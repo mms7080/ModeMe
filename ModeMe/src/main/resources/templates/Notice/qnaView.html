@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notice Detail</title>
+    <link rel="stylesheet" href="/css/Notice/qnaView.css">
+</head>
+<body>
+  	<!-- 헤더푸터-->
+	<div th:replace="~{header :: header}"></div>
+	<div th:replace="~{footer :: footer}"></div>
+	
+	<main>
+	    <h1>NOTICE</h1>
+	    <table class="detail-table">
+	        <tr>
+	            <th>제목</th>
+	            <td>사이드 스냅팬츠(2C) [상품문의]</td>
+	        </tr>
+	        <tr>
+	            <th>작성자</th>
+	            <td>김회원</td>
+	        </tr>
+	    </table>
+	    <div class="content">
+	        <p>사이즈 문의합니다!</p>
+	        <p>176cm인데 라이사이즈 맞을까요?</p>
+	    </div>
+	
+	    <!-- 버튼 그룹을 flexbox로 배치 -->
+	    <div class="main-buttons-container">	
+	        <!-- 오른쪽: 수정/삭제 -->
+	        <div class="delete-buttons">
+	            <button onclick="goToRevise()">수정</button>
+	            <button onclick="goToDelete()">삭제</button>
+	        </div>
+	    </div>
+	
+	    <div class="buttons">
+	        <button onclick="goBack()">목록</button>
+	    </div>
+	</main>
+
+    <script>
+        function goBack() {
+            window.history.back(); // 이전 페이지로 이동
+        }
+    </script>
+</body>
+</html>

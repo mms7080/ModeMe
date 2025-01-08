@@ -17,7 +17,7 @@ public class ViewController {
 	public String noticeWrite() {
 		return "/Notice/NoticeWrite";
 	}
-	//공지 상세게시판뷰
+	//공지 상세페이지뷰
 	@GetMapping("/noticeView") 
 	public String noticeView() {
 		return "/Notice/NoticeView";
@@ -26,6 +26,11 @@ public class ViewController {
 	@GetMapping("/qna") 
 	public String qna() {
 		return "/Notice/qna";
+	}
+	//Q&A 상세페이지뷰
+	@GetMapping("/qnaView") 
+	public String qnaView() {
+		return "/Notice/qnaView";
 	}
 	//헤더 없어도되는데 나중에 쓸일있을거같아서 해둠
 	@GetMapping("/header") 
