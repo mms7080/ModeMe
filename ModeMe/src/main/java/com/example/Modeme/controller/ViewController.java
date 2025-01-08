@@ -32,6 +32,11 @@ public class ViewController {
 	public String qnaView() {
 		return "/Notice/qnaView";
 	}
+	//Q&A 작성
+	@GetMapping("/qnaWrite") 
+	public String qnaWrite() {
+		return "/Notice/qnaWrite";
+	}
 	//헤더 없어도되는데 나중에 쓸일있을거같아서 해둠
 	@GetMapping("/header") 
 	public String header() {
