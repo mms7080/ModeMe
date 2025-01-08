@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notice Detail</title>
+    <link rel="stylesheet" href="/css/Notice/NoticeView.css">
+</head>
+<body>
+  	<!-- 헤더푸터-->
+	<div th:replace="~{header :: header}"></div>
+	<div th:replace="~{footer :: footer}"></div>
+	
+	<main>
+	    <h1>NOTICE</h1>
+	    <table class="detail-table">
+	        <tr>
+	            <th>제목</th>
+	            <td>[빈티지 체크셔츠] 프리오더 주문건 필독 공지사항</td>
+	        </tr>
+	        <tr>
+	            <th>작성자</th>
+	            <td>관리자</td>
+	        </tr>
+	    </table>
+	    <div class="content">
+	        <p>!! 필독 해주세요 !!</p>
+	        <p>[빈티지 체크셔츠]가 많은 사랑에 힘입어 조금 더 퀄리티 높은 상품으로 재작업됩니다.</p>
+	        <p>현재 시즌 트렌드에 맞춰 재작업 중이며, 배송일정은 추가 공지사항을 통해 안내드리겠습니다.</p>
+	    </div>
+	
+	    <!-- 버튼 그룹을 flexbox로 배치 -->
+	    <div class="main-buttons-container">
+	        <!-- 왼쪽: 이전글/다음글 -->
+	        <div class="navigation-buttons">
+	            <button onclick="goToPrevious()">이전글</button>
+	            <button onclick="goToNext()">다음글</button>
+	        </div>
+	
+	        <!-- 오른쪽: 수정/삭제 -->
+	        <div class="delete-buttons">
+	            <button onclick="goToRevise()">수정</button>
+	            <button onclick="goToDelete()">삭제</button>
+	        </div>
+	    </div>
+	
+	    <div class="buttons">
+	        <button onclick="goBack()">목록</button>
+	    </div>
+	</main>
+
+    <script>
+        function goBack() {
+            window.history.back(); // 이전 페이지로 이동
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notice</title>
+<link rel="stylesheet" href="/css/Notice/qna.css">
+</head>
+<body>
+ 	<!-- 헤더푸터-->
+	<div th:replace="~{header :: header}"></div>
+	<div th:replace="~{footer :: footer}"></div>
+
+
+	<main>
+		<h1>Q&A</h1>
+		<div class="write-notice">
+            <button onclick="openNoticeForm()" a href="/noticeWrite.html">QnA 작성</button>
+        </div>
+		<table class="notice-table">
+			<thead>
+				<tr>
+					<th>번호</th>
+					<th>상품정보</th>
+					<th>작성자</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>6</td>
+					<td><a href="/test2.html"> <img src="/image/bo1.png"
+							alt="상품 이미지"
+							style="width: 40px; height: 60px; vertical-align: middle;">
+							사이드 스냅팬츠(2C) [상품문의]
+					</a></td>
+
+					<td class="text-center">김회원</td>
+				</tr>
+				<tr>
+					<td>5</td>
+					<td><a href="/test3.html">[상품문의]</a></td>
+					<td>박회원</td>
+				</tr>
+				<tr>
+					<td>4</td>
+					<td><a href="/test4.html">[상품문의]</a></td>
+					<td>최회원</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td><a href="/test4.html">테스트</a></td>
+					<td>관리자</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td><a href="/test4.html">테스트</a></td>
+					<td>관리자</td>
+				</tr>
+				<tr>
+					<td>1</td>
+					<td><a href="/test4.html">테스트</a></td>
+					<td>관리자</td>
+				</tr>
+				<!-- Add more rows as needed -->
+			</tbody>
+		</table>
+		<div class="pagination">
+			<button>&lt;</button>
+			<span>1</span>
+			<button>&gt;</button>
+		</div>
+		<div class="search-section">
+			<label for="search-option">검색 옵션:</label> <select id="search-option">
+				<option value="title">제목</option>
+				<option value="content">내용</option>
+				<option value="title_content">제목+내용</option>
+				<option value="id">아이디</option>
+			</select> <input type="text" id="search-input" placeholder="검색어를 입력하세요">
+			<button onclick="searchNotice()">검색</button>
+		</div>
+
+
+	</main>
+</body>
+</html>
