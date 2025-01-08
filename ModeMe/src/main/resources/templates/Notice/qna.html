@@ -78,8 +78,25 @@
 			</select> <input type="text" id="search-input" placeholder="검색어를 입력하세요">
 			<button onclick="searchNotice()">검색</button>
 		</div>
-
-
 	</main>
+	    <script>
+        function openNoticeForm() {
+            window.location.href = '/qnaWrite'; 
+            // 작성 페이지로 이동하거나 작성 폼을 띄웁니다.
+        }
+
+        function editNotice(id) {
+            alert('공지 수정 페이지로 이동합니다. ID: ' + id);
+            // 해당 ID의 공지 수정 페이지로 이동하거나 수정 폼을 띄웁니다.
+        }
+
+        function deleteNotice(id) {
+            const confirmDelete = confirm('공지사항을 삭제하시겠습니까? ID: ' + id);
+            if (confirmDelete) {
+                alert('공지사항이 삭제되었습니다.');
+                // 실제 삭제 작업 수행 (백엔드와 연동 필요)
+            }
+        }
+    </script>
 </body>
 </html>
