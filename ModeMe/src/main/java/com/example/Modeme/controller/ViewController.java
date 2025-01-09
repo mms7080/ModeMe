@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ViewController {
 	//공지
-	@GetMapping("/notice") 
+	@GetMapping("/notice")
 	public String noticehome() {
 		return "/Notice/NoticeHome";
 	}
@@ -45,7 +45,6 @@ public class ViewController {
 	public String footer() {
 		return "/footer";
 	}         
-	
 	//마이페이지
 	@GetMapping("/MyPage")
 	public String MyPage() {
