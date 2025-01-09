@@ -8,17 +8,30 @@
 	font-family: 'omyu_pretty';
 }    
 /* 푸터 */
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* 전체 화면 높이를 채우기 위한 설정 */
+}
+
+main {
+    flex: 1; /* 본문 영역이 남은 공간을 차지하도록 설정 */
+}
+
 .footer {
     background-color: #f5f5f5;
     padding: 20px 0;
     text-align: center;
     font-size: 14px;
     color: #666;
-    position: absolute; /* Positioning the footer at the bottom */
-    bottom: 0;
-    width: 100%; /* Ensure the footer spans across the full width */
+    width: 100%; /* 화면의 전체 너비에 맞춤 */
+    margin-top: auto; /* 푸터를 자연스럽게 페이지 하단에 위치시킴 */
+    position: relative; /* 푸터가 고정되지 않도록 설정 */
 }
 
 .footer p {
     margin: 5px 0;
 }
+
