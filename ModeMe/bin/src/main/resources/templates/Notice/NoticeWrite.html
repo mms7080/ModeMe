@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notice Write</title>
+    <link rel="stylesheet" href="/css/Notice/NoticeWrite.css">
+</head>
+<body>
+
+ 	<!-- 헤더-->
+	<div th:replace="~{header :: header}"></div>
+	
+	<main>
+	    <h1>NOTICE 작성</h1>
+	    <table class="detail-table">
+	        <tr>
+	            <th>제목</th>
+	            <td><input type="text" id="noticeTitle" placeholder="제목을 작성하세요" style="width: 99%; padding: 10px;"></td>
+	        </tr>
+	        <tr>
+	            <th>작성자</th>
+	            <td>관리자</td>
+	        </tr>
+	    </table>
+	    <div class="content" style="height: 300px;">
+	        <textarea id="noticeContent" placeholder="내용을 작성하세요..." style="width: 100%; height: 100%; padding: 1px;"></textarea>
+	    </div>
+	    <div class="buttons">
+	        <button onclick="openNoticeForm()">작성 완료</button>
+	            <script>
+	        function openNoticeForm() {
+				alert('공지사항이 작성되었습니다.');
+	            window.location.href = '/notice'; 
+	        }
+	        </script>
+	    </div>
+	</main>
+    <script>
+        function goBack() {
+            window.history.back(); // 이전 페이지로 이동
+        }
+    </script>
+        <!--푸터-->
+    <div th:replace="~{footer :: footer}"></div>
+</body>
+</html>

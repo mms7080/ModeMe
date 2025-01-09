@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q&A Detail</title>
+    <link rel="stylesheet" href="/css/Notice/qnaView.css">
+</head>
+<body>
+  	<!-- 헤더-->
+	<div th:replace="~{header :: header}"></div>
+	
+	
+<main>
+    <h1>Q&A</h1>
+    <table class="detail-table">
+        <tr>
+            <th>제목</th>
+            <td>사이드 스냅팬츠(2C) [상품문의]</td>
+        </tr>
+        <tr>
+            <th>작성자</th>
+            <td>김회원</td>
+        </tr>
+    </table>
+    <div class="content">
+        <p>사이즈 문의합니다!</p>
+        <p>176cm인데 라이사이즈 맞을까요?</p>
+    </div>
+
+    <!-- 버튼 그룹 -->
+    <div class="main-buttons-container">
+        <div class="delete-buttons">
+            <button onclick="goToRevise()">수정</button>
+            <button onclick="goToDelete()">삭제</button>
+        </div>
+    </div>
+
+ 
+
+    <!-- 댓글 섹션 -->
+    <section class="comments-section">
+        <h2>댓글</h2>
+        <div class="comments-list">
+            <!-- 기존 댓글 표시 -->
+            <div class="comment">
+                <p><strong>관리자</strong> 
+                <br><br>라지가 적당하실거같습니다!</p>
+            </div>
+        </div>
+
+        <!-- 댓글 입력 폼 -->
+        <div class="comment-form">
+            <textarea id="comment-input" placeholder="댓글을 입력하세요..."></textarea>
+            <button onclick="submitComment()">댓글 작성</button>
+        </div>
+	    <div class="buttons">
+	        <button onclick="goBack()">목록</button>
+	    </div>
+    </section>
+</main>
+
+    <script>
+        function goBack() {
+            window.history.back(); // 이전 페이지로 이동
+        }
+    </script>
+    
+    <!--푸터-->
+    <div th:replace="~{footer :: footer}"></div>
+    
+</body>
+</html>

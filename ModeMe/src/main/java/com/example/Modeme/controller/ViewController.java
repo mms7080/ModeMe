@@ -8,6 +8,7 @@ public class ViewController {
 	
 	
 	//공지 테스트 ㅁㄴㅇㅁㄴㅇㄴㅇㄴ
+	// jungmin
 	@GetMapping("/notice") 
 	public String noticehome() {
 		return "/Notice/NoticeHome";
