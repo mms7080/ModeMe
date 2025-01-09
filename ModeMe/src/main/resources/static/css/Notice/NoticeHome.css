@@ -36,7 +36,6 @@ h1 {
 
 .notice-table th, .notice-table td {
     border-top: 1px solid #ddd; /* 가로줄 */
-    border-bottom: 1px solid #ddd; /* 가로줄 */
     border-left: none; /* 세로줄 제거 */
     border-right: none; /* 세로줄 제거 */
     padding: 12px;
@@ -115,7 +114,7 @@ h1 {
     display: block;
     margin: 20px auto;
     text-align: center;
-    margin-left:70%;
+    margin-left:75%;
 }
 
 .write-notice button {

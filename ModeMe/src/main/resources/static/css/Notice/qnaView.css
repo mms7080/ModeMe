@@ -165,7 +165,7 @@ h1 {
 
 .comment-form button {
     height: auto;
-    padding: 8px 15px; /* 버튼 크기를 적당히 조정 */
+    padding: 13px 15px; /* 버튼 크기를 적당히 조정 */
     font-size: 14px; /* 글자 크기를 키움 */
     border: none;
     background-color: #7f7f7f;
