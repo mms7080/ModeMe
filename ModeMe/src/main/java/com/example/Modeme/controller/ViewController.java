@@ -5,12 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class ViewController {
-<<<<<<< HEAD
-	
-	
 	//공지
-=======
->>>>>>> c6dca9ba59eea65f7f350511b9267186dcf81421
 	@GetMapping("/notice") 
 	public String noticehome() {
 		return "/Notice/NoticeHome";
