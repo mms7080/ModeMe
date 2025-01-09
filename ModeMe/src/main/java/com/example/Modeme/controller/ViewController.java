@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class ViewController {
 	
 	
-	//공지 테스트
+	//공지
 	@GetMapping("/notice") 
 	public String noticehome() {
 		return "/Notice/NoticeHome";
@@ -24,18 +24,18 @@ public class ViewController {
 	}
 	//Q&A
 	@GetMapping("/qna") 
-	public String qna() {
-		return "/Notice/qna";
-	}
-	//Q&A 상세페이지뷰
-	@GetMapping("/qnaView") 
-	public String qnaView() {
-		return "/Notice/qnaView";
+	public String qnaHome() {
+		return "/Notice/qnaHome";
 	}
 	//Q&A 작성
 	@GetMapping("/qnaWrite") 
 	public String qnaWrite() {
 		return "/Notice/qnaWrite";
+	}
+	//Q&A 상세페이지뷰
+	@GetMapping("/qnaView") 
+	public String qnaView() {
+		return "/Notice/qnaView";
 	}
 	//헤더 없어도되는데 나중에 쓸일있을거같아서 해둠
 	@GetMapping("/header") 
