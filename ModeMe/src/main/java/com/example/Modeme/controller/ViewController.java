@@ -50,7 +50,7 @@ public class ViewController {
 	//마이페이지
 	@GetMapping("/MyPage")
 	public String MyPage() {
-		return "MyPage/MyPage";
+		return "/MyPage/MyPage";
 	}
 	
 }
