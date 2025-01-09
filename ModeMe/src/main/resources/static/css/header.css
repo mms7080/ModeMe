@@ -85,3 +85,10 @@ header {
 .menu a:hover {
     color: #555;
 }
+.header img {
+    width: 3.8%;
+    height: auto;
+    display: block;
+    margin: 10px auto; /* 중앙 정렬 */
+}
+
