@@ -10,4 +10,19 @@ public class SignupController {
    public String signup() {
       return "/Sign/Signup";
    }
+   //로그인
+   @GetMapping("/signin") 
+   public String signin() {
+      return "/Sign/Signin";
+   }
+   //아이디찾기
+   @GetMapping("/find_id")
+   public String find_id() {
+	   return "/Sign/find_id";
+   }
+   //비밀번호찾기
+   @GetMapping("/find_pw")
+   public String find_pw() {
+	   return "/Sign/find_pw";
+   }
 }

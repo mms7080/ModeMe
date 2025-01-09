@@ -6,7 +6,7 @@
 }
 
 * {
-    font-family: 'omyu_pretty', sans-serif;
+    font-family: 'omyu_pretty';
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -18,8 +18,8 @@ body {
 }
 
 .signup-container {
-    width: 100%;
-    max-width: 1200px;
+    width: 80%;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 20px;
     background-color: #fff;
