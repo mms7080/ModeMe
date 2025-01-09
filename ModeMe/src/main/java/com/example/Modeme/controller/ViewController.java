@@ -7,9 +7,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class ViewController {
 	
 	
+<<<<<<< HEAD
 	//공지 테스트 ㅁㄴㅇㅁㄴㅇㄴㅇㄴ
 	// jungmin
 	//
+=======
+	//공지 정민이바보ㅁㄴㅇㅁㄴㅇㄴ
+>>>>>>> 02c9feb81758b1c34169d5eb7cc71ae90bf1a425
 	@GetMapping("/notice") 
 	public String noticehome() {
 		return "/Notice/NoticeHome";
@@ -50,5 +54,10 @@ public class ViewController {
 		return "/footer";
 	}         
 	
+	//마이페이지
+	@GetMapping("/MyPage")
+	public String MyPage() {
+		return "MyPage/MyPage";
+	}
 	
 }
