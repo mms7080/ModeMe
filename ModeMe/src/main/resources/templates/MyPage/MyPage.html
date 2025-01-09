@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyPage</title>
+<link rel="stylesheet" href="/css/MyPage/MyPage.css">
+
+</head>
+<body>
+	<!-- 헤더푸터-->
+	<div th:replace="~{header :: header}"></div>
+
+	<main>
+		<h1>MyPage</h1>
+
+		<div class="MypageHeader">
+			<div class="firstbox">
+				<div class="firstbuttonbox">
+					<span>가용적립금</span> <span>2,000원</span>
+					<form method="get" action="/saved_money" class="MileageSearch">
+						<button type="submit" class="MileageSearchButton">조회</button>
+					</form>
+				</div>
+				<div class="firstboxcol">
+					<span>사용적립금</span> <span>0원</span>
+				</div>
+			</div>
+			<div class="secondbox">
+				<div class="firstboxcol">
+					<span>총적립금</span> <span>2,000원</span>
+				</div>
+				<div class="firstboxcol">
+					<span>총주문</span> <span>KRW 0(0회)</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="MyPageOrder">
+			<div class="mypageordertitle">
+				<span>나의 주문처리 현황 </span><span class="smalltitle">(최근 3개월 기준)</span>
+			</div>
+			<div class="orderprogress">
+				<div class="ordermypage" id="orderbefore">
+					<span>입금전</span> <span>0</span>
+				</div>
+				<div class="ordermypage" id="orderprepare">
+					<span>배송준비중</span> <span>0</span>
+				</div>
+				<div class="ordermypage" id="ordering">
+					<span>배송중</span> <span>0</span>
+				</div>
+				<div class="ordermypage" id="orderfinish">
+					<span>배송완료</span> <span>0</span>
+				</div>
+				<div id="ordertotal">
+					<ul style="list-style-type: circle; list-style-position: inside;">
+						<li>취소 : <span>0</span></li>
+						<li>교환 : <span>0</span></li>
+						<li>반품 : <span>0</span></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="mypagebuttons">
+			<div class="mypagebutton">
+				<a href="#" class="buttons">
+					<div>
+						ORDER</br>주문내역 조회
+					</div>
+					<p>
+						고객님께서 주문하신 상품의</br>주문내역을 확인하실수 있습니다.
+					</p>
+				</a>
+			</div>
+			<div class="mypagebutton">
+				<a href="#" class="buttons">
+					<div>
+						PROFILE</br>주문내역 조회
+					</div>
+					<p>
+						고객님께서 주문하신 상품의</br>주문내역을 확인하실수 있습니다.
+					</p>
+				</a>
+			</div>
+			<div class="mypagebutton">
+				<a href="#" class="buttons">
+					<div>
+						WISHLIST</br>주문내역 조회
+					</div>
+					<p>
+						고객님께서 주문하신 상품의</br>주문내역을 확인하실수 있습니다.
+					</p>
+			</div>
+			<div class="mypagebutton">
+				<a href="#" class="buttons">MILEAGE</br>주문내역 조회
+				</a>
+				<p>
+					고객님께서 주문하신 상품의</br>주문내역을 확인하실수 있습니다.
+				</p>
+			</div>
+			<div class="mypagebutton">
+				<a href="#" class="buttons">ADDRESS</br>주문내역 조회
+				</a>
+				<p>
+					고객님께서 주문하신 상품의</br>주문내역을 확인하실수 있습니다.
+				</p>
+			</div>
+		</div>
+
+	</main>
+
+	<div th:replace="~{footer :: footer}"></div>
+
+</body>
+</html>
