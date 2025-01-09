@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ViewController {
 
+
 	@GetMapping("/notice") 
 	public String noticehome() {
 		return "/Notice/NoticeHome";
