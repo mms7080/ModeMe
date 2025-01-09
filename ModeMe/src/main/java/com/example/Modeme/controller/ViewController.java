@@ -10,6 +10,7 @@ public class ViewController {
 	//공지 테스트 ㅁㄴㅇㅁㄴㅇㄴㅇㄴ
 	// jungmin
 	//ㅁㄴ
+	//공지 정민이바보ㅁㄴㅇㅁㄴㅇㄴ
 	@GetMapping("/notice") 
 	public String noticehome() {
 		return "/Notice/NoticeHome";
@@ -50,5 +51,10 @@ public class ViewController {
 		return "/footer";
 	}         
 	
+	//마이페이지
+	@GetMapping("/MyPage")
+	public String MyPage() {
+		return "MyPage/MyPage";
+	}
 	
 }
