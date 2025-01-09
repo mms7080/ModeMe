@@ -53,4 +53,10 @@ public class ViewController {
 		return "/MyPage/MyPage";
 	}
 	
+	//제품 상세
+	@GetMapping("/productDetail")
+	public String productDetail() {
+		return "/productDetail/productDetail";
+	}
+	
 }
