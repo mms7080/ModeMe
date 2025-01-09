@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class SignupController {
    //회원가입
    @GetMapping("/signup") 
-   public String noticehome() {
-      return "/Signup/Signup";
+   public String signup() {
+      return "/Sign/Signup";
    }
 }
