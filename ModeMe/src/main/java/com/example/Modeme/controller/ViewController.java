@@ -48,5 +48,10 @@ public class ViewController {
 		return "/footer";
 	}         
 	
+	//마이페이지
+	@GetMapping("/MyPage")
+	public String MyPage() {
+		return "MyPage/MyPage";
+	}
 	
 }
