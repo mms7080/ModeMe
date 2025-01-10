@@ -1,37 +1,80 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:fragment="header">
 <head>
-<meta charset="EUC-KR">
-<title>Insert title here</title>
-<link rel="stylesheet" href="/css/header.css">
+    <meta charset="EUC-KR">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header with Search</title>
+    <link rel="stylesheet" href="/css/header.css">
+    <style>
+        /* 추가된 CSS는 아래 작성 */
+    </style>
 </head>
 <body>
-	 <header class="header">
-    <div class="top-bar">
-        <!-- ���� �޴� -->
-        <div class="left-menu">
-            <a href="#">LOGOUT</a>
-            <a href="#">ORDER</a>
-            <a href="#">CART</a>
-            <a href="#">MY PAGE</a>
+    <header class="header">
+        <div class="top-bar">
+            <!-- 왼쪽 메뉴 -->
+            <div class="left-menu">
+                <a href="/signin">LOGIN</a>
+                <a href="#">ORDER</a>
+                <a href="#">CART</a>
+                <a href="/MyPage">MY PAGE</a>
+            </div>
+            <!-- 오른쪽 메뉴 -->
+            <div class="right-menu">
+                <a href="/notice">NOTICE</a>
+                <a href="/qna">Q&A</a>
+                <a href="#" id="search-btn">SEARCH</a>
+            </div>
         </div>
-        <!-- ������ �޴� -->
-        <div class="right-menu">
-            <a href="/notice">NOTICE</a>
-            <a href="/qna">Q&A</a>
-            <a href="#">SEARCH</a>
+        <a href="/">
+            <img src="/image/logo.png" alt="로고">
+        </a>
+
+        <nav class="menu">
+            <a href="#">NEW 5%</a>
+            <a href="#">BEST 30</a>
+            <a href="#">OUTER</a>
+            <a href="#">TOP</a>
+            <a href="#">BOTTOM</a>
+            <a href="#">OPS</a>
+            <a href="#">ACC</a>
+        </nav>
+    </header>
+
+<!-- 검색창 부분 -->
+<div id="search-modal" class="search-modal">
+    <div class="search-content">
+        <button class="close-btn" id="close-btn">&times;</button>
+		<div class="search-bar">
+		    <input type="text" placeholder="검색어를 입력하세요" class="search-input">
+		    <button class="search-button">
+		        <img src="/image/search.png" alt="검색" class="search-icon">
+		    </button>
+		</div>
+        <div class="popular-searches">
+            <p>인기검색어</p>
+            <ul>
+                <li><a href="#">겨울 코트</a></li>
+                <li><a href="#">스웨터</a></li>
+                <li><a href="#">청바지</a></li>
+            </ul>
         </div>
     </div>
-    <div class="logo">Mode Me</div>
-    <nav class="menu">
-        <a href="#">NEW 5%</a>
-        <a href="#">BEST 30</a>
-        <a href="#">OUTER</a>
-        <a href="#">TOP</a>
-        <a href="#">BOTTOM</a>
-        <a href="#">OPS</a>
-        <a href="#">ACC</a>
-    </nav>
-</header>
+</div>
+
+
+    <script>
+        const searchBtn = document.getElementById("search-btn");
+        const closeBtn = document.getElementById("close-btn");
+        const searchModal = document.getElementById("search-modal");
+
+        searchBtn.addEventListener("click", () => {
+            searchModal.style.display = "block";
+        });
+
+        closeBtn.addEventListener("click", () => {
+            searchModal.style.display = "none";
+        });
+    </script>
 </body>
 </html>

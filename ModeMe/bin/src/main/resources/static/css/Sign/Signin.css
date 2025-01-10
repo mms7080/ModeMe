@@ -1,0 +1,189 @@
+@font-face {
+    font-family: 'omyu_pretty';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/omyu_pretty.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    font-family: 'omyu_pretty';
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/* 기본 스타일 */
+body {
+    background-color: #fff;
+    color: #333;
+}
+
+/* 컨테이너 */
+.login-container {
+    max-width: 430px;
+    width: 100%;
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.breadcrumb {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+h1 {
+    font-size: 28px;
+    margin-bottom: 30px;
+}
+
+/* 로그인 폼 */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: none;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between; /* 좌측과 우측 정렬 분리 */
+    align-items: center; /* 세로 중앙 정렬 */
+    margin-bottom: 20px;
+}
+
+.form-left {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* 체크박스와 텍스트 사이 간격 */
+}
+
+.form-left input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.form-left label {
+    font-size: 16px;
+    color: #555;
+}
+
+.form-right {
+    display: flex;
+    gap: 10px; /* 아이디 찾기와 비밀번호 찾기 간격 */
+}
+
+.form-right a {
+    text-decoration: none;
+    color: #555;
+    font-size: 16px;
+}
+
+
+.form-options a {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    color: #555;
+}
+
+.form-options a + a::before {
+    margin: 0 5px;
+    color: #555;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 12px 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #000;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-btn:hover {
+    background-color: #444;
+}
+
+/* 소셜 로그인 */
+.social-login {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.kakao-btn {
+    padding: 12px 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+    background-color: #FEE500;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.kakao-btn:hover {
+    background-color: #e3c900;
+}
+
+.naver-btn {
+    padding: 12px 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #03C75A;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.naver-btn:hover {
+    background-color: #02a94f;
+}
+
+/* 회원가입 링크 */
+.signup-link {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #555;
+}
+
+.signup-link a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #000;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.signup-link a:hover {
+    background-color: #444;
+}
