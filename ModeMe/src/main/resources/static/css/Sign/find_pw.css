@@ -1,0 +1,119 @@
+/* 기본 스타일 */
+body {
+    font-family: 'omyu_pretty', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    color: #333;
+}
+
+.find-container {
+    max-width: 400px; /* 컨테이너 넓이 고정 */
+    width: 100%;
+    max-height: 490px;
+    height: 100%;
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #000;
+}
+
+/* 폼 스타일 */
+.find-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    max-width: 380px;
+    width:100%;
+}
+
+.form-row label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-row input {
+	width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.form-row select {
+    width: 106%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.radio-group {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.radio-group input {
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+
+.radio-group label {
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.phone-input-group {
+    display: flex;
+    gap: 10px;
+}
+
+.phone-input-group input {
+	max-width:380px;
+	width:120%;
+    flex: 1;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    text-align: center; /* 텍스트 가운데 정렬 */
+}
+
+/* 버튼 */
+.find-btn {
+    width: 100%;
+    padding: 12px 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #000;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.find-btn:hover {
+    background-color: #444;
+}
