@@ -15,11 +15,9 @@ body {
     flex-direction: column;
     min-height: 100vh; /* 전체 화면 높이를 채우기 위한 설정 */
 }
-
 main {
     flex: 1; /* 본문 영역이 남은 공간을 차지하도록 설정 */
 }
-
 .footer {
     background-color: #f5f5f5;
     padding: 20px 0;
@@ -30,7 +28,6 @@ main {
     margin-top: auto; /* 푸터를 자연스럽게 페이지 하단에 위치시킴 */
     position: relative; /* 푸터가 고정되지 않도록 설정 */
 }
-
 .footer p {
     margin: 5px 0;
 }

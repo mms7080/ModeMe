@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아이디 찾기</title>
+    <link rel="stylesheet" href="/css/Sign/find_id.css">
+</head>
+<body>
+    <!-- 헤더 -->
+    <div th:replace="~{header :: header}"></div>
+
+    <!-- 아이디 찾기 본문 -->
+    <main class="find-container">
+        <h1>아이디 찾기</h1>
+        <form action="/find-id" method="post" class="find-form">
+            <!-- 회원유형 -->
+            <div class="form-row">
+                <label for="member-type">회원유형</label>
+                <select id="member-type" name="memberType" required>
+                    <option value="personal">개인회원</option>
+                    <option value="personal-business">개인 사업자회원</option>
+                </select>
+            </div>
+            <!-- 찾기 방법 -->
+            <div class="form-row">
+                <label>찾기 방법</label>
+                <div class="radio-group">
+                    <input type="radio" id="email" name="findMethod" value="email" onclick="toggleFields('email')" checked>
+                    <label for="email">이메일</label>
+                    <input type="radio" id="phone" name="findMethod" value="phone" onclick="toggleFields('phone')">
+                    <label for="phone">휴대폰번호</label>
+                </div>
+            </div>
+            <!-- 이름 -->
+            <div class="form-row">
+                <label for="name">이름</label>
+                <input type="text" id="name" name="name" placeholder="이름" required>
+            </div>
+            <!-- 이메일로 찾기 -->
+            <div class="form-row email-fields">
+                <label for="email-input">이메일</label>
+                <input type="email" id="email-input" name="email" placeholder="example@email.com" required>
+            </div>
+			<!-- 휴대폰번호로 찾기 -->
+			<div class="form-row phone-fields" style="display: none;">
+			    <label for="phone-input">휴대폰 번호</label>
+			    <div class="phone-input-group">
+			        <input type="text" name="phonePart1" placeholder="010" maxlength="3" required>
+			        <input type="text" name="phonePart2" placeholder="1234" maxlength="4" required>
+			        <input type="text" name="phonePart3" placeholder="5678" maxlength="4" required>
+			    </div>
+			</div>
+            <button type="submit" class="find-btn">확인</button>
+        </form>
+    </main>
+
+    <!-- 푸터 -->
+    <div th:replace="~{footer :: footer}"></div>
+    
+    <script>
+        function toggleFields(method) {
+            const emailFields = document.querySelector(".email-fields");
+            const phoneFields = document.querySelector(".phone-fields");
+
+            if (method === "email") {
+                emailFields.style.display = "flex";
+                phoneFields.style.display = "none";
+            } else {
+                emailFields.style.display = "none";
+                phoneFields.style.display = "flex";
+            }
+        }
+    </script>
+</body>
+</html>

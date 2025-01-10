@@ -50,7 +50,13 @@ public class ViewController {
 	//마이페이지
 	@GetMapping("/MyPage")
 	public String MyPage() {
-		return "MyPage/MyPage";
+		return "/MyPage/MyPage";
+	}
+	
+	//제품 상세
+	@GetMapping("/productDetail")
+	public String productDetail() {
+		return "/productDetail/productDetail";
 	}
 	
 	//결제페이지
