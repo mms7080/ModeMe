@@ -14,11 +14,6 @@
     font-style: normal;
 }
 
-html {
-    height: auto; /*화면 전체 높이만큼 설정*/
-    overflow: auto; /* 스크롤 활성화 */
-}
-
 /* 메인 콘텐츠 */
 main {
     margin: 20px;
