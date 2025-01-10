@@ -25,4 +25,9 @@ public class SignupController {
    public String find_pw() {
 	   return "/Sign/find_pw";
    }
+   //회원정보수정
+   @GetMapping("/modify")
+   public String modify() {
+	   return "/Sign/modify";
+   }
 }
