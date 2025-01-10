@@ -41,32 +41,46 @@
         </nav>
     </header>
 
-<!-- 검색창 -->
-<div id="search-modal" class="search-modal">
-    <div class="search-content">
-        <button class="close-btn" id="close-btn">&times;</button>
-		<div class="search-bar">
-		    <input type="text" placeholder="검색어를 입력하세요" class="search-input">
-		    <button class="search-button">
-		        <img src="/image/search.png" alt="검색" class="search-icon">
-		    </button>
-		</div>
-        <div class="popular-searches">
-            <p>인기검색어</p>
-            <ul>
-                <li><a href="#">겨울 코트</a></li>
-                <li><a href="#">스웨터</a></li>
-                <li><a href="#">청바지</a></li>
-            </ul>
+    <!-- 오른쪽 네비게이션 -->
+    <div class="floating-nav">
+        <button id="scroll-up-btn" class="floating-btn">▲</button>
+        
+        <button id="add-fav-btn" class="floating-btn">
+   			<img src="/image/fav.png" alt="즐겨찾기 추가" class="btn-icon">
+		</button>
+		
+        <button id="scroll-down-btn" class="floating-btn">▼</button>
+    </div>
+
+    <!-- 검색창 -->
+    <div id="search-modal" class="search-modal">
+        <div class="search-content">
+            <button class="close-btn" id="close-btn">&times;</button>
+            <div class="search-bar">
+                <input type="text" placeholder="검색어를 입력하세요" class="search-input">
+                <button class="search-button">
+                    <img src="/image/search.png" alt="검색" class="search-icon">
+                </button>
+            </div>
+            <div class="popular-searches">
+                <p>인기검색어</p>
+                <ul>
+                    <li><a href="#">겨울 코트</a></li>
+                    <li><a href="#">스웨터</a></li>
+                    <li><a href="#">청바지</a></li>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
 
     <script>
         const searchBtn = document.getElementById("search-btn");
         const closeBtn = document.getElementById("close-btn");
         const searchModal = document.getElementById("search-modal");
+        const scrollUpBtn = document.getElementById("scroll-up-btn");
+        const scrollDownBtn = document.getElementById("scroll-down-btn");
 
+        // 검색 모달 토글
         searchBtn.addEventListener("click", () => {
             searchModal.style.display = "block";
         });
@@ -74,6 +88,45 @@
         closeBtn.addEventListener("click", () => {
             searchModal.style.display = "none";
         });
+
+        // 스크롤 업
+        scrollUpBtn.addEventListener("click", () => {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        });
+
+        // 스크롤 다운
+        scrollDownBtn.addEventListener("click", () => {
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: "smooth"
+            });
+        });
+     	// 즐겨찾기 등록 기능
+        const addFavBtn = document.getElementById("add-fav-btn");
+     	
+        addFavBtn.addEventListener("click", () => {
+            const title = document.title; // 현재 페이지의 제목
+            const url = window.location.href; // 현재 페이지의 URL
+
+            try {
+                // IE/Edge에서 즐겨찾기 추가 (window.external API 사용)
+                if (window.external && 'AddFavorite' in window.external) {
+                    window.external.AddFavorite(url, title);
+                } else {
+                    // 그 외 브라우저에서 즐겨찾기 추가를 안내
+                    alert("Ctrl+D 눌러 이 페이지를 즐겨찾기에 추가하세요.");
+                }
+            } catch (e) {
+                // 에러 처리
+                alert("죄송합니다. 브라우저에서 즐겨찾기 추가를 지원하지 않습니다.");
+            }
+        });
+        // 
+
+
     </script>
 </body>
 </html>
