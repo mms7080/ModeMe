@@ -16,7 +16,7 @@
 		<h1>MyPage</h1>
 
 		<div class="MypageHeader">
-			<div class="firstbox">
+			<div class="firstbox rightline">
 				<div class="firstbuttonbox">
 					<span>가용적립금</span> <span>2,000원</span>
 					<form method="get" action="/saved_money" class="MileageSearch">
@@ -27,7 +27,7 @@
 					<span>사용적립금</span> <span>0원</span>
 				</div>
 			</div>
-			<div class="secondbox">
+			<div class="firstbox">
 				<div class="firstboxcol">
 					<span>총적립금</span> <span>2,000원</span>
 				</div>
@@ -39,19 +39,20 @@
 
 		<div class="MyPageOrder">
 			<div class="mypageordertitle">
-				<span>나의 주문처리 현황 </span><span class="smalltitle">(최근 3개월 기준)</span>
+				<span id="myorderprocess">나의 주문처리 현황 </span><span class="smalltitle">(최근
+					3개월 기준)</span>
 			</div>
 			<div class="orderprogress">
-				<div class="ordermypage" id="orderbefore">
+				<div class="rightline" id="orderbefore">
 					<span>입금전</span> <span>0</span>
 				</div>
-				<div class="ordermypage" id="orderprepare">
+				<div class="rightline" id="orderprepare">
 					<span>배송준비중</span> <span>0</span>
 				</div>
-				<div class="ordermypage" id="ordering">
+				<div class="rightline" id="ordering">
 					<span>배송중</span> <span>0</span>
 				</div>
-				<div class="ordermypage" id="orderfinish">
+				<div class="rightline" id="orderfinish">
 					<span>배송완료</span> <span>0</span>
 				</div>
 				<div id="ordertotal">
@@ -70,43 +71,50 @@
 					<div>
 						ORDER</br>주문내역 조회
 					</div>
-					<p>
+					<div class="buttoncontent">
 						고객님께서 주문하신 상품의</br>주문내역을 확인하실수 있습니다.
-					</p>
+					</div>
 				</a>
 			</div>
 			<div class="mypagebutton">
 				<a href="#" class="buttons">
 					<div>
-						PROFILE</br>주문내역 조회
+						PROFILE</br>회원 정보
 					</div>
-					<p>
-						고객님께서 주문하신 상품의</br>주문내역을 확인하실수 있습니다.
-					</p>
+					<div class="buttoncontent">
+						회원이신 고객님의 개인정보를</br>관리하는 공간입니다.
+					</div>
 				</a>
 			</div>
 			<div class="mypagebutton">
 				<a href="#" class="buttons">
 					<div>
-						WISHLIST</br>주문내역 조회
+						WISHLIST</br>관심 상품
 					</div>
-					<p>
-						고객님께서 주문하신 상품의</br>주문내역을 확인하실수 있습니다.
-					</p>
+					<div class="buttoncontent">
+						관심상품으로 등록하신</br>상품의 목록을 보여드립니다.
+					</div>
+				</a>
 			</div>
 			<div class="mypagebutton">
-				<a href="#" class="buttons">MILEAGE</br>주문내역 조회
+				<a href="#" class="buttons">
+					<div>
+						MILEAGE</br>적립금
+					</div>
+					<div class="buttoncontent">
+						적립금은 상품 구매시</br>사용하실 수 있습니다.
+					</div>
 				</a>
-				<p>
-					고객님께서 주문하신 상품의</br>주문내역을 확인하실수 있습니다.
-				</p>
 			</div>
 			<div class="mypagebutton">
-				<a href="#" class="buttons">ADDRESS</br>주문내역 조회
+				<a href="#" class="buttons">
+					<div>
+						ADDRESS</br>배송 주소록 관리
+					</div>
+					<div class="buttoncontent">
+						자주 사용하는 배송지를 등록하고</br>관리하실 수 있습니다.
+					</div>
 				</a>
-				<p>
-					고객님께서 주문하신 상품의</br>주문내역을 확인하실수 있습니다.
-				</p>
 			</div>
 		</div>
 
