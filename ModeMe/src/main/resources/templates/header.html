@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:fragment="header">
 <head>
-    <meta charset="EUC-KR">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Header with Search</title>
     <link rel="stylesheet" href="/css/header.css">
     <style>
-        /* 추가된 CSS는 아래 작성 */
+        /* 異�媛��� CSS�� ���� ���� */
     </style>
 </head>
 <body>
     <header class="header">
         <div class="top-bar">
-            <!-- 왼쪽 메뉴 -->
+            <!-- �쇱そ 硫��� -->
             <div class="left-menu">
                 <a href="/signin">LOGIN</a>
-                <a href="#">ORDER</a>
+                <a href="/order">ORDER</a>
                 <a href="#">CART</a>
                 <a href="/MyPage">MY PAGE</a>
             </div>
-            <!-- 오른쪽 메뉴 -->
+            <!-- �ㅻⅨ履� 硫��� -->
             <div class="right-menu">
                 <a href="/notice">NOTICE</a>
                 <a href="/qna">Q&A</a>
@@ -27,7 +27,7 @@
             </div>
         </div>
         <a href="/">
-            <img src="/image/logo.png" alt="로고">
+            <img src="/image/logo.png" alt="濡�怨�">
         </a>
 
         <nav class="menu">
@@ -41,22 +41,22 @@
         </nav>
     </header>
 
-<!-- 검색창 부분 -->
+<!-- 寃���李� 遺�遺� -->
 <div id="search-modal" class="search-modal">
     <div class="search-content">
         <button class="close-btn" id="close-btn">&times;</button>
 		<div class="search-bar">
-		    <input type="text" placeholder="검색어를 입력하세요" class="search-input">
+		    <input type="text" placeholder="寃����대�� ���ν���몄��" class="search-input">
 		    <button class="search-button">
-		        <img src="/image/search.png" alt="검색" class="search-icon">
+		        <img src="/image/search.png" alt="寃���" class="search-icon">
 		    </button>
 		</div>
         <div class="popular-searches">
-            <p>인기검색어</p>
+            <p>�멸린寃�����</p>
             <ul>
-                <li><a href="#">겨울 코트</a></li>
-                <li><a href="#">스웨터</a></li>
-                <li><a href="#">청바지</a></li>
+                <li><a href="#">寃⑥�� 肄���</a></li>
+                <li><a href="#">�ㅼ�⑦��</a></li>
+                <li><a href="#">泥�諛�吏�</a></li>
             </ul>
         </div>
     </div>
