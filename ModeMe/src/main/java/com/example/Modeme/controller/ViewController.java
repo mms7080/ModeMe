@@ -59,6 +59,18 @@ public class ViewController {
 		return "/productDetail/productDetail";
 	}
 	
+	// 제품 리뷰 작성페이지
+	@GetMapping("/productReviewWrite")
+	public String productReviewWrite() {
+		return "/productDetail/productReviewWrite";
+	}
+
+	// 제품 문의 작성페이지
+	@GetMapping("/productQAWrite")
+	public String productQAWrite() {
+		return "/productDetail/productQAWrite";
+	}
+	
 	//결제페이지
 	@GetMapping("/purchase")
 	public String purchase() {
