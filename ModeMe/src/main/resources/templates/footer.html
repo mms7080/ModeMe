@@ -1,14 +1,60 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:fragment="footer">
-<head>
+ <html lang="ko" xmlns:th="http://www.thymeleaf.org" th:fragment="footer">
+ <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/footer.css">
     <title>Footer</title>
-    <link rel="stylesheet" href="/css/footer.css">
 </head>
 <body>
     <footer class="footer">
-        <p>CUSTOMER CENTER: 010-3060-0342</p>
-        <p>Email: support@chitchat.com</p>
+        <div class="footer-container">
+            <!-- Customer Center -->
+            <div class="footer-section">
+                <h5>CUSTOMER CENTER</h5>
+                <p class="phone-number">010-3060-0342</p>
+                <p>AM 10:00 - PM 6:00</p>
+                <p>LUNCH PM 12:00 - PM 1:30</p>
+                <p>SAT.SUN.HOLIDAY OFF</p>
+            </div>
+
+            <!-- Banking Account -->
+            <div class="footer-section">
+                <h5>BANKING ACCOUNT</h5>
+                <p>신한은행 110-445-079289</p>
+                <p>예금주: 모드미</p>
+                <select>
+                    <option>인터넷뱅킹 바로가기</option>
+                </select>
+            </div>
+
+            <!-- Return Address -->
+            <div class="footer-section">
+                <h5>RETURN ADDRESS</h5>
+                <div class="buttons">
+                    <button>내 주문내역</button>
+                    <button>마이페이지</button>
+                </div>
+            </div>
+
+            <!-- Company Info -->
+            <div class="footer-section">
+                <h5>COMPANY</h5>
+                <ul>
+                    <li><a href="#">AGREEMENT</a></li>
+                    <li><a href="#">PRIVACY POLICY</a></li>
+                    <li><a href="#">GUIDE</a></li>
+                </ul>
+			<div class="social-media">
+			    <a href="https://instagram.com" target="_blank">
+			        <img src="/image/insta.png" alt="Instagram Logo" class="social-icon">
+			    </a>
+			    <a href="https://kakao.com" target="_blank">
+			        <img src="/image/kakao.jpg" alt="Kakao Logo" class="social-icon">
+			    </a>
+			</div>
+            </div>
+        </div>
     </footer>
 </body>
 </html>
