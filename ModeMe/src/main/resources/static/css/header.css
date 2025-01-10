@@ -335,5 +335,60 @@ header {
 }
 
 
+/* 툴팁 스타일 */
+.floating-btn {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 툴팁 기본 스타일 (숨김 상태) */
+.floating-btn::after {
+    content: attr(data-tooltip); /* data-tooltip의 값을 가져와 표시 */
+    position: absolute;
+    top: 50%; /* 버튼의 세로 중앙에 맞춤 */
+    right: 60px; /* 버튼의 왼쪽에 표시 */
+    transform: translateY(-50%);
+    background-color: #000;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 10;
+}
+
+/* 툴팁 화살표 */
+.floating-btn::before {
+    content: "";
+    position: absolute;
+    top: 50%; /* 버튼의 세로 중앙에 맞춤 */
+    right: 50px; /* 툴팁 바로 옆에 화살표 표시 */
+    transform: translateY(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent transparent #000; /* 화살표 색상 */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 10;
+}
+
+/* 마우스 올릴 때 툴팁 표시 */
+.floating-btn:hover::after,
+.floating-btn:hover::before {
+    opacity: 1;
+    visibility: visible;
+}
+
 
 
