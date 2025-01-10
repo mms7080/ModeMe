@@ -17,6 +17,7 @@ body {
 main {
     text-align: center;
     margin: 20px;
+    position: relative;
 }
 
 h1 {
@@ -110,11 +111,12 @@ h1 {
     background-color: #fbdfe7;
 }
 
+/* 공지 작성 버튼 위치 설정 */
 .write-notice {
-    display: block;
-    margin: 20px auto;
+    position: absolute; /* 부모 컨테이너 기준으로 고정 */
+    top: 10px; /* 테이블 상단에서 10px 간격 */
+    right: 10%; /* 부모 컨테이너 오른쪽에서 10% 간격 */
     text-align: center;
-    margin-left:75%;
 }
 
 .write-notice button {
@@ -130,6 +132,8 @@ h1 {
 .write-notice button:hover {
     background-color: #666666;
 }
+
+
 /* 검색 폼 스타일 */
 .search-section {
     text-align: center;
