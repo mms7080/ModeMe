@@ -36,6 +36,11 @@ public class ViewController {
 	public String qnaView() {
 		return "/Notice/qnaView";
 	}
+	//비밀글 페이지
+	@GetMapping("/secretPage") 
+	public String secretPage() {
+		return "/Notice/secretPage";
+	}
 	//헤더 없어도되는데 나중에 쓸일있을거같아서 해둠
 	@GetMapping("/header") 
 	public String header() {

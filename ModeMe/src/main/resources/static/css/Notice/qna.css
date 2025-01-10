@@ -57,8 +57,20 @@ h1 {
 }
 
 .notice-table td {
+    text-align: center; /* 텍스트 가운데 정렬 */
+    vertical-align: middle; /* 수직 가운데 정렬 */
+    position: relative; /* Flexbox 사용 없이 텍스트 정렬 유지 */
+    padding: 14px;
     color: #555;
 }
+
+.notice-table td img {
+    display: inline-block; /* 이미지를 inline-block으로 설정 */
+    vertical-align: middle; /* 이미지와 텍스트 수직 정렬 */
+    max-width: 30px; /* 이미지 최대 너비 */
+    max-height: 30px; /* 이미지 최대 높이 */
+}
+
 
 /* 페이지네이션 */
 .pagination {
