@@ -9,6 +9,52 @@
 
 </head>
 <body>
+	<!-- 헤더푸터-->
+	<div th:replace="~{header :: header}"></div>
+
+	<h1>MyPage</h1>
+	<main>
+
+		<div class="MileageHeader">
+			<div class="firstbox rightline">
+				<div>
+					<span>총적립금</span> <span>2,000원</span>
+				</div>
+				<div>
+					<span>사용된 적립금</span> <span>0원</span>
+				</div>
+				<div>
+					<span>환불예정 적립금</span> <span>0원</span>
+				</div>
+			</div>
+			<div class="firstbox">
+				<div>
+					<span>사용가능 적립금</span> <span>2,000원</span>
+				</div>
+				<div>
+					<span>미가용 적립금</span> <span>0원</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="mileagemain">
+			<div class="mileagemaintitle">주문 상품 정보</div>
+			<div class="mileagecontent">
+				<span>주문날짜</span> <span>적립금</span> <span>내용</span>
+			</div>
+		</div>
+
+		<div class="mileagefooter">
+			<div class="mileagenotice">적립금 안내</div>
+			<div class="mileagexplane">
+				<div>1. 주문으로 발생한 적립금은 즉시 사용하능한 적립금으로 전환됩니다.</div>
+				<div>2. 사용가능 적립금은 상품구매시 바로 사용가능합니다.</div>
+				<div>3. 적립금 사용 후 반품/환불/취소시 적립금 또한 상환됩니다.</div>
+			</div>
+		</div>
+	</main>
+
+	<div th:replace="~{footer :: footer}"></div>
 
 </body>
 </html>
