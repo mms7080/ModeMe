@@ -4,10 +4,12 @@
     font-weight: normal;
     font-style: normal;
 }
-*{
-	font-family: 'omyu_pretty';
-}    
-/* 푸터 */
+
+* {
+    font-family: 'omyu_pretty';
+}
+
+/* 페이지 전체 높이를 설정하고, Flexbox로 설정 */
 body {
     margin: 0;
     padding: 0;
@@ -15,22 +17,35 @@ body {
     flex-direction: column;
     min-height: 100vh; /* 전체 화면 높이를 채우기 위한 설정 */
 }
+
 main {
     flex: 1; /* 본문 영역이 남은 공간을 차지하도록 설정 */
 }
+
+/* 푸터 스타일 */
 .footer {
     background-color: #f9f9f9;
     padding: 20px 50px;
     border-top: 1px solid #ddd;
+    font-size: 14px;
+    color: #333;
+    text-align: left;
+    width: 100%; /* 화면 전체 너비에 맞춤 */
+    position: relative; /* 스크롤 시 따라오지 않게 설정 */
+    bottom: 0; /* 페이지 하단에 위치 */
+    margin-top: auto; /* 본문 다음에 위치 */
 }
 
+/* 푸터 컨테이너 */
 .footer-container {
     display: flex;
     justify-content: space-between;
     max-width: 1200px;
     margin: 0 auto;
+    flex-wrap: wrap;
 }
 
+/* 푸터 섹션 스타일 */
 .footer-section {
     flex: 1;
     margin: 0 10px;
@@ -65,6 +80,7 @@ main {
     text-decoration: underline;
 }
 
+/* 전화번호 강조 */
 .phone-number {
     font-size: 16px;
     font-weight: bold;
@@ -72,6 +88,7 @@ main {
     margin-bottom: 10px;
 }
 
+/* 버튼 스타일 */
 .buttons {
     display: flex;
     gap: 10px;
@@ -90,17 +107,7 @@ main {
     background-color: #555;
 }
 
-.social-media a {
-    display: inline-block;
-    margin-right: 10px;
-    text-decoration: none;
-    font-size: 12px;
-    color: #555;
-}
-
-.social-media a:hover {
-    text-decoration: underline;
-}
+/* 소셜 미디어 스타일 */
 .social-media {
     display: flex;
     gap: 10px; /* 아이콘 간격 설정 */
@@ -123,4 +130,14 @@ main {
     transform: scale(1.1); /* 호버 시 확대 효과 */
 }
 
-
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .footer-section {
+        width: 100%;
+        text-align: center;
+    }
+}
