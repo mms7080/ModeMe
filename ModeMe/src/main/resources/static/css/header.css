@@ -107,8 +107,8 @@ header {
 /* 검색 내용 */
 .search-content {
     position: absolute;
-    top: 20%;
-    left: 50%;
+    top: 10%;
+    left: 83%;
     transform: translate(-50%, -20%);
     width: 400px;
     background-color: white;
@@ -156,31 +156,39 @@ header {
 }
 
 /* 인기 검색어 */
+.popular-searches {
+    text-align: left; /* 텍스트를 왼쪽으로 정렬 */
+    margin-left: 20px; /* 왼쪽으로 이동 간격 설정 */
+    margin-top: 20px; /* 위쪽 간격 유지 */
+}
+
 .popular-searches p {
     font-weight: bold;
-    margin-top: 20px;
-    margin-bottom: 10px;
+    font-size:20px;
+    margin-bottom: 15px;
     color: #333;
 }
 
 .popular-searches ul {
-    list-style: none;
+    list-style: none; /* 기본 리스트 스타일 제거 */
     padding: 0;
+    margin: 0; /* 리스트의 기본 여백 제거 */
 }
 
 .popular-searches ul li {
-    margin: 5px 0;
+    margin: 5px 0; /* 리스트 간격 설정 */
 }
 
 .popular-searches ul li a {
-    text-decoration: none;
+    text-decoration: none; /* 밑줄 제거 */
     color: #333;
 }
 
 .popular-searches ul li a:hover {
-    text-decoration: underline;
-    color: #555;
+    text-decoration: underline; /* 마우스 호버 시 밑줄 추가 */
+    color: #555; /* 색상 변경 */
 }
+
 /* 검색 입력 필드와 버튼 컨테이너 */
 .search-bar {
     display: flex;
