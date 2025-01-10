@@ -62,18 +62,14 @@ h1 {
     padding: 14px;
     height: 14px; /* 고정 높이 설정 */
     color: #555;
+    
 }
 
 .notice-table td img {
     display: inline-block; /* 이미지를 인라인 블록으로 설정 */
     vertical-align: middle; /* 이미지와 텍스트를 같은 라인에 정렬 */
-    max-width: 30px; /* 이미지 최대 너비 */
-    max-height: 30px; /* 이미지 최대 높이 */
     margin-right: 2px; /* 이미지와 텍스트 간격 */
 }
-
-
-
 
 /* 페이지네이션 */
 .pagination {
@@ -105,13 +101,6 @@ h1 {
     background-color: #f5f5f5;
 }
 
-
-
-.notice-table td:last-child {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
 
 .notice-table button {
     padding: 5px 10px;
