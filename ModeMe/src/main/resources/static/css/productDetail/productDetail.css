@@ -51,6 +51,7 @@ body {
 	width: 80%;
 	margin: 0 auto;
 	padding: 20px;
+	align-content: center;
 }
 
 .product-section {
@@ -60,7 +61,7 @@ body {
 }
 
 .product-images {
-	width: 60%;
+	width: 47%;
 }
 
 .image-preview {
@@ -81,8 +82,12 @@ body {
 	background-color: #e0e0e0;
 }
 
+.product-void {
+	width: 6%;
+}
+
 .product-details {
-	width: 40%;
+	width: 47%;
 }
 
 .product-details .price {
