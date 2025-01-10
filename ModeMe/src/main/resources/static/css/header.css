@@ -6,6 +6,9 @@
 }
 *{
 	font-family: 'omyu_pretty';
+}
+::-webkit-scrollbar {
+	display:none;
 }    
 body {
     margin: 0;
