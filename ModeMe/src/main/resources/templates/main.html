@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModeMe</title>
+    <link href="css/main.css" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="~{header::header}"></div>
+
+<section>
+    <h2 class="section-title">Weekly Best</h2>
+    <div class="carousel">
+        <img src="image/026.jpg" alt="Weekly Best Item 1">
+        <img src="image/026.jpg" alt="Weekly Best Item 2">
+        <img src="image/026.jpg" alt="Weekly Best Item 3">
+        <img src="image/026.jpg" alt="Weekly Best Item 4">
+    </div>
+</section>
+
+<section>
+    <h2 class="section-title">New Arrival 5%</h2>
+    <div class="product-grid">
+        <div class="product-card">
+            <img src="image/026.jpg" alt="New Arrival 1">
+            <p>Corduroy Pintuck Pants (4C)</p>
+            <p>KRW 42,500</p>
+        </div>
+        <div class="product-card">
+            <img src="image/026.jpg" alt="New Arrival 2">
+            <p>Wool Half Mustang</p>
+            <p>KRW 82,000</p>
+        </div>
+        <div class="product-card">
+            <img src="image/026.jpg" alt="New Arrival 3">
+            <p>Knitewear Hoodie Set (3C)</p>
+            <p>KRW 23,500</p>
+        </div>
+        <div class="product-card">
+            <img src="image/026.jpg" alt="New Arrival 4">
+            <p>Brick Hidden Padding (3C)</p>
+            <p>KRW 64,500</p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2 class="section-title">Best Item</h2>
+    <div class="product-grid">
+        <div class="product-card">
+            <img src="image/026.jpg" alt="Best Item 1">
+            <p>Ten Wide Pants (2C)</p>
+            <p>KRW 40,000</p>
+        </div>
+        <div class="product-card">
+            <img src="image/026.jpg" alt="Best Item 2">
+            <p>Cashmere Half-neck Knitwear (7C)</p>
+            <p>KRW 34,900</p>
+        </div>
+        <div class="product-card">
+            <img src="image/026.jpg" alt="Best Item 3">
+            <p>Napping Corduroy Hoodie & Pants (3C)</p>
+            <p>KRW 48,500</p>
+        </div>
+        <div class="product-card">
+            <img src="image/026.jpg" alt="Best Item 4">
+            <p>Corduroy Straight Pants (3C)</p>
+            <p>KRW 32,500</p>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{footer::footer}"></div>
+
+</body>
+</html>

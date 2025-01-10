@@ -53,4 +53,18 @@ public class ViewController {
 		return "MyPage/MyPage";
 	}
 	
+	//결제페이지
+	@GetMapping("/purchase")
+	public String purchase() {
+		return "purchase/purchase";
+	}
+	//메인페이지
+	@GetMapping("/")
+	public String mainView() {
+		return "main";
+	}
+	@GetMapping("/main")
+	public String mainView2() {
+		return "main";
+	}
 }
