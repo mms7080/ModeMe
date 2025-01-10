@@ -16,3 +16,32 @@
 	font-weight: normal;
 	font-style: normal;
 }
+
+html, body {
+	height:100%;
+}
+
+/* 메인 콘텐츠 */
+main {
+	margin: 20px;
+	height:100%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+h1 {
+	font-size: 24px;
+	text-align: center;
+	color: #333;
+	margin-bottom: 20px;
+}
+
+.greybox {
+	height: 15%;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	border: 5px solid lightgrey;
+	padding: 10px;
+	font-size: 15px;
+}
