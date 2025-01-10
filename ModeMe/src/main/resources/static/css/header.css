@@ -393,7 +393,7 @@ header {
 .points-tooltip {
     position: absolute;
     top: 32px; /* LOGIN 바로 아래 */
-    left: 2.8%; /* 기준점을 왼쪽에서 50%로 변경 */
+    left: 2.6%; /* 기준점을 왼쪽에서 50%로 변경 */
     transform: translateX(0); /* translateX를 제거하여 더 오른쪽으로 위치 */
     background-color: #000;
     color: #fff;
