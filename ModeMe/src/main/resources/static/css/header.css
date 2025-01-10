@@ -27,12 +27,17 @@ header {
 /* 왼쪽 메뉴 스타일 */
 .left-menu {
     margin-right: 20px;
+    position: relative;
+    padding-left: 160px;
 }
 
 /* 오른쪽 메뉴 스타일 */
 .right-menu {
     margin-left: 20px;
+    position: relative;
+    padding-right: 160px;
 }
+
 
 /* 왼쪽 메뉴 항목 */
 .left-menu a {
@@ -391,10 +396,10 @@ header {
 }
 /* 포인트 툴팁 스타일 */
 .points-tooltip {
-    position: absolute;
-    top: 32px; /* LOGIN 바로 아래 */
-    left: 2.8%; /* 기준점을 왼쪽에서 50%로 변경 */
-    transform: translateX(0); /* translateX를 제거하여 더 오른쪽으로 위치 */
+    position: absolute; /* 부모 요소를 기준으로 위치 */
+    top: 20px; /* LOGIN 버튼 바로 아래 */
+    left:45.6%; /* 부모의 중앙에 위치 */
+    transform: translateX(-50%); /* 부모 중앙에서 정확히 정렬 */
     background-color: #000;
     color: #fff;
     font-size: 12px;
@@ -404,16 +409,16 @@ header {
     opacity: 1; /* 항상 표시 */
     visibility: visible; /* 항상 표시 */
     z-index: 1000;
-    animation: bounce 2s infinite ease-in-out; /* 통통 튀는 애니메이션 추가 */
+    animation: bounce 2s infinite ease-in-out; /* 통통 튀는 애니메이션 */
 }
 
 /* 툴팁 애니메이션 */
 @keyframes bounce {
     0%, 100% {
-        transform: translateY(0); /* translateX는 삭제 */
+        transform: translate(-50%, 0); /* 원래 위치 */
     }
     50% {
-        transform: translateY(-5px); /* translateX는 삭제 */
+        transform: translate(-50%, -5px); /* 위로 이동 범위 축소 */
     }
 }
 
