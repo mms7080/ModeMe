@@ -64,10 +64,27 @@ h1 {
 	transition: bacground-color 0.3s;
 }
 
+.orderheaderform {
+	display: flex;
+	justify-content:center;
+	align-items: center;
+	gap: 5px;
+	width:50%;
+}
+
+.searchcalendar {
+	display: flex;
+background-color: transparent;
+	border:none;
+	align-items: center;
+	cursor: pointer;
+}
+
 .ordersearch {
 	background-color: black;
 	color: white;
 	border-radius: 3px;
+	width:100%;
 }
 
 .ordercontent {

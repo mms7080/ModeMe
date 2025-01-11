@@ -9,17 +9,17 @@
 
 </head>
 <body>
-	<!-- 헤더푸터-->
+	<!-- 헤더 -->
 	<div th:replace="~{header :: header}"></div>
 
-		<h1>MyPage</h1>
+	<h1>MyPage</h1>
 	<main>
-
+		<!-- 마이페이지 회색 박스 -->
 		<div class="MypageHeader">
 			<div class="firstbox rightline">
 				<div class="firstbuttonbox">
 					<span>가용적립금</span> <span>2,000원</span>
-					<form method="get" action="/saved_money" class="MileageSearch">
+					<form method="get" action="/mileage" class="MileageSearch">
 						<button type="submit" class="MileageSearchButton">조회</button>
 					</form>
 				</div>
@@ -36,7 +36,8 @@
 				</div>
 			</div>
 		</div>
-
+		
+		<!-- 나의 주문처리 현황 -->
 		<div class="MyPageOrder">
 			<div class="mypageordertitle">
 				<span id="myorderprocess">나의 주문처리 현황 </span><span class="smalltitle">(최근
@@ -65,9 +66,10 @@
 			</div>
 		</div>
 
+		<!-- 마이페이지 분류 버튼 -->
 		<div class="mypagebuttons">
 			<div class="mypagebutton">
-				<a href="/order" class="buttons">
+				<a href="/order" class="mypagebuttondetail">
 					<div>
 						ORDER</br>주문내역 조회
 					</div>
@@ -77,7 +79,7 @@
 				</a>
 			</div>
 			<div class="mypagebutton">
-				<a href="#" class="buttons">
+				<a href="#" class="mypagebuttondetail">
 					<div>
 						PROFILE</br>회원 정보
 					</div>
@@ -87,7 +89,7 @@
 				</a>
 			</div>
 			<div class="mypagebutton">
-				<a href="/wishlist" class="buttons">
+				<a href="/wishlist" class="mypagebuttondetail">
 					<div>
 						WISHLIST</br>관심 상품
 					</div>
@@ -97,7 +99,7 @@
 				</a>
 			</div>
 			<div class="mypagebutton">
-				<a href="/mileage" class="buttons">
+				<a href="/mileage" class="mypagebuttondetail">
 					<div>
 						MILEAGE</br>적립금
 					</div>
@@ -107,7 +109,7 @@
 				</a>
 			</div>
 			<div class="mypagebutton">
-				<a href="/address" class="buttons">
+				<a href="/address" class="mypagebuttondetail">
 					<div>
 						ADDRESS</br>배송 주소록 관리
 					</div>
@@ -119,7 +121,8 @@
 		</div>
 
 	</main>
-
+	
+	<!-- 푸터 -->
 	<div th:replace="~{footer :: footer}"></div>
 
 </body>
