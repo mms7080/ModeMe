@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문 관리</title>
+    <link rel="stylesheet" href="/css/manager/managerSale.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script defer src="/js/manager/managerSale.js"></script>
+</head>
+<body>
+    <!-- 헤더 -->
+    <div th:replace="~{header :: header}"></div>
+
+    <main>
+        <h1>주문 관리</h1>    
+
+        <!-- 매출 차트 (월별 및 카테고리별) -->
+        <div class="chart-section">
+            <!-- 월별 차트 -->
+            <div class="chart-container">
+                <canvas id="salesChartMonthly"></canvas>
+            </div>
+
+            <!-- 카테고리별 차트 -->
+            <div class="chart-container">
+                <canvas id="salesChartCategory"></canvas>
+            </div>
+        </div>
+
+        <!-- 검색 섹션 -->
+        <div class="search-section">
+            <label for="search-option">검색 옵션:</label> 
+            <select id="search-option">
+                <option value="Order">주문자</option>
+                <option value="how">결제방법</option>
+                <option value="id">주문아이디</option>
+            </select>
+            <input type="text" id="search-input" placeholder="검색어를 입력하세요">
+            <button onclick="searchNotice()">검색</button>
+        </div>
+
+        <!-- 주문 테이블 -->
+        <table class="notice-table">
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>주문일시</th>
+                    <th>카테고리</th>
+                    <th>주문정보</th>
+                    <th>수량</th>
+                    <th>상품금액</th>
+                    <th>주문상태</th>
+                    <th>주문아이디</th>
+                    <th>주문자</th>
+                    <th>결제방법</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>2025-01-09</td>
+                    <td>top</td>
+                    <td>빈티지 체크셔츠</td>
+                    <td>1</td>
+                    <td>18000</td>
+                    <td>완료</td>
+                    <td>test01</td>
+                    <td>홍길동</td>
+                    <td>카드결제</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>2025-02-08</td>
+                    <td>bottom</td>
+                    <td>코튼 팬츠</td>
+                    <td>2</td>
+                    <td>40000</td>
+                    <td>완료</td>
+                    <td>test02</td>
+                    <td>김철수</td>
+                    <td>현금결제</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 페이지네이션 -->
+        <div class="pagination">
+            <button>&lt;</button>
+            <span>1</span>
+            <button>&gt;</button>
+        </div>
+    </main>
+
+    <!-- 푸터 -->
+    <div th:replace="~{footer :: footer}"></div>
+
+</body>  
+</html>
