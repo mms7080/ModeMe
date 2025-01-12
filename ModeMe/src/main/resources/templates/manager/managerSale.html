@@ -28,18 +28,6 @@
             </div>
         </div>
 
-        <!-- 검색 섹션 -->
-        <div class="search-section">
-            <label for="search-option">검색 옵션:</label> 
-            <select id="search-option">
-                <option value="Order">주문자</option>
-                <option value="how">결제방법</option>
-                <option value="id">주문아이디</option>
-            </select>
-            <input type="text" id="search-input" placeholder="검색어를 입력하세요">
-            <button onclick="searchNotice()">검색</button>
-        </div>
-
         <!-- 주문 테이블 -->
         <table class="notice-table">
             <thead>
@@ -90,6 +78,18 @@
             <span>1</span>
             <button>&gt;</button>
         </div>
+                <!-- 검색 섹션 -->
+        <div class="search-section">
+            <label for="search-option">검색 옵션:</label> 
+            <select id="search-option">
+                <option value="Order">주문자</option>
+                <option value="how">결제방법</option>
+                <option value="id">주문아이디</option>
+            </select>
+            <input type="text" id="search-input" placeholder="검색어를 입력하세요">
+            <button onclick="searchNotice()">검색</button>
+        </div>
+        
     </main>
 
     <!-- 푸터 -->

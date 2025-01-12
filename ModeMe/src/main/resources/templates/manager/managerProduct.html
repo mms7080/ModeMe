@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MyPage</title>
+<title>상품관리</title>
 <link rel="stylesheet" href="/css/manager/managerProduct.css">
 <script defer src="/js/manager/managerProduct.js"></script>
 </head>
@@ -13,14 +13,6 @@
 	<div th:replace="~{header :: header}"></div>
 	<main>
 		<h1>상품관리</h1>
-		<div class="search-section">
-			<label for="search-option">검색 옵션:</label> <select id="search-option">
-				<option value="code">상품코드</option>
-				<option value="name">상품명</option>
-				<option value="date">등록일시</option>
-			</select> <input type="text" id="search-input" placeholder="검색어를 입력하세요">
-			<button onclick="searchNotice()">검색</button>
-		</div>
 		<table class="notice-table">
 			<thead>
 				<tr>
@@ -45,6 +37,7 @@
 					<td>10</td>
 					<td>
 						<button id="modfiyButton">수정</button>
+						<button id="deleteButton">삭제</button>
 					</td>
 				</tr>
 			</tbody>
@@ -53,6 +46,14 @@
 			<button>&lt;</button>
 			<span>1</span>
 			<button>&gt;</button>
+		</div>
+				<div class="search-section">
+			<label for="search-option">검색 옵션:</label> <select id="search-option">
+				<option value="code">상품코드</option>
+				<option value="name">상품명</option>
+				<option value="date">등록일시</option>
+			</select> <input type="text" id="search-input" placeholder="검색어를 입력하세요">
+			<button onclick="searchNotice()">검색</button>
 		</div>
 	</main>
 	<div th:replace="~{footer :: footer}"></div>

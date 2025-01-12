@@ -75,6 +75,7 @@ main {
 .form-group textarea {
     width: 60%;
     padding: 10px;
+    margin-bottom: 10px;
     font-size: 14px;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -85,7 +86,7 @@ main {
     background-color: transparent; /* 배경색 투명하게 설정 */
     padding: 10px; /* 패딩을 추가하여 버튼 크기 조정 */
     font-size: 16px; /* 글자 크기 설정 */
-    width: 19%; /* 너비를 100%로 설정 */
+    width: 21%; /* 너비를 100%로 설정 */
     height: auto;
     cursor: pointer; /* 커서 포인터로 변경 (사용자가 클릭할 수 있다는 표시) */
 }
@@ -106,6 +107,7 @@ main {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
+    gap:10px;
 }
 
 .dynamic-list-item input {
