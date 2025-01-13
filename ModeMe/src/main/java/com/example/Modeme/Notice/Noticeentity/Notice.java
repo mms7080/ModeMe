@@ -1,4 +1,4 @@
-package com.example.Modeme.Noticeentity;
+package com.example.Modeme.Notice.Noticeentity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;

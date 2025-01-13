@@ -1,4 +1,4 @@
-package com.example.Modeme.Noticedto;
+package com.example.Modeme.Notice.Noticedto;
 
 
 public class NoticeDto {

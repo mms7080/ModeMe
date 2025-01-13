@@ -1,4 +1,4 @@
-package com.example.Modeme.NoticeService;
+package com.example.Modeme.Notice.NoticeService;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,9 +9,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.example.Modeme.NoticeRepsitory.NoticeRepository;
-import com.example.Modeme.Noticedto.NoticeDto;
-import com.example.Modeme.Noticeentity.Notice;
+import com.example.Modeme.Notice.NoticeRepository.NoticeRepository;
+import com.example.Modeme.Notice.Noticedto.NoticeDto;
+import com.example.Modeme.Notice.Noticeentity.Notice;
 
 @Service
 public class NoticeService {

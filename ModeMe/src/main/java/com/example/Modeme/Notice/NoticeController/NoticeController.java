@@ -1,4 +1,4 @@
-package com.example.Modeme.NoticeController;
+package com.example.Modeme.Notice.NoticeController;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.Modeme.NoticeService.NoticeService;
-import com.example.Modeme.Noticedto.NoticeDto;
-import com.example.Modeme.Noticeentity.Notice;
+import com.example.Modeme.Notice.NoticeService.NoticeService;
+import com.example.Modeme.Notice.Noticedto.NoticeDto;
+import com.example.Modeme.Notice.Noticeentity.Notice;
 
 @Controller
 @RequestMapping("/notices")
