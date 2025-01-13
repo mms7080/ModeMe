@@ -5,12 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Detail Page</title>
     <link rel="stylesheet" href="/css/productDetail/productDetail.css">
-    <script defer src="/js/prdDetailNav.js"></script>
+    <script defer src="/js/productDetail/prdDetailNav.js"></script>
+    <script defer src="/js/productDetail/productDetail.js"></script>
 </head>
 <body>
-
+	<!-- 헤더 -->
+	<div th:replace="~{header :: header}"></div>
 
     <div class="top container" id="prdBuy">
+    
+    	<!-- Admin Action Buttons Section -->
+		<div class="admin-buttons">
+			<span>
+			    <a href="/main" class="admin-delete-button">삭제</a>
+			    <a href="/productEdit" class="admin-edit-button">수정</a>
+			</span>
+		</div>
     
 		<!-- Navigation Menu -->
 		<ul class="menu">
@@ -35,13 +45,21 @@
         <div class="product-section">
             <!-- Product Images -->
             <div class="product-images">
-                <div class="image-preview"></div>
-                <div class="thumbnail-list">
-                    <div class="thumbnail"></div>
-                    <div class="thumbnail"></div>
-                    <div class="thumbnail"></div>
-                </div>
-            </div>
+			    <div class="image-preview">
+			        <img src="image/prdDetailSample/4.jpg" alt="Main Preview" class="preview-image" />
+			    </div>
+			    <div class="thumbnail-list">
+			        <div class="thumbnail">
+			            <img src="image/prdDetailSample/6.jpg" alt="Thumbnail 1" />
+			        </div>
+			        <div class="thumbnail">
+			            <img src="image/prdDetailSample/3.jpg" alt="Thumbnail 2" />
+			        </div>
+			        <div class="thumbnail">
+			            <img src="image/prdDetailSample/5.jpg" alt="Thumbnail 3" />
+			        </div>
+			    </div>
+			</div>
             
             <div class="product-void"></div>
 
@@ -52,7 +70,7 @@
                 <!-- Product Options -->
                 <div class="product-options">
 	                <div>
-	                	<span class="option-label"><b>COLOR</b></span>
+	                	<span class="option-label color"><b>COLOR</b></span>
 	                	<div class="option-buttons">
 		                    <button>베이지</button>
 		                    <button>그레이</button>
@@ -60,7 +78,7 @@
 	                    </div>
 	                </div>
 	                <div>
-	                	<span class="option-label"><b>SIZE</b></span>
+	                	<span class="option-label size"><b>SIZE</b></span>
 	                	<div class="option-buttons">	                	
 		                    <button>S</button>
 		                    <button>M</button>
@@ -68,36 +86,18 @@
 		                    <button>XL</button>
 	                	</div>
 	                </div>
+	                <button class="add-to-selection">항목 추가</button>
                 </div>
                 
                 <!-- Selection Section -->
                 <div class="selection">
-                    <div class="selection-item">
-                    	<b>최고로 따뜻한 발마칸 코오트</b>
-                        <p>베이지</p>
-                        <span class="size">L</span>
-                        <input type="number" class="quantity-input" value="1" min="1">
-                        <span class="price">₩81,900</span>
-                        <button class="delete-item" aria-label="삭제">&times;</button>
-                    </div>
-                    <div class="selection-item">
-                    	<b>최고로 따뜻한 발마칸 코오트</b>
-                        <p>그레이</p>
-                        <span class="size">M</span>
-                        <input type="number" class="quantity-input" value="1" min="1">
-                        <span class="price">₩81,900</span>
-                        <button class="delete-item" aria-label="삭제">&times;</button>
-                    </div>
-                    <div class="selection-item">
-                    	<b>최고로 따뜻한 발마칸 코오트</b>
-                        <p>블랙</p>
-                        <span class="size">S</span>
-                        <input type="number" class="quantity-input" value="1" min="1">
-                        <span class="price">₩81,900</span>
-                        <button class="delete-item" aria-label="삭제">&times;</button>
-                    </div>
+					<!-- Selection 자동 생성 -->
                 </div>
-
+                
+				<div class="selection-summary">
+				    총 가격: <span id="total-price">₩0</span>
+				</div>
+				
                 <!-- Purchase Section -->
                 <div class="purchase-section">
                     <button class="buyNow">바로 구매하기</button>
@@ -224,7 +224,7 @@
                 <button>3</button>
             </div>
 			<div class="section-action">
-		        <a href="/review-write" class="action-button">리뷰 작성하기</a>
+		        <a href="/productReviewWrite" class="action-button">리뷰 작성하기</a>
 		    </div>
         </div>
 
@@ -263,9 +263,13 @@
                 <button>3</button>
             </div>
 		    <div class="section-action">
-		        <a href="/qa-write" class="action-button">질문 작성하기</a>
+		        <a href="/productQAWrite" class="action-button">질문 작성하기</a>
 		    </div>
         </div>
     </div>
+    
+    	<!-- 푸터 -->
+	<div th:replace="~{footer :: footer}"></div>
+    
 </body>
 </html>

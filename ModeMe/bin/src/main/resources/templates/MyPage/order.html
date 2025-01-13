@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order</title>
+<link rel="stylesheet" href="/css/MyPage/order.css">
+
+</head>
+<body>
+	<!-- 헤더푸터-->
+	<div th:replace="~{header :: header}"></div>
+
+	<h1>Order</h1>
+	<main>
+		<div class="OrderHeader">
+			<div class="greybox">
+				<select class="orderselect">
+					<option>입금전</option>
+					<option>배송준비중</option>
+					<option>배송중</option>
+					<option>배송완료</option>
+					<option>취소</option>
+					<option>교환</option>
+					<option>반품</option>
+				</select> 
+				<span class="daybuttons">
+					<button class="daybutton">오늘</button>
+					<button class="daybutton">1주일</button>
+					<button class="daybutton">1개월</button>
+					<button class="daybutton">3개월</button>
+					<button class="daybutton">6개월</button>
+				</span> 
+					
+				<form class="orderheaderform">
+					<input/>
+					<button class="searchcalendar">
+						  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-date" viewBox="0 0 16 16">
+						    <path d="M6.445 11.688V6.354h-.633A13 13 0 0 0 4.5 7.16v.695c.375-.257.969-.62 1.258-.777h.012v4.61zm1.188-1.305c.047.64.594 1.406 1.703 1.406 1.258 0 2-1.066 2-2.871 0-1.934-.781-2.668-1.953-2.668-.926 0-1.797.672-1.797 1.809 0 1.16.824 1.77 1.676 1.77.746 0 1.23-.376 1.383-.79h.027c-.004 1.316-.461 2.164-1.305 2.164-.664 0-1.008-.45-1.05-.82zm2.953-2.317c0 .696-.559 1.18-1.184 1.18-.601 0-1.144-.383-1.144-1.2 0-.823.582-1.21 1.168-1.21.633 0 1.16.398 1.16 1.23"/>
+						    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+						  </svg>
+						</button>
+						 ~ <input/>
+					<button class="searchcalendar">
+					  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-date" viewBox="0 0 16 16">
+					    <path d="M6.445 11.688V6.354h-.633A13 13 0 0 0 4.5 7.16v.695c.375-.257.969-.62 1.258-.777h.012v4.61zm1.188-1.305c.047.64.594 1.406 1.703 1.406 1.258 0 2-1.066 2-2.871 0-1.934-.781-2.668-1.953-2.668-.926 0-1.797.672-1.797 1.809 0 1.16.824 1.77 1.676 1.77.746 0 1.23-.376 1.383-.79h.027c-.004 1.316-.461 2.164-1.305 2.164-.664 0-1.008-.45-1.05-.82zm2.953-2.317c0 .696-.559 1.18-1.184 1.18-.601 0-1.144-.383-1.144-1.2 0-.823.582-1.21 1.168-1.21.633 0 1.16.398 1.16 1.23"/>
+					    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+					  </svg>
+					</button>
+					<button class="ordersearch">조회</button>
+				</form>
+			</div>
+		</div>
+		<p style="color: grey;">○ 주문내역은 최대 6개월까지만 조회 가능합니다.</p>
+		<div class="ordermain">
+			<div class="ordermaintitle">주문 상품 정보</div>
+			<div class="ordercontent">
+				<span>주문일자</br>[주문번호]</span>
+				<span>이미지</span>
+				<span>상품정보</span>
+				<span>수량</span>
+				<span>상품구매금액</span>
+				<span>주문처리상태</span>
+				<span>취소/교환/반품</span>
+			</div>
+			
+			<!-- 주문 내역이 있을 경우 (orderList model명)-->
+			<div th:if="${orderList != null && !orderList.isEmpty()}">
+				<div>주문 내역이 있습니다.</div>
+			</div>
+			<div th:unless="${orderList != null && !orderList.isEmpty()}" class="orderlist">
+				<!-- 주문 내역이 없는 경우 -->
+				<div>주문 내역이 없습니다.</div>
+			</div>
+		</div>
+	</main>
+
+	<div th:replace="~{footer :: footer}"></div>
+
+</body>
+</html>

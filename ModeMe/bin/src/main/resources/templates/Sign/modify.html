@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원정보 수정</title>
+    <link rel="stylesheet" href="/css/Sign/modify.css">
+</head>
+<body>
+    <!-- 헤더 -->
+    <div th:replace="~{header :: header}"></div>
+
+    <!-- 본문 -->
+    <main class="modify-container">
+        <div class="breadcrumb">
+            <a href="/mainpage">홈</a> &gt; <span>회원정보 수정</span>
+        </div>
+        <h1>회원정보 수정</h1>
+        <form action="/member/update" method="post" class="modify-form">
+            <!-- 기본정보 -->
+            <fieldset>
+                <legend>기본정보</legend>
+                <div class="form-row">
+                    <label for="username">아이디</label>
+                    <input type="text" id="username" name="username" value="ec0002" readonly>
+                </div>
+                <div class="form-row">
+                    <label for="password">비밀번호</label>
+                    <input type="password" id="password" name="password" placeholder="비밀번호를 입력해주세요">
+                </div>
+                <div class="form-row">
+                    <label for="name">이름</label>
+                    <input type="text" id="name" name="name" value="김은채">
+                </div>
+                <div class="form-row">
+                    <label for="address">주소</label>
+                    <input type="text" id="address" name="address" placeholder="주소를 입력해주세요">
+                    <button type="button" class="address-btn">주소찾기</button>
+                </div>
+            </fieldset>
+
+            <!-- 연락처 -->
+            <fieldset>
+                <legend>연락처</legend>
+                <div class="form-row">
+                    <label for="phone">휴대폰 번호</label>
+                    <div class="phone-input-group">
+                        <input type="text" name="phonePart1" placeholder="010" maxlength="3">
+                        <input type="text" name="phonePart2" placeholder="1234" maxlength="4">
+                        <input type="text" name="phonePart3" placeholder="5678" maxlength="4">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label>SMS 수신 여부</label>
+                    <div class="radio-group">
+                        <input type="radio" id="sms-yes" name="sms" value="yes">
+                        <label for="sms-yes">수신</label>
+                        <input type="radio" id="sms-no" name="sms" value="no" checked>
+                        <label for="sms-no">거부</label>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- 이메일 -->
+            <fieldset>
+                <legend>이메일</legend>
+                <div class="form-row">
+                    <label for="email">이메일</label>
+                    <input type="email" id="email" name="email" value="example@domain.com">
+                </div>
+                <div class="form-row">
+                    <label>이메일 수신 여부</label>
+                    <div class="radio-group">
+                        <input type="radio" id="email-yes" name="emailConsent" value="yes">
+                        <label for="email-yes">수신</label>
+                        <input type="radio" id="email-no" name="emailConsent" value="no" checked>
+                        <label for="email-no">거부</label>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- 추가정보 -->
+            <fieldset>
+                <legend>추가정보</legend>
+                <div class="form-row">
+                    <label for="job">직업</label>
+                    <input type="text" id="job" name="job" placeholder="직업을 입력해주세요">
+                </div>
+                <div class="form-row">
+                    <label for="birth">생년월일</label>
+                    <input type="date" id="birth" name="birth">
+                </div>
+            </fieldset>
+
+            <!-- 버튼 -->
+            <div class="form-actions">
+                <button type="submit" class="btn-save">회원정보 수정</button>
+                <button type="reset" class="btn-cancel">취소</button>
+            </div>
+        </form>
+    </main>
+
+    <!-- 푸터 -->
+    <div th:replace="~{footer :: footer}"></div>
+</body>
+</html>

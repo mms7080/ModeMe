@@ -1,46 +1,61 @@
 @charset "UTF-8";
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'omyu_pretty';
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'omyu_pretty';
 }
 
 @font-face {
-    font-family: 'omyu_pretty';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/omyu_pretty.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
+	font-family: 'omyu_pretty';
+	src:
+		url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/omyu_pretty.woff2')
+		format('woff2');
+	font-weight: normal;
+	font-style: normal;
 }
 
-html {
-    height: auto; /*화면 전체 높이만큼 설정*/
-    overflow: auto; /* 스크롤 활성화 */
+html, body {
+	height: 100%;
 }
 
 /* 메인 콘텐츠 */
 main {
-    margin: 20px;
+	margin: 20px;
+	height: 100%;
+	width: 80%;
+	margin: 0 auto; /* 수평으로 가운데 정렬 */
+	display: flex;
+	flex-direction: column;
+	gap: 30px;
 }
 
 h1 {
-    font-size: 24px;
-    text-align: center;
-    color: #333;
-    margin-bottom: 20px;
+	font-size: 24px;
+	text-align: center;
+	color: #333;
+	margin-bottom: 20px;
+	padding: 20px;
 }
 
 .MypageHeader {
+	height: 15%;
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
 	border: 5px solid lightgrey;
 	padding: 10px;
 	font-size: 15px;
+	align-content: center;
 }
 
 .firstbox {
+	padding: 10px;
+}
+
+.rightline {
 	border-right: 1px solid lightgrey;
+	align-content: center;
 }
 
 .MileageSearch {
@@ -55,33 +70,37 @@ h1 {
 
 .MyPageOrder {
 	border: 1px solid lightgrey;
-	margin-top: 10px;
-	margin-bottom: 10px;
+	height: 20%;
+}
+
+.mypageordertitle {
+	height: 30%;
+	padding-left: 10px;
+	align-content: center;
 }
 
 .smalltitle {
 	font-size: 10px;
 	color: lightgrey;
+	align-content: center;
 }
 
 .orderprogress {
-	display:grid;
+	height: 70%;
+	display: grid;
 	grid-template-columns: repeat(5, 1fr);
 	border-top: 1px solid lightgrey;
 	text-align: center;
-}
-
-.ordermypage {
-	border-right: 1px solid lightgrey;
-    align-content: center;
+	align-content: center;
 }
 
 .mypagebuttons {
 	display: grid;
 	grid-template-rows: repeat(2, 1fr);
 	grid-template-columns: repeat(3, 1fr);
-	gap: 10px;
+	gap: 7px;
 	text-align: center;
+	height: 40%;
 }
 
 .mypagebutton {
@@ -93,13 +112,14 @@ h1 {
 	border: 1px solid black;
 }
 
-.mypagebutton p {
+.mypagebutton .buttoncontent {
 	font-size: 10px;
 	color: grey;
-	margin-top: 10px;
 }
 
-.buttons {
+.mypagebuttondetail {
 	color: black;
 	text-decoration: none;
+	display: flex;
+	flex-direction: column;
 }
