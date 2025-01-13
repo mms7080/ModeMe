@@ -63,6 +63,7 @@ main {
     margin-bottom: 15px;
 }
 
+
 .form-group label {
     font-size: 14px;
     color: #333;
@@ -78,6 +79,23 @@ main {
     font-size: 14px;
     border: 1px solid #ddd;
     border-radius: 4px;
+}
+
+.color-info {
+    display: flex;
+    align-items: center; /* 레이블과 input을 세로 중앙 정렬 */
+    gap: 10px; /* 레이블과 input 사이 간격 */
+}
+
+input[type="color"] {
+    border: none;
+    padding: 0;
+    width: 30px; /* 너비 줄임 */
+    height: 30px; /* 높이 줄임 */
+    cursor: pointer;
+    border-radius: 4px; /* 둥근 모서리 */
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .form-group input[type="file"] {

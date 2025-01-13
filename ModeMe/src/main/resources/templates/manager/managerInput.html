@@ -7,6 +7,10 @@
 <title>상품등록</title>
 <link rel="stylesheet" href="/css/manager/managerInput.css">
 <script defer src="/js/manager/managerInput.js">`</script>
+<script defer src="/js/manager/managerColor.js">`</script>
+<script defer src="/js/manager/managerEdit.js">`</script>
+<link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
 </head>
 <body>
 	<!-- 헤더푸터-->
@@ -71,9 +75,11 @@
             <div class="section">
                 <div class="section-title">옵션정보</div>
                 <div class="form-group">
-                    <label for="options">옵션 설정</label>
-                    <textarea id="options" placeholder="옵션 정보를 입력하세요"></textarea>
-                </div>
+                    <div class="RTE-container">
+						<label for="rich-text-editor">상품 상세정보</label>
+						<div id="rich-text-editor" style="height: 300px;"></div>
+					</div>
+             </div>
                 	<div class="form-group">
 						<label for="product-condition">상품 상태</label>
 							<select id="product-condition">
@@ -87,8 +93,18 @@
 					</div>
 				<div class="form-group">
                 	<label for="color">색상</label>
-                		<div id="color-list" class="dynamic-list"></div>
-                    <button onclick="addColor()">색상 추가</button>                
+						<div class="product-color-information">
+		    <!-- 색상 입력 섹션 -->
+		   				 <div class="color-section">
+		        		<span class="color-info">
+		            		<label for="color">상품 색상</label>
+		           	 		<input class="color" type="color" id="color" value="#000000">
+		        		</span>
+		       			 <div class="color-output">R: 0, G: 0, B: 0</div>
+		        	<input class="color-name" type="text" placeholder="색상 이름 입력">
+		        	<button class="add-color">색상추가</button>
+		    </div>
+		</div>              
                 </div>
                 <div class="form-group">
                 	<label for="size">사이즈</label>
