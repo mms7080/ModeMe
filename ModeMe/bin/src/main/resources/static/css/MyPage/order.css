@@ -1,0 +1,110 @@
+@charset "UTF-8";
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'omyu_pretty';
+}
+
+@font-face {
+	font-family: 'omyu_pretty';
+	src:
+		url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/omyu_pretty.woff2')
+		format('woff2');
+	font-weight: normal;
+	font-style: normal;
+}
+
+html, body {
+	height: 100%;
+}
+
+/* 메인 콘텐츠 */
+main {
+	margin: 20px;
+	height: 100%;
+	width: 80%;
+	margin: 0 auto;  /* 수평으로 가운데 정렬 */
+}
+
+h1 {
+	font-size: 24px;
+	text-align: center;
+	color: #333;
+	padding:20px;
+	margin-bottom: 20px;
+}
+
+.greybox {
+	height: 100%;
+	padding: 10px;
+	display: flex;
+	border: 5px solid lightgrey;
+	font-size: 15px;
+	flex-wrap: wrap;
+	flex-direction: row;
+	gap: 5px;
+	margin-bottom: 10px;
+}
+
+.daybuttons {
+	display: flex;
+	flex-direction:row;
+	width: 25%;
+}
+
+.daybutton {
+	width: 20%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: none;
+	cursor:pointer;
+	transition: bacground-color 0.3s;
+}
+
+.orderheaderform {
+	display: flex;
+	justify-content:center;
+	align-items: center;
+	gap: 5px;
+	width:50%;
+}
+
+.searchcalendar {
+	display: flex;
+background-color: transparent;
+	border:none;
+	align-items: center;
+	cursor: pointer;
+}
+
+.ordersearch {
+	background-color: black;
+	color: white;
+	border-radius: 3px;
+	width:100%;
+}
+
+.ordercontent {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7개의 동일한 크기의 컬럼 */
+}
+
+.ordermain {
+	margin-top: 30px;
+	height: 80%;
+}
+
+.ordermaintitle {
+	border-bottom: 1px solid lightgrey;
+	height:15%;
+	align-content:center;
+	margin-bottom: 10px;
+}
+
+.orderlist {
+	margin-top: 10px;
+	border: 1px solid lightgrey;
+}

@@ -1,0 +1,41 @@
+@charset "UTF-8";
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'omyu_pretty';
+}
+
+@font-face {
+	font-family: 'omyu_pretty';
+	src:
+		url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/omyu_pretty.woff2')
+		format('woff2');
+	font-weight: normal;
+	font-style: normal;
+}
+
+html, body {
+	height: 100%;
+}
+
+/* 메인 콘텐츠 */
+main {
+	margin: 20px;
+	height: 100%;
+	width: 80%;
+	margin: 0 auto;  /* 수평으로 가운데 정렬 */
+}
+
+h1 {
+	font-size: 24px;
+	text-align: center;
+	color: #333;
+	padding:20px;
+	margin-bottom: 20px;
+}
+
+.wishlist {
+	border: 1px solid lightgrey;
+}

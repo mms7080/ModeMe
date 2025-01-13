@@ -2,127 +2,85 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notice</title>
-    <link rel="stylesheet" href="/css/Notice/NoticeHome.css">
-    <style>
-
-
-</style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notice</title>
+<link rel="stylesheet" href="/css/Notice/NoticeHome.css">
 </head>
 <body>
- 	<!-- 헤더-->
+	<!-- 헤더 -->
 	<div th:replace="~{header :: header}"></div>
 
+	<main>
+		<h1>NOTICE</h1>
 
-    <main>
-        <h1>NOTICE</h1>
-        
-        <!-- 공지 작성 버튼 -->
-        <div class="write-notice">
-            <button onclick="openNoticeForm()" a href="/noticeWrite">공지 작성</button>
-        </div>
+		<!-- 공지 작성 버튼 -->
+		<div class="write-notice">
+			<button onclick="window.location.href='/notices/new'">공지 작성</button>
+		</div>
 
-        <table class="notice-table">
-            <thead>
-                <tr>
-                    <th>번호</th>
-                    <th>제목</th>
-                    <th>작성자</th>
-                    <th>관리자 전용</th>
-                </tr>
-            </thead>
-            <tbody>
-	            <tr>
-                    <td>6</td>
-                    <td><a href="/noticeView">[빈티지 체크셔츠] 프리오더 주문건 필독 공지사항</a></td>
-                    <td>관리자</td>
-                    <td>
-                        <button onclick="deleteNotice(6)">삭제</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td><a href="/test3.html">[배송공지] 설 연휴 배송 안내</a></td>
-                    <td>관리자</td>
-                    <td>
-                        <button onclick="deleteNotice(5)">삭제</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td><a href="/test4.html">교환/반품 안내</a></td>
-                    <td>관리자</td>
-                    <td>
-                        <button onclick="deleteNotice(4)">삭제</button>
-                    </td>
-                </tr>
-              	<tr>
-                    <td>3</td>
-                    <td><a href="/test4.html">테스트</a></td>
-                    <td>관리자</td>
-                    <td>
-                        <button onclick="deleteNotice(3)">삭제</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><a href="/test4.html">테스트</a></td>
-                    <td>관리자</td>
-                    <td>
-                        <button onclick="deleteNotice(2)">삭제</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td><a href="/test4.html">테스트</a></td>
-                    <td>관리자</td>
-                    <td>
-                        <button onclick="deleteNotice(1)">삭제</button>
-                    </td>
-                </tr>
-                <!-- Add more rows as needed -->
-            </tbody>
-        </table>
-        <div class="pagination">
-            <button>&lt;</button>
-            <span>1</span>
-            <button>&gt;</button>
-        </div>
+		<table class="notice-table">
+			<thead>
+				<tr>
+					<th>번호</th>
+					<th>제목</th>
+					<th>작성자</th>
+					<th>관리자 전용</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="notice : ${notices}">
+					<td th:text="${notice.id}"></td>
+					<td><a th:href="@{/notices/view/{id}(id=${notice.id})}"
+						th:text="${notice.title}"></a></td>
+					<td th:text="${notice.author}"></td>
+					<td>
+						<form th:action="@{/notices/delete/{id}(id=${notice.id})}"
+							method="post" onsubmit="return confirmDelete();">
+							<button type="submit">삭제</button>
+						</form>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="pagination">
+			<!-- 이전 버튼 -->
+			<button th:if="${currentPage > 0}"
+				th:onclick="'location.href=\'?page=' + (${currentPage} - 1) + '&size=' + ${pageSize} + '\';'">&lt;</button>
+
+			<!-- 페이지 번호 -->
+			<span th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+				th:classappend="${i == currentPage} ? 'active' : ''"
+				th:onclick="'location.href=\'?page=' + ${i} + '&size=' + ${pageSize} + '\';'"
+				th:text="${i + 1}"> </span>
+
+			<!-- 다음 버튼 -->
+			<button th:if="${currentPage < totalPages - 1}"
+				th:onclick="'location.href=\'?page=' + (${currentPage} + 1) + '&size=' + ${pageSize} + '\';'">&gt;</button>
+		</div>
+
+
+
+		<!-- 검색 섹션 -->
 		<div class="search-section">
-		    <label for="search-option">검색 옵션:</label>
-		    <select id="search-option">
-		        <option value="title">제목</option>
-		        <option value="content">내용</option>
-		        <option value="title_content">제목+내용</option>
-		        <option value="id">아이디</option>
-		    </select>
-		    <input type="text" id="search-input" placeholder="검색어를 입력하세요">
-		    <button onclick="searchNotice()">검색</button>
-		</div>     
-    </main>
-    <script>
-        function openNoticeForm() {
-            window.location.href = '/noticeWrite'; 
-            // 작성 페이지로 이동하거나 작성 폼을 띄웁니다.
-        }
+			<label for="search-option">검색 옵션:</label> <select id="search-option">
+				<option value="title">제목</option>
+				<option value="content">내용</option>
+				<option value="title_content">제목+내용</option>
+				<option value="id">아이디</option>
+			</select> <input type="text" id="search-input" placeholder="검색어를 입력하세요">
+			<button onclick="searchNotice()">검색</button>
+		</div>
+	</main>
+	<script>
+		function confirmDelete() {
+			return confirm('공지사항을 삭제하시겠습니까?'); // 확인 팝업
+		}
+	</script>
 
-        function editNotice(id) {
-            alert('공지 수정 페이지로 이동합니다. ID: ' + id);
-            // 해당 ID의 공지 수정 페이지로 이동하거나 수정 폼을 띄웁니다.
-        }
 
-        function deleteNotice(id) {
-            const confirmDelete = confirm('공지사항을 삭제하시겠습니까? ID: ' + id);
-            if (confirmDelete) {
-                alert('공지사항이 삭제되었습니다.');
-                // 실제 삭제 작업 수행 (백엔드와 연동 필요)
-            }
-        }
-    </script>
-        <!--푸터-->
-    <div th:replace="~{footer :: footer}"></div>
+	<!-- 푸터 -->
+	<div th:replace="~{footer :: footer}"></div>
 </body>
 </html>

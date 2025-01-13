@@ -1,10 +1,94 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Q&A Write</title>
+    <link rel="stylesheet" href="/css/productDetail/reviewWrite.css">
 </head>
 <body>
 
+	<!-- 헤더 -->
+	<div th:replace="~{header :: header}"></div>
+
+    <div class="review-container">
+        <h1>Q&A</h1>
+        <p class="description">상품에 대한 문의를 작성해주세요.</p>
+
+        <!-- Product Summary -->
+        <div class="product-summary">
+            <div class="product-image" style="background-color: #e0e0e0;"></div>
+            <div class="product-info">
+                <h2>최고로 따뜻한 발마칸 코오트</h2>
+                <p>₩81,900</p>
+                <button>상품 상세보기</button>
+                <button>상품정보 선택</button>
+            </div>
+        </div>
+
+        <!-- Q&A Form -->
+        <form class="review-form">
+            <!-- Title Selection -->
+            <label for="title">제목</label>
+            <select id="title" class="title" name="title" required>
+                <option value="[상품문의]">[상품문의]</option>
+                <option value="[사이즈문의]">[사이즈문의]</option>
+                <option value="[기타문의]">[기타문의]</option>
+            </select>
+
+            <!-- Text Editor -->
+            <label for="content">내용</label>
+            <textarea id="content" class="content" rows="10" placeholder="내용을 입력하세요"></textarea>
+
+            <!-- File Upload -->
+            <div class="file-upload">
+                <label>사진등록</label>
+                <div class="file-input-group">
+                    <input type="file" id="file1">
+                </div>
+                <div class="file-input-group">
+                    <input type="file" id="file2">
+                </div>
+                <div class="file-input-group">
+                    <input type="file" id="file3">
+                </div>
+                <div class="file-input-group">
+                    <input type="file" id="file4">
+                </div>
+            </div>
+
+            <!-- Password -->
+			<div class="password-section">
+			    <label for="password">비밀번호</label>
+			    <input type="password" id="password" placeholder="비밀번호를 입력하세요">
+			</div>
+			
+			<!-- Secret Post Option -->
+			<div class="secret-section">
+			    <label>비밀글 설정</label>
+			    <div class="secret-options">
+			        <label>
+			            <span>공개글</span>
+			            <input type="radio" name="secret" value="public">
+			        </label>
+			        <label>
+			            <span>비밀글</span>
+			            <input type="radio" name="secret" value="private" checked>
+			        </label>
+			    </div>
+			</div>
+
+            <!-- Buttons -->
+            <div class="form-buttons">
+                <button type="button" onclick="location.href='/list-url'">목록</button>
+                <button type="submit" onclick="location.href='/productDetail'" class="upload-button">등록</button>
+                <button type="button" onclick="location.href='/productDetail'">취소</button>
+            </div>
+        </form>
+    </div>
+    
+    	<!-- 푸터 -->
+	<div th:replace="~{footer :: footer}"></div>
+    
 </body>
 </html>

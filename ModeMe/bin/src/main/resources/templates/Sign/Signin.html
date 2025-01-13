@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>로그인</title>
     <link rel="stylesheet" href="/css/Sign/Signin.css">
+    <!-- 네이버 SDK -->
+    <script src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js" charset="utf-8"></script>
+    <!-- 카카오 SDK -->
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 </head>
 <body>
     <!-- 헤더 -->
@@ -25,22 +29,25 @@
                 <label for="password">비밀번호</label>
                 <input type="password" id="password" name="password" placeholder="비밀번호" required>
             </div>
-			<div class="form-options">
-			    <div class="form-left">
-			        <input type="checkbox" id="remember" name="remember">
-			        <label for="remember">아이디 저장</label>
-			    </div>
-			    <div class="form-right">
-			        <a href="/find_id">아이디 찾기</a> /
-			        <a href="/find_pw">비밀번호 찾기</a>
-			    </div>
+            <div class="form-options">
+                <div class="form-left">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember">아이디 저장</label>
+                </div>
+                <div class="form-right">
+                    <a href="/find_id">아이디 찾기</a> /
+                    <a href="/find_pw">비밀번호 찾기</a>
+                </div>
             </div>
             <button type="submit" class="login-btn">로그인</button>
         </form>
+
+        <!-- 소셜 로그인 -->
         <div class="social-login">
-            <button class="kakao-btn">카카오로 로그인</button>
-            <button class="naver-btn">네이버로 로그인</button>
+            <button class="kakao-btn" onclick="loginWithKakao()">카카오로 로그인</button>
+            <button class="naver-btn" id="naver-login-button">네이버로 로그인</button>
         </div>
+
         <div class="signup-link">
             <p>아직 회원이 아니신가요?</p>
             <a href="/signup" class="signup-btn">회원가입</a>
@@ -49,5 +56,54 @@
 
     <!-- 푸터 -->
     <div th:replace="~{footer :: footer}"></div>
+
+    <!-- 카카오 로그인 Script -->
+    <script>
+        // 카카오 로그인 초기화
+        Kakao.init('337dc51e65db835d92140237621c8f56'); // 본인의 JavaScript 키 입력
+        console.log(Kakao.isInitialized());
+
+        function loginWithKakao() {
+            Kakao.Auth.login({
+                success: function(authObj) {
+                    alert('카카오 로그인 성공!');
+                    console.log(authObj);
+                },
+                fail: function(err) {
+                    alert('카카오 로그인 실패!');
+                    console.log(err);
+                }
+            });
+        }
+    </script>
+
+    <!-- 네이버 로그인 Script -->
+    <script>
+        // 네이버 로그인 초기화
+        const naverLogin = new naver.LoginWithNaverId({
+            clientId: "L2yk1g6sJC3EhfnnBVtN", // 네이버 애플리케이션 Client ID
+            callbackUrl: "http://localhost:9999/naver_callback", // Redirect URI 설정
+            loginButton: { color: "green", type: 2, height: 50 }, // 버튼 스타일
+            isPopup: true // 팝업 방식 로그인
+        });
+
+        // 초기화 실행
+        naverLogin.init();
+
+        // 네이버 로그인 상태 확인
+        naverLogin.getLoginStatus(function (status) {
+            if (status) {
+                const email = naverLogin.user.getEmail();
+                const nickname = naverLogin.user.getNickName();
+                if (!email) {
+                    alert("이메일 정보 제공을 동의해주세요.");
+                    naverLogin.reprompt();
+                    return;
+                }
+                alert(`네이버 로그인 성공! 환영합니다, ${nickname}님!`);
+                console.log(`Email: ${email}, Nickname: ${nickname}`);
+            }
+        });
+    </script>
 </body>
 </html>
