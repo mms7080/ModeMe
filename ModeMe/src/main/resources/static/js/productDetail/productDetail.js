@@ -99,3 +99,60 @@ document.addEventListener("DOMContentLoaded", () => {
         addButton.addEventListener("click", addSelectionItem);
     }
 });
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const previewImage = document.querySelector(".image-preview img");
+    const thumbnails = document.querySelectorAll(".thumbnail img");
+
+    thumbnails.forEach((thumbnail) => {
+        thumbnail.addEventListener("click", () => {
+            // 현재 preview 이미지의 src와 alt를 저장
+            const currentPreviewSrc = previewImage.src;
+            const currentPreviewAlt = previewImage.alt;
+
+            // 썸네일의 src와 alt를 preview로 교체
+            previewImage.src = thumbnail.src;
+            previewImage.alt = thumbnail.alt;
+
+            // 기존 preview 이미지를 클릭된 썸네일로 이동
+            thumbnail.src = currentPreviewSrc;
+            thumbnail.alt = currentPreviewAlt;
+        });
+    });
+
+    // 초기 설정: 첫 번째 썸네일 이미지를 프리뷰로 표시
+    if (thumbnails.length > 0) {
+        previewImage.src = thumbnails[0].src;
+        previewImage.alt = thumbnails[0].alt;
+    }
+});
+
+/*document.addEventListener("DOMContentLoaded", () => {
+    const previewImage = document.querySelector(".image-preview img");
+    const thumbnails = document.querySelectorAll(".thumbnail img");
+
+    thumbnails.forEach((thumbnail) => {
+        thumbnail.addEventListener("click", () => {
+            // 기존 프리뷰 이미지를 저장
+            const currentPreviewSrc = previewImage.src;
+            const currentPreviewAlt = previewImage.alt;
+
+            // 썸네일 이미지를 프리뷰로 변경
+            previewImage.src = thumbnail.src;
+            previewImage.alt = thumbnail.alt;
+
+            // 클릭한 썸네일에 기존 프리뷰 이미지를 설정
+            thumbnail.src = currentPreviewSrc;
+            thumbnail.alt = currentPreviewAlt;
+        });
+    });
+
+    // 초기 상태 설정 (첫 번째 썸네일로 프리뷰 설정)
+    if (thumbnails.length > 0) {
+        previewImage.src = thumbnails[0].src;
+        previewImage.alt = thumbnails[0].alt;
+    }
+});*/
+
+
