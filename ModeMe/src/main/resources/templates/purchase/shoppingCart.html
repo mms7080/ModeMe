@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>장바구니</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .summary {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .summary div {
+            font-size: 14px;
+        }
+        .product-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .product-table th, .product-table td {
+            text-align: center;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        .product-table img {
+            width: 80px;
+            height: auto;
+        }
+        .total {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: right;
+            margin: 20px 0;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #555;
+            line-height: 1.6;
+        }
+        .footer .section {
+            margin-bottom: 10px;
+        }
+        .footer a {
+            color: #333;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        .button-group {
+            text-align: right;
+            margin-top: 20px;
+        }
+        .button-group button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .button-group button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+	
+	<div th:replace="~{header::header}"></div>
+	
+    <div class="container">
+        <h1>장바구니</h1>
+
+        <div class="summary">
+            <div>총 상품 금액: <strong>KRW 48,500</strong></div>
+            <div>배송비: <strong>KRW 0</strong></div>
+            <div>합계: <strong>KRW 48,500</strong></div>
+        </div>
+
+        <table class="product-table">
+            <thead>
+                <tr>
+                    <th>이미지</th>
+                    <th>상품명</th>
+                    <th>판매가</th>
+                    <th>수량</th>
+                    <th>적립금</th>
+                    <th>배송비</th>
+                    <th>합계</th>
+                    <th>관리</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><img src="image/026.jpg" alt="상품"></td>
+                    <td>나핑 코듀로이 후드 & 팬츠 (3C)</td>
+                    <td>KRW 48,500</td>
+                    <td>1</td>
+                    <td>49원</td>
+                    <td>무료</td>
+                    <td>KRW 48,500</td>
+                    <td class="button-group-vertical">
+						<button>주문하기</button>
+						<button>관심상품등록</button>
+						<button>삭제</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="total">
+            총 결제 금액: <strong>KRW 48,500</strong>
+        </div>
+
+        <div class="button-group">
+            <button>장바구니 비우기</button>
+            <button>결제하기</button>
+        </div>
+
+    </div>
+    
+   	<div th:replace="~{footer::footer}"></div> 
+    
+</body>
+</html>

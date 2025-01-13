@@ -40,7 +40,11 @@ public class ViewController {
 	public String footer() {
 		return "/footer";
 	}
-
+	// 장바구니
+	@GetMapping("/shoppingcart")
+	public String shoppingcart() {
+		return "/purchase/shoppingCart";
+	}
 	// 마이페이지
 	@GetMapping("/mypage")
 	public String MyPage() {
