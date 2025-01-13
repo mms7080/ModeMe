@@ -1,147 +1,121 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<!-- 안녕하세요 -->
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>상품등록</title>
-<link rel="stylesheet" href="/css/manager/managerInput.css">
-<script defer src="/js/manager/managerInput.js">`</script>
-<script defer src="/js/manager/managerColor.js">`</script>
-<script defer src="/js/manager/managerEdit.js">`</script>
-<link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
-<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품 등록</title>
+    <link rel="stylesheet" href="/css/productDetail/productEdit.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script defer src="/js/manager/managerInput.js"></script>
+    <script defer src="/js/manager/managerColor.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 </head>
 <body>
-	<!-- 헤더푸터-->
+
+	<!-- 헤더 -->
 	<div th:replace="~{header :: header}"></div>
 
-    <main>
-        <div class="container">
-            <!-- Section: 기본정보 -->
-            <div class="section">
-                <div class="section-title">기본정보</div>
-                <div class="form-group">
-                    <label for="product-name">상품명</label>
-                    <input type="text" id="product-name" placeholder="상품명을 입력하세요">
-                </div>
-                <div class="form-group">
-                    <label for="product-code">상품코드</label>
-                    <input type="text" id="product-code" placeholder="상품코드를 입력하세요">
-                </div>
-				<div class="form-group">
-    				<label for="mainimage">메인 이미지</label>
-    				<input type="file" id="mainimage" accept="image/*" onchange="previewMainImage(event)">
-   					<div id="image-preview-container">
-        			<img id="image-preview" src="" alt="미리보기" style="display: none; width: 100%; max-width: 300px;">
-    			</div>
-				</div>
-                <div class="form-group">
-                    <label for="category">카테고리</label>
-                    <div class="category-select">
-                        <select id="main-category">
-                            <option value="">카테고리 선택</option>
-                            <option value="outer">outer</option>
-                            <option value="top">top</option>
-                            <option value="bottom">bottom</option>
-                            <option value="ops">ops</option>
-                            <option value="acc">acc</option>
-                        </select>
-                        <select id="sub-category">
-                            <option value="">하위 카테고리 선택</option>
-                            <option value="jumper">점퍼</option>
-                            <option value="cardigan">가디건</option>
-                            <option value="jacket">자켓</option>
-                            <option value="coat">코트</option>
-                            <option value="tshirt">티셔츠</option>
-                            <option value="sleeveless">민소매</option>
-                            <option value="shirt_blouse">셔츠/블라우스</option>
-                            <option value="knit">니트</option>
-                            <option value="hood_mtm">후드/맨투맨</option>
-                            <option value="denim">데님</option>
-                            <option value="pants">팬츠</option>
-                            <option value="slacks">슬랙스</option>
-                            <option value="skirt">스커트</option>
-                            <option value="training">트레이닝</option>
-                            <option value="onepiece">원피스</option>
-                            <option value="accessory">악세사리</option>
-                        </select>
-                    </div>
-                    <ul id="selected-categories"></ul>
-                </div>
-            </div>
+    <div class="product-edit-container">
+        <h1>상품 수정</h1>
 
-            <!-- Section: 옵션정보 -->
-            <div class="section">
-                <div class="section-title">옵션정보</div>
-                <div class="form-group">
-                    <div class="RTE-container">
-						<label for="rich-text-editor">상품 상세정보</label>
-						<div id="rich-text-editor" style="height: 300px;"></div>
-					</div>
-             </div>
-                	<div class="form-group">
-						<label for="product-condition">상품 상태</label>
-							<select id="product-condition">
-    							<option value="new">신상품</option>
-    							<option value="used">중고상품</option>
-    							<option value="in-stock">재고상품</option>
-  								<option value="display">진열상품</option>
-    							<option value="refurbished">리퍼상품</option>
-    							<option value="scratch">스크래치상품</option>
-						</select>
-					</div>
-				<div class="form-group">
-                	<label for="color">색상</label>
-						<div class="product-color-information">
-		   				 <div class="color-section">
-		        		<span class="color-info">
-		            		<label for="color">상품 색상</label>
-		           	 		<input class="color" type="color" id="color" value="#000000">
-		        		</span>
-		       			 <div class="color-output">R: 0, G: 0, B: 0</div>
-		        	<input class="color-name" type="text" placeholder="색상 이름 입력">
-		        	<button class="add-color">색상추가</button>
+        <div class="product-informations">
+		    <!-- 상품 수량 -->
+		    <span class="product-info">
+		        <label for="stock">상품 수량</label>
+		        <input type="number" id="stock" min="0" placeholder="수량 입력">
+		        <button id="sold-out-btn">품절</button>
+		    </span>
+		
+		    <!-- 상품 가격 -->
+		    <span class="product-info">
+		        <label for="price">상품 가격</label>
+		        <input type="number" id="price" min="0" placeholder="가격 입력">
+		    </span>
+		</div>
+		
+		<div class="product-color-information">
+		    <!-- 색상 입력 섹션 -->
+		    <div class="color-section">
+		        <span class="color-info">
+		            <label for="color">상품 색상</label>
+		            <input class="color" type="color" id="color" value="#000000">
+		        </span>
+		        <div class="color-output">R: 0, G: 0, B: 0</div>
+		        <input class="color-name" type="text" placeholder="색상 이름 입력">
+		        <button class="add-color">+</button>
 		    </div>
-		</div>              
-                </div>
-                <div class="form-group">
-                	<label for="size">사이즈</label>
-                		<div id="size-list" class="dynamic-list"></div>
-                   		<button onclick="addSize()">사이즈 추가</button>                    
-                </div>
-                <div class="form-group">
-                	<labal for="image">서브이미지</labal>
-                		<div id="image-list" class="dynamic-list"></div>
-                    <button onclick="addImage()">이미지 추가</button>                   
-                </div>
-            </div>
+		</div>
 
-            <!-- Section: 가격정보 -->
-            <div class="section">
-                <div class="section-title">가격정보</div>
-                <div class="form-group">
-                    <label for="price">가격</label>
-                    <input type="number" id="price" placeholder="상품 가격을 입력하세요">
-                </div>
-                <div class="form-group">
-                    <label for="shipping-fee">배송비</label>
-                    <input type="text" id="shipping-fee" placeholder="배송비를 입력하세요 (숫자만)">
-            	</div>            
-            </div>
-            
-            <div class="section">
-                <div class="section-title">수량정보</div>
-                <div class="form-group">
-                    <label for="quantity">수량</label>
-					<input type="number" id="quantity" placeholder="수량을 입력하세요">
-                </div>
-            </div>
-            <div class="button-group">
-                <button>저장</button>
-            </div>
+		<!-- Product Category -->
+		<div class="category-container">
+		    <div class="main-category">
+		        <label class="main-category-label">상품 카테고리</label>
+		        <div>
+		            <label for="outer" class="category-label">Outer</label>
+		            <input type="radio" id="outer" name="category" value="outer">
+		        </div>
+		        <div>
+		            <label for="top" class="category-label">Top</label>
+		            <input type="radio" id="top" name="category" value="top">
+		        </div>
+		        <div>
+		            <label for="bottom" class="category-label">Bottom</label>
+		            <input type="radio" id="bottom" name="category" value="bottom">
+		        </div>
+		        <div>
+		            <label for="acc" class="category-label">Acc</label>
+		            <input type="radio" id="acc" name="category" value="acc">
+		        </div>
+		    </div>
+	        <!-- 서브 카테고리가 동적으로 추가됨 -->
+		    <div class="subcategory" id="subcategory">
+		    </div>
+		</div>
+
+        <!-- Product Size -->
+        <div class="size-container">
+	        <label class="size-label">상품 사이즈</label>
+	        <select id="size">
+	            <option value="SelectSize">S M L XL</option>
+	            <option value="FreeSize">FreeSize</option>
+	        </select>
         </div>
-    </main>
+
+        <!-- Main Images -->
+        <div class="main-img-input-container">
+	        <label class="img-input-label">메인 이미지</label>
+	        <div class="image-inputs">
+	        	<div>
+		            <input type="file" id="image1">
+	        	</div>
+	        	<div>
+		            <input type="file" id="image2">
+	        	</div>
+	        	<div>
+		            <input type="file" id="image3">
+	        	</div>
+	        	<div>
+		            <input type="file" id="image4">
+	        	</div>
+	        </div>
+        </div>
+		
+        <!-- Rich Text Editor for Product Description -->
+		<div class="RTE-container">
+			<label for="rich-text-editor">상품 상세정보</label>
+			<div id="rich-text-editor" style="height: 300px;"></div>
+		</div>
+
+		<!-- Buttons -->
+		<div class="buttons">
+		    <button id="save-btn" data-url="/productDetail">수정 완료</button>
+		    <button id="cancel-btn" data-url="/productDetail">수정 취소</button>
+		    <button id="temp-save-btn" data-url="/productDetail">임시 저장</button>
+		</div>
+    </div>
+    
+    	<!-- 푸터 -->
 	<div th:replace="~{footer :: footer}"></div>
+    
 </body>
 </html>

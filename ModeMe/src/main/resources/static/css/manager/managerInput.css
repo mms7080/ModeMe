@@ -1,219 +1,309 @@
-    @font-face {
-    font-family: 'omyu_pretty';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/omyu_pretty.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
+@font-face {
+	font-family: 'omyu_pretty'/* ,"Lato", helvetica,
+	"Apple SD Gothic Neo", Nanum Gothic, Malgun Gothic,
+	맑은 고딕, sans-serif */;
+	src:
+		url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/omyu_pretty.woff2')
+		format('woff2');
+	font-weight: normal;
+	font-style: normal;
 }
 
 * {
-    font-family: 'omyu_pretty', sans-serif;
+	font-family: 'omyu_pretty';
 }
 
 body {
-    margin: 0;
+	margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
     background-color: #f9f9f9;
 }
 
-main {
-    text-align: left;
-    margin: 20px auto;
-    width: 60%;
-}
-
-.container {
-	max-width: 120%;
-    background-color: #fff;
+.product-edit-container {
+    width: 80%;
+    margin: 0 auto;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
 }
 
-.tabs {
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* product-informations를 Flexbox로 설정 */
+.product-informations {
     display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
+    gap: 20px; /* 요소 간 간격 */
+    flex-wrap: wrap; /* 화면이 좁아질 경우 줄바꿈 허용 */
+    align-items: flex-start; /* 요소를 세로 방향으로 가운데 정렬 */
 }
 
-.tab {
-    padding: 10px 20px;
-    cursor: pointer;
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    font-weight: bold;
-    color: #333;
+/* 각 product-info 요소를 가로로 배치 */
+.product-info {
+    display: flex;
+    flex-direction: column; /* 내부 요소는 여전히 세로 정렬 */
+    align-items: flex-start; /* 내부 요소를 가운데 정렬 */
+    width: calc(50% - 20px); /* 2열로 나열 (간격 포함) */
+    box-sizing: border-box; /* padding 포함하여 크기 계산 */
 }
 
-.tab.active {
-    background-color: #ddd;
-}
-
-.section {
-    margin-bottom: 20px;
-}
-
-.section-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #333;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-
-.form-group label {
-    font-size: 14px;
-    color: #333;
-    margin-bottom: 5px;
-    display: block;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    width: 60%;
+/* 공통 스타일 */
+.product-info input,
+.product-info button {
     padding: 10px;
-    font-size: 14px;
     border: 1px solid #ddd;
     border-radius: 4px;
+}
+
+/* Label 스타일 */
+.product-info label {
+    display: block;
+    width: 35%; /* Label은 다른 요소와 너비가 다르므로 분리 */
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+/* Input 스타일 */
+.product-info input {
+    width: 80%;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+/* Button 스타일 */
+.product-info button {
+    width: 20%;
+    align-content: center;
+    font-size: 12px;
+    margin-bottom: 20px;
+}
+
+.product-color-information {
+    margin-bottom: 20px;
+}
+
+.color-section {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 요소 간 간격 */
+    margin-bottom: 10px;
 }
 
 .color-info {
     display: flex;
-    align-items: center; /* 레이블과 input을 세로 중앙 정렬 */
-    gap: 10px; /* 레이블과 input 사이 간격 */
-}
-
-input[type="color"] {
-    border: none;
-    padding: 0;
-    width: 30px; /* 너비 줄임 */
-    height: 30px; /* 높이 줄임 */
-    cursor: pointer;
-    border-radius: 4px; /* 둥근 모서리 */
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.form-group input[type="file"] {
-    border: none; /* 테두리 제거 */
-    background-color: transparent; /* 배경색 투명하게 설정 */
-    padding: 10px; /* 패딩을 추가하여 버튼 크기 조정 */
-    font-size: 16px; /* 글자 크기 설정 */
-    width: 21%; /* 너비를 100%로 설정 */
-    height: auto;
-
-    cursor: pointer; /* 커서 포인터로 변경 (사용자가 클릭할 수 있다는 표시) */
-}
-
-.form-group textarea {
-    min-height: 100px;
-    resize:none;
-}
-
-.category-select {
-	width: 63%;
-    display: flex;
-    gap: 10px;
-}
-
-.dynamic-list-item {
-    display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    gap: 5px; /* Label과 Input 간 간격 */
 }
 
-.dynamic-list-item input {
-    width: 60%;
-    padding: 10px;
+.color-info label {
+    font-weight: bold;
+}
+
+.color-output {
     font-size: 14px;
+    color: #333;
+    width: 120px; /* 고정 너비 설정 */
+    text-align: center;
+}
+
+.color-name {
+    width: 150px;
+    padding: 5px;
     border: 1px solid #ddd;
     border-radius: 4px;
 }
 
-.dynamic-list-item button {
+button.add-color {
     padding: 5px 10px;
     font-size: 14px;
-    background-color: #e74c3c;
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+button.add-color:hover {
+    background-color: #e0e0e0;
+}
+/* 기본 카테고리 스타일 */
+.category-container {
+    display: flex;
+    gap: 20px;
+}
+
+.main-category {
+    flex: 1;
+}
+
+.main-category div {
+    margin-bottom: 10px;
+}
+
+.main-category label {
+	display: block;
+    margin: 10px 0 5px;
+}
+
+.main-category-label {
+	font-weight: bold;
+}
+
+.category-label {
+    cursor: pointer;
+    font-weight: bold;
+    color: #aaa; /* 기본 연회색 */
+    margin-left: 10px;
+    transition: color 0.3s, background-color 0.3s;
+}
+
+.subcategory {
+    flex: 1; /* 서브 카테고리 너비 */
+    border-left: 1px solid #ddd; /* 구분선 추가 */
+    padding-left: 20px; /* 구분선과 내용 간 간격 */
+}
+
+/* 선택된 카테고리 */
+input[type="radio"]:checked + .category-label {
+    color: #000; /* 검정색 */
+    font-weight: bold;
+    background-color: transparent;
+}
+
+.main-category input[type="radio"] + .category-label {
+    color: #aaa; /* 기본 연회색 */
+}
+/* 선택되지 않은 항목 */
+input[type="radio"]:not(:checked) + .category-label {
+    color: #aaa; /* 연회색 */
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    padding: 2px 6px;
+}
+
+
+/* Size Section */
+.size-container {
+    margin-bottom: 20px;
+}
+
+.size-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#size {
+    width: 40%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fff;
+}
+
+/* Main Images Section */
+.main-img-input-container {
+    margin-bottom: 20px;
+}
+
+.img-input-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.image-inputs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2열 레이아웃 */
+    gap: 10px; /* 이미지 입력 간격 */
+}
+
+.image-inputs div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border: 1px dashed #ddd; /* 점선 테두리 */
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    position: relative;
+}
+
+.image-inputs div:hover {
+    border-color: #bbb;
+    background-color: #f0f0f0;
+}
+
+.image-inputs input[type="file"] {
+    display: none; /* 기본 파일 입력 숨김 */
+}
+
+.image-inputs div::after {
+    content: "이미지 업로드";
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+.RTE-container label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#rich-text-editor {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    background-color: #fff;
+}
+
+
+
+/* Button Container */
+.buttons {
+    display: flex;
+    justify-content: flex-end; /* 버튼을 오른쪽 정렬 */
+    gap: 10px; /* 버튼 간 간격 */
+    margin-top: 20px;
+}
+
+/* Buttons Style */
+.buttons button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+/* Hover Effect */
+.buttons button:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+
+/* button {
+    background-color: #333;
     color: #fff;
     border: none;
-    border-radius: 4px;
-    margin-left: 5%;
     cursor: pointer;
-}
-
-.dynamic-list-item button:hover {
-    background-color: #c0392b;
-}
-
-.button-group {
-    text-align: center;
-}
-
-.button-group button {
-    padding: 10px 20px;
-    background-color: #7f7f7f;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    border-radius: 4px;
-}
-
-/* 기존 색상 추가 버튼 스타일 */
-button {
-    padding: 10px 20px;
-    background-color: #7f7f7f; /* 기존 버튼 색상 */
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    border-radius: 4px;
 }
 
 button:hover {
-    background-color: #666666; /* 버튼 hover 시 색상 변경 */
-}
+    background-color: #555;
+} */
 
-/* 삭제 버튼 스타일 동일하게 적용 */
-.dynamic-list-item button {
-    padding: 10px 20px;         /* 색상 추가 버튼과 동일한 padding */
-    background-color: #7f7f7f;  /* 색상 추가 버튼과 동일한 배경 색상 */
-    color: white;               /* 흰색 글자 */
-    border: none;               /* 테두리 없애기 */
-    cursor: pointer;           /* 마우스 커서 포인터 */
-    font-size: 14px;            /* 폰트 사이즈 동일 */
-    border-radius: 4px;         /* 테두리 둥글게 */
-}
-
-.dynamic-list-item button:hover {
-    background-color: #666666;  /* hover 시 색상 변경 */
-}
-
-.button-group button:hover {
-    background-color: #666666;
-}
-
-.footer {
-    background-color: #f5f5f5;
-    padding: 20px 0;
-    text-align: center;
-    font-size: 14px;
-    color: #666;
-}
-
-.footer p {
-    margin: 5px 0;
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
-a:focus {
-    outline: none;
-}

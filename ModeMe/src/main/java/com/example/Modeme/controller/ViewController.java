@@ -134,12 +134,6 @@ public class ViewController {
 		return "/manager/managerProduct";
 	}
 
-	// 관리자 상품 수정
-	@GetMapping("/managerModfiy")
-	public String manageModfiy() {
-		return "/manager/managerModfiy";
-	}
-
 	// 관리자 리뷰 관리
 	@GetMapping("/managerReview")
 	public String manageReview() {

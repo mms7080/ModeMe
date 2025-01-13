@@ -1,46 +1,54 @@
-// Function to add a new color section
-const addColorSection = () => {
-    const colorList = document.querySelector(".product-color-information");
+document.addEventListener("DOMContentLoaded", () => {
+    // 품절 버튼과 상품 수량 입력 필드
+    const stockInput = document.getElementById("stock");
+    const soldOutButton = document.getElementById("sold-out-btn");
 
-    const colorSection = document.createElement("div");
-    colorSection.className = "color-section";
-    colorSection.innerHTML = `
-        <span class="color-info">
-            <label for="color">상품 색상</label>
-            <input class="color" type="color" value="#000000">
-        </span>
-        <div class="color-output">R: 0, G: 0, B: 0</div>
-        <input class="color-name" type="text" placeholder="색상 이름 입력">
-        <button onclick="removeItem(this)">삭제</button>
-    `;
-
-    colorList.appendChild(colorSection);
-
-    const colorInput = colorSection.querySelector(".color");
-    const colorOutput = colorSection.querySelector(".color-output");
-    const addButton = colorSection.querySelector(".add-color");
-
-    // Update RGB values dynamically
-    colorInput.addEventListener("input", () => {
-        const rgb = hexToRgb(colorInput.value);
-        colorOutput.textContent = `R: ${rgb.r}, G: ${rgb.g}, B: ${rgb.b}`;
+    // 품절 버튼 클릭 시 수량을 0으로 설정하고 입력 필드 비활성화
+    soldOutButton.addEventListener("click", () => {
+        stockInput.value = 0;
+        stockInput.disabled = true; // 입력 필드 비활성화
     });
 
-    // Add event listener to "+" button for adding new color sections
-    addButton.addEventListener("click", addColorSection);
-};
+    const colorInfoContainer = document.querySelector(".product-color-information");
 
-// Convert HEX color to RGB
-const hexToRgb = (hex) => {
-    const bigint = parseInt(hex.slice(1), 16);
-    const r = (bigint >> 16) & 255;
-    const g = (bigint >> 8) & 255;
-    const b = bigint & 255;
-    return { r, g, b };
-};
+    // Function to add a new color section
+    const addColorSection = () => {
+        const colorSection = document.createElement("div");
+        colorSection.className = "color-section";
+        colorSection.innerHTML = `
+            <span class="color-info">
+                <label for="color">상품 색상</label>
+                <input class="color" type="color" value="#000000">
+            </span>
+            <div class="color-output">R: 0, G: 0, B: 0</div>
+            <input class="color-name" type="text" placeholder="색상 이름 입력">
+            <button class="add-color">+</button>
+        `;
+        colorInfoContainer.appendChild(colorSection);
 
-// Initialize the first color section
-document.addEventListener("DOMContentLoaded", () => {
+        // Add event listener to new color input
+        const colorInput = colorSection.querySelector(".color");
+        const colorOutput = colorSection.querySelector(".color-output");
+        const addButton = colorSection.querySelector(".add-color");
+
+        colorInput.addEventListener("input", () => {
+            const rgb = hexToRgb(colorInput.value);
+            colorOutput.textContent = `R: ${rgb.r}, G: ${rgb.g}, B: ${rgb.b}`;
+        });
+
+        addButton.addEventListener("click", addColorSection);
+    };
+
+    // Function to convert HEX to RGB
+    const hexToRgb = (hex) => {
+        const bigint = parseInt(hex.slice(1), 16);
+        const r = (bigint >> 16) & 255;
+        const g = (bigint >> 8) & 255;
+        const b = bigint & 255;
+        return { r, g, b };
+    };
+
+    // Initial setup for color section
     const initialColorInput = document.querySelector(".color");
     const initialColorOutput = document.querySelector(".color-output");
     const initialAddButton = document.querySelector(".add-color");
