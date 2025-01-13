@@ -1,28 +1,159 @@
-// Add new size input
-function addSize() {
-    const sizeList = document.getElementById("size-list");
-    const div = document.createElement("div");
-    div.className = "dynamic-list-item";
-    div.innerHTML = `
-        <input type="text" placeholder="사이즈를 입력하세요">
-        <button onclick="removeItem(this)">삭제</button>
-    `;
-    sizeList.appendChild(div);
-}
+document.addEventListener("DOMContentLoaded", () => {
+    const mainCategoryInputs = document.querySelectorAll('input[name="category"]');
+    const mainCategoryLabels = document.querySelectorAll('label[for]');
+    const subcategoryContainer = document.getElementById("subcategory");
 
-// Add new image input
-function addImage() {
-    const imageList = document.getElementById("image-list");
-    const div = document.createElement("div");
-    div.className = "dynamic-list-item";
-    div.innerHTML = `
-        <input type="file" accept="image/*">
-        <button onclick="removeItem(this)">삭제</button>
-    `;
-    imageList.appendChild(div);
-}
+    // 서브 카테고리 데이터
+    const subcategories = {
+        outer: ["점퍼", "가디건", "자켓", "코트"],
+        top: ["티셔츠", "민소매", "셔츠/블라우스", "니트", "후드/맨투맨"],
+        bottom: ["데님", "팬츠", "슬랙스", "스커트", "트레이닝"]
+    };
 
-// Remove any item from the dynamic list
-function removeItem(button) {
-    button.parentElement.remove();
-}
+    // 카테고리 선택 시 서브 카테고리 표시 및 라벨 색상 변경
+    mainCategoryInputs.forEach((input) => {
+        input.addEventListener("change", () => {
+            const selectedCategory = input.value;
+
+            // 모든 라벨을 회색으로 초기화
+            mainCategoryLabels.forEach((label) => {
+                label.style.color = "#aaa";
+                label.style.fontWeight = "normal";
+            });
+
+            // 선택된 라벨만 검정색으로 강조
+            const selectedLabel = document.querySelector(`label[for="${input.id}"]`);
+            selectedLabel.style.color = "#000";
+            selectedLabel.style.fontWeight = "bold";
+
+            // 서브 카테고리 생성
+            const subItems = subcategories[selectedCategory] || [];
+            subcategoryContainer.innerHTML = ""; // 기존 서브 카테고리 초기화
+
+            subItems.forEach((item) => {
+                const subItemDiv = document.createElement("div");
+                const subItemLabel = document.createElement("label");
+                const subItemInput = document.createElement("input");
+
+                subItemLabel.textContent = item;
+                subItemInput.type = "radio";
+                subItemInput.name = "subcategory";
+                subItemInput.value = item;
+
+                subItemDiv.appendChild(subItemInput);
+                subItemDiv.appendChild(subItemLabel);
+
+                subcategoryContainer.appendChild(subItemDiv);
+            });
+        });
+    });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const imageInputs = document.querySelectorAll(".image-inputs div");
+
+    imageInputs.forEach((box, index) => {
+        const fileInput = box.querySelector("input[type='file']");
+
+        // 박스를 클릭하면 연결된 파일 입력 필드 활성화
+        box.addEventListener("click", () => {
+            fileInput.click();
+        });
+
+        // 파일 선택 후 파일 이름 표시 (선택적으로 추가)
+        fileInput.addEventListener("change", () => {
+            if (fileInput.files.length > 0) {
+                box.innerHTML = `<span>${fileInput.files[0].name}</span>`;
+            }
+        });
+    });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Rich Text Editor 초기화
+    const editor = new Quill("#rich-text-editor", {
+        theme: "snow",
+        placeholder: "상품 상세 정보를 입력하세요...",
+        modules: {
+            toolbar: {
+                container: [
+                    ["bold", "italic", "underline", "strike"],
+                    ["blockquote", "code-block"],
+                    [{ header: 1 }, { header: 2 }],
+                    [{ list: "ordered" }, { list: "bullet" }],
+                    [{ script: "sub" }, { script: "super" }],
+                    [{ indent: "-1" }, { indent: "+1" }],
+                    [{ direction: "rtl" }],
+                    [{ size: ["small", false, "large", "huge"] }],
+                    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                    [{ color: [] }, { background: [] }],
+                    [{ font: [] }],
+                    [{ align: [] }],
+                    ["image"], // 이미지 삽입 버튼 추가
+                    ["clean"],
+                ],
+                handlers: {
+                    image: function () {
+                        const input = document.createElement("input");
+                        input.setAttribute("type", "file");
+                        input.setAttribute("accept", "image/*");
+                        input.click();
+
+                        input.onchange = async () => {
+                            const file = input.files[0];
+                            if (file) {
+                                // Base64 인코딩 삽입
+                                const reader = new FileReader();
+                                reader.onload = (e) => {
+                                    const range = editor.getSelection();
+                                    editor.insertEmbed(range.index, "image", e.target.result);
+                                };
+                                reader.readAsDataURL(file);
+
+                                // 서버 업로드 (옵션)
+                                const formData = new FormData();
+                                formData.append("image", file);
+
+                                try {
+                                    const response = await fetch("/upload-image", {
+                                        method: "POST",
+                                        body: formData,
+                                    });
+                                    const data = await response.json();
+                                    if (data.url) {
+                                        const range = editor.getSelection();
+                                        editor.insertEmbed(range.index, "image", data.url);
+                                    } else {
+                                        console.error("서버 업로드 실패");
+                                    }
+                                } catch (error) {
+                                    console.error("서버 업로드 중 오류 발생:", error);
+                                }
+                            }
+                        };
+                    },
+                },
+            },
+        },
+    });
+});
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const buttons = document.querySelectorAll(".buttons button");
+
+    buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const url = button.getAttribute("data-url"); // 버튼의 data-url 속성 값 가져오기
+            if (url) {
+                window.location.href = url; // 해당 URL로 이동
+            } else {
+                console.error("URL이 설정되지 않았습니다.");
+            }
+        });
+    });
+});
+
+
+
