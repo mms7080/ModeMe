@@ -8,7 +8,8 @@
     <script defer src="/js/prdDetailNav.js"></script>
 </head>
 <body>
-
+	<!-- 헤더 -->
+	<div th:replace="~{header :: header}"></div>
 
     <div class="top container" id="prdBuy">
     
@@ -267,5 +268,9 @@
 		    </div>
         </div>
     </div>
+    
+    	<!-- 푸터 -->
+	<div th:replace="~{footer :: footer}"></div>
+    
 </body>
 </html>

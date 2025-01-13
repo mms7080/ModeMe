@@ -11,6 +11,10 @@
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 </head>
 <body>
+
+	<!-- 헤더 -->
+	<div th:replace="~{header :: header}"></div>
+
     <div class="product-edit-container">
         <h1>상품 수정</h1>
 
@@ -108,7 +112,10 @@
 		    <button id="cancel-btn" data-url="/productDetail">수정 취소</button>
 		    <button id="temp-save-btn" data-url="/productDetail">임시 저장</button>
 		</div>
-
     </div>
+    
+    	<!-- 푸터 -->
+	<div th:replace="~{footer :: footer}"></div>
+    
 </body>
 </html>

@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="/css/productDetail/reviewWrite.css">
 </head>
 <body>
+
+	<!-- 헤더 -->
+	<div th:replace="~{header :: header}"></div>
+
     <div class="review-container">
         <h1>REVIEW</h1>
         <p class="description">상품 사용후기를 작성해주세요.</p>
@@ -63,5 +67,9 @@
 		    </div>
         </form>
     </div>
+    
+    	<!-- 푸터 -->
+	<div th:replace="~{footer :: footer}"></div>
+    
 </body>
 </html>
