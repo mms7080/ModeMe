@@ -88,6 +88,12 @@ public class ViewController {
 	public String productQAWrite() {
 		return "/productDetail/productQAWrite";
 	}
+	
+	// 제품 문의 작성페이지
+	@GetMapping("/productEdit")
+	public String productEdit() {
+		return "/productDetail/productEdit";
+	}
 
 	// 결제페이지
 	@GetMapping("/purchase")
