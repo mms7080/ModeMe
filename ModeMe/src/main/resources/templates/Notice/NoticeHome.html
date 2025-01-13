@@ -44,12 +44,23 @@
 			</tbody>
 		</table>
 
-		<!-- 페이지네이션 -->
 		<div class="pagination">
-			<button>&lt;</button>
-			<span>1</span>
-			<button>&gt;</button>
+			<!-- 이전 버튼 -->
+			<button th:if="${currentPage > 0}"
+				th:onclick="'location.href=\'?page=' + (${currentPage} - 1) + '&size=' + ${pageSize} + '\';'">&lt;</button>
+
+			<!-- 페이지 번호 -->
+			<span th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+				th:classappend="${i == currentPage} ? 'active' : ''"
+				th:onclick="'location.href=\'?page=' + ${i} + '&size=' + ${pageSize} + '\';'"
+				th:text="${i + 1}"> </span>
+
+			<!-- 다음 버튼 -->
+			<button th:if="${currentPage < totalPages - 1}"
+				th:onclick="'location.href=\'?page=' + (${currentPage} + 1) + '&size=' + ${pageSize} + '\';'">&gt;</button>
 		</div>
+
+
 
 		<!-- 검색 섹션 -->
 		<div class="search-section">
