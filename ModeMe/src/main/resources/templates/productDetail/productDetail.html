@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Detail Page</title>
     <link rel="stylesheet" href="/css/productDetail/productDetail.css">
-    <script defer src="/js/prdDetailNav.js"></script>
+    <script defer src="/js/productDetail/prdDetailNav.js"></script>
+    <script defer src="/js/productDetail/productDetail.js"></script>
 </head>
 <body>
 	<!-- 헤더 -->
@@ -53,7 +54,7 @@
                 <!-- Product Options -->
                 <div class="product-options">
 	                <div>
-	                	<span class="option-label"><b>COLOR</b></span>
+	                	<span class="option-label color"><b>COLOR</b></span>
 	                	<div class="option-buttons">
 		                    <button>베이지</button>
 		                    <button>그레이</button>
@@ -61,7 +62,7 @@
 	                    </div>
 	                </div>
 	                <div>
-	                	<span class="option-label"><b>SIZE</b></span>
+	                	<span class="option-label size"><b>SIZE</b></span>
 	                	<div class="option-buttons">	                	
 		                    <button>S</button>
 		                    <button>M</button>
@@ -69,36 +70,18 @@
 		                    <button>XL</button>
 	                	</div>
 	                </div>
+	                <button class="add-to-selection">항목 추가</button>
                 </div>
                 
                 <!-- Selection Section -->
                 <div class="selection">
-                    <div class="selection-item">
-                    	<b>최고로 따뜻한 발마칸 코오트</b>
-                        <p>베이지</p>
-                        <span class="size">L</span>
-                        <input type="number" class="quantity-input" value="1" min="1">
-                        <span class="price">₩81,900</span>
-                        <button class="delete-item" aria-label="삭제">&times;</button>
-                    </div>
-                    <div class="selection-item">
-                    	<b>최고로 따뜻한 발마칸 코오트</b>
-                        <p>그레이</p>
-                        <span class="size">M</span>
-                        <input type="number" class="quantity-input" value="1" min="1">
-                        <span class="price">₩81,900</span>
-                        <button class="delete-item" aria-label="삭제">&times;</button>
-                    </div>
-                    <div class="selection-item">
-                    	<b>최고로 따뜻한 발마칸 코오트</b>
-                        <p>블랙</p>
-                        <span class="size">S</span>
-                        <input type="number" class="quantity-input" value="1" min="1">
-                        <span class="price">₩81,900</span>
-                        <button class="delete-item" aria-label="삭제">&times;</button>
-                    </div>
+					<!-- Selection 자동 생성 -->
                 </div>
-
+                
+				<div class="selection-summary">
+				    총 가격: <span id="total-price">₩0</span>
+				</div>
+				
                 <!-- Purchase Section -->
                 <div class="purchase-section">
                     <button class="buyNow">바로 구매하기</button>
