@@ -5,24 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notice Write</title>
     <link rel="stylesheet" href="/css/Notice/NoticeWrite.css">
-    <script>
-        function validateForm() {
-            const title = document.querySelector('input[name="title"]').value.trim();
-            const content = document.querySelector('textarea[name="content"]').value.trim();
 
-            if (!title) {
-                alert("제목을 작성해주세요.");
-                return false; // 폼 제출 방지
-            }
-
-            if (!content) {
-                alert("내용을 작성해주세요.");
-                return false; // 폼 제출 방지
-            }
-
-            return true; // 폼 제출 허용
-        }
-    </script>
+    <!-- Quill CSS -->
+    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
 </head>
 <body>
 
@@ -31,7 +16,7 @@
     
     <main>
         <h1>NOTICE 작성</h1>
-        <form th:action="@{/notices/new}" method="post" onsubmit="return validateForm()">
+        <form th:action="@{/notices/new}" method="post" onsubmit="return submitForm();">
             <table class="detail-table">
                 <tr>
                     <th>제목</th>
@@ -45,14 +30,42 @@
                 </tr>
             </table>
             <div class="content" style="height: 300px;">
-                <textarea name="content" placeholder="내용을 작성하세요..." style="width: 100%; height: 100%; padding: 1px;"></textarea>
+                <!-- Quill Editor -->
+                <div id="editor-container" style="height: 80%;"></div>
+                <!-- Hidden textarea to submit content -->
+                <textarea name="content" id="hidden-content" style="display: none;"></textarea>
             </div>
             <div class="noticebuttons">
                 <button type="submit">작성 완료</button>
             </div>
         </form>
     </main>
+
+    <!-- Quill JS -->
+    <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+    <script>
+        // Initialize Quill editor
+        const quill = new Quill('#editor-container', {
+            theme: 'snow',
+            placeholder: '내용을 작성하세요...',
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline'], // Text formatting
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }], // Lists
+                    [{ 'align': [] }], // Alignment
+                    ['link', 'image'] // Links and Images
+                ]
+            }
+        });
+
+        // Submit form with Quill content
+        function submitForm() {
+            const content = document.querySelector('textarea[name="content"]');
+            content.value = quill.root.innerHTML; // Get the HTML content from Quill
+            return true; // Allow form submission
+        }
+    </script>
 </body>
 <!-- 푸터 -->
-<div th:replace="~{footer :: footer}"></div> 
+<div th:replace="~{footer :: footer}"></div>
 </html>
