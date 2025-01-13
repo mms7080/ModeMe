@@ -51,6 +51,15 @@ h1 {
 
 .firstbox {
 	padding: 10px;
+	font-size: 17px;
+	display: flex;
+	flex-direction: column;
+	gap:5px;
+}
+
+.firstboxspan {
+	display: flex;
+		justify-content: space-between;
 }
 
 .rightline {
@@ -60,6 +69,7 @@ h1 {
 .mileagemaintitle {
 	border-bottom: 1px solid lightgrey;
 	padding: 10px;
+	font-size:20px;
 }
 
 .mileagecontent {
@@ -78,6 +88,7 @@ h1 {
 .mileagenotice {
 	background-color:lightgrey;
 	padding:10px;
+	font-size: 17px;
 }
 
 .mileagexplane {

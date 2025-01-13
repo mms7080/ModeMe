@@ -39,9 +39,9 @@ h1 {
 }
 
 .addressp {
-	color: lightgrey;
+	color: grey;
 	text-align:center;
-	font-size:10px;
+	font-size:15px;
 	margin-top:10px;
 }
 
@@ -56,6 +56,10 @@ h1 {
 	text-align: center;
 	padding:10px;
 	border-bottom: 1px solid grey;
+}
+
+.addresscontent span {
+	font-size: 17px;
 }
 
 .addresslist {
@@ -73,6 +77,7 @@ h1 {
 	color: white;
 	background-color: black;
 	width:10%;
+	font-size:17px;
 }
 
 .addressfooter {
@@ -83,9 +88,9 @@ h1 {
 .addressnotice {
 	background-color:lightgrey;
 	padding:10px;
+	font-size: 17px;
 }
 
 .addressexplane {
 	padding:7px;
-	font-size:12px;
 }
