@@ -42,11 +42,9 @@ h1 {
 	padding: 10px;
 	display: flex;
 	border: 5px solid lightgrey;
-	font-size: 15px;
-	flex-wrap: wrap;
-	flex-direction: row;
 	gap: 5px;
 	margin-bottom: 10px;
+	width:100%;
 }
 
 .daybuttons {
@@ -65,14 +63,12 @@ h1 {
 	transition: bacground-color 0.3s;
 }
 
-.overheaderformform {
-	display: inline-box;
-}
-
 .orderheaderform {
 	display: flex;
+	flex-direction: row;
 	align-items: center;
 	gap: 5px;
+	width:65%;
 }
 
 .searchcalendar {
@@ -81,17 +77,25 @@ background-color: transparent;
 	border:none;
 	align-items: center;
 	cursor: pointer;
+
 }
 
 .ordersearch {
-	background-color: black;
-	color: white;
-	border-radius: 3px;
+    background-color: black;
+    color: white;
+    border-radius: 3px;
+    text-align: center;
+    width:10%;
 }
 
 .ordercontent {
     display: grid;
-    grid-template-columns: repeat(7, 1fr); /* 7개의 동일한 크기의 컬럼 */
+    grid-template-columns: repeat(7, 1fr);
+justify-items: center;
+}
+
+.ordercontent span {
+	font-size: 15px;
 }
 
 .ordermain {
@@ -104,9 +108,17 @@ background-color: transparent;
 	height:10%;
 	align-content:center;
 	margin-bottom: 10px;
+	font-size: 20px;
 }
 
 .orderlist {
 	margin-top: 10px;
 	border: 1px solid lightgrey;
+}
+
+@media (max-width: 540px) {
+    .greybox {
+    	display: flex;
+    	flex-wrap: wrap;
+    }
 }
