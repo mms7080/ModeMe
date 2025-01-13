@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notice Edit</title>
+    <link rel="stylesheet" href="/css/Notice/NoticeWrite.css">
+</head>
+<body>
+
+    <!-- 헤더 -->
+    <div th:replace="~{header :: header}"></div>
+    
+    <main>
+        <h1>NOTICE 수정</h1>
+        <!-- 수정 폼 -->
+        <form th:action="@{/notices/edit/{id}(id=${notice.id})}" method="post">
+            <table class="detail-table">
+                <tr>
+                    <th>제목</th>
+                    <td>
+                        <!-- 기존 제목 값을 채워넣음 -->
+                        <input type="text" name="title" th:value="${notice.title}" placeholder="제목을 작성하세요" style="width: 99%; padding: 10px;">
+                    </td>
+                </tr>
+                <tr>
+                    <th>작성자</th>
+                    <td>관리자</td> <!-- 작성자는 관리자 고정 -->
+                </tr>
+            </table>
+            <div class="content" style="height: 300px;">
+                <!-- 기존 내용 값을 채워넣음 -->
+                <textarea name="content" placeholder="내용을 작성하세요..." style="width: 100%; height: 100%; padding: 1px;"
+                          th:text="${notice.content}"></textarea>
+            </div>
+            <div class="noticebuttons">
+                <button type="submit">수정 완료</button>
+                <!-- 취소 버튼 -->
+                <button type="button" onclick=>취소</button>
+            </div>
+        </form>
+    </main>
+
+    <!-- 푸터 -->
+    <div th:replace="~{footer :: footer}"></div>
+</body>
+</html>

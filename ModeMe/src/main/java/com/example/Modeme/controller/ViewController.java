@@ -5,25 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class ViewController {
-
-	// 공지
-	@GetMapping("/notice")
-	public String noticehome() {
-		return "/Notice/NoticeHome";
-	}
-
-	// 공지 작성
-	@GetMapping("/noticeWrite")
-	public String noticeWrite() {
-		return "/Notice/NoticeWrite";
-	}
-
-	// 공지 상세페이지뷰
-	@GetMapping("/noticeView")
-	public String noticeView() {
-		return "/Notice/NoticeView";
-	}
-
+	
 	// Q&A
 	@GetMapping("/qna")
 	public String qnaHome() {
