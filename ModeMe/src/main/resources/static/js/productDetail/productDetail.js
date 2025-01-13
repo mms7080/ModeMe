@@ -1,9 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const colorButtons = document.querySelectorAll(".option-label.color + .option-buttons button");
-    const sizeButtons = document.querySelectorAll(".option-label.size + .option-buttons button");
     const selectionContainer = document.querySelector(".selection");
     const addButton = document.querySelector(".add-to-selection");
     const totalPriceElement = document.getElementById("total-price");
+
+    const colorButtons = document.querySelectorAll(".option-label.color + .option-buttons button");
+    const sizeButtons = document.querySelectorAll(".option-label.size + .option-buttons button");
 
     let selectedColor = null;
     let selectedSize = null;
@@ -11,18 +12,28 @@ document.addEventListener("DOMContentLoaded", () => {
     // Handle color selection
     colorButtons.forEach((button) => {
         button.addEventListener("click", () => {
+            // 모든 색상 버튼에서 'selected-color' 클래스 제거
             colorButtons.forEach((btn) => btn.classList.remove("selected-color"));
+
+            // 클릭한 버튼에 'selected-color' 클래스 추가
             button.classList.add("selected-color");
-            selectedColor = button.textContent;
+
+            // 선택한 색상 텍스트 저장
+            selectedColor = button.textContent.trim();
         });
     });
 
     // Handle size selection
     sizeButtons.forEach((button) => {
         button.addEventListener("click", () => {
+            // 모든 사이즈 버튼에서 'selected-size' 클래스 제거
             sizeButtons.forEach((btn) => btn.classList.remove("selected-size"));
+
+            // 클릭한 버튼에 'selected-size' 클래스 추가
             button.classList.add("selected-size");
-            selectedSize = button.textContent;
+
+            // 선택한 사이즈 텍스트 저장
+            selectedSize = button.textContent.trim();
         });
     });
 
@@ -33,7 +44,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Check if the combination already exists
         const existingItem = Array.from(selectionContainer.children).find(
             (item) =>
                 item.querySelector("p").textContent === selectedColor &&
@@ -45,7 +55,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Add new selection item
         const itemElement = document.createElement("div");
         itemElement.className = "selection-item";
         itemElement.innerHTML = `
@@ -57,10 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <button class="delete-item" aria-label="삭제">&times;</button>
         `;
 
-        // Add quantity change listener
         itemElement.querySelector(".quantity-input").addEventListener("input", updateTotalPrice);
-
-        // Add delete button functionality
         itemElement.querySelector(".delete-item").addEventListener("click", () => {
             itemElement.remove();
             updateTotalPrice();
@@ -68,12 +74,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         selectionContainer.appendChild(itemElement);
 
-        // Reset selected options
         resetSelections();
         updateTotalPrice();
     };
 
-    // Reset selected options
     const resetSelections = () => {
         colorButtons.forEach((button) => button.classList.remove("selected-color"));
         sizeButtons.forEach((button) => button.classList.remove("selected-size"));
@@ -81,18 +85,16 @@ document.addEventListener("DOMContentLoaded", () => {
         selectedSize = null;
     };
 
-    // Calculate total price
     const updateTotalPrice = () => {
         const totalPrice = Array.from(selectionContainer.children).reduce((acc, item) => {
             const quantity = parseInt(item.querySelector(".quantity-input").value, 10);
-            const price = 81900; // 가격 설정
+            const price = 81900;
             return acc + quantity * price;
         }, 0);
 
         totalPriceElement.textContent = `₩${totalPrice.toLocaleString()}`;
     };
 
-    // Add event listener to add button
     if (addButton) {
         addButton.addEventListener("click", addSelectionItem);
     }
