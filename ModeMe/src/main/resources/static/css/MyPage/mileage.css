@@ -43,7 +43,7 @@ h1 {
 	height: 25%;
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
-	border: 5px solid lightgrey;
+	border: 5px solid grey;
 	padding: 10px;
 	font-size: 15px;
 	margin-bottom: 20px;

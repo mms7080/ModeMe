@@ -43,7 +43,7 @@ h1 {
 	height: 15%;
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
-	border: 5px solid lightgrey;
+	border: 5px solid grey;
 	padding: 10px;
 	font-size: 15px;
 	align-content: center;
@@ -51,6 +51,15 @@ h1 {
 
 .firstbox {
 	padding: 10px;
+	display: flex;
+	flex-direction: column;
+	gap:5px;
+}
+
+.firstboxcol{
+		display:flex;
+	justify-content: space-between;
+	font-size: 17px;
 }
 
 .rightline {
