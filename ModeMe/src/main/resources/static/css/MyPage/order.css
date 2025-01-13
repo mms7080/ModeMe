@@ -5,6 +5,7 @@
 	padding: 0;
 	box-sizing: border-box;
 	font-family: 'omyu_pretty';
+			font-size: 15px;
 }
 
 @font-face {
@@ -64,12 +65,14 @@ h1 {
 	transition: bacground-color 0.3s;
 }
 
+.overheaderformform {
+	display: inline-box;
+}
+
 .orderheaderform {
 	display: flex;
-	justify-content:center;
 	align-items: center;
 	gap: 5px;
-	width:50%;
 }
 
 .searchcalendar {
@@ -84,7 +87,6 @@ background-color: transparent;
 	background-color: black;
 	color: white;
 	border-radius: 3px;
-	width:100%;
 }
 
 .ordercontent {
@@ -99,7 +101,7 @@ background-color: transparent;
 
 .ordermaintitle {
 	border-bottom: 1px solid lightgrey;
-	height:15%;
+	height:10%;
 	align-content:center;
 	margin-bottom: 10px;
 }
