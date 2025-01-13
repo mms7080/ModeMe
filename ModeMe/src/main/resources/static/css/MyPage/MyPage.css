@@ -106,6 +106,7 @@ h1 {
 .mypagebutton {
 	padding: 10px;
 	border: 1px solid lightgrey;
+	align-content:center;
 }
 
 .mypagebutton:hover {
@@ -122,4 +123,5 @@ h1 {
 	text-decoration: none;
 	display: flex;
 	flex-direction: column;
+	gap: 5px;
 }
