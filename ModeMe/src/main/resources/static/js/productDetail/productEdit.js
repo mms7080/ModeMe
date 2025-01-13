@@ -69,31 +69,76 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// rich text editer
 document.addEventListener("DOMContentLoaded", () => {
     // Rich Text Editor 초기화
     const editor = new Quill("#rich-text-editor", {
         theme: "snow",
         placeholder: "상품 상세 정보를 입력하세요...",
         modules: {
-            toolbar: [
-                ["bold", "italic", "underline", "strike"],
-                ["blockquote", "code-block"],
-                [{ header: 1 }, { header: 2 }],
-                [{ list: "ordered" }, { list: "bullet" }],
-                [{ script: "sub" }, { script: "super" }],
-                [{ indent: "-1" }, { indent: "+1" }],
-                [{ direction: "rtl" }],
-                [{ size: ["small", false, "large", "huge"] }],
-                [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                [{ color: [] }, { background: [] }],
-                [{ font: [] }],
-                [{ align: [] }],
-                ["clean"],
-            ],
+            toolbar: {
+                container: [
+                    ["bold", "italic", "underline", "strike"],
+                    ["blockquote", "code-block"],
+                    [{ header: 1 }, { header: 2 }],
+                    [{ list: "ordered" }, { list: "bullet" }],
+                    [{ script: "sub" }, { script: "super" }],
+                    [{ indent: "-1" }, { indent: "+1" }],
+                    [{ direction: "rtl" }],
+                    [{ size: ["small", false, "large", "huge"] }],
+                    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                    [{ color: [] }, { background: [] }],
+                    [{ font: [] }],
+                    [{ align: [] }],
+                    ["image"], // 이미지 삽입 버튼 추가
+                    ["clean"],
+                ],
+                handlers: {
+                    image: function () {
+                        const input = document.createElement("input");
+                        input.setAttribute("type", "file");
+                        input.setAttribute("accept", "image/*");
+                        input.click();
+
+                        input.onchange = async () => {
+                            const file = input.files[0];
+                            if (file) {
+                                // Base64 인코딩 삽입
+                                const reader = new FileReader();
+                                reader.onload = (e) => {
+                                    const range = editor.getSelection();
+                                    editor.insertEmbed(range.index, "image", e.target.result);
+                                };
+                                reader.readAsDataURL(file);
+
+                                // 서버 업로드 (옵션)
+                                const formData = new FormData();
+                                formData.append("image", file);
+
+                                try {
+                                    const response = await fetch("/upload-image", {
+                                        method: "POST",
+                                        body: formData,
+                                    });
+                                    const data = await response.json();
+                                    if (data.url) {
+                                        const range = editor.getSelection();
+                                        editor.insertEmbed(range.index, "image", data.url);
+                                    } else {
+                                        console.error("서버 업로드 실패");
+                                    }
+                                } catch (error) {
+                                    console.error("서버 업로드 중 오류 발생:", error);
+                                }
+                            }
+                        };
+                    },
+                },
+            },
         },
     });
 });
+
+
 
 document.addEventListener("DOMContentLoaded", () => {
     const buttons = document.querySelectorAll(".buttons button");

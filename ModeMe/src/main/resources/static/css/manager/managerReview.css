@@ -184,11 +184,7 @@ h1 {
 	margin: 5px 0;
 }
 
-.notice-table td:last-child {
-	display: flex;
-	justify-content: center;
-	gap: 10px;
-}
+
 
 .notice-table button {
 	padding: 5px 10px;
