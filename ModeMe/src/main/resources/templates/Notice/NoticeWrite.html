@@ -16,12 +16,12 @@
     
     <main>
         <h1>NOTICE 작성</h1>
-        <form th:action="@{/notices/new}" method="post" onsubmit="return submitForm();">
+        <form th:action="@{/notices/new}" method="post" onsubmit="return validateForm();">
             <table class="detail-table">
                 <tr>
                     <th>제목</th>
                     <td>
-                        <input type="text" name="title" placeholder="제목을 작성하세요" style="width: 99%; padding: 10px;">
+                        <input type="text" name="title" id="title" placeholder="제목을 작성하세요" style="width: 99%; padding: 10px;">
                     </td>
                 </tr>
                 <tr>
@@ -58,14 +58,28 @@
             }
         });
 
-        // Submit form with Quill content
-        function submitForm() {
-            const content = document.querySelector('textarea[name="content"]');
-            content.value = quill.root.innerHTML; // Get the HTML content from Quill
+        // Validate form inputs before submission
+        function validateForm() {
+            const title = document.querySelector('#title').value.trim();
+            const content = quill.root.innerHTML.trim();
+
+            if (!title) {
+                alert('제목을 작성하세요.');
+                return false; // Prevent form submission
+            }
+
+            if (content === '<p><br></p>' || !content) { // Check if Quill content is empty
+                alert('내용을 작성하세요.');
+                return false; // Prevent form submission
+            }
+
+            // If validation passes, copy Quill content to hidden textarea
+            document.querySelector('#hidden-content').value = content;
             return true; // Allow form submission
         }
     </script>
 </body>
+
 <!-- 푸터 -->
 <div th:replace="~{footer :: footer}"></div>
 </html>
