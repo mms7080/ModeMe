@@ -306,4 +306,31 @@ input[type="radio"]:not(:checked) + .category-label {
 button:hover {
     background-color: #555;
 } */
+/* product-name 스타일 */
+.product-name {
+    display: flex;
+    flex-direction: column; /* 내부 요소를 세로 정렬 */
+    align-items: flex-start; /* 내부 요소를 왼쪽 정렬 */
+    width: calc(50% - 20px); /* 2열로 나열 (간격 포함) */
+    box-sizing: border-box; /* padding 포함하여 크기 계산 */
+    margin-bottom: 20px; /* 아래 요소와의 간격 */
+    margin-top: 20px; /* 아래 요소와의 간격 */
+}
 
+/* product-name 내 input 스타일 */
+.product-name input {
+    width: 80%; /* 입력 창 너비 */
+    padding: 10px; /* 내부 여백 */
+    border: 1px solid #ddd; /* 테두리 */
+    border-radius: 4px; /* 둥근 모서리 */
+    font-size: 12px; /* 글꼴 크기 */
+    margin-top: 5px; /* Label과 간격 */
+}
+
+/* product-name 내 label 스타일 */
+.product-name label {
+    display: block; /* Label을 블록 요소로 설정 */
+    width: 35%; /* Label 너비 */
+    font-weight: bold; /* 굵은 텍스트 */
+    margin-bottom: 5px; /* Input과의 간격 */
+}
