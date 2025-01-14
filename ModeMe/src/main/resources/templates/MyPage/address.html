@@ -6,6 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Address</title>
 <link rel="stylesheet" href="/css/MyPage/address.css">
+<script defer src="/js/MyPage/address.js"></script>
+<script type="text/javascript" src="https://ssl.daumcdn.net/dmaps/maps/maps3.js?autoload=false"></script>
+
 
 </head>
 <body>
@@ -25,10 +28,48 @@
 			<div class="addresslist">등록된 주소가 없습니다.</div>
 		</div>
 		
+		<!-- 배송지 등록버튼 및 팝업 창 -->
 		<form class="addressform">
-			<button class="addresssubmit">배송지등록</button>
+			<!-- 주문 페이지에서 '배송지 입력' 버튼 -->
+			<button class="addresssubmit" onclick="openAddressPopup()">배송지 등록</button>
+
+			<!-- 배송지 입력 팝업 -->
+			<div id="addressPopup" class="popup-overlay">
+				<div class="popup-content">
+					<div class="popup-title">
+						<span></span>
+						<h2>배송지 등록</h2>
+						<button type="button" class="closebutton"
+							onclick="closeAddressPopup()">✖</button>
+					</div>
+					<!-- 배송지 입력 폼 -->
+					<div>
+						<div class="popup-input">
+							<label for="recipient">이름:</label>
+							<input type="text" id="recipient" name="recipient" required>
+						</div>
+						<div class="popup-input">
+							<label for="phone">전화번호:</label>
+							<input type="text" id="phone" name="phone" required>
+						</div>
+						<div class="popup-input">
+							<label for="zip">우편번호:</label>
+							<input type="text" id="zip" name="zip" required readonly>
+							<button class="popup-button" type="button" onclick="openDaumPostcode()">우편번호 찾기</button>
+						</div>
+						<div class="popup-input">
+							<label for="address">상세주소:</label>
+							<input type="text" id="address" name="address" required readonly>
+						</div>
+						<div class="popup-button-div">
+							<button class="popup-button2" type="submit">저장</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
 		</form>
-		
+
 		<div class="addressfooter">
 			<div class="addressnotice">배송주소록 유의사항</div>
 			<div class="addressexplane">
