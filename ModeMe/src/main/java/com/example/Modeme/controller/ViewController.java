@@ -115,6 +115,12 @@ public class ViewController {
 	public String mainView2() {
 		return "/main";
 	}
+	
+	// OUTER 예시 링크
+	@GetMapping("/outer")
+	public String outer() {
+		return "/product/productList";
+	}
 
 	// 관리자 상품 등록
 	@GetMapping("/managerInput")
