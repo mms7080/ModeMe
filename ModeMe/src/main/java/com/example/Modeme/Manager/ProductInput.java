@@ -38,7 +38,7 @@ public class ProductInput {
 	private String subCategory; // 서브 카테고리
 	private String size; // 상품 사이즈
     private String productDescription; // 상품 상세정보
-
+    	//?
     // 이미지 경로를 저장하는 List
     @ElementCollection
     private List<String> imagePaths; // 이미지 파일 경로
