@@ -1,10 +1,15 @@
 package com.example.Modeme.User.UserController;
 
+import java.security.Principal;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.example.Modeme.User.UserDTO.Headerlogin;
 import com.example.Modeme.User.UserDTO.UserDTO;
 import com.example.Modeme.User.UserService.UserService;
 
@@ -16,6 +21,14 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class SignupController {
+	
+	@Autowired
+	Headerlogin keep; // 로그인 유지 재사용 Headerlogin 클래스
+	
+    @ModelAttribute //모든 매핑에 추가할 코드
+    public void addAttributes(Model model, Principal principal) {
+        keep.headerlogin(model, principal); //로그인 유지 
+    }
 
     private final UserService userService;
 

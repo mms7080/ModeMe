@@ -1,5 +1,8 @@
 package com.example.Modeme.Notice.NoticeController;
 
+import java.security.Principal;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.Modeme.Notice.NoticeService.NoticeService;
 import com.example.Modeme.Notice.Noticedto.NoticeDto;
 import com.example.Modeme.Notice.Noticeentity.Notice;
+import com.example.Modeme.User.UserDTO.Headerlogin;
 
 @Controller
 @RequestMapping("/notices")
@@ -21,6 +25,14 @@ public class NoticeController {
 
     public NoticeController(NoticeService noticeService) {
         this.noticeService = noticeService;
+    }
+    
+	@Autowired
+	Headerlogin keep; // 로그인 유지 재사용 Headerlogin 클래스
+	
+    @ModelAttribute //모든 매핑에 추가할 코드
+    public void addAttributes(Model model, Principal principal) {
+        keep.headerlogin(model, principal); //로그인 유지 
     }
 
     // 공지 목록 및 페이지네이션
