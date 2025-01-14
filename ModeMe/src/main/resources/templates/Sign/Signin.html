@@ -6,9 +6,9 @@
     <title>로그인</title>
     <link rel="stylesheet" href="/css/Sign/Signin.css">
     <!-- 네이버 SDK -->
-    <script src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js" charset="utf-8"></script>
-    <!-- 카카오 SDK -->
-    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<!--     <script src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js" charset="utf-8"></script>
+    카카오 SDK
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script> -->
 </head>
 <body>
     <!-- 헤더 -->
@@ -20,7 +20,7 @@
             <a href="/mainpage">홈</a> &gt; <span>로그인</span>
         </div>
         <h1>로그인</h1>
-        <form action="/login" method="post" class="login-form">
+        <form action="/api/signin" method="post" class="login-form">
             <div class="form-group">
                 <label for="username">아이디</label>
                 <input type="text" id="username" name="username" placeholder="아이디" required>
@@ -43,11 +43,11 @@
         </form>
 
         <!-- 소셜 로그인 -->
-        <div class="social-login">
-            <div id="naverIdLogin" style="display: none;"></div> <!-- 네이버 로그인 버튼 -->
+ <!--        <div class="social-login">
+            <div id="naverIdLogin" style="display: none;"></div> 네이버 로그인 버튼
             <button class="kakao-btn" onclick="loginWithKakao()">카카오로 로그인</button>
             <button class="naver-btn" id="custom-naver-login-button">네이버로 로그인</button>
-        </div>
+        </div> -->
 
         <div class="signup-link">
             <p>아직 회원이 아니신가요?</p>
@@ -60,7 +60,7 @@
 
     <!-- 카카오 로그인 Script -->
     <script>
-        // 카카오 로그인 초기화
+/*         // 카카오 로그인 초기화
         Kakao.init('337dc51e65db835d92140237621c8f56'); // 본인의 JavaScript 키 입력
         console.log(Kakao.isInitialized());
 
@@ -75,12 +75,12 @@
                     console.log(err);
                 }
             });
-        }
+        } */
     </script>
 
     <!-- 네이버 로그인 Script -->
     <script>
-        // 네이버 로그인 초기화
+/*         // 네이버 로그인 초기화
         const naverLogin = new naver.LoginWithNaverId({
             clientId: "L2yk1g6sJC3EhfnnBVtN", // 네이버 애플리케이션 Client ID
             callbackUrl: "http://localhost:9999/naver_callback", // Redirect URI 설정
@@ -94,9 +94,9 @@
         // 네이버 로그인 버튼에 이벤트 연결
         document.getElementById("custom-naver-login-button").addEventListener("click", function () {
             naverLogin.authorize(); // 네이버 로그인 요청
-        });
+        }); */
 
-        // 네이버 로그인 상태 확인
+/*         // 네이버 로그인 상태 확인
         naverLogin.getLoginStatus(function (status) {
             if (status) {
                 const email = naverLogin.user.getEmail();
@@ -109,7 +109,7 @@
                 alert(`네이버 로그인 성공! 환영합니다, ${nickname}님!`);
                 console.log(`Email: ${email}, Nickname: ${nickname}`);
             }
-        });
+        }); */
     </script>
 </body>
 </html>
