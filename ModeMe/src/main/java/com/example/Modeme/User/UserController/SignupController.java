@@ -21,10 +21,10 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class SignupController {
-	
-	@Autowired
-	Headerlogin keep; // 로그인 유지 재사용 Headerlogin 클래스
-	
+   
+   @Autowired
+   Headerlogin keep; // 로그인 유지 재사용 Headerlogin 클래스
+   
     @ModelAttribute //모든 매핑에 추가할 코드
     public void addAttributes(Model model, Principal principal) {
         keep.headerlogin(model, principal); //로그인 유지 
