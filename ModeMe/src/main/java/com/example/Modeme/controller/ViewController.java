@@ -1,10 +1,24 @@
 package com.example.Modeme.controller;
 
+import java.security.Principal;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+
+import com.example.Modeme.User.UserDTO.Headerlogin;
 
 @Controller
 public class ViewController {
+	@Autowired
+	Headerlogin keep; // 로그인 유지 재사용 Headerlogin 클래스
+	
+    @ModelAttribute //모든 매핑에 추가할 코드
+    public void addAttributes(Model model, Principal principal) {
+        keep.headerlogin(model, principal); //로그인 유지 
+    }
 	// Q&A
 	@GetMapping("/qna")
 	public String qnaHome() {
@@ -29,10 +43,17 @@ public class ViewController {
 		return "/Notice/secretPage";
 	}
 
-	// 헤더 없어도되는데 나중에 쓸일있을거같아서 해둠
 	@GetMapping("/header")
-	public String header() {
-		return "/header";
+	public String getHeader(Model model, Principal principal) { // principal -> 현재 인증된 사용자의 정보 담고있는 객체
+		if (principal != null) {
+			// 사용자가 로그인한 경우
+			model.addAttribute("loggedIn", true);
+			model.addAttribute("username", principal.getName());
+		} else {
+			// 사용자가 로그인하지 않은 경우
+			model.addAttribute("loggedIn", false);
+		}
+		return "header";
 	}
 
 	// 푸터 없어도되는데 나중에 쓸일있을거같아서 해둠

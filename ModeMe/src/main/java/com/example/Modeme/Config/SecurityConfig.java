@@ -34,6 +34,7 @@ public class SecurityConfig {
                 .ignoringRequestMatchers(
                     "/api/signin", // 로그인 처리 경로를 CSRF 보호에서 제외
                     "/api/signup", // 회원가입 처리 경로 추가
+                    "/logout",
                     "/sigin",
                     "/signup",
                     "/image/**",
@@ -46,6 +47,7 @@ public class SecurityConfig {
                 .requestMatchers(
                     "/api/signin", // 로그인 처리 경로를 CSRF 보호에서 제외
                     "/api/signup", // 회원가입 처리 경로 추가
+                    "/logout",
                     "/signin", // 로그인 페이지
                     "/signup", // 회원가입 페이지
                     "/image/**",
