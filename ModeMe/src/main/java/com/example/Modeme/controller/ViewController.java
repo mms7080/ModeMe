@@ -121,7 +121,13 @@ public class ViewController {
 	public String outer() {
 		return "/product/productList";
 	}
-
+	
+	// CART 장바구니
+	@GetMapping("/shopcart")
+	public String shoppingCart() {
+		return "/purchase/shoppingCart";
+	}
+	
 	// 관리자 상품 등록
 	@GetMapping("/managerInput")
 	public String inputProduct() {
