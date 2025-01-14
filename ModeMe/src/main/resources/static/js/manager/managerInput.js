@@ -40,6 +40,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 subItemInput.name = "subcategory";
                 subItemInput.value = item;
 
+				// 선택된 항목의 값을 hidden input에 넣는 이벤트 리스너 추가
+				subItemInput.addEventListener("change", () => {
+				    // 모든 선택된 항목을 hidden input에 저장
+				    const selectedSubcategories = [];
+				    document.querySelectorAll('input[name="subcategory"]:checked').forEach((checkbox) => {
+				        selectedSubcategories.push(checkbox.value);
+				    });
+
+				    subCategoryInput.value = selectedSubcategories.join(","); // 선택된 항목을 쉼표로 구분하여 저장
+				});
+				
                 subItemDiv.appendChild(subItemInput);
                 subItemDiv.appendChild(subItemLabel);
 

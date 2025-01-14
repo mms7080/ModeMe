@@ -17,19 +17,19 @@
         <h1>상품 등록</h1>	        
         <div class="product-name">
            <label for="name">상품 이름</label>
-           <input type="text" id="name" placeholder="이름 입력">
+           <input type="text" id="name" name="name" placeholder="이름 입력">
         </div>    
         <div class="product-informations">
 		     <!-- 상품 수량 -->
 		    <span class="product-info">
 		        <label for="stock">상품 수량</label>
-		        <input type="number" id="stock" min="0" placeholder="수량 입력">
+		        <input type="number" id="stock" name="stock" min="0" placeholder="수량 입력">
 		    </span>
 		
 		    <!-- 상품 가격 -->
 		    <span class="product-info">
 		        <label for="price">상품 가격</label>
-		        <input type="number" id="price" min="0" placeholder="가격 입력">
+		        <input type="number" id="price" name="price" min="0" placeholder="가격 입력">
 		    </span>
 		</div>
 		
@@ -38,11 +38,13 @@
 		    <div class="color-section">
 		        <span class="color-info">
 		            <label for="color">상품 색상</label>
-		            <input class="color" type="color" id="color" value="#000000">
+		            <input class="color" type="color" id="color"  value="#000000">
 		        </span>
 		        <div class="color-output">R: 0, G: 0, B: 0</div>
-		        <input class="color-name" type="text" placeholder="색상 이름 입력">
+		        <input class="color-name" type="text" id="colorName" placeholder="색상 이름 입력">
 		        <button class="add-color">+</button>
+		        <input type="hidden" name="color"  id="color" value="#000000">
+		        <input type="hidden" name="colorName" id="colorName">
 		    </div>
 		</div>
 
@@ -69,13 +71,14 @@
 		    </div>
 	        <!-- 서브 카테고리가 동적으로 추가됨 -->
 		    <div class="subcategory" id="subcategory">
+		    <input type="hidden" name="subcategory" id="subcategory">
 		    </div>
 		</div>
 
         <!-- Product Size -->
         <div class="size-container">
 	        <label class="size-label">상품 사이즈</label>
-	        <select id="size">
+	        <select id="size" name="size">
 	            <option value="SelectSize">S M L XL</option>
 	            <option value="FreeSize">FreeSize</option>
 	        </select>
@@ -86,16 +89,16 @@
 	        <label class="img-input-label">메인 이미지</label>
 	        <div class="image-inputs">
 	        	<div>
-		            <input type="file" id="image1">
+		            <input type="file" id="image1" name="images" multiple>
 	        	</div>
 	        	<div>
-		            <input type="file" id="image2">
+		            <input type="file" id="image2" name="images" multiple>
 	        	</div>
 	        	<div>
-		            <input type="file" id="image3">
+		            <input type="file" id="image3" name="images" multiple>
 	        	</div>
 	        	<div>
-		            <input type="file" id="image4">
+		            <input type="file" id="image4" name="images" multiple>
 	        	</div>
 	        </div>
         </div>
@@ -104,6 +107,7 @@
 		<div class="RTE-container">
 			<label for="rich-text-editor">상품 상세정보</label>
 			<div id="rich-text-editor" style="height: 300px;"></div>
+			<input type="hidden" name="productDescription" id="rich-text-editor">
 		</div>
 
 		<!-- Buttons -->
