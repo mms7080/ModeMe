@@ -2,7 +2,9 @@ package com.example.Modeme.QnA.QnaController;
 
 import java.nio.file.AccessDeniedException;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/qna")
 public class QnaController {
-
+	
     private final QnaService qnaService;
     private final CommentService commentService;
     
@@ -43,30 +45,48 @@ public class QnaController {
     // QnA 목록 페이지 및 페이지네이션
     @GetMapping
     public String getQnaList(
-        @RequestParam(defaultValue = "0") int page, // 현재 페이지 번호
-        @RequestParam(defaultValue = "5") int size, // 페이지 크기
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "5") int size,
         Model model
     ) {
-        Page<Qna> qnaPage = qnaService.getQnaList(page, size); // 최신글이 위로 정렬된 데이터
-        model.addAttribute("qnaList", qnaPage.getContent()); // 현재 페이지 데이터
-        model.addAttribute("currentPage", page); // 현재 페이지 번호
-        model.addAttribute("totalPages", qnaPage.getTotalPages()); // 전체 페이지 수
-        model.addAttribute("pageSize", size); // 페이지 크기
+        Page<Qna> qnaPage = qnaService.getQnaList(page, size);
+        List<Qna> qnaList = qnaPage.getContent();
+
+        // 댓글 수를 계산
+        Map<Long, Integer> commentCounts = new HashMap<>();
+        for (Qna qna : qnaList) {
+            int count = commentService.getCommentCountByQnaId(qna.getId());
+            commentCounts.put(qna.getId(), count);
+        }
+
+        model.addAttribute("qnaList", qnaList);
+        model.addAttribute("commentCounts", commentCounts); // 댓글 수 추가
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", qnaPage.getTotalPages());
+        model.addAttribute("pageSize", size);
         return "/Notice/qnaHome";
     }
 
 
-    // QnA 상세 페이지
+
+    //QnA 상세페이지
     @GetMapping("/{id}")
     public String getQna(@PathVariable Long id, Model model) {
         Qna qna = qnaService.getQna(id);
         model.addAttribute("qna", qna);
         
-        List<Comment> comments = commentService.getCommentsByQnaId(id); // 댓글 데이터
+        // 댓글 리스트 추가
+        List<Comment> comments = commentService.getCommentsByQnaId(id);
         model.addAttribute("comments", comments);
-        
-        return "/Notice/qnaView"; // /Notice 디렉토리에 있는 qnaView.html 반환
+
+        // 댓글 수 추가
+        Map<Long, Integer> commentCounts = new HashMap<>();
+        commentCounts.put(id, comments.size()); // 현재 QnA의 댓글 수
+        model.addAttribute("commentCounts", commentCounts);
+
+        return "/Notice/qnaView"; // qnaView.html로 이동
     }
+
 
     // QnA 작성 처리
     @PostMapping("/create")

@@ -24,6 +24,10 @@ public class CommentService {
     public List<Comment> getCommentsByQnaId(Long qnaId) {
         return commentRepository.findByQnaIdOrderByCreatedAtDesc(qnaId);
     }
+    //제목옆에 댓글갯수 로직
+    public int getCommentCountByQnaId(Long qnaId) {
+        return commentRepository.countByQnaId(qnaId);
+    }
     //댓글 작성 로직
     public Comment addComment(Long qnaId, String content, String username) {
         User user = userRepository.findByUsername(username)

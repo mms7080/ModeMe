@@ -34,8 +34,12 @@
 				            <span th:text="'🔒'+${qna.title}"></span> <!-- 비밀글 -->
 				        </a>
 				        <a th:if="${!qna.secret}" th:href="@{/qna/{id}(id=${qna.id})}">
-				            <span th:text="${qna.title}"></span> <!-- 공개글 -->
+				            <span th:text="${qna.title}"></span>
 				        </a>
+				        <!-- 댓글 개수 표시 -->
+				        <span th:if="${commentCounts != null and commentCounts[qna.id] != null and commentCounts[qna.id] > 0}" style="color: red;">
+				            (<span th:text="${commentCounts[qna.id]}"></span>)
+				        </span>
 				    </td>
 				    <td th:text="${qna.user.username}"></td>
 				</tr>
@@ -57,7 +61,7 @@
             <button th:if="${currentPage < totalPages - 1}"
                     th:onclick="'location.href=\'?page=' + (${currentPage} + 1) + '&size=' + ${pageSize} + '\';'">&gt;</button>
         </div>
-        		<div class="search-section">
+				<div class="search-section">
 			<label for="search-option">검색 옵션:</label> <select id="search-option">
 				<option value="title">제목</option>
 				<option value="content">내용</option>

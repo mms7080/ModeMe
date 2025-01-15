@@ -15,7 +15,10 @@
 		<table class="detail-table">
 			<tr>
 				<th>제목</th>
-				<td th:text="${qna.title}"></td>
+				<td>
+					<span th:text="${qna.title}"></span>
+					<span th:if="${commentCounts[qna.id] > 0}">(<span th:text="${commentCounts[qna.id]}"></span>)</span>
+				</td>
 			</tr>
 			<tr>
 				<th>작성자</th>
@@ -33,8 +36,6 @@
 				<form th:action="@{/qna/edit/{id}(id=${qna.id})}" method="get" style="display: inline;">
 				    <button type="submit" class="edit-post-button" th:if="${#authentication.name == qna.user.username}">수정</button>
 				</form>
-
-
 
 				<!-- 삭제 버튼 -->
 				<form th:action="@{/qna/{id}/delete(id=${qna.id})}" method="post" style="display: inline;">
