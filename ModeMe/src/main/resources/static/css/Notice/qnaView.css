@@ -4,9 +4,9 @@
     font-weight: normal;
     font-style: normal;
 }
-*{
-	font-family: 'omyu_pretty';
-}    
+* {
+    font-family: 'omyu_pretty';
+}
 body {
     margin: 0;
     padding: 0;
@@ -57,7 +57,7 @@ h1 {
 .inven-buttons {
     text-align: center;
     margin-bottom: 20px;
-    margin-top:1%;
+    margin-top: 1%;
 }
 
 .inven-buttons button {
@@ -84,10 +84,10 @@ h1 {
     width: 100%; /* Ensure the footer spans across the full width */
 }
 
-
 .footer p {
     margin: 5px 0;
 }
+
 .main-buttons-container {
     display: flex;
     justify-content: space-between; /* 양 끝에 배치 */
@@ -123,58 +123,119 @@ h1 {
 /* 댓글 섹션 */
 .comments-section {
     margin-top: 30px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
 .comments-section h2 {
-    font-size: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
     margin-bottom: 15px;
+    text-align: left;
 }
 
 .comments-list {
     margin-bottom: 20px;
-    border: 1px solid #ddd;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border-radius: 5px;
 }
 
 .comment {
+	position: relative;
+    padding: 15px;
+    border: 1px solid #ddd;
     margin-bottom: 10px;
-    padding: 5px 0;
+    border-radius: 5px;
+    background-color: #fff;
 }
 
-.comment p {
-    margin: 0;
-}
-
-.comment-form {
+.comment-header {
     display: flex;
-    align-items: center; /* 버튼과 textarea를 세로 가운데 정렬 */
-    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+.comment-header .username {
+    font-weight: bold;
+    color: #333;
+}
+
+.comment-header .date {
+    font-size: 12px;
+    color: #999;
+}
+
+.comment-content p {
+    margin: 0;
+    color: #444;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* 댓글 입력 섹션 */
+.comment-form {
+    margin-top: 20px;
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+    display: flex;
+    flex-direction: column; /* 요소를 세로로 배치 */
+    align-items: stretch; /* 부모 요소 너비에 맞게 확장 */
+    width: 100%;
+    max-width: 1500px; /* 최대 너비 제한 */
+    box-sizing: border-box; /* 패딩 포함한 전체 크기 조정 */
 }
 
 .comment-form textarea {
-    flex: 1;
+    width: 100%; /* 부모 요소에 맞게 너비를 100%로 설정 */
     padding: 10px;
-    font-size: 14px;
     border: 1px solid #ddd;
     border-radius: 5px;
+    font-size: 14px;
+    line-height: 1.5;
     resize: none;
-    height: 80px; /* 텍스트 영역 높이 설정 */
+    height: 120px; /* 텍스트 영역 높이 조정 */
+    box-sizing: border-box; /* 패딩 포함한 전체 크기 조정 */
 }
 
 .comment-form button {
-    height: auto;
-    padding: 13px 15px; /* 버튼 크기를 적당히 조정 */
-    font-size: 14px; /* 글자 크기를 키움 */
+    padding: 10px 20px;
     border: none;
-    background-color: #7f7f7f;
-    color: white;
+    background-color: #fff;
+    color: black;
+    font-size: 14px;
     cursor: pointer;
-    border-radius: 3px; /* 둥근 모서리 */
-    align-self: center; /* 버튼을 세로 가운데 정렬 */
+    border-radius: 5px;
+    margin-top: 10px; /* 버튼과 텍스트 영역 간격 추가 */
+    align-self: flex-end; /* 버튼을 오른쪽 정렬 */
+    width: auto; /* 버튼 크기를 고정하지 않고 자동 조정 */
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
 .comment-form button:hover {
-    background-color: #666666; /* 호버 색상 */
+    background-color: #f5f5f5;
+}
+
+/* 삭제 버튼 */
+.delete-button {
+    position: absolute; /* 버튼을 댓글 박스 내부에서 위치 지정 */
+    bottom: 10px; /* 아래쪽에 배치 */
+    right: 10px; /* 오른쪽에 배치 */
+    padding: 5px 8px;
+    font-size: 12px; /* 작고 깔끔한 크기 */
+    font-weight: bold;
+    border: none;
+    background-color: #e74c3c;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.2s ease; /* 부드러운 전환 효과 */
+}
+
+.delete-button:hover {
+    background-color: #c0392b; /* 호버 시 더 어두운 빨간색 */
 }

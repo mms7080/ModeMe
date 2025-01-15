@@ -21,8 +21,6 @@ public class SecurityConfig {
 //   public PasswordEncoder passwordEncoder() {
 //        return new BCryptPasswordEncoder();
 //    }
-    //
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance();
@@ -33,8 +31,8 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf
                 .ignoringRequestMatchers(
-                    "/api/signin", // 로그인 처리 경로를 CSRF 보호에서 제외
-                    "/api/signup", // 회원가입 처리 경로 추가
+                    "/api/signin", 
+                    "/api/signup", 
                     "/logout",
                     "/sigin",
                     "/signup",
@@ -45,19 +43,24 @@ public class SecurityConfig {
                 )
             )
             .authorizeHttpRequests(auth -> auth
+                // QnA 관련 권한 설정
+                .requestMatchers("/qna").permitAll() // QnA 목록 페이지는 인증 없이 접근 가능
+                .requestMatchers("/qnaWrite", "/qnaView/**").authenticated() // 작성 및 상세 조회는 인증 필요
+                
+                // 로그인, 회원가입, 정적 리소스는 모두 접근 가능
                 .requestMatchers(
-                    "/api/signin", // 로그인 처리 경로를 CSRF 보호에서 제외
-                    "/api/signup", // 회원가입 처리 경로 추가
+                    "/api/signin",
+                    "/api/signup",
                     "/logout",
-                    "/signin", // 로그인 페이지
-                    "/signup", // 회원가입 페이지
+                    "/signin",
+                    "/signup",
                     "/image/**",
                     "/css/**",
                     "/js/**",
                     "/resources/**",
                     "/",
                     "/main"
-                ).permitAll() // 인증 없이 접근 가능
+                ).permitAll()
                 .anyRequest().authenticated() // 나머지 요청은 인증 필요
             )
             .formLogin(login -> login
@@ -83,4 +86,5 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 }

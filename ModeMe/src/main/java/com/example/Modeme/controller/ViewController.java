@@ -19,29 +19,29 @@ public class ViewController {
     public void addAttributes(Model model, Principal principal) {
         keep.headerlogin(model, principal); //로그인 유지 
     }
-	// Q&A
-	@GetMapping("/qna")
-	public String qnaHome() {
-		return "/Notice/qnaHome";
-	}
-
-	// Q&A 작성
-	@GetMapping("/qnaWrite")
-	public String qnaWrite() {
-		return "/Notice/qnaWrite";
-	}
-
-	// Q&A 상세페이지뷰
-	@GetMapping("/qnaView")
-	public String qnaView() {
-		return "/Notice/qnaView";
-	}
-
-	// 비밀글 페이지
-	@GetMapping("/secretPage")
-	public String secretPage() {
-		return "/Notice/secretPage";
-	}
+//	// Q&A
+//	@GetMapping("/qna")
+//	public String qnaHome() {
+//		return "/Notice/qnaHome";
+//	}
+//
+//	// Q&A 작성
+//	@GetMapping("/qnaWrite")
+//	public String qnaWrite() {
+//		return "/Notice/qnaWrite";
+//	}
+//
+//	// Q&A 상세페이지뷰
+//	@GetMapping("/qnaView")
+//	public String qnaView() {
+//		return "/Notice/qnaView";
+//	}
+//
+//	// 비밀글 페이지
+//	@GetMapping("/secretPage")
+//	public String secretPage() {
+//		return "/Notice/secretPage";
+//	}
 
 	@GetMapping("/header")
 	public String getHeader(Model model, Principal principal) { // principal -> 현재 인증된 사용자의 정보 담고있는 객체

@@ -3,45 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notice Write</title>
+    <title>Q&A 작성</title>
     <link rel="stylesheet" href="/css/Notice/qnaWrite.css">
 </head>
 <body>
 
- 	<!-- 헤더-->
-	<div th:replace="~{header :: header}"></div>
-	
-	<main>
-	    <h1>Q&A 작성</h1>
-	    <table class="detail-table">
-	        <tr>
-	            <th>제목</th>
-	            <td><input type="text" id="noticeTitle" placeholder="제목을 작성하세요" style="width: 99%; padding: 10px;"></td>
-	        </tr>
-	        <tr>
-	            <th>작성자</th>
-	            <td>000회원님</td>
-	        </tr>
-	    </table>
-	    <div class="content" style="height: 300px;">
-	        <textarea id="noticeContent" placeholder="내용을 작성하세요..." style="width: 100%; height: 100%; padding: 1px;"></textarea>
-	    </div>
-	    <div class="QnAbuttons">
-	        <button onclick="openNoticeForm()">작성 완료</button>
-	            <script>
-	        function openNoticeForm() {
-				alert('Q&A가 작성되었습니다.');
-	            window.location.href = '/qna'; 
-	        }
-	        </script>
-	    </div>
-	</main>
+    <!-- 헤더 -->
+    <div th:replace="~{header :: header}"></div>
+    
+    <main>
+        <h1>Q&A 작성</h1>
+        <form th:action="@{/qna/create}" method="post" onsubmit="return validateForm();">
+            <table class="detail-table">
+                <tr>
+                    <th>제목</th>
+                    <td>
+                        <input type="text" name="title" id="noticeTitle" placeholder="제목을 작성하세요" style="width: 99%; padding: 10px;" required>
+                    </td>
+                </tr>
+                <tr>
+                    <th>작성자</th>
+                    <td th:text="${#authentication.name}"></td> <!-- 로그인된 사용자 이름 표시 -->
+                </tr>
+                <tr>
+                    <th>비밀글 설정</th>
+                    <td>
+                        <input type="checkbox" id="isSecret" name="isSecret" value="true" onclick="toggleSecretPassword()">
+                        <label for="isSecret">비밀글로 설정</label>
+                    </td>
+                </tr>
+                <tr id="secretPasswordRow" style="display: none;">
+                    <th>비밀번호</th>
+                    <td>
+                        <input type="password" name="secretPassword" id="secretPassword" placeholder="비밀번호를 입력하세요" style="width: 99%; padding: 10px;">
+                    </td>
+                </tr>
+            </table>
+            <div class="content" style="height: 300px;">
+                <textarea name="content" id="noticeContent" placeholder="내용을 작성하세요..." style="width: 100%; height: 100%; padding: 10px;" required></textarea>
+            </div>
+            <div class="QnAbuttons">
+                <button type="submit">작성 완료</button> <!-- 작성 완료 버튼 -->
+            </div>
+        </form>
+    </main>
+
     <script>
-        function goBack() {
-            window.history.back(); // 이전 페이지로 이동
+        // 비밀글 설정 체크박스에 따라 비밀번호 입력 필드 토글
+        function toggleSecretPassword() {
+            const isSecret = document.getElementById("isSecret").checked;
+            const secretPasswordRow = document.getElementById("secretPasswordRow");
+            if (isSecret) {
+                secretPasswordRow.style.display = "";
+                document.getElementById("secretPassword").required = true;
+            } else {
+                secretPasswordRow.style.display = "none";
+                document.getElementById("secretPassword").required = false;
+            }
+        }
+
+        // 폼 유효성 검사
+        function validateForm() {
+            const title = document.getElementById("noticeTitle").value.trim();
+            const content = document.getElementById("noticeContent").value.trim();
+            const isSecret = document.getElementById("isSecret").checked;
+            const secretPassword = document.getElementById("secretPassword").value.trim();
+
+            if (!title) {
+                alert("제목을 작성하세요.");
+                return false;
+            }
+
+            if (!content) {
+                alert("내용을 작성하세요.");
+                return false;
+            }
+
+            if (isSecret && !secretPassword) {
+                alert("비밀글의 비밀번호를 입력하세요.");
+                return false;
+            }
+
+            return true;
         }
     </script>
-        <!--푸터-->
+
+    <!-- 푸터 -->
     <div th:replace="~{footer :: footer}"></div>
 </body>
 </html>
