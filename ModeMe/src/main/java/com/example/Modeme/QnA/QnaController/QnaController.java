@@ -186,7 +186,7 @@ public class QnaController {
         return "/Notice/qnaEdit";
     }
 
-
+    //QnA 수정
     @PostMapping("/{id}/update")
     public String updateQna(@PathVariable Long id, @ModelAttribute Qna updatedQna, Principal principal) throws AccessDeniedException {
         Qna existingQna = qnaService.findById(id);
@@ -201,6 +201,19 @@ public class QnaController {
 
         return "redirect:/qna/" + id;
     }
+    //댓글 수정
+    @PostMapping("/{qnaId}/comment/{commentId}/edit")
+    public String editComment(
+        @PathVariable Long qnaId,
+        @PathVariable Long commentId,
+        @RequestParam String content,
+        Principal principal
+    ) throws AccessDeniedException {
+        String username = principal.getName();
+        commentService.editComment(commentId, content, username);
+        return "redirect:/qna/" + qnaId; // 수정 후 Q&A 상세 페이지로 리다이렉트
+    }
+
     
 
 }

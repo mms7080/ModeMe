@@ -1,5 +1,6 @@
 package com.example.Modeme.QnA.QnaService;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -53,6 +54,20 @@ public class CommentService {
         }
 
         commentRepository.deleteById(commentId);
+    }
+    //댓글 수정 로직
+    public void editComment(Long commentId, String content, String username) throws AccessDeniedException {
+        Comment comment = commentRepository.findById(commentId)
+            .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+        
+        // 작성자 본인인지 확인
+        if (!comment.getUser().getUsername().equals(username)) {
+            throw new AccessDeniedException("수정 권한이 없습니다.");
+        }
+
+        // 댓글 내용 수정
+        comment.setContent(content);
+        commentRepository.save(comment);
     }
 
 }
