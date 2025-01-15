@@ -83,8 +83,8 @@ public class QnaController {
 
     // QnA 삭제 처리
     @PostMapping("/delete/{id}")
-    public String deleteQna(@PathVariable Long id) {
-        qnaService.deleteQna(id);
+    public String deleteQna(@PathVariable Long id,String username) {
+        qnaService.deleteQna(id, username);
         return "redirect:/qna";
     }
 
@@ -144,6 +144,18 @@ public class QnaController {
         commentService.deleteComment(commentId, username); // 삭제 서비스 호출
         return "redirect:/qna/" + qnaId; // QnA 상세 페이지로 리다이렉트
     }
+    
+    //QnA 삭제
+    @PostMapping("/{id}/delete")
+    public String deleteQna(
+        @PathVariable Long id,
+        Principal principal
+    ) {
+        String username = principal.getName(); // 현재 로그인된 사용자 이름
+        qnaService.deleteQna(id, username); // 삭제 처리 서비스 호출
+        return "redirect:/qna"; // 삭제 후 목록 페이지로 리다이렉트
+    }
+
 
     
     

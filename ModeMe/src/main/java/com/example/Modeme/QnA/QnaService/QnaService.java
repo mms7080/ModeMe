@@ -9,10 +9,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.Modeme.QnA.QnA.Qna;
+import com.example.Modeme.QnA.QnARepository.CommentRepository;
 import com.example.Modeme.QnA.QnARepository.QnaRepository;
 import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.User.UserRepository.UserRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -21,6 +23,7 @@ public class QnaService {
 
     private final QnaRepository qnaRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
     public List<Qna> getQnaList() {
         return qnaRepository.findAll();
@@ -46,11 +49,23 @@ public class QnaService {
 
         return qnaRepository.save(qna);
     }
+    
+    //qna 게시글 삭제
+    @Transactional
+    public void deleteQna(Long id, String username) {
+        Qna qna = qnaRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
 
-
-
-    public void deleteQna(Long id) {
+        // 로그인된 사용자가 작성자인지 확인
+        if (!qna.getUser().getUsername().equals(username)) {
+            throw new RuntimeException("게시글 삭제 권한이 없습니다.");
+        }
+        //먼저 관련된 댓글 삭제
+        commentRepository.deleteByQnaId(id);
+        // QnA 삭제
         qnaRepository.deleteById(id);
+        // 삭제 처리
+        qnaRepository.delete(qna);
     }
     
     public Page<Qna> getQnaList(int page, int size) {
