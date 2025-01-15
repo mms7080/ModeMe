@@ -30,12 +30,15 @@ public class Address {
 		)
 	private Long addressid;
 	
-	//이름
+	//회원아이디
+	@Column
+	private String userid;
+	//배송지이름
 	@Column(nullable = false)
 	private String name;
 	//전화번호
 	@Column(nullable = false)
-    private int phone;
+    private String phone;
     //배송지
 	@Column(nullable = false,  length = 2000)
     private String address;

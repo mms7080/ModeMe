@@ -13,5 +13,8 @@ public interface AddressRepository extends JpaRepository<Address, Long>{
     List<Address> findByName(String name);
 
     // 전화번호로 주소 찾기
-    List<Address> findByPhone(int phone);
+    List<Address> findByPhone(String phone);
+
+    // 아이디로 주소 찾기
+	List<Address> findByUserid(String userid);
 }

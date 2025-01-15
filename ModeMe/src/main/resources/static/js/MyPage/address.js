@@ -48,6 +48,8 @@ function openDaumPostcode() {
 }
 
 
+let isAlertShown = false; // 알림이 표시되었는지 여부를 기록하는 변수
+
 // 폼 제출 처리 함수 (폼을 서버로 보내기)
 function submitAddressForm(event) {
     event.preventDefault();  // 폼 제출 시 새로 고침 방지
@@ -64,12 +66,19 @@ function submitAddressForm(event) {
     console.log("전화번호:", phone);
     console.log("우편번호:", zip);
 
-    // 데이터 전송 코드 추가 가능 (여기서는 알림을 사용)
-    alert("배송지가 등록되었습니다.");
+    // 알림이 이미 울렸는지 확인
+    if (!isAlertShown) {
+        alert("배송지가 등록되었습니다.");
+        isAlertShown = true;  // 알림을 울렸다는 표시
+    }
 
     // 팝업 닫기 (필요한 경우)
     closeAddressPopup();
+
+    // 폼을 실제로 제출
+    document.getElementById("addressForm").submit();
 }
+
 
 // 팝업 열기
 function openAddressPopup() {

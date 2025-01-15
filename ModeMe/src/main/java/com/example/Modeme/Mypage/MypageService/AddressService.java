@@ -30,7 +30,7 @@ public class AddressService {
 
     // 새로운 주소 생성
     public Address createAddress(Address address) {
-        if (address.getName() == null || address.getPhone() == 0 || address.getAddress() == null) {
+        if (address.getName() == null || address.getPhone() == null || address.getAddress() == null) {
             throw new IllegalArgumentException("All fields must be provided");
         }
         return addressrep.save(address);

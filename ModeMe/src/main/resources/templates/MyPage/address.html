@@ -23,13 +23,27 @@
 	<main>
 		<div class="addressmain">
 			<div class="addresscontent">
-				<span>주소록 고정</span> <span>배송지명</span> <span>수령인</span> <span>휴대전화</span>
-				<span>주소</span> <span>수정</span>
+				<span>주소록 고정</span> <span>수령인</span> <span>휴대전화</span>
+				<span>주소</span> <span>삭제</span>
 			</div>
-			<div class="addresslist">등록된 주소가 없습니다.</div>
+			
+			
+			<!-- 등록된 주소가 있을 경우(address_list 모델명)-->
+			<div class="address_time" th:if="${address_list != null && !address_list.isEmpty()}" th:each="content:${address_list}">
+				<span class="address_under" th:text="${content.userid}"></span>
+				<span class="address_under" th:text="${content.name}"></span>
+				<span class="address_under" th:text="${content.phone}"></span>
+				<span class="address_under" th:text="${content.address}"></span>
+				<form>
+					<button class="address_delete">✖</button>
+				</form>
+			</div>
+			<div th:unless="${address_list != null && !address_list.isEmpty()}">
+				<div class="addresslist">등록된 주소가 없습니다.</div>
+			</div>
 		</div>
 		
-		<form class="addressform" id="addressForm">
+		<form class="addressform" id="addressForm" method="POST" action="/address" onsubmit="submitAddressForm(event)">
     <!-- 주문 페이지에서 '배송지 입력' 버튼 -->
     <button class="addresssubmit" type="button" onclick="openAddressPopup()">배송지 등록</button>
 
@@ -49,27 +63,27 @@
                 </div>
                 <div class="popup-input">
                     <label for="phone">전화번호:</label>
-                    <input type="text" id="phone" name="phone" required>
+                    <input type="text" id="phone" name="phone" placeholder="ex)010-1234-5678" required>
                 </div>
                 <div class="popup-input">
                     <label for="zip">우편번호:</label>
-                    <input type="text" id="zip" placeholder="우편번호" readonly>
+                    <input type="text" id="zip" name="zip" placeholder="우편번호" readonly>
                     <button class="popup-button" type="button" onclick="openDaumPostcode()">우편번호 찾기</button>
                 </div>
                 <div class="popup-input">
                     <label for="address">주소:</label>
-                    <input type="text" id="address" placeholder="주소" readonly>
+                    <input type="text" id="address" name="address" placeholder="주소" readonly>
                 </div>
                 <div class="popup-input">
                     <label for="addressdetail"></label>
-                    <input type="text" id="extraaddress" placeholder="참고항목" readonly>
+                    <input type="text" id="extraaddress" name="extraaddress" placeholder="참고항목" readonly>
                 </div>
                 <div class="popup-input">
                     <label for="addressdetail">상세주소:</label>
-                    <input type="text" id="addressdetail" placeholder="상세주소" readonly>
+                    <input type="text" id="addressdetail" name="addressdetail" placeholder="상세주소" >
                 </div>
                 <div class="popup-button-div">
-                    <button class="popup-button2" type="button" onclick="submitAddressForm(event)">저장</button>
+                    <button class="popup-button2" type="submit">저장</button>
                 </div>
             </div>
         </div>
