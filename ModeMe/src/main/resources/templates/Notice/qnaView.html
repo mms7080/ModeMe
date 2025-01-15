@@ -30,7 +30,11 @@
 		<div class="main-buttons-container">
 			<div class="delete-buttons">
 				<!-- 수정 버튼 -->
-				<button onclick="goToRevise()">수정</button>
+				<form th:action="@{/qna/edit/{id}(id=${qna.id})}" method="get" style="display: inline;">
+				    <button type="submit" class="edit-post-button" th:if="${#authentication.name == qna.user.username}">수정</button>
+				</form>
+
+
 
 				<!-- 삭제 버튼 -->
 				<form th:action="@{/qna/{id}/delete(id=${qna.id})}" method="post" style="display: inline;">

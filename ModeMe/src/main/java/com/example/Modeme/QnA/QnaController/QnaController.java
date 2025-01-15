@@ -1,5 +1,6 @@
 package com.example.Modeme.QnA.QnaController;
 
+import java.nio.file.AccessDeniedException;
 import java.security.Principal;
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class QnaController {
 
     private final QnaService qnaService;
     private final CommentService commentService;
+    
 
     @Autowired
     Headerlogin keep; // 로그인 유지 재사용 Headerlogin 클래스
@@ -156,8 +158,29 @@ public class QnaController {
         return "redirect:/qna"; // 삭제 후 목록 페이지로 리다이렉트
     }
 
+    //QnA 수정
+    @GetMapping("/edit/{id}")
+    public String editQna(@PathVariable Long id, Model model) {
+        Qna qna = qnaService.findById(id);
+        model.addAttribute("qna", qna);
+        return "/Notice/qnaEdit";
+    }
 
-    
+
+    @PostMapping("/{id}/update")
+    public String updateQna(@PathVariable Long id, @ModelAttribute Qna updatedQna, Principal principal) throws AccessDeniedException {
+        Qna existingQna = qnaService.findById(id);
+
+        if (!existingQna.getUser().getUsername().equals(principal.getName())) {
+            throw new AccessDeniedException("수정 권한이 없습니다.");
+        }
+
+        existingQna.setTitle(updatedQna.getTitle());
+        existingQna.setContent(updatedQna.getContent());
+        qnaService.save(existingQna);
+
+        return "redirect:/qna/" + id;
+    }
     
 
 }

@@ -14,6 +14,7 @@ import com.example.Modeme.QnA.QnARepository.QnaRepository;
 import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.User.UserRepository.UserRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -70,6 +71,17 @@ public class QnaService {
     
     public Page<Qna> getQnaList(int page, int size) {
         return qnaRepository.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"))); // createdAt 기준 내림차순 정렬
+    }
+    
+    //QnA수정
+    public Qna findById(Long id) {
+        return qnaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Q&A not found with id: " + id));
+    }
+
+
+    public void save(Qna qna) {
+        qnaRepository.save(qna);
     }
 
 
