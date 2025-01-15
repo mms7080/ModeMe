@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Q&A 작성</title>
     <link rel="stylesheet" href="/css/Notice/qnaWrite.css">
+    <!-- Quill CSS -->
+    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
 </head>
 <body>
 
@@ -40,7 +42,10 @@
                 </tr>
             </table>
             <div class="content" style="height: 300px;">
-                <textarea name="content" id="noticeContent" placeholder="내용을 작성하세요..." style="width: 100%; height: 100%; padding: 10px;" required></textarea>
+                <!-- Quill Editor -->
+                <div id="editor-container" style="height: 80%;"></div>
+                <!-- Hidden textarea to submit content -->
+                <textarea name="content" id="noticeContent" style="display: none;"></textarea>
             </div>
             <div class="QnAbuttons">
                 <button type="submit">작성 완료</button> <!-- 작성 완료 버튼 -->
@@ -48,7 +53,24 @@
         </form>
     </main>
 
+    <!-- Quill JS -->
+    <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
     <script>
+        // Initialize Quill editor with toolbar
+        const quill = new Quill('#editor-container', {
+            theme: 'snow',
+            placeholder: '내용을 작성하세요...',
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline'], // Text formatting
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }], // Lists
+                    [{ 'align': [] }], // Alignment
+                    [{ 'color': [] }, { 'background': [] }], // Text color and background color
+                    ['link', 'image'] // Links and Images
+                ]
+            }
+        });
+
         // 비밀글 설정 체크박스에 따라 비밀번호 입력 필드 토글
         function toggleSecretPassword() {
             const isSecret = document.getElementById("isSecret").checked;
@@ -65,16 +87,16 @@
         // 폼 유효성 검사
         function validateForm() {
             const title = document.getElementById("noticeTitle").value.trim();
-            const content = document.getElementById("noticeContent").value.trim();
             const isSecret = document.getElementById("isSecret").checked;
             const secretPassword = document.getElementById("secretPassword").value.trim();
+            const content = quill.root.innerHTML.trim();
 
             if (!title) {
                 alert("제목을 작성하세요.");
                 return false;
             }
 
-            if (!content) {
+            if (!content || content === '<p><br></p>') {
                 alert("내용을 작성하세요.");
                 return false;
             }
@@ -83,6 +105,9 @@
                 alert("비밀글의 비밀번호를 입력하세요.");
                 return false;
             }
+
+            // Save Quill content to the hidden textarea
+            document.getElementById("noticeContent").value = content;
 
             return true;
         }

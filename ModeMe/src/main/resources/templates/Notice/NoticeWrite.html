@@ -1,84 +1,95 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notice Write</title>
-    <link rel="stylesheet" href="/css/Notice/NoticeWrite.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notice Write</title>
+<link rel="stylesheet" href="/css/Notice/NoticeWrite.css">
 
-    <!-- Quill CSS -->
-    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+<!-- Quill CSS -->
+<link href="https://cdn.quilljs.com/1.3.7/quill.snow.css"
+	rel="stylesheet">
 </head>
 <body>
 
-    <!-- 헤더 -->
-    <div th:replace="~{header :: header}"></div>
-    
-    <main>
-        <h1>NOTICE 작성</h1>
-        <form th:action="@{/notices/new}" method="post" onsubmit="return validateForm();">
-            <table class="detail-table">
-                <tr>
-                    <th>제목</th>
-                    <td>
-                        <input type="text" name="title" id="title" placeholder="제목을 작성하세요" style="width: 99%; padding: 10px;">
-                    </td>
-                </tr>
-                <tr>
-                    <th>작성자</th>
-                    <td>관리자</td>
-                </tr>
-            </table>
-            <div class="content" style="height: 300px;">
-                <!-- Quill Editor -->
-                <div id="editor-container" style="height: 80%;"></div>
-                <!-- Hidden textarea to submit content -->
-                <textarea name="content" id="hidden-content" style="display: none;"></textarea>
-            </div>
-            <div class="noticebuttons">
-                <button type="submit">작성 완료</button>
-            </div>
-        </form>
-    </main>
+	<!-- 헤더 -->
+	<div th:replace="~{header :: header}"></div>
 
-    <!-- Quill JS -->
-    <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
-    <script>
-        // Initialize Quill editor with color options
-        const quill = new Quill('#editor-container', {
-            theme: 'snow',
-            placeholder: '내용을 작성하세요...',
-            modules: {
-                toolbar: [
-                    ['bold', 'italic', 'underline'], // Text formatting
-                    [{ 'list': 'ordered' }, { 'list': 'bullet' }], // Lists
-                    [{ 'align': [] }], // Alignment
-                    [{ 'color': [] }, { 'background': [] }], // Text color and background color
-                    ['link', 'image'] // Links and Images
-                ]
-            }
-        });
+	<main>
+		<h1>NOTICE 작성</h1>
+		<form th:action="@{/notices/new}" method="post"
+			onsubmit="return validateForm();">
+			<table class="detail-table">
+				<tr>
+					<th>제목</th>
+					<td><input type="text" name="title" id="title"
+						placeholder="제목을 작성하세요" style="width: 99%; padding: 10px;">
+					</td>
+				</tr>
+				<tr>
+					<th>작성자</th>
+					<td>관리자</td>
+				</tr>
+			</table>
+			<div class="content" style="height: 300px;">
+				<!-- Quill Editor -->
+				<div id="editor-container" style="height: 80%;"></div>
+				<!-- Hidden textarea to submit content -->
+				<textarea name="content" id="hidden-content" style="display: none;"></textarea>
+			</div>
+			<div class="noticebuttons">
+				<button type="submit">작성 완료</button>
+			</div>
+		</form>
+	</main>
 
-        // Validate form inputs before submission
-        function validateForm() {
-            const title = document.querySelector('#title').value.trim();
-            const content = quill.root.innerHTML.trim();
+	<!-- Quill JS -->
+	<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+	<script>
+		// Initialize Quill editor with color options
+		const quill = new Quill('#editor-container', {
+			theme : 'snow',
+			placeholder : '내용을 작성하세요...',
+			modules : {
+				toolbar : [ [ 'bold', 'italic', 'underline' ], // Text formatting
+				[ {
+					'list' : 'ordered'
+				}, {
+					'list' : 'bullet'
+				} ], // Lists
+				[ {
+					'align' : []
+				} ], // Alignment
+				[ {
+					'color' : []
+				}, {
+					'background' : []
+				} ], // Text color and background color
+				[ 'link', 'image' ] // Links and Images
+				]
+			}
+		});
 
-            if (!title) {
-                alert('제목을 작성하세요.');
-                return false; // Prevent form submission
-            }
+		// Validate form inputs before submission
+		function validateForm() {
+			const title = document.querySelector('#title').value.trim();
+			const content = quill.root.innerHTML.trim();
 
-            if (content === '<p><br></p>' || !content) { // Check if Quill content is empty
-                alert('내용을 작성하세요.');
-                return false; // Prevent form submission
-            }
+			if (!title) {
+				alert('제목을 작성하세요.');
+				return false; // Prevent form submission
+			}
 
-            // If validation passes, copy Quill content to hidden textarea
-            document.querySelector('#hidden-content').value = content;
-            return true; // Allow form submission
-        }
-    </script>
+			if (content === '<p><br></p>' || !content) { // Check if Quill content is empty
+				alert('내용을 작성하세요.');
+				return false; // Prevent form submission
+			}
+
+			// If validation passes, copy Quill content to hidden textarea
+			document.querySelector('#hidden-content').value = content;
+			return true; // Allow form submission
+		}
+	</script>
 </body>
 
 <!-- 푸터 -->
