@@ -123,6 +123,7 @@ h1 {
 /* 댓글 섹션 */
 .comments-section {
     margin-top: 30px;
+    margin-bottom:30px;
     padding: 20px;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
