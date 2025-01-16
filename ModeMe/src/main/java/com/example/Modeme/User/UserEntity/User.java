@@ -45,4 +45,7 @@ public class User {
 
     @Column(length = 255) // 상세 주소
     private String addressDetail;
+
+    @Column(length = 10, nullable = false) // 권한 필드 추가, 기본값은 user
+    private String role = "user"; // 기본값 설정
 }
