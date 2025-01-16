@@ -121,6 +121,20 @@ section {
     fill: none; /* 내부 채우지 않음 */
     stroke-linecap: round; /* 끝부분 라운드 처리 */
 }
+/* 옷 이미지 아래 색들 점 */
+.color-dots {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 10px;
+}
+.color-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
 /* 카테고리 스타일 */
 .category-section {
     padding: 20px 0;
