@@ -60,16 +60,23 @@
             <!-- 다음 버튼 -->
             <button th:if="${currentPage < totalPages - 1}"
                     th:onclick="'location.href=\'?page=' + (${currentPage} + 1) + '&size=' + ${pageSize} + '\';'">&gt;</button>
-        </div>
-				<div class="search-section">
-			<label for="search-option">검색 옵션:</label> <select id="search-option">
-				<option value="title">제목</option>
-				<option value="content">내용</option>
-				<option value="title_content">제목+내용</option>
-				<option value="id">아이디</option>
-			</select> <input type="text" id="search-input" placeholder="검색어를 입력하세요">
-			<button onclick="searchNotice()">검색</button>
-		</div>
+			<!-- 검색 -->
+			<div class="search-section">
+				<form th:action="@{/qna}" method="get">
+				    <label for="search-option">검색 옵션:</label>
+				    <select id="search-option" name="option">
+				        <option value="title">제목</option>
+				        <option value="content">내용</option>
+				        <option value="title_content">제목+내용</option>
+				        <option value="id">아이디</option>
+				    </select>
+				    <input type="text" id="search-input" name="keyword" placeholder="검색어를 입력하세요" />
+				    <button type="submit">검색</button>
+				</form>
+
+
+			</div>
+
     </main>
 
     <!-- 푸터 -->

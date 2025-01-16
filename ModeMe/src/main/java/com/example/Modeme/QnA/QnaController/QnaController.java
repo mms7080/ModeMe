@@ -42,17 +42,28 @@ public class QnaController {
         keep.headerlogin(model, principal); // 로그인 유지
     }
 
-    // QnA 목록 페이지 및 페이지네이션
+ // QnA 목록 및 검색 기능 추가
     @GetMapping
     public String getQnaList(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "5") int size,
+        @RequestParam(required = false) String option, // 검색 옵션
+        @RequestParam(required = false) String keyword, // 검색 키워드
         Model model
     ) {
-        Page<Qna> qnaPage = qnaService.getQnaList(page, size);
+        Page<Qna> qnaPage;
+
+        // 검색 조건이 있을 경우 검색 수행
+        if (option != null && keyword != null) {
+            qnaPage = qnaService.searchQna(option, keyword, page, size);
+        } else {
+            // 검색 조건이 없으면 기본 목록 조회
+            qnaPage = qnaService.getQnaList(page, size);
+        }
+
         List<Qna> qnaList = qnaPage.getContent();
 
-        // 댓글 수를 계산
+        // 댓글 수 계산
         Map<Long, Integer> commentCounts = new HashMap<>();
         for (Qna qna : qnaList) {
             int count = commentService.getCommentCountByQnaId(qna.getId());
@@ -60,12 +71,14 @@ public class QnaController {
         }
 
         model.addAttribute("qnaList", qnaList);
-        model.addAttribute("commentCounts", commentCounts); // 댓글 수 추가
+        model.addAttribute("commentCounts", commentCounts);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", qnaPage.getTotalPages());
         model.addAttribute("pageSize", size);
+
         return "/Notice/qnaHome";
     }
+
 
 
 

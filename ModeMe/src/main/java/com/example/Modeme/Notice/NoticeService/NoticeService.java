@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -84,5 +85,29 @@ public class NoticeService {
         dto.setContent(notice.getContent());
         dto.setAuthor(notice.getAuthor());
         return dto;
+    }
+    //공지 검색리스트
+    public Page<Notice> getNoticeList(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+        return noticeRepository.findAll(pageable);
+    }
+
+    
+    // 공지 검색
+    public Page<Notice> searchNotices(String option, String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        switch (option) {
+            case "title":
+                return noticeRepository.findByTitleContaining(keyword, pageable);
+            case "content":
+                return noticeRepository.findByContentContaining(keyword, pageable);
+            case "title_content":
+                return noticeRepository.findByTitleContainingOrContentContaining(keyword, keyword, pageable);
+            case "author":
+                return noticeRepository.findByAuthorContaining(keyword, pageable);
+            default:
+                return Page.empty();
+        }
     }
 }

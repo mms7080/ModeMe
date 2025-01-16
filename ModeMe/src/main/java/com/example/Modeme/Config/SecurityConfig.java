@@ -17,10 +17,6 @@ public class SecurityConfig {
         this.customUserDetailsService = customUserDetailsService;
     }
 
-//    @Bean
-//   public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
     @Bean
     public PasswordEncoder passwordEncoder() {
         return org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance();
@@ -34,27 +30,25 @@ public class SecurityConfig {
                     "/api/signin", 
                     "/api/signup", 
                     "/logout",
-                    "/sigin",
-                    "/signup",
+                    "/qna/**",
+                    "/notices/**",
                     "/image/**",
                     "/css/**",
                     "/js/**",
-                    "/resources/**",
-                    "/address",
-                    "/address_default"
+                    "/resources/**"
                 )
             )
             .authorizeHttpRequests(auth -> auth
                 // QnA 관련 권한 설정
-                .requestMatchers("/qna","/notices").permitAll() // QnA 목록 페이지는 인증 없이 접근 가능
-                .requestMatchers("/qnaWrite", "/qnaView/**").authenticated() // 작성 및 상세 조회는 인증 필요
+                .requestMatchers("/qna", "/qna/**").permitAll() // QnA 목록, 상세보기 모두 허용
+                .requestMatchers("/qna/write", "/qna/edit/**", "/qna/delete/**").authenticated() // QnA 쓰기/수정/삭제는 인증 필요
                 
                 // 공지 관련 권한 설정
-                .requestMatchers("/notices/new", "/notices/edit/**", "/notices/delete/**").hasRole("ADMIN") // 관리자만 접근 가능                // 로그인, 회원가입, 정적 리소스는 모두 접근 가능
+                .requestMatchers("/notices","/notices/**").permitAll() // 공지 목록 누구나 접근 가능
+                .requestMatchers("/notices/new", "/notices/edit/**", "/notices/delete/**").hasRole("ADMIN") // 관리자만 허용
+
+                // 로그인, 회원가입, 정적 리소스는 모두 접근 가능
                 .requestMatchers(
-                    "/api/signin",
-                    "/api/signup",
-                    "/logout",
                     "/signin",
                     "/signup",
                     "/image/**",
@@ -64,13 +58,15 @@ public class SecurityConfig {
                     "/",
                     "/main"
                 ).permitAll()
-                .anyRequest().authenticated() // 나머지 요청은 인증 필요
+
+                // 그 외의 모든 요청은 인증 필요
+                .anyRequest().authenticated()
             )
             .formLogin(login -> login
                 .loginPage("/signin") // 로그인 페이지 경로 설정
                 .loginProcessingUrl("/api/signin") // 로그인 처리 경로 설정
-                .defaultSuccessUrl("/", true) // 로그인 성공 시 이동할 경로 설정
-                .failureUrl("/signin?error=true") // 로그인 실패 시 이동할 경로 설정
+                .defaultSuccessUrl("/", true) // 로그인 성공 시 이동 경로 설정
+                .failureUrl("/signin?error=true") // 로그인 실패 시 이동 경로 설정
                 .usernameParameter("username") // 로그인 폼의 아이디 필드 이름
                 .passwordParameter("password") // 로그인 폼의 비밀번호 필드 이름
                 .permitAll()
@@ -89,5 +85,4 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 }

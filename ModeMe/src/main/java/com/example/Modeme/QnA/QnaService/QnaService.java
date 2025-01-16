@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +27,11 @@ public class QnaService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
 
+    // 기존 메서드들...
+
     public List<Qna> getQnaList() {
         return qnaRepository.findAll();
     }
-    
 
     public Qna getQna(Long id) {
         return qnaRepository.findById(id)
@@ -50,8 +52,8 @@ public class QnaService {
 
         return qnaRepository.save(qna);
     }
-    
-    //qna 게시글 삭제
+
+    // QnA 게시글 삭제
     @Transactional
     public void deleteQna(Long id, String username) {
         Qna qna = qnaRepository.findById(id)
@@ -61,30 +63,41 @@ public class QnaService {
         if (!qna.getUser().getUsername().equals(username)) {
             throw new RuntimeException("게시글 삭제 권한이 없습니다.");
         }
-        //먼저 관련된 댓글 삭제
+        // 먼저 관련된 댓글 삭제
         commentRepository.deleteByQnaId(id);
         // QnA 삭제
         qnaRepository.deleteById(id);
-        // 삭제 처리
-        qnaRepository.delete(qna);
     }
-    
+
     public Page<Qna> getQnaList(int page, int size) {
         return qnaRepository.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"))); // createdAt 기준 내림차순 정렬
     }
-    
-    //QnA수정
+
+    // QnA 수정
     public Qna findById(Long id) {
         return qnaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Q&A not found with id: " + id));
     }
 
-
     public void save(Qna qna) {
         qnaRepository.save(qna);
     }
 
+    // ======== 검색 기능 추가 ========
+    public Page<Qna> searchQna(String option, String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 
-    
-    
+        switch (option) {
+            case "title":
+                return qnaRepository.findByTitleContaining(keyword, pageable);
+            case "content":
+                return qnaRepository.findByContentContaining(keyword, pageable);
+            case "title_content":
+                return qnaRepository.findByTitleContainingOrContentContaining(keyword, keyword, pageable);
+            case "id":
+                return qnaRepository.findByUser_UsernameContaining(keyword, pageable);
+            default:
+                throw new IllegalArgumentException("Invalid search option: " + option);
+        }
+    }
 }

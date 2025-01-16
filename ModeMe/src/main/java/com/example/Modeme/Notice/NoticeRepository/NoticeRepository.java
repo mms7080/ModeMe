@@ -12,13 +12,22 @@ import com.example.Modeme.Notice.Noticeentity.Notice;
 
 @Repository
 public interface NoticeRepository extends JpaRepository<Notice, Long> {
-	// 작성 날짜 기준 내림차순 정렬
-	List<Notice> findAllByOrderByCreatedDateDesc(); 
+
+    // 작성 날짜 기준 내림차순 정렬
+    List<Notice> findAllByOrderByCreatedDateDesc();
+
     // 이전 공지 (현재 ID보다 작은 값 중 가장 큰 값)
     Optional<Notice> findTop1ByIdLessThanOrderByIdDesc(Long id);
 
     // 다음 공지 (현재 ID보다 큰 값 중 가장 작은 값)
     Optional<Notice> findTop1ByIdGreaterThanOrderByIdAsc(Long id);
-    // 페이징 처리를 위한 메서드
-    Page<Notice> findAll(Pageable pageable); 
+
+    Page<Notice> findByTitleContaining(String keyword, Pageable pageable);
+
+    Page<Notice> findByContentContaining(String keyword, Pageable pageable);
+
+    Page<Notice> findByTitleContainingOrContentContaining(String title, String content, Pageable pageable);
+
+    Page<Notice> findByAuthorContaining(String keyword, Pageable pageable);
 }
+
