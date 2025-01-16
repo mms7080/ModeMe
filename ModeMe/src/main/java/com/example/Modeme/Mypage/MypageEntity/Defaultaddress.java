@@ -9,26 +9,24 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "Address")
+@Table(name = "DefaultAddress")
 @SequenceGenerator(
 		allocationSize = 1,
 		initialValue = 1,
-		name = "AddressSeq",
-		sequenceName = "AddressSeq"
+		name = "DefaultAddressSeq",
+		sequenceName = "DefaultAddressSeq"
 	)
-public class Address {
+public class Defaultaddress {
 	@Id
 	@GeneratedValue(
 			strategy = GenerationType.SEQUENCE,
-			generator = "AddressSeq"
+			generator = "DefaultAddressSeq"
 		)
 	private Long addressid;
 	
@@ -44,5 +42,7 @@ public class Address {
     //배송지
 	@Column(nullable = false,  length = 2000)
     private String address;
+	@Column
+	private boolean isDefault; // 기본 배송지 여부
+	
 }
-

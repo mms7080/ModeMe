@@ -55,7 +55,7 @@ function submitAddressForm(event) {
     event.preventDefault();  // 폼 제출 시 새로 고침 방지
 
     // 폼 데이터 가져오기
-    const recipient = document.getElementById("recipient").value;
+    const name = document.getElementById("recipient").value;
     const address = document.getElementById("address").value;
     const phone = document.getElementById("phone").value;
     const zip = document.getElementById("zip").value;
@@ -94,3 +94,23 @@ function closeAddressPopup() {
 
 // 폼 제출 이벤트 리스너 추가
 document.getElementById("addressForm").addEventListener("submit", submitAddressForm);
+
+// 기본 배송지 설정 버튼 클릭 시
+    function setDefaultAddress(addressId) {
+        $.ajax({
+            url: '/address_default',
+            method: 'POST',
+            data: { addressid: addressId },
+            success: function(response) {
+                // 기본 배송지 영역만 갱신
+                $('#default-address-list').html(response);
+            }
+        });
+    }
+
+	function setDefaultAddress(addressId, name, phone, address) {
+	    // 기본 배송지 영역을 찾아서 내용 업데이트
+	    document.getElementById("defaultName").innerText = name;
+	    document.getElementById("defaultPhone").innerText = phone;
+	    document.getElementById("defaultAddress").innerText = address;
+	}

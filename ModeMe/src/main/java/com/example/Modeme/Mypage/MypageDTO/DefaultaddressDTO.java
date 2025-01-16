@@ -7,9 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddressDTO {
-		private Long addressid;
-		private String name;
-		private String phone;
-		private String address;
+public class DefaultaddressDTO {
+	private Long addressid;
+	private String name;
+	private String phone;
+	private String address;
+	private boolean isDefault;
 }
