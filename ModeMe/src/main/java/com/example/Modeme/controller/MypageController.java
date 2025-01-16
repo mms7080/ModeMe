@@ -69,20 +69,23 @@ import com.example.Modeme.User.UserDTO.Headerlogin;
 			// 배송 주소록 관리
 			@GetMapping("/address")
 			public String Address(
-				@AuthenticationPrincipal CustomUserDetails userDetails,
-				Model model
+			    @AuthenticationPrincipal CustomUserDetails userDetails,
+			    Model model
 			) {
-				String userid = userDetails.getUsername();
-				List<Address> address_list = addressrep.findByUserid(userid);
-				
-				model.addAttribute("address_list",address_list);
-				
-	List<Defaultaddress> default_list = defaultrep.findByUserid(userid);
-				
-				model.addAttribute("default_list",default_list);			
-				
-				return "/MyPage/address";
+			    if (userDetails == null) {
+			        return "redirect:/signin"; // 인증되지 않은 사용자는 로그인 페이지로 리다이렉트
+			    }
+
+			    String userid = userDetails.getUsername();
+			    List<Address> address_list = addressrep.findByUserid(userid);
+			    model.addAttribute("address_list", address_list);
+
+			    List<Defaultaddress> default_list = defaultrep.findByUserid(userid);
+			    model.addAttribute("default_list", default_list);
+
+			    return "/MyPage/address";
 			}
+
 			
 			@PostMapping("/address")
 			public String AddressPost(

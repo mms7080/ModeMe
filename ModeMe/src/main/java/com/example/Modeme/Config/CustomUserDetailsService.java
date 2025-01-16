@@ -25,24 +25,12 @@ public class CustomUserDetailsService implements UserDetailsService {
  @Override
  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
      User user = userRepository.findByUsername(username)
-         .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + username));
+         .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
-     // 디버깅: 데이터베이스의 role 확인
-     System.out.println("Database Role: " + user.getRole()); // 데이터베이스에서 가져온 역할
+     return new CustomUserDetails(user);
+ }
 
-     // GrantedAuthority 생성
-     List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().toUpperCase()));
-
-     // 디버깅: 생성된 권한 목록 확인
-     System.out.println("Granted Authorities: " + authorities);
-
-     return new org.springframework.security.core.userdetails.User(
-         user.getUsername(),
-         user.getPassword(),
-         authorities
-     );
  }
 
 
 
-}
