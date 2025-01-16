@@ -49,7 +49,8 @@ public class SecurityConfig {
                 .requestMatchers("/qna").permitAll() // QnA 목록 페이지는 인증 없이 접근 가능
                 .requestMatchers("/qnaWrite", "/qnaView/**").authenticated() // 작성 및 상세 조회는 인증 필요
                 
-                // 로그인, 회원가입, 정적 리소스는 모두 접근 가능
+                // 공지 관련 권한 설정
+                .requestMatchers("/notices/new", "/notices/edit/**", "/notices/delete/**").hasRole("ADMIN") // 관리자만 접근 가능                // 로그인, 회원가입, 정적 리소스는 모두 접근 가능
                 .requestMatchers(
                     "/api/signin",
                     "/api/signup",

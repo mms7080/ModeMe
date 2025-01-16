@@ -15,33 +15,36 @@
 		<h1>NOTICE</h1>
 
 		<!-- 공지 작성 버튼 -->
-		<div class="write-notice">
-			<button onclick="window.location.href='/notices/new'">공지 작성</button>
+		<div class="write-notice" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+		    <button onclick="window.location.href='/notices/new'">공지 작성</button>
 		</div>
 
+
 		<table class="notice-table">
-			<thead>
-				<tr>
-					<th>번호</th>
-					<th>제목</th>
-					<th>작성자</th>
-					<th>관리자 전용</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="notice : ${notices}">
-					<td th:text="${notice.id}"></td>
-					<td><a th:href="@{/notices/view/{id}(id=${notice.id})}"
-						th:text="${notice.title}"></a></td>
-					<td th:text="${notice.author}"></td>
-					<td>
-						<form th:action="@{/notices/delete/{id}(id=${notice.id})}"
-							method="post" onsubmit="return confirmDelete();">
-							<button type="submit">삭제</button>
-						</form>
-					</td>
-				</tr>
-			</tbody>
+		    <thead>
+		        <tr>
+		            <th>번호</th>
+		            <th>제목</th>
+		            <th>작성자</th>
+		            <!-- 관리자만 보이는 열 -->
+		            <th th:if="${#authorization.expression('hasRole(''ADMIN'')')}">관리자 전용</th>
+		        </tr>
+		    </thead>
+		    <tbody>
+		        <tr th:each="notice : ${notices}">
+		            <td th:text="${notice.id}"></td>
+		            <td>
+		                <a th:href="@{/notices/view/{id}(id=${notice.id})}" th:text="${notice.title}"></a>
+		            </td>
+		            <td th:text="${notice.author}"></td>
+		            <!-- 관리자만 보이는 삭제 버튼 -->
+		            <td th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+		                <form th:action="@{/notices/delete/{id}(id=${notice.id})}" method="post" onsubmit="return confirmDelete();">
+		                    <button type="submit">삭제</button>
+		                </form>
+		            </td>
+		        </tr>
+		    </tbody>
 		</table>
 
 		<div class="pagination">

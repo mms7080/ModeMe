@@ -3,11 +3,14 @@ package com.example.Modeme.User.UserService;
 import com.example.Modeme.User.UserDTO.UserDTO;
 import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.User.UserRepository.UserRepository;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserService {
 
@@ -41,7 +44,20 @@ public class UserService {
         user.setPostcode(userDTO.getPostcode());
         user.setAddress(userDTO.getAddress());
         user.setAddressDetail(userDTO.getAddressDetail());
+        user.setRole("user"); // 기본 역할 설정
 
+        userRepository.save(user);
+    }
+    
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다: " + username));
+    }
+
+    public void updateRole(String username, String role) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다: " + username));
+        user.setRole(role);
         userRepository.save(user);
     }
 }
