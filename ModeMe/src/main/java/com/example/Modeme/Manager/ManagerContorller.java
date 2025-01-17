@@ -1,11 +1,15 @@
 package com.example.Modeme.Manager;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.example.Modeme.QnA.QnARepository.QnaRepository;
+import com.example.Modeme.User.UserDTO.Headerlogin;
 import com.example.Modeme.User.UserRepository.UserRepository;
 
 @Controller
@@ -16,6 +20,13 @@ public class ManagerContorller {
     @Autowired
     private QnaRepository qnaRepository;
     
+    @Autowired
+    Headerlogin keep;
+
+    @ModelAttribute
+    public void addAttributes(Model model, Principal principal) {
+        keep.headerlogin(model, principal);
+    }
     
     //관리자 메인
     @GetMapping("/managerMain")
