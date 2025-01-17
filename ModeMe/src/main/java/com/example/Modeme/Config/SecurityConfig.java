@@ -27,8 +27,9 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf
                 .ignoringRequestMatchers(
-                    "/api/signin", 
-                    "/api/signup", 
+                    "/signin", 
+                    "/api/signin",
+                    "/signup", 
                     "/logout",
                     "/qna/**",
                     "/notices/**",

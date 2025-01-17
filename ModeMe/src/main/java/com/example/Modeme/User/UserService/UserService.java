@@ -45,7 +45,7 @@ public class UserService {
         user.setAddress(userDTO.getAddress());
         user.setAddressDetail(userDTO.getAddressDetail());
         user.setRole("user"); // 기본 역할 설정
-
+       
         userRepository.save(user);
     }
     

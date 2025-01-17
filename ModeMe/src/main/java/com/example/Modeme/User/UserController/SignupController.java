@@ -41,13 +41,13 @@ public class SignupController {
 
     // 회원가입 처리
     @PostMapping("/signup")
-    public String signup(@Valid UserDTO userDTO, BindingResult bindingResult, Model model) {
+    public String signupsssssss(@Valid UserDTO userDTO, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "/Sign/signup"; // 유효성 오류가 있으면 다시 폼으로 이동
         }
 
         try {
-            userService.registerUser(userDTO);
+            userService.registerUser(userDTO);  
         } catch (IllegalArgumentException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "signup"; // 오류 메시지와 함께 다시 폼으로 이동
