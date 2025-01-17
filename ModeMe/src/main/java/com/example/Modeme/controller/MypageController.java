@@ -69,23 +69,20 @@ import com.example.Modeme.User.UserDTO.Headerlogin;
 			// 배송 주소록 관리
 			@GetMapping("/address")
 			public String Address(
-			    @AuthenticationPrincipal CustomUserDetails userDetails,
-			    Model model
+				@AuthenticationPrincipal CustomUserDetails userDetails,
+				Model model
 			) {
-			    if (userDetails == null) {
-			        return "redirect:/signin"; // 인증되지 않은 사용자는 로그인 페이지로 리다이렉트
-			    }
-
-			    String userid = userDetails.getUsername();
-			    List<Address> address_list = addressrep.findByUserid(userid);
-			    model.addAttribute("address_list", address_list);
-
-			    List<Defaultaddress> default_list = defaultrep.findByUserid(userid);
-			    model.addAttribute("default_list", default_list);
-
-			    return "/MyPage/address";
+				String userid = userDetails.getUsername();
+				List<Address> address_list = addressrep.findByUserid(userid);
+				
+				model.addAttribute("address_list",address_list);
+				
+	List<Defaultaddress> default_list = defaultrep.findByUserid(userid);
+				
+				model.addAttribute("default_list",default_list);			
+				
+				return "/MyPage/address";
 			}
-
 			
 			@PostMapping("/address")
 			public String AddressPost(
@@ -98,7 +95,7 @@ import com.example.Modeme.User.UserDTO.Headerlogin;
 			) {
 				String userid = userDetails.getUsername();
 				
-				String full_address = zip + address + extraaddress + " " + addressdetail;
+				String full_address = zip + " " + address + extraaddress + " " + addressdetail;
 				
 				Address save_address = new Address(null,userid,name,phone,full_address);
 				addressrep.save(save_address); //팝업에서 배송지목록 테이블로 저장
@@ -118,11 +115,36 @@ import com.example.Modeme.User.UserDTO.Headerlogin;
 		        String userid = userDetails.getUsername();
 		        
 		        // 기존 기본 배송지 삭제 (필요시)
-		        defaultser.deleteAddress(addressId);
+		        defaultser.deleteDefaultAddress(userid, addressId);
 		        
 		        Defaultaddress save_default = new Defaultaddress(null, userid, name, phone, address, true);
 		        defaultrep.save(save_default);
 
 		        return "redirect:/address"; // 처리 후 주소 목록 페이지로 리다이렉트
+		    }
+		    
+		    //배송지목록(address 테이블) 삭제
+		    @PostMapping("/address_delete")
+		    public String DeleteAddress(
+    		 @AuthenticationPrincipal CustomUserDetails userDetails,
+		        @RequestParam(value = "addressid") Long addressId
+		    ) {
+		    	String userid = userDetails.getUsername();
+		    	
+		    	addresser.deleteAddress(userid, addressId);
+		    	
+		    	return "redirect:/address";
+		    }
+		    
+		    @PostMapping("/default_delete")
+		    public String DeleteDefault(
+		    		@AuthenticationPrincipal CustomUserDetails userDetails,
+			        @RequestParam(value = "addressid") Long addressId
+		    		) {
+		    	String userid = userDetails.getUsername();
+		    	
+		    	defaultser.deleteDefault(userid, addressId);
+		    	
+		    	return "redirect:/address";
 		    }
 		}

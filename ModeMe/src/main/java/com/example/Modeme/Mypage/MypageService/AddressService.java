@@ -1,6 +1,7 @@
 package com.example.Modeme.Mypage.MypageService;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,11 +48,12 @@ public class AddressService {
         return addressrep.save(existingAddress);
     }
 
-    // 주소 삭제
-    public void deleteAddress(Long id) {
-        if (!addressrep.existsById(id)) {
-            throw new IllegalArgumentException("Address not found with id: " + id);
-        }
-        addressrep.deleteById(id);
+    //주소 삭제
+    public void deleteAddress(String userid, Long addressid) {
+    	// 해당 사용자의 주소 중에서 주어진 ID를 조회
+        Optional<Address> address = addressrep.findByAddressidAndUserid(addressid, userid);
+        
+     // 조회된 주소 삭제
+        addressrep.delete(address.get());
     }
 }

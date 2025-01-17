@@ -28,6 +28,7 @@ main {
 	flex-direction: column;
 	width: 80%;
 	margin: 0 auto; /* 수평으로 가운데 정렬 */
+	gap:10px;
 }
 
 h1 {
@@ -45,6 +46,10 @@ h1 {
 	margin-top:10px;
 }
 
+.defaultaddressbox {
+	border: 5px solid grey;
+}
+
 .addressmain {
 	border: 1px solid grey;
 	margin-bottom: 10px;
@@ -60,6 +65,7 @@ h1 {
 
 .blueline {
 	border: 5px blue solid;
+	margin-bottom: 10px;
 }
 
 .address_time {
@@ -70,12 +76,18 @@ h1 {
 	align-items: center;
 }
 
+.defaultform {
+	height:100%;
+}
+
 .defaultbutton {
 	border:none;
 	cursor: pointer;
 	background-color: black;
 	color:white;
-	border-radius: 10px;
+	border-radius: 5px;
+	height: 100%;
+	width:50%;
 }
 
 .address_delete {

@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.Modeme.Mypage.MypageEntity.Address;
 import com.example.Modeme.Mypage.MypageEntity.Defaultaddress;
 import com.example.Modeme.Mypage.MypageRepository.AddressRepository;
 import com.example.Modeme.Mypage.MypageRepository.DefaultaddressRepository;
@@ -47,16 +48,24 @@ public class DefaultaddressService {
     }
 
  // ID로 주소를 삭제 (주어진 ID를 제외하고 나머지 주소 삭제)
-    public void deleteAddress(Long addressId) {
-        // 주어진 addressId를 제외한 나머지 주소를 삭제
-        List<Defaultaddress> allAddresses = defaultrep.findAll();  // 모든 주소를 조회
+    public void deleteDefaultAddress(String userid, Long addressId) {
+    	// 해당 사용자의 모든 기본 주소 조회
+        List<Defaultaddress> userAddresses = defaultrep.findByUserid(userid);
         
-        for (Defaultaddress address : allAddresses) {
-            // 주어진 addressId가 아닌 경우에만 삭제
-            if (!address.getAddressid().equals(addressId)) {
-                defaultrep.delete(address);  // 나머지 주소를 삭제
-            }
-        }
+		// 주어진 addressId를 제외한 나머지 주소를 삭제
+	    for (Defaultaddress address : userAddresses) {
+	        if (!address.getAddressid().equals(addressId)) {
+	            defaultrep.delete(address);  // 나머지 주소 삭제
+	        }
+	    }
+    }
+    
+  //주소 삭제
+    public void deleteDefault(String userid, Long addressid) {
+    	// 해당 사용자의 주소 중에서 주어진 ID를 조회
+        Optional<Defaultaddress> address = defaultrep.findByAddressidAndUserid(addressid, userid);
+        
+     // 조회된 주소 삭제
+        defaultrep.delete(address.get());
     }
 }
-

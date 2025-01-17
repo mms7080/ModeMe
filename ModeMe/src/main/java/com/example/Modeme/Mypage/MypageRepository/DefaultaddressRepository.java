@@ -1,6 +1,7 @@
 package com.example.Modeme.Mypage.MypageRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -15,5 +16,7 @@ public interface DefaultaddressRepository extends JpaRepository<Defaultaddress, 
 
     // 아이디로 주소 찾기
 	List<Defaultaddress> findByUserid(String userid);
+
+	Optional<Defaultaddress> findByAddressidAndUserid(Long addressid, String userid);
 
 }

@@ -1,6 +1,7 @@
 package com.example.Modeme.Mypage.MypageRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -17,4 +18,8 @@ public interface AddressRepository extends JpaRepository<Address, Long>{
 
     // 아이디로 주소 찾기
 	List<Address> findByUserid(String userid);
+	
+	Optional<Address> findByAddressidAndUserid(Long addressid, String userid);
+
+	 void delete(Address address);
 }

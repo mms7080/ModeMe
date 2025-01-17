@@ -39,7 +39,9 @@ public class SecurityConfig {
                     "/js/**",
                     "/resources/**",
                     "/address/**",
-                    "/address_default"
+                    "/address_default",
+                    "/address_delete",
+                    "/default_delete"
                 )
             )
             .authorizeHttpRequests(auth -> auth

@@ -21,13 +21,13 @@
 		<p class="addressp">자주 쓰는 배송지를 등록 관리하실 수 있습니다.</p>
 	</h1>
 	<main>
-		<div class="addressmain">
+		<div class="defaultaddressbox">
 			<div class="addresscontent">
 				<span>주소록 고정</span> <span>수령인</span> <span>휴대전화</span>
 				<span>주소</span> <span>삭제</span>
 			</div>
 			<div th:fragment="address_list">
-				<div class="address_time blueline"
+				<div class="address_time"
 					th:if="${default_list != null && !default_list.isEmpty()}">
 					<span>기본 배송지</span> <span class="address_under" id="defaultName"
 						th:text="${default_list[0].name}"></span> <span
@@ -35,21 +35,27 @@
 						th:text="${default_list[0].phone}"></span> <span
 						class="address_under" id="defaultAddress"
 						th:text="${default_list[0].address}"></span>
-					<form>
-						<button class="address_delete" type="button">✖</button>
+					<form action="default_delete" method="POST">
+						<input type="hidden" name="addressid" th:value="${default_list[0].addressid}"/>
+						<button class="address_delete" type="submit">✖</button>
 					</form>
 				</div>
 			</div>
 			<div th:unless="${default_list != null && !default_list.isEmpty()}">
-				<div class="addresslist blueline">기본 배송지가 없습니다.</div>
+				<div class="addresslist">기본 배송지가 없습니다.</div>
+			</div>
 			</div>
 			
-			
+			<div class="addressmain">
+			<div class="addresscontent">
+				<span>주소록 고정</span> <span>수령인</span> <span>휴대전화</span>
+				<span>주소</span> <span>삭제</span>
+			</div>
 			<!-- 등록된 주소가 있을 경우(address_list 모델명)-->
 			<div class="address_time"
 				th:if="${address_list != null && !address_list.isEmpty()}"
 				th:each="content:${address_list}">
-				<form action="/address_default" method="POST">
+				<form action="/address_default" method="POST" class="defaultform">
 				<input type="hidden" name="addressid" th:value="${content.addressid}" />
 					<input type="hidden" name="recipient" th:value="${content.name}" />
 					<input type="hidden" name="phone" th:value="${content.phone}" />
@@ -60,8 +66,9 @@
 				<span
 					class="address_under" th:text="${content.phone}"></span> <span
 					class="address_under" th:text="${content.address}"></span>
-				<form>
-					<button class="address_delete">✖</button>
+				<form action="/address_delete" method="POST" id="delete_address">
+				<input type="hidden" name="addressid" th:value="${content.addressid}" />
+					<button class="address_delete" type="submit">✖</button>
 				</form>
 			</div>
 			<div th:unless="${address_list != null && !address_list.isEmpty()}">
