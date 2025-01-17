@@ -28,7 +28,7 @@
             <tbody>
                 <!-- QnA 목록 렌더링 -->
 				<tr th:each="qna, iterStat : ${qnaList}">
-				    <td th:text="${iterStat.count}"></td>
+				    <td th:text="${totalSize - iterStat.index}"></td>
 				    <td>
 				        <a th:if="${qna.secret}" th:href="@{/qna/{id}/secret(id=${qna.id})}">
 				            <span th:text="'🔒'+${qna.title}"></span> <!-- 비밀글 -->

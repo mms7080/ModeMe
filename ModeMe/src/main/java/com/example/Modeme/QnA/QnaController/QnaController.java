@@ -75,6 +75,7 @@ public class QnaController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", qnaPage.getTotalPages());
         model.addAttribute("pageSize", size);
+        model.addAttribute("totalSize", qnaPage.getTotalElements());
 
         return "/Notice/qnaHome";
     }
