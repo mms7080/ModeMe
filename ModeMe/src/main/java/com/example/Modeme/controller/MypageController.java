@@ -1,6 +1,7 @@
 	package com.example.Modeme.controller;
 	
 	import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +71,7 @@ import com.example.Modeme.User.UserDTO.Headerlogin;
 			@GetMapping("/address")
 			public String Address(
 				@AuthenticationPrincipal CustomUserDetails userDetails,
+				@RequestParam(value = "page", defaultValue = "1") int page,
 				Model model
 			) {
 				String userid = userDetails.getUsername();
@@ -79,7 +81,46 @@ import com.example.Modeme.User.UserDTO.Headerlogin;
 				
 	List<Defaultaddress> default_list = defaultrep.findByUserid(userid);
 				
-				model.addAttribute("default_list",default_list);			
+				model.addAttribute("default_list",default_list);
+				
+				
+				//페이지네이션
+				// 사용자 ID로 주소 목록 조회
+			    List<Address> address_page = addressrep.findByUserid(userid);
+			    model.addAttribute("address_list", address_page);
+
+			    // 페이지네이션 처리
+			    List<Address> addresses = addressrep.findByUserid(userid); // 사용자 주소 목록
+
+			    int pageSize = 5; // 한 페이지에 표시할 주소 수
+			    int paginationSize = 10; // 페이지 번호 최대 표시 개수
+
+			    // 데이터가 없다면 기본 페이지로 이동
+			    if (addresses.isEmpty()) {
+			        return "/MyPage/address"; // 기본 페이지로 이동
+			    }
+
+			    // 전체 페이지 개수 계산
+			    int totalReservation = addresses.size();
+			    int totalPages = (int) Math.ceil((double) totalReservation / pageSize);
+
+			    // 현재 페이지 범위 계산
+			    int startIndex = (page - 1) * pageSize;
+			    int endIndex = Math.min(startIndex + pageSize, totalReservation);
+
+			    // 현재 페이지에 해당하는 주소 목록
+			    List<Address> paginationAddress = addresses.subList(startIndex, endIndex);
+
+			    // 페이지네이션 범위 계산
+			    int currentRangeStart = ((page - 1) / paginationSize) * paginationSize + 1;
+			    int currentRangeEnd = Math.min(currentRangeStart + paginationSize - 1, totalPages);
+
+			    // 모델에 페이지네이션 관련 데이터 추가
+			    model.addAttribute("address_list", paginationAddress);
+			    model.addAttribute("currentPage", page);
+			    model.addAttribute("totalPages", totalPages);
+			    model.addAttribute("startPage", currentRangeStart); 
+			    model.addAttribute("endPage", currentRangeEnd);
 				
 				return "/MyPage/address";
 			}

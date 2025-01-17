@@ -220,7 +220,7 @@ h1 {
 }
 
 .addressfooter {
-	margin-top:30px;
+	margin-bottom:30px;
 	border: 1px solid grey;
 }
 
@@ -232,4 +232,62 @@ h1 {
 
 .addressexplane {
 	padding:7px;
+}
+
+.container {
+    margin: 20px auto;
+        align-content: center;
+}
+
+.pagination {
+   display: flex;
+   justify-content: center;
+   padding: 0;
+   list-style: none;
+}
+
+.pagination .page-item {
+   margin: 0 5px;
+}
+
+.pagination .page-item.disabled {
+    display: none;
+}
+
+.pagination .page-link {
+   display: inline-flex;
+   justify-content: center;
+   align-items: center;
+   padding: 8px 12px;
+   border: 1px solid #ddd;
+   background-color: #fff;
+   font-size: 14px;
+   color: #333;
+   cursor: pointer;
+   transition: background-color .3s ease, color .3s ease;
+}
+
+.pagination .page-link:hover {
+   background-color: #f5f5f5;
+}
+
+.pagination .page-item.active .page-link {
+   background-color: #fff;
+   color: #333;
+   border-color: #ddd;
+}
+
+.pagination .page-item a {
+   text-decoration: none;
+}
+
+.pagination span {
+   font-weight: bold;
+   background-color: #fff;
+   cursor: pointer;
+}
+
+.pagination span:hover {
+   font-weight: bold;
+   background-color: #f5f5f5;
 }

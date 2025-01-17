@@ -1,5 +1,6 @@
 package com.example.Modeme.Mypage.MypageService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,36 +18,17 @@ public class AddressService {
     public AddressService(AddressRepository addressrep) {
         this.addressrep = addressrep;
     }
+	
+	//username으로 모든 주소 찾기
+	public List<Address> getAddressByUsername(String username) {
+	    List<Address> addresses = addressrep.findAllByUserid(username);
+	    if (addresses.isEmpty()) {
+	        // 예외 대신 빈 리스트 반환
+	        return new ArrayList<>(); // 빈 리스트 반환
+	    }
+	    return addresses;
+	}
 
-    // 모든 주소 조회
-    public List<Address> getAllAddresses() {
-        return addressrep.findAll();
-    }
-
-    // ID로 주소 조회
-    public Address getAddressById(Long id) {
-        return addressrep.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Address not found with id: " + id));
-    }
-
-    // 새로운 주소 생성
-    public Address createAddress(Address address) {
-        if (address.getName() == null || address.getPhone() == null || address.getAddress() == null) {
-            throw new IllegalArgumentException("All fields must be provided");
-        }
-        return addressrep.save(address);
-    }
-
-    // 주소 수정
-    public Address updateAddress(Long id, Address updatedAddress) {
-        Address existingAddress = getAddressById(id);
-
-        existingAddress.setName(updatedAddress.getName());
-        existingAddress.setPhone(updatedAddress.getPhone());
-        existingAddress.setAddress(updatedAddress.getAddress());
-
-        return addressrep.save(existingAddress);
-    }
 
     //주소 삭제
     public void deleteAddress(String userid, Long addressid) {

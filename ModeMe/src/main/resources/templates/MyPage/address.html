@@ -123,6 +123,26 @@
     </div>
 </form>
 
+	<!-- 페이지네이션 -->
+<div class="container" th:if="${totalPages > 1}">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <!-- 이전 버튼 -->
+            <li class="page-item" th:if="${currentPage > 1}">
+                <a class="page-link" th:href="@{/address(page=${currentPage - 1})}" aria-label="Previous"> &lt; </a>
+            </li>
+            <!-- 페이지 번호 -->
+            <li class="page-item" th:each="i : ${#numbers.sequence(startPage, endPage)}" th:classappend="${i == currentPage} ? 'active' : ''">
+                <a class="page-link" th:href="@{/address(page=${i})}" th:text="${i}"></a>
+            </li>
+            <!-- 다음 버튼 -->
+            <li class="page-item" th:if="${currentPage < totalPages}">
+                <a class="page-link" th:href="@{/address(page=${currentPage + 1})}" aria-label="Next"> &gt; </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
 
 		<div class="addressfooter">
 			<div class="addressnotice">배송주소록 유의사항</div>
@@ -133,6 +153,8 @@
 			</div>
 		</div>
 	</main>
+	
+
 
 	<div th:replace="~{footer :: footer}"></div>
 
