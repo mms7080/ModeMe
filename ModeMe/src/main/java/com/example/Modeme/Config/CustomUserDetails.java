@@ -4,23 +4,25 @@ import com.example.Modeme.User.UserEntity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
 import java.util.Collection;
-import java.util.Collections;
 
-public class CustomUserDetails implements UserDetails, Serializable {
-
-    private static final long serialVersionUID = 1L; // 클래스 버전에 대한 고유 ID 추가
+public class CustomUserDetails implements UserDetails {
 
     private final User user;
+    private final Collection<? extends GrantedAuthority> authorities;
 
-    public CustomUserDetails(User user) {
+    public CustomUserDetails(User user, Collection<? extends GrantedAuthority> authorities) {
         this.user = user;
+        this.authorities = authorities;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        return authorities;
     }
 
     @Override
@@ -31,6 +33,10 @@ public class CustomUserDetails implements UserDetails, Serializable {
     @Override
     public String getUsername() {
         return user.getUsername();
+    }
+
+    public String getRole() {
+        return user.getRole();
     }
 
     @Override
@@ -51,9 +57,5 @@ public class CustomUserDetails implements UserDetails, Serializable {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public User getUser() {
-        return user;
     }
 }

@@ -12,25 +12,27 @@ import org.springframework.stereotype.Service;
 import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.User.UserRepository.UserRepository;
 
-//CustomUserDetailsService: 데이터베이스에서 사용자 정보를 로드하여 UserDetails로 변환
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
- private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
- public CustomUserDetailsService(UserRepository userRepository) {
-     this.userRepository = userRepository;
- }
+    public CustomUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
- @Override
- public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-     User user = userRepository.findByUsername(username)
-         .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + username));
 
-     return new CustomUserDetails(user);
- }
+        // 디버깅: 데이터베이스의 role 확인
+        System.out.println("Database Role: " + user.getRole()); // 데이터베이스에서 가져온 역할
 
- }
+        // GrantedAuthority 생성
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().toUpperCase()));
 
-
-
+        // CustomUserDetails 객체 반환
+        return new CustomUserDetails(user, authorities);
+    }
+}

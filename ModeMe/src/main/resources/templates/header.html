@@ -24,7 +24,7 @@
             </div>
             <!--상단바 오른쪽 -->
             <div class="right-menu">
-			<a href="/managerInput" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">ADMIN</a>
+			<a href="/managerMain" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">ADMIN</a>
                 <a href="/notices">NOTICE</a>
                 <a href="/qna">Q&A</a>
                 <a href="#" id="search-btn">SEARCH</a>
