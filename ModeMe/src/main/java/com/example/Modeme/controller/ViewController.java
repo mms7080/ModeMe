@@ -20,11 +20,6 @@ public class ViewController {
         keep.headerlogin(model, principal); //로그인 유지 
     }
     
-	@GetMapping("/managerMain")
-	public String managerMain() {
-		return "/manager/managerMain";
-	}
-
 	@GetMapping("/header")
 	public String getHeader(Model model, Principal principal) { // principal -> 현재 인증된 사용자의 정보 담고있는 객체
 		if (principal != null) {
