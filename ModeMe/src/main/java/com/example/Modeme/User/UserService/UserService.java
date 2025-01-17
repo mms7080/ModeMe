@@ -1,13 +1,14 @@
 package com.example.Modeme.User.UserService;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.example.Modeme.User.UserDTO.UserDTO;
 import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.User.UserRepository.UserRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
-//    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public void registerUser(UserDTO userDTO) {
         // 아이디 중복 체크
@@ -29,13 +30,13 @@ public class UserService {
         }
 
         // 비밀번호 암호화
-//        String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
+        String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
 
         // User 엔티티로 변환 후 저장
         User user = new User();
         user.setUsername(userDTO.getUsername());
-        user.setPassword(userDTO.getPassword());
-//        user.setPassword(encodedPassword);
+//      user.setPassword(userDTO.getPassword());
+        user.setPassword(encodedPassword);
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
         user.setPhone(userDTO.getPhone());
