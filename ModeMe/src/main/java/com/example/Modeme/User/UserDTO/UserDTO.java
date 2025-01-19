@@ -37,4 +37,6 @@ public class UserDTO {
     private String address;
 
     private String addressDetail;
+    
+    private String role;
 }
