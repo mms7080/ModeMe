@@ -13,6 +13,7 @@ body {
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin: 0 auto; /* 가운데 정렬 */
+    margin-bottom:50px;
 }
 
 
@@ -73,6 +74,13 @@ body {
 	{
 	text-align: right;
 }
+.coupon-row input {
+    flex: 0 0 50%; /* 너비를 50%로 조정 */
+    text-align: right; /* 텍스트 정렬을 오른쪽으로 */
+    margin-left: auto; /* 오른쪽으로 붙임 */
+    margin-right: 10px; /* 버튼과의 간격 */
+}
+
 
 .product-item {
 	display: flex;
