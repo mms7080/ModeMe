@@ -1,3 +1,4 @@
+// 주소 검색&입력
 function openDaumPostcode() {
 	new daum.Postcode({
 		oncomplete: function(data) {
@@ -47,7 +48,7 @@ function openDaumPostcode() {
 }
 
 
-
+// 이메일 입력 변경
 function handleDomainChange() {
     const emailDomainSelect = document.getElementById("email-domain");
     const customDomainInput = document.getElementById("custom-domain");
@@ -60,3 +61,25 @@ function handleDomainChange() {
     }
 }
 
+// 카카오페이 API호출
+document.getElementById("payButton").addEventListener("click", function () {
+	console.log("ㅎㅇ")
+    // Kakao SDK 초기화 (JavaScript 키 사용)
+    Kakao.init('DEV581382E3D0577F398E33A1EF7D71AF90A241F'); // 여기에 본인의 JavaScript 키 입력
+
+    // 결제 요청
+    Kakao.Pay.request({
+        merchant_id: 'YOUR_MERCHANT_ID', // 카카오에서 발급된 가맹점 ID
+        product_name: 'Cashmere Half-neck Knitwear', // 상품 이름
+        total_amount: 34900, // 결제 금액 (KRW 단위)
+        tax_free_amount: 0, // 비과세 금액
+        success_url: 'localhost:9999/main', // 성공 시 이동할 URL
+        fail_url: 'localhost:9999/error', // 실패 시 이동할 URL
+    }).then(function (response) {
+        console.log("결제 성공:", response);
+        alert("결제가 성공적으로 처리되었습니다!");
+    }).catch(function (error) {
+        console.error("결제 실패:", error);
+        alert("결제가 실패했습니다. 다시 시도해주세요.");
+    });
+});
