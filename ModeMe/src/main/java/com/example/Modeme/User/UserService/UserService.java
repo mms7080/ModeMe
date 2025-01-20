@@ -35,18 +35,20 @@ public class UserService {
         // User 엔티티로 변환 후 저장
         User user = new User();
         user.setUsername(userDTO.getUsername());
-//      user.setPassword(userDTO.getPassword());
         user.setPassword(encodedPassword);
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
+
+        // 전화번호를 합친 값을 저장
         user.setPhone(userDTO.getPhone());
-        user.setBirthdate(userDTO.getBirthdate() != null ? userDTO.getBirthdate() : null);
+
+        user.setBirthdate(userDTO.getBirthdate());
         user.setGender(userDTO.getGender());
         user.setPostcode(userDTO.getPostcode());
         user.setAddress(userDTO.getAddress());
         user.setAddressDetail(userDTO.getAddressDetail());
-        user.setRole("user"); // 기본 역할 설정
-       
+        user.setRole("user");
+
         userRepository.save(user);
     }
     

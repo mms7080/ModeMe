@@ -4,6 +4,7 @@ import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -13,24 +14,22 @@ import com.example.Modeme.User.UserDTO.Headerlogin;
 import com.example.Modeme.User.UserDTO.UserDTO;
 import com.example.Modeme.User.UserService.UserService;
 
-import org.springframework.ui.Model;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
 
 @Controller
 @RequiredArgsConstructor
 public class SignupController {
-   
-   @Autowired
-   Headerlogin keep; // 로그인 유지 재사용 Headerlogin 클래스
-   
-    @ModelAttribute //모든 매핑에 추가할 코드
-    public void addAttributes(Model model, Principal principal) {
-        keep.headerlogin(model, principal); //로그인 유지 
-    }
+
+    @Autowired
+    Headerlogin keep; // 로그인 유지 재사용 Headerlogin 클래스
 
     private final UserService userService;
+
+    @ModelAttribute // 모든 매핑에 추가할 코드
+    public void addAttributes(Model model, Principal principal) {
+        keep.headerlogin(model, principal); // 로그인 유지
+    }
 
     // 회원가입 폼
     @GetMapping("/signup")
@@ -41,19 +40,25 @@ public class SignupController {
 
     // 회원가입 처리
     @PostMapping("/signup")
-    public String signupsssssss(@Valid UserDTO userDTO, BindingResult bindingResult, Model model) {
+    public String signupProcess(@Valid UserDTO userDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "/Sign/signup"; // 유효성 오류가 있으면 다시 폼으로 이동
         }
 
         try {
-            userService.registerUser(userDTO);  
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "signup"; // 오류 메시지와 함께 다시 폼으로 이동
-        }
+            // 전화번호 합치기 (프론트에서 3개 입력 받아 1개로 합친 후 UserDTO에 전달됨)
+            userDTO.setPhone(userDTO.getPhone1() + userDTO.getPhone2() + userDTO.getPhone3());
 
-        return "redirect:/Sign/signin"; // 성공 시 로그인 페이지로 리다이렉트
+            // 회원가입 처리
+            userService.registerUser(userDTO);
+
+            // 회원가입 성공 시 ?success 파라미터 추가하여 리다이렉트
+            return "redirect:/signup?success";
+
+        } catch (IllegalArgumentException e) {
+            // 회원가입 실패 시 ?error 파라미터 추가하여 리다이렉트
+            return "redirect:/signup?error";
+        }
     }
 
     // 로그인 페이지

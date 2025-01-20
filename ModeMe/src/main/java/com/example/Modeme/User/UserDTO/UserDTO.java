@@ -9,32 +9,36 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class UserDTO {
-
-    @NotBlank(message = "아이디는 필수 입력 사항입니다.")
-    @Size(min = 4, max = 16, message = "아이디는 4자 이상 16자 이하로 입력해주세요.")
+    @NotBlank
     private String username;
 
-    @NotBlank(message = "비밀번호는 필수 입력 사항입니다.")
-    @Size(min = 8, message = "비밀번호는 8자 이상이어야 합니다.")
+    @NotBlank
     private String password;
 
-    @NotBlank(message = "이름은 필수 입력 사항입니다.")
+    private String confirmPassword;
+
+    @NotBlank
     private String name;
 
-    @NotBlank(message = "이메일은 필수 입력 사항입니다.")
-    @Email(message = "올바른 이메일 형식을 입력해주세요.")
+    @NotBlank
+    @Email
     private String email;
 
-    private String phone;
-
-    // 생일 필드를 LocalDate로 변경
+    @NotNull
     private LocalDate birthdate;
 
     private String gender;
 
     private String postcode;
-
     private String address;
-
     private String addressDetail;
+
+    // 전화번호를 세 개의 input으로 받음
+    private String phone1;
+    private String phone2;
+    private String phone3;
+
+    // 실제 저장할 통합된 phone 필드
+    private String phone;
 }
+
