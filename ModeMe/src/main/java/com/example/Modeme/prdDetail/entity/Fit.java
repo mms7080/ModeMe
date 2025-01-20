@@ -10,7 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -19,30 +18,34 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "PRODUCT_STOCK")
-@SequenceGenerator(name = "ProductStockSeq", sequenceName = "ProductStockSeq", allocationSize = 1, initialValue = 1)
+@Table(name = "PRODUCT_SIZE")
+@SequenceGenerator(
+        name = "SizeSeq",
+        sequenceName = "SizeSeq",
+        allocationSize = 1,
+        initialValue = 1
+)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class ProductStock {
+public class Fit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ProductStockSeq")
-    @Column(name = "stock_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SizeSeq")
+    @Column(name = "product_size_id")
     private Long id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "sizes")
+    private SizeType sizes;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    private Product product;  // 수정 없음
 
-    @Column(nullable = false)
-    private String color;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "size_id", nullable = false) // 필드 이름 변경
-    private Fit sizes;
-
-    @Column(nullable = false)
-    private int stock;
+    public enum SizeType {
+        S, M, L, XL, FREESIZE
+    }
 }
+

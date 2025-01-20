@@ -29,7 +29,7 @@ public class NoticeController {
 
     @Autowired
     Headerlogin keep;
-
+    //로그인 정보유지
     @ModelAttribute
     public void addAttributes(Model model, Principal principal) {
         keep.headerlogin(model, principal);

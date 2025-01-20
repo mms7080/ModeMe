@@ -1,23 +1,28 @@
 package com.example.Modeme.prdDetail.entity;
 
-import com.example.Modeme.prdDetail.entity.ProductStock.SizeType;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name="ORDERS_ITEM")
 @SequenceGenerator(name = "OrderItemSeq", sequenceName = "OrderItemSeq", allocationSize = 1, initialValue = 1)
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class OrderItem {
 
     @Id
@@ -33,9 +38,9 @@ public class OrderItem {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "product_size", nullable = false) // 필드 이름 변경
-    private SizeType productSize;
+    @ManyToOne
+    @JoinColumn(name = "size_id", nullable = false) // 단일 Size 참조
+    private Fit sizes;
 
     @Column(nullable = false)
     private int quantity;

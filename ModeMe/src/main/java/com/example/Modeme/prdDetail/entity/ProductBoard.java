@@ -2,6 +2,7 @@ package com.example.Modeme.prdDetail.entity;
 
 import java.util.List;
 import com.example.Modeme.User.UserEntity.User;
+import com.example.Modeme.prdDetail.entity.ProductQA.TitleCategory;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -16,6 +17,10 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "PRODUCT_BOARD")
@@ -25,6 +30,10 @@ import jakarta.persistence.Table;
         allocationSize = 1,
         initialValue = 1
 )
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class ProductBoard {
 
     @Id

@@ -27,7 +27,6 @@ public class QnaService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
 
-    // 기존 메서드들...
 
     public List<Qna> getQnaList() {
         return qnaRepository.findAll();
@@ -82,6 +81,19 @@ public class QnaService {
     public void save(Qna qna) {
         qnaRepository.save(qna);
     }
+ // 관리자 여부 확인
+    public boolean isAdmin(String username) {
+        User user = userRepository.findByUsername(username)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        // 역할(Role)이 "admin" 또는 "ROLE_ADMIN"인 경우 관리자로 판단
+        String role = user.getRole();
+        System.out.println("Database Role: " + role); // 역할 값 출력
+        return "ROLE_ADMIN".equalsIgnoreCase(role.trim()) || "admin".equalsIgnoreCase(role.trim());
+    }
+
+
+
 
     // ======== 검색 기능 추가 ========
     public Page<Qna> searchQna(String option, String keyword, int page, int size) {

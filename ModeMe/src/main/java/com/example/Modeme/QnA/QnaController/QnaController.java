@@ -75,6 +75,7 @@ public class QnaController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", qnaPage.getTotalPages());
         model.addAttribute("pageSize", size);
+        model.addAttribute("totalSize", qnaPage.getTotalElements());
 
         return "/Notice/qnaHome";
     }
@@ -129,16 +130,32 @@ public class QnaController {
         return "/Notice/qnaWrite"; // /Notice 디렉토리에 있는 qnaWrite.html 반환
     }
 
-    // 비밀글 확인 페이지
+ // 비밀글 확인 페이지
     @GetMapping("/{id}/secret")
-    public String viewSecretPage(@PathVariable Long id, Model model) {
+    public String viewSecretPage(@PathVariable Long id, Model model, Principal principal) {
         Qna qna = qnaService.getQna(id);
+
+        // 비밀글이 아니면 바로 상세 페이지로 이동
         if (!qna.isSecret()) {
-            return "redirect:/qna/" + id; // 비밀글이 아니면 바로 내용 페이지로
+            return "redirect:/qna/" + id;
         }
+
+        // 관리자 여부 확인
+        boolean isAdmin = principal != null && qnaService.isAdmin(principal.getName());
+        System.out.println("Principal Name: " + (principal != null ? principal.getName() : "null"));
+        System.out.println("Is Admin: " + isAdmin);
+
+        if (isAdmin) {
+            // 관리자는 비밀번호 확인 없이 바로 상세 페이지로 이동
+            return "redirect:/qna/" + id;
+        }
+
         model.addAttribute("qnaId", id); // 비밀글 ID 전달
+        model.addAttribute("isAdmin", isAdmin); // 관리자 여부 전달
         return "Notice/secretPage"; // 비밀번호 입력 페이지
     }
+
+
 
     // 비밀글 비밀번호 확인 처리
     @PostMapping("/{id}/secret/verify")

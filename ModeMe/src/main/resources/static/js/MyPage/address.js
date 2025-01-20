@@ -107,6 +107,17 @@ document.getElementById("addressForm").addEventListener("submit", submitAddressF
             }
         });
     }
+	// 기본 배송지 삭제 버튼 클릭 시
+	    function deleteDefault(addressId) {
+	        $.ajax({
+	            url: '/default_delete',
+	            method: 'POST',
+	            data: { addressid: addressId },
+	            success: function(response) {
+	                $('#default-address-list').html(response);
+	            }
+	        });
+	    }
 
 	function setDefaultAddress(addressId, name, phone, address) {
 	    // 기본 배송지 영역을 찾아서 내용 업데이트
@@ -114,3 +125,16 @@ document.getElementById("addressForm").addEventListener("submit", submitAddressF
 	    document.getElementById("defaultPhone").innerText = phone;
 	    document.getElementById("defaultAddress").innerText = address;
 	}
+	
+// 배송지 목록 삭제버튼 클릭시
+function DeleteAddress(addressId){
+	$.ajax({
+		url:'/address_delete',
+		method: 'POST',
+		data: {addressid: addressId},
+		success: function(response) {
+			// 요청이 성공하면 페이지 새로고침
+			
+		}
+	})
+}

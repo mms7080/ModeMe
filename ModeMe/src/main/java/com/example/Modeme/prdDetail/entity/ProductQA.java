@@ -5,11 +5,32 @@ import java.util.List;
 
 import com.example.Modeme.User.UserEntity.User;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "PRODUCT_QA")
 @SequenceGenerator(name = "ProductQASeq", sequenceName = "ProductQASeq", allocationSize = 1, initialValue = 1)
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class ProductQA {
 
     @Id

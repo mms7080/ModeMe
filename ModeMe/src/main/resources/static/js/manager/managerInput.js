@@ -1,34 +1,36 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // **카테고리 및 서브 카테고리 로직**
     const mainCategoryInputs = document.querySelectorAll('input[name="category"]');
     const mainCategoryLabels = document.querySelectorAll('label[for]');
     const subcategoryContainer = document.getElementById("subcategory");
+//    const subcategoryHiddenInput = document.getElementById("subcategory-hidden");
+/*	const subcategoryHiddenInput = document.getElementById("subcategory");*/
+	const subcategoryHiddenInput = document.querySelector('input[name="subcategory"]');
 
-    // 서브 카테고리 데이터
     const subcategories = {
         outer: ["점퍼", "가디건", "자켓", "코트"],
         top: ["티셔츠", "민소매", "셔츠/블라우스", "니트", "후드/맨투맨"],
-        bottom: ["데님", "팬츠", "슬랙스", "스커트", "트레이닝"]
+        bottom: ["데님", "팬츠", "슬랙스", "스커트", "트레이닝"],
     };
 
-    // 카테고리 선택 시 서브 카테고리 표시 및 라벨 색상 변경
     mainCategoryInputs.forEach((input) => {
         input.addEventListener("change", () => {
             const selectedCategory = input.value;
 
-            // 모든 라벨을 회색으로 초기화
+            // 모든 라벨 초기화
             mainCategoryLabels.forEach((label) => {
                 label.style.color = "#aaa";
                 label.style.fontWeight = "normal";
             });
 
-            // 선택된 라벨만 검정색으로 강조
+            // 선택된 라벨 강조
             const selectedLabel = document.querySelector(`label[for="${input.id}"]`);
             selectedLabel.style.color = "#000";
             selectedLabel.style.fontWeight = "bold";
 
-            // 서브 카테고리 생성
+            // 서브 카테고리 표시
             const subItems = subcategories[selectedCategory] || [];
-            subcategoryContainer.innerHTML = ""; // 기존 서브 카테고리 초기화
+            subcategoryContainer.innerHTML = "";
 
             subItems.forEach((item) => {
                 const subItemDiv = document.createElement("div");
@@ -40,38 +42,76 @@ document.addEventListener("DOMContentLoaded", () => {
                 subItemInput.name = "subcategory";
                 subItemInput.value = item;
 
-				// 선택된 항목의 값을 hidden input에 넣는 이벤트 리스너 추가
-				subItemInput.addEventListener("change", () => {
-				    // 모든 선택된 항목을 hidden input에 저장
-				    const selectedSubcategories = [];
-				    document.querySelectorAll('input[name="subcategory"]:checked').forEach((checkbox) => {
-				        selectedSubcategories.push(checkbox.value);
-				    });
+                // 서브 카테고리 선택 시 hidden input 업데이트
+                subItemInput.addEventListener("change", () => {
+                    subcategoryHiddenInput.value = item;
+                });
 
-				    subCategoryInput.value = selectedSubcategories.join(","); // 선택된 항목을 쉼표로 구분하여 저장
-				});
-				
                 subItemDiv.appendChild(subItemInput);
                 subItemDiv.appendChild(subItemLabel);
-
                 subcategoryContainer.appendChild(subItemDiv);
             });
+
+            // 초기값 설정
+            if (subItems.length > 0) {
+                subcategoryHiddenInput.value = subItems[0];
+            } else {
+                subcategoryHiddenInput.value = "";
+            }
         });
     });
-});
 
-document.addEventListener("DOMContentLoaded", () => {
+    // **Rich Text Editor 초기화**
+    const editor = new Quill("#rich-text-editor", {
+        theme: "snow",
+        placeholder: "상품 상세 정보를 입력하세요...",
+        modules: {
+            toolbar: [
+                ["bold", "italic", "underline", "strike"],
+                ["blockquote", "code-block"],
+                [{ header: 1 }, { header: 2 }],
+                [{ list: "ordered" }, { list: "bullet" }],
+                [{ size: ["small", false, "large", "huge"] }],
+                [{ color: [] }, { background: [] }],
+                ["clean"],
+            ],
+        },
+    });
+
+    const productDescriptionInput = document.getElementById("productDescription");
+
+    // Rich Text Editor 내용 변경 시 hidden input 업데이트
+    editor.on("text-change", () => {
+        productDescriptionInput.value = editor.root.innerHTML.trim(); // HTML 내용 저장
+    });
+
+    // **폼 제출 시 유효성 검사**
+    const form = document.querySelector("form");
+    form.addEventListener("submit", (event) => {
+        // 서브 카테고리 유효성 검사
+        if (!subcategoryHiddenInput.value) {
+            event.preventDefault();
+            alert("서브 카테고리를 선택해주세요.");
+            return;
+        }
+
+        // 상품 상세 정보 유효성 검사
+        if (!productDescriptionInput.value || productDescriptionInput.value.trim() === "") {
+            event.preventDefault();
+            alert("상품 상세 정보를 입력해주세요.");
+        }
+    });
+
+    // **이미지 파일 입력 로직**
     const imageInputs = document.querySelectorAll(".image-inputs div");
 
-    imageInputs.forEach((box, index) => {
+    imageInputs.forEach((box) => {
         const fileInput = box.querySelector("input[type='file']");
 
-        // 박스를 클릭하면 연결된 파일 입력 필드 활성화
         box.addEventListener("click", () => {
             fileInput.click();
         });
 
-        // 파일 선택 후 파일 이름 표시 (선택적으로 추가)
         fileInput.addEventListener("change", () => {
             if (fileInput.files.length > 0) {
                 box.innerHTML = `<span>${fileInput.files[0].name}</span>`;
@@ -79,92 +119,3 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
-
-document.addEventListener("DOMContentLoaded", () => {
-    // Rich Text Editor 초기화
-    const editor = new Quill("#rich-text-editor", {
-        theme: "snow",
-        placeholder: "상품 상세 정보를 입력하세요...",
-        modules: {
-            toolbar: {
-                container: [
-                    ["bold", "italic", "underline", "strike"],
-                    ["blockquote", "code-block"],
-                    [{ header: 1 }, { header: 2 }],
-                    [{ list: "ordered" }, { list: "bullet" }],
-                    [{ script: "sub" }, { script: "super" }],
-                    [{ indent: "-1" }, { indent: "+1" }],
-                    [{ direction: "rtl" }],
-                    [{ size: ["small", false, "large", "huge"] }],
-                    [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                    [{ color: [] }, { background: [] }],
-                    [{ font: [] }],
-                    [{ align: [] }],
-                    ["image"], // 이미지 삽입 버튼 추가
-                    ["clean"],
-                ],
-                handlers: {
-                    image: function () {
-                        const input = document.createElement("input");
-                        input.setAttribute("type", "file");
-                        input.setAttribute("accept", "image/*");
-                        input.click();
-
-                        input.onchange = async () => {
-                            const file = input.files[0];
-                            if (file) {
-                                // Base64 인코딩 삽입
-                                const reader = new FileReader();
-                                reader.onload = (e) => {
-                                    const range = editor.getSelection();
-                                    editor.insertEmbed(range.index, "image", e.target.result);
-                                };
-                                reader.readAsDataURL(file);
-
-                                // 서버 업로드 (옵션)
-                                const formData = new FormData();
-                                formData.append("image", file);
-
-                                try {
-                                    const response = await fetch("/upload-image", {
-                                        method: "POST",
-                                        body: formData,
-                                    });
-                                    const data = await response.json();
-                                    if (data.url) {
-                                        const range = editor.getSelection();
-                                        editor.insertEmbed(range.index, "image", data.url);
-                                    } else {
-                                        console.error("서버 업로드 실패");
-                                    }
-                                } catch (error) {
-                                    console.error("서버 업로드 중 오류 발생:", error);
-                                }
-                            }
-                        };
-                    },
-                },
-            },
-        },
-    });
-});
-
-
-
-document.addEventListener("DOMContentLoaded", () => {
-    const buttons = document.querySelectorAll(".buttons button");
-
-    buttons.forEach((button) => {
-        button.addEventListener("click", () => {
-            const url = button.getAttribute("data-url"); // 버튼의 data-url 속성 값 가져오기
-            if (url) {
-                window.location.href = url; // 해당 URL로 이동
-            } else {
-                console.error("URL이 설정되지 않았습니다.");
-            }
-        });
-    });
-});
-
-
-

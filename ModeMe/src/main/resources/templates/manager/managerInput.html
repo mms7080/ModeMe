@@ -14,7 +14,8 @@
 	<!-- 헤더 -->
 	<div th:replace="~{header :: header}"></div>
     <div class="product-edit-container">
-        <h1>상품 등록</h1>	        
+        <h1>상품 등록</h1>
+        <form action="/manager/new" method="post" onsubmit="return validateForm();" >
         <div class="product-name">
            <label for="name">상품 이름</label>
            <input type="text" id="name" name="name" placeholder="이름 입력">
@@ -43,8 +44,8 @@
 		        <div class="color-output">R: 0, G: 0, B: 0</div>
 		        <input class="color-name" type="text" id="colorName" placeholder="색상 이름 입력">
 		        <button class="add-color">+</button>
-		        <input type="hidden" name="color"  id="color" value="#000000">
-		        <input type="hidden" name="colorName" id="colorName">
+		        <input type="hidden" name="colors"  id="colors" value="#000000">
+		        <input type="hidden" name="colorNames" id="colorNames">
 		    </div>
 		</div>
 
@@ -71,14 +72,14 @@
 		    </div>
 	        <!-- 서브 카테고리가 동적으로 추가됨 -->
 		    <div class="subcategory" id="subcategory">
-		    <input type="hidden" name="subcategory" id="subcategory">
+		    <input type="hidden" name="subcategory" id="subcategory-hidden">
 		    </div>
 		</div>
 
         <!-- Product Size -->
         <div class="size-container">
 	        <label class="size-label">상품 사이즈</label>
-	        <select id="size" name="size">
+	        <select id="size" name="productSize">
 	            <option value="SelectSize">S M L XL</option>
 	            <option value="FreeSize">FreeSize</option>
 	        </select>
@@ -107,17 +108,16 @@
 		<div class="RTE-container">
 			<label for="rich-text-editor">상품 상세정보</label>
 			<div id="rich-text-editor" style="height: 300px;"></div>
-			<input type="hidden" name="productDescription" id="rich-text-editor">
+			<input type="hidden" name="productDescription" id="productDescription"/>
 		</div>
 
 		<!-- Buttons -->
 		<div class="buttons">
-		    <button id="save-btn" data-url="/productDetail">수정 완료</button>
-		    <button id="cancel-btn" data-url="/productDetail">수정 취소</button>
-		    <button id="temp-save-btn" data-url="/productDetail">임시 저장</button>
+		    <button id="save-btn" type="submit">저장</button>
 		</div>
+ 		</form>
     </div>
-    
+ 
     	<!-- 푸터 -->
 	<div th:replace="~{footer :: footer}"></div>
     
