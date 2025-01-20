@@ -27,18 +27,16 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>1</td>
-					<td>2025-01-09</td>
-					<td></td>
-					<td>shirt01</td>
-					<td>빈티지 체크셔츠</td>
-					<td>18000</td>
-					<td>10</td>
-					<td>
+				<tr th:each="product : ${products}">
+						<td th:text="${product.id}"></td>
+						<td th:text="${product.name}"></td>
+						<td th:text="${product.category}"></td>
+						<td th:text="${product.subcategory}"></td>
+						<td th:text="${product.stock}"></td>
+						<td>
 						<button id="modfiyButton">수정</button>
 						<button id="deleteButton">삭제</button>
-					</td>
+						</td>
 				</tr>
 			</tbody>
 		</table>

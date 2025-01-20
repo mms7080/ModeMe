@@ -41,7 +41,8 @@ public class SecurityConfig {
                     "/address/**",
                     "/address_default",
                     "/address_delete",
-                    "/default_delete"
+                    "/default_delete",
+                    "/manager/**"
                 )
             )
             .authorizeHttpRequests(auth -> auth
