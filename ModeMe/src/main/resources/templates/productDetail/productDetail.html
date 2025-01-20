@@ -1,244 +1,272 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${product.name} + ' - 상품 상세정보'">Product Detail Page</title>
-    <link rel="stylesheet" href="/css/productDetail/productDetail.css">
-    <script defer src="/js/productDetail/prdDetailNav.js"></script>
-    <script defer src="/js/productDetail/productDetail.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Detail Page</title>
+<link rel="stylesheet" href="/css/productDetail/productDetail.css">
+<script defer src="/js/productDetail/prdDetailNav.js"></script>
+<script defer src="/js/productDetail/productDetail.js"></script>
 </head>
 <body>
 	<!-- 헤더 -->
 	<div th:replace="~{header :: header}"></div>
 
-    <div class="top container" id="prdBuy">
-    
-    	<!-- Admin Action Buttons Section -->
+	<div class="top container" id="prdBuy">
+
+		<!-- Admin Action Buttons Section -->
 		<div class="admin-buttons">
-			<span>
-			    <a href="/main" class="admin-delete-button">삭제</a>
-			    <a th:href="'/productEdit/' + ${product.id}" class="admin-edit-button">수정</a>
+			<span> <a href="/main" class="admin-delete-button">삭제</a> <a
+				href="/productEdit" class="admin-edit-button">수정</a>
 			</span>
 		</div>
-    
+
 		<!-- Navigation Menu -->
 		<ul class="menu">
-		    <li><a><b>상품구매</b></a></li>
-		    <li><a href="#prdDetail">상품상세정보</a></li>
-		    <li><a href="#prdInfo">상품구매안내</a></li>
-		    <li class="selected">
-		        <a href="#prdReview">
-		            상품후기
-		            <span ></span>
-		        </a>
-		    </li>
-		    <li>
-		        <a href="#prdQnA">
-		            Q&A
-		            <span ></span>
-		        </a>
-		    </li>
+			<li><a><b>상품구매</b></a></li>
+			<li><a href="#prdDetail">상품상세정보</a></li>
+			<li><a href="#prdInfo">상품구매안내</a></li>
+			<li class="selected"><a href="#prdReview"> 상품후기 <span
+					class="reviewcount">2</span>
+			</a></li>
+			<li><a href="#prdQnA"> Q&A <span class="qnacount">2</span>
+			</a></li>
 		</ul>
-		
-       <!-- Product Section -->
-        <div class="product-section">
-            <!-- Product Images -->
-            <div class="product-images">
-			    <div class="image-preview">
-			        <img src="image/prdDetailSample/4.jpg" alt="Main Preview" class="preview-image" />
-			    </div>
-			    <div class="thumbnail-list">
-			        <div class="thumbnail">
-			            <img src="image/prdDetailSample/6.jpg" alt="Thumbnail 1" />
-			        </div>
-			        <div class="thumbnail">
-			            <img src="image/prdDetailSample/3.jpg" alt="Thumbnail 2" />
-			        </div>
-			        <div class="thumbnail">
-			            <img src="image/prdDetailSample/5.jpg" alt="Thumbnail 3" />
-			        </div>
-			    </div>
-			</div>
-            
-            <div class="product-void"></div>
 
-            <!-- Product Details -->
-            <div class="product-details">
-                <h2 th:text="${product.name}">상품 이름</h2>
-                <p class="price" th:text="'₩' + ${product.price}">상품 가격</p>
-                
-                <!-- Product Options -->
-                <div class="product-options">
-	                <div>
-	                	<span class="option-label color"><b>COLOR</b></span>
-	                	<div class="option-buttons" th:each="color : ${product.colorNames}">
-		                    <button th:text="${color}">Color</button>
-	                    </div>
-	                </div>
-	                <div>
-	                	<span class="option-label size"><b>SIZE</b></span>
-	                	<div class="option-buttons" th:each="size : ${product.productSize}">
-		                    <button th:text="${size}">Size</button>
-	                	</div>
-	                </div>
-	                <button class="add-to-selection">항목 추가</button>
-                </div>
-                
-				<div class="selection-summary">
-				    총 가격: <span id="total-price">₩0</span>
+		<!-- Product Section -->
+		<div class="product-section">
+			<!-- Product Images -->
+			<div class="product-images">
+				<div class="image-preview">
+					<img src="image/prdDetailSample/4.jpg" alt="Main Preview"
+						class="preview-image" />
 				</div>
-				
-                <!-- Purchase Section -->
-                <div class="purchase-section">
-                    <button class="buyNow">바로 구매하기</button>
-                    <button>장바구니 담기</button>
-                    <button>관심상품 등록</button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Middle Section -->
-        <div class="middle container" id="prdDetail">
-            <div class="product-description">
-                <p th:utext="${product.productDescription}">상품 상세 설명이 들어갑니다.</p>
-            </div>
-        </div>
-        
-		<!-- Bottom Section -->
-        <div class="bottom container" id="prdInfo">
-        
-			<!-- Navigation Menu -->
-			<ul class="menu">
-			    <li><a href="#prdBuy">상품구매</a></li>
-			    <li><a href="#prdDetail">상품상세정보</a></li>
-			    <li><a><b>상품구매안내</b></a></li>
-			    <li class="selected">
-			        <a href="#prdReview">
-			            상품후기
-			            <span class="reviewcount">2</span>
-			        </a>
-			    </li>
-			    <li>
-			        <a href="#prdQnA">
-			            Q&A
-			            <span class="qnacount">2</span>
-			        </a>
-			    </li>
-			</ul>
-        
-            <h3>상품결제정보</h3>
-            <p>고액결제의 경우 안전을 위해 카드사에서 확인전화를 드릴 수도 있습니다. 확인과정에서 도난 카드의 사용이나 타인 명의의 주문등 정상적인 주문이 아니라고 판단될 경우 임의로 주문을 보류 또는 취소할 수 있습니다.</p>
-            <p>무통장 입금은 상품 구매 대금은 PC뱅킹, 인터넷뱅킹, 텔레뱅킹 혹은 가까운 은행에서 직접 입금하시면 됩니다. 주문시 입력한 입금자명과 실제입금자의 성명이 반드시 일치하여야 하며, 7일 이내로 입금을 하셔야 하며 입금되지 않은 주문은 자동취소 됩니다.</p>
+				<div class="thumbnail-list">
+					<div class="thumbnail">
+						<img src="image/prdDetailSample/6.jpg" alt="Thumbnail 1" />
+					</div>
+					<div class="thumbnail">
+						<img src="image/prdDetailSample/3.jpg" alt="Thumbnail 2" />
+					</div>
+					<div class="thumbnail">
+						<img src="image/prdDetailSample/5.jpg" alt="Thumbnail 3" />
+					</div>
+				</div>
+			</div>
 
-            <h3>배송정보</h3>
-            <p>배송 방법 : 택배</p>
-            <p>배송 지역 : 전국지역</p>
-            <p>배송 비용 : 무료</p>
-            <p>배송 기간 : 2일 ~ 5일</p>
-            <p>배송 안내 : 산간벽지나 도서지방은 별도의 추가금액을 지불하셔야 하는 경우가 있습니다. 고객님께서 주문하신 상품은 입금 확인후 배송해 드립니다. 다만, 상품종류에 따라서 상품의 배송이 다소 지연될 수 있습니다.</p>
+			<div class="product-void"></div>
 
-            <h3>교환 및 반품정보</h3>
-            <p>교환 및 반품 주소: [12345] 서울특별시 칠팔구 일이로34길 56-7 (팔구동) 1011호</p>
-            <p><strong>교환 및 반품이 가능한 경우</strong></p>
-            <ul>
-                <li>계약내용에 관한 서면을 받은 날부터 7일. 단, 그 서면을 받은 때보다 재화등의 공급이 늦게 이루어진 경우에는 재화등을 공급받거나 재화등의 공급이 시작된 날부터 7일 이내</li>
-                <li>공급받으신 상품 및 용역의 내용이 표시/광고 내용과 다르거나 계약내용과 다르게 이행된 때에는 당해 재화 등을 공급받은 날부터 3월 이내, 그 사실을 알게 된 날 또는 알 수 있었던 날부터 30일 이내</li>
-            </ul>
-            <p><strong>교환 및 반품이 불가능한 경우</strong></p>
-            <ul>
-                <li>이용자에게 책임 있는 사유로 재화 등이 멸실 또는 훼손된 경우(다만, 재화 등의 내용을 확인하기 위하여 포장 등을 훼손한 경우에는 청약철회를 할 수 있습니다)</li>
-                <li>이용자의 사용 또는 일부 소비에 의하여 재화 등의 가치가 현저히 감소한 경우</li>
-                <li>시간의 경과에 의하여 재판매가 곤란할 정도로 재화등의 가치가 현저히 감소한 경우</li>
-                <li>복제가 가능한 재화등의 포장을 훼손한 경우</li>
-                <li>개별 주문 생산되는 재화 등 청약철회시 판매자에게 회복할 수 없는 피해가 예상되어 소비자의 사전 동의를 얻은 경우</li>
-                <li>디지털 콘텐츠의 제공이 개시된 경우(다만, 가분적 용역 또는 가분적 디지털콘텐츠로 구성된 계약의 경우 제공이 개시되지 아니한 부분은 청약철회를 할 수 있습니다)</li>
-            </ul>
-            <p>※ 고객님의 마음이 바뀌어 교환, 반품을 하실 경우 상품반송 비용은 고객님께서 부담하셔야 합니다. (색상 교환, 사이즈 교환 등 포함)</p>
-        </div>
+			<!-- Product Details -->
+			<div class="product-details">
+				<h2 th:text="${product.name}"></h2>
+				<p class="price" th:text="'₩' + ${product.price}"></p>
 
-        <!-- Reviews Section -->
-        <div class="reviews" id="prdReview">
-        
-        	<!-- Navigation Menu -->
-			<ul class="menu">
-			    <li><a href="#prdBuy">상품구매</a></li>
-			    <li><a href="#prdDetail">상품상세정보</a></li>
-			    <li><a href="#prdInfo">상품구매안내</a></li>
-			    <li class="selected">
-			        <a><b>상품후기</b>
-			            <span class="reviewcount">2</span>
-			        </a>
-			    </li>
-			    <li>
-			        <a href="#prdQnA">
-			            Q&A
-			            <span class="qnacount">2</span>
-			        </a>
-			    </li>
-			</ul>
-        
-            <div class="section-header">상품후기</div>
-            <div class="review-item">
-                <p><strong>사용자1</strong></p>
-                <p>정말 좋은 제품입니다! 추천합니다.</p>
-            </div>
-            <div class="review-item">
-                <p><strong>사용자2</strong></p>
-                <p>가격 대비 만족스러운 품질이에요.</p>
-            </div>
-            <div class="pagination">
-                <button>1</button>
-                <button>2</button>
-                <button>3</button>
-            </div>
-			<div class="section-action">
-		        <a href="/productReviewWrite" class="action-button">리뷰 작성하기</a>
-		    </div>
-        </div>
+				<!-- Product Options -->
+				<div class="product-options">
+					<div>
+						<span class="option-label color"><b>COLOR</b></span>
+						<div class="option-buttons"
+							th:each="color : ${product.colorNames}">
+							<button th:text="${color}" class="color-button"></button>
+						</div>
+					</div>
+					<div>
+						<span class="option-label size"><b>SIZE</b></span>
+						<div class="option-buttons"
+							th:each="size : ${product.productSize}">
+							<button th:text="${size}" class="size-button"></button>
+						</div>
+					</div>
+					<button class="add-to-selection">항목 추가</button>
+				</div>
 
-        <!-- Q&A Section -->
-        <div class="qa-section" id="prdQnA">
-        
-        	<!-- Navigation Menu -->
-			<ul class="menu">
-			    <li><a href="#prdBuy">상품구매</a></li>
-			    <li><a href="#prdDetail">상품상세정보</a></li>
-			    <li><a href="#prdInfo">상품구매안내</a></li>
-			    <li class="selected">
-			        <a href="#prdReview">상품후기
-			            <span class="reviewcount">2</span>
-			        </a>
-			    </li>
-			    <li>
-			        <a><b>Q&A</b>
-			            <span class="qnacount">2</span>
-			        </a>
-			    </li>
-			</ul>
-        
-            <div class="section-header">Q&A</div>
-            <div class="qa-item">
-                <p><strong>질문:</strong> 이 상품은 다른 색상도 있나요?</p>
-                <p><strong>답변:</strong> 네, 블랙, 화이트, 그레이 색상이 있습니다.</p>
-            </div>
-            <div class="qa-item">
-                <p><strong>질문:</strong> 보증 기간이 어떻게 되나요?</p>
-                <p><strong>답변:</strong> 보증 기간은 1년입니다.</p>
-            </div>
-            <div class="pagination">
-                <button>1</button>
-                <button>2</button>
-                <button>3</button>
-            </div>
-		    <div class="section-action">
-		        <a href="/productQAWrite" class="action-button">질문 작성하기</a>
-		    </div>
-        </div>
-    </div>
-    
-    
-    	<!-- 푸터 -->
+				<!-- Selection Section -->
+				<div class="selection"></div>
+
+				<div class="selection-summary">
+					총 가격: <span id="total-price">₩0</span>
+				</div>
+				<!-- 구매 섹션 -->
+				<div class="purchase-section">
+					<a href="#" class="buyNow">
+						<button>바로 구매하기</button>
+					</a> <a href="#">
+						<button>장바구니 담기</button>
+					</a> <a href="#">
+						<button>관심상품 등록</button>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+	<!-- Middle Section -->
+	<div class="middle container" id="prdDetail">
+
+		<!-- Navigation Menu -->
+		<ul class="menu">
+			<li><a href="#prdBuy">상품구매</a></li>
+			<li><a><b>상품상세정보</b></a></li>
+			<li><a href="#prdInfo">상품구매안내</a></li>
+			<li class="selected"><a href="#prdReview"> 상품후기 <span
+					class="reviewcount">2</span>
+			</a></li>
+			<li><a href="#prdQnA"> Q&A <span class="qnacount">2</span>
+			</a></li>
+		</ul>
+
+		<div class="product-description">
+			<div class="image-placeholder"
+				style="width: 60%; height: 300px; background-color: #e0e0e0; margin: 20px auto;"></div>
+			<div class="image-placeholder"
+				style="width: 60%; height: 400px; background-color: #e0e0e0; margin: 20px auto;"></div>
+			<div class="image-placeholder"
+				style="width: 60%; height: 500px; background-color: #e0e0e0; margin: 20px auto;"></div>
+		</div>
+	</div>
+
+	<!-- Bottom Section -->
+	<div class="bottom container" id="prdInfo">
+
+		<!-- Navigation Menu -->
+		<ul class="menu">
+			<li><a href="#prdBuy">상품구매</a></li>
+			<li><a href="#prdDetail">상품상세정보</a></li>
+			<li><a><b>상품구매안내</b></a></li>
+			<li class="selected"><a href="#prdReview"> 상품후기 <span
+					class="reviewcount">2</span>
+			</a></li>
+			<li><a href="#prdQnA"> Q&A <span class="qnacount">2</span>
+			</a></li>
+		</ul>
+
+		<h3>상품결제정보</h3>
+		<p>고액결제의 경우 안전을 위해 카드사에서 확인전화를 드릴 수도 있습니다. 확인과정에서 도난 카드의 사용이나 타인
+			명의의 주문등 정상적인 주문이 아니라고 판단될 경우 임의로 주문을 보류 또는 취소할 수 있습니다.</p>
+		<p>무통장 입금은 상품 구매 대금은 PC뱅킹, 인터넷뱅킹, 텔레뱅킹 혹은 가까운 은행에서 직접 입금하시면 됩니다.
+			주문시 입력한 입금자명과 실제입금자의 성명이 반드시 일치하여야 하며, 7일 이내로 입금을 하셔야 하며 입금되지 않은 주문은
+			자동취소 됩니다.</p>
+
+		<h3>배송정보</h3>
+		<p>배송 방법 : 택배</p>
+		<p>배송 지역 : 전국지역</p>
+		<p>배송 비용 : 무료</p>
+		<p>배송 기간 : 2일 ~ 5일</p>
+		<p>배송 안내 : 산간벽지나 도서지방은 별도의 추가금액을 지불하셔야 하는 경우가 있습니다. 고객님께서 주문하신 상품은
+			입금 확인후 배송해 드립니다. 다만, 상품종류에 따라서 상품의 배송이 다소 지연될 수 있습니다.</p>
+
+		<h3>교환 및 반품정보</h3>
+		<p>교환 및 반품 주소: [12345] 서울특별시 칠팔구 일이로34길 56-7 (팔구동) 1011호</p>
+		<p>
+			<strong>교환 및 반품이 가능한 경우</strong>
+		</p>
+		<ul>
+			<li>계약내용에 관한 서면을 받은 날부터 7일. 단, 그 서면을 받은 때보다 재화등의 공급이 늦게 이루어진
+				경우에는 재화등을 공급받거나 재화등의 공급이 시작된 날부터 7일 이내</li>
+			<li>공급받으신 상품 및 용역의 내용이 표시/광고 내용과 다르거나 계약내용과 다르게 이행된 때에는 당해 재화 등을
+				공급받은 날부터 3월 이내, 그 사실을 알게 된 날 또는 알 수 있었던 날부터 30일 이내</li>
+		</ul>
+		<p>
+			<strong>교환 및 반품이 불가능한 경우</strong>
+		</p>
+		<ul>
+			<li>이용자에게 책임 있는 사유로 재화 등이 멸실 또는 훼손된 경우(다만, 재화 등의 내용을 확인하기 위하여 포장
+				등을 훼손한 경우에는 청약철회를 할 수 있습니다)</li>
+			<li>이용자의 사용 또는 일부 소비에 의하여 재화 등의 가치가 현저히 감소한 경우</li>
+			<li>시간의 경과에 의하여 재판매가 곤란할 정도로 재화등의 가치가 현저히 감소한 경우</li>
+			<li>복제가 가능한 재화등의 포장을 훼손한 경우</li>
+			<li>개별 주문 생산되는 재화 등 청약철회시 판매자에게 회복할 수 없는 피해가 예상되어 소비자의 사전 동의를 얻은
+				경우</li>
+			<li>디지털 콘텐츠의 제공이 개시된 경우(다만, 가분적 용역 또는 가분적 디지털콘텐츠로 구성된 계약의 경우 제공이
+				개시되지 아니한 부분은 청약철회를 할 수 있습니다)</li>
+		</ul>
+		<p>※ 고객님의 마음이 바뀌어 교환, 반품을 하실 경우 상품반송 비용은 고객님께서 부담하셔야 합니다. (색상 교환,
+			사이즈 교환 등 포함)</p>
+	</div>
+
+	<!-- Reviews Section -->
+	<div class="reviews" id="prdReview">
+
+		<!-- Navigation Menu -->
+		<ul class="menu">
+			<li><a href="#prdBuy">상품구매</a></li>
+			<li><a href="#prdDetail">상품상세정보</a></li>
+			<li><a href="#prdInfo">상품구매안내</a></li>
+			<li class="selected"><a><b>상품후기</b> <span
+					class="reviewcount">2</span> </a></li>
+			<li><a href="#prdQnA"> Q&A <span class="qnacount">2</span>
+			</a></li>
+		</ul>
+
+		<div class="section-header">상품후기</div>
+		<div class="review-item">
+			<p>
+				<strong>사용자1</strong>
+			</p>
+			<p>정말 좋은 제품입니다! 추천합니다.</p>
+		</div>
+		<div class="review-item">
+			<p>
+				<strong>사용자2</strong>
+			</p>
+			<p>가격 대비 만족스러운 품질이에요.</p>
+		</div>
+		<div class="pagination">
+			<button>1</button>
+			<button>2</button>
+			<button>3</button>
+		</div>
+		<div class="section-action">
+			<a href="/productReviewWrite" class="action-button">리뷰 작성하기</a>
+		</div>
+	</div>
+
+	<!-- Q&A Section -->
+	<div class="qa-section" id="prdQnA">
+
+		<!-- Navigation Menu -->
+		<ul class="menu">
+			<li><a href="#prdBuy">상품구매</a></li>
+			<li><a href="#prdDetail">상품상세정보</a></li>
+			<li><a href="#prdInfo">상품구매안내</a></li>
+			<li class="selected"><a href="#prdReview">상품후기 <span
+					class="reviewcount">2</span>
+			</a></li>
+			<li><a><b>Q&A</b> <span class="qnacount">2</span> </a></li>
+		</ul>
+
+		<div class="section-header">Q&A</div>
+		<div class="qa-item">
+			<p>
+				<strong>질문:</strong> 이 상품은 다른 색상도 있나요?
+			</p>
+			<p>
+				<strong>답변:</strong> 네, 블랙, 화이트, 그레이 색상이 있습니다.
+			</p>
+		</div>
+		<div class="qa-item">
+			<p>
+				<strong>질문:</strong> 보증 기간이 어떻게 되나요?
+			</p>
+			<p>
+				<strong>답변:</strong> 보증 기간은 1년입니다.
+			</p>
+		</div>
+		<div class="pagination">
+			<button>1</button>
+			<button>2</button>
+			<button>3</button>
+		</div>
+		<div class="section-action">
+			<a href="/productQAWrite" class="action-button">질문 작성하기</a>
+		</div>
+	</div>
+
+	<!-- 푸터 -->
 	<div th:replace="~{footer :: footer}"></div>
+
 </body>
 </html>
