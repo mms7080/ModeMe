@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Detail Page</title>
+    <title th:text="${product.name} + ' - 상품 상세정보'">Product Detail Page</title>
     <link rel="stylesheet" href="/css/productDetail/productDetail.css">
     <script defer src="/js/productDetail/prdDetailNav.js"></script>
     <script defer src="/js/productDetail/productDetail.js"></script>
@@ -18,7 +18,7 @@
 		<div class="admin-buttons">
 			<span>
 			    <a href="/main" class="admin-delete-button">삭제</a>
-			    <a href="/productEdit" class="admin-edit-button">수정</a>
+			    <a th:href="'/productEdit/' + ${product.id}" class="admin-edit-button">수정</a>
 			</span>
 		</div>
     
@@ -30,18 +30,18 @@
 		    <li class="selected">
 		        <a href="#prdReview">
 		            상품후기
-		            <span class="reviewcount">2</span>
+		            <span ></span>
 		        </a>
 		    </li>
 		    <li>
 		        <a href="#prdQnA">
 		            Q&A
-		            <span class="qnacount">2</span>
+		            <span ></span>
 		        </a>
 		    </li>
 		</ul>
 		
-        <!-- Product Section -->
+       <!-- Product Section -->
         <div class="product-section">
             <!-- Product Images -->
             <div class="product-images">
@@ -65,33 +65,24 @@
 
             <!-- Product Details -->
             <div class="product-details">
-                <h2>최고로 따뜻한 발마칸 코오트</h2>
-                <p class="price">₩81,900</p>
+                <h2 th:text="${product.name}">상품 이름</h2>
+                <p class="price" th:text="'₩' + ${product.price}">상품 가격</p>
+                
                 <!-- Product Options -->
                 <div class="product-options">
 	                <div>
 	                	<span class="option-label color"><b>COLOR</b></span>
-	                	<div class="option-buttons">
-		                    <button>베이지</button>
-		                    <button>그레이</button>
-		                    <button>블랙</button>
+	                	<div class="option-buttons" th:each="color : ${product.colorNames}">
+		                    <button th:text="${color}">Color</button>
 	                    </div>
 	                </div>
 	                <div>
 	                	<span class="option-label size"><b>SIZE</b></span>
-	                	<div class="option-buttons">	                	
-		                    <button>S</button>
-		                    <button>M</button>
-		                    <button>L</button>
-		                    <button>XL</button>
+	                	<div class="option-buttons" th:each="size : ${product.productSize}">
+		                    <button th:text="${size}">Size</button>
 	                	</div>
 	                </div>
 	                <button class="add-to-selection">항목 추가</button>
-                </div>
-                
-                <!-- Selection Section -->
-                <div class="selection">
-					<!-- Selection 자동 생성 -->
                 </div>
                 
 				<div class="selection-summary">
@@ -109,30 +100,8 @@
         
         <!-- Middle Section -->
         <div class="middle container" id="prdDetail">
-        
-			<!-- Navigation Menu -->
-			<ul class="menu">
-			    <li><a href="#prdBuy">상품구매</a></li>
-			    <li><a><b>상품상세정보</b></a></li>
-			    <li><a href="#prdInfo">상품구매안내</a></li>
-			    <li class="selected">
-			        <a href="#prdReview">
-			            상품후기
-			            <span class="reviewcount">2</span>
-			        </a>
-			    </li>
-			    <li>
-			        <a href="#prdQnA">
-			            Q&A
-			            <span class="qnacount">2</span>
-			        </a>
-			    </li>
-			</ul>
-			
             <div class="product-description">
-                <div class="image-placeholder" style="width: 60%; height: 300px; background-color: #e0e0e0; margin: 20px auto;"></div>
-                <div class="image-placeholder" style="width: 60%; height: 400px; background-color: #e0e0e0; margin: 20px auto;"></div>
-                <div class="image-placeholder" style="width: 60%; height: 500px; background-color: #e0e0e0; margin: 20px auto;"></div>
+                <p th:utext="${product.productDescription}">상품 상세 설명이 들어갑니다.</p>
             </div>
         </div>
         
@@ -268,8 +237,8 @@
         </div>
     </div>
     
+    
     	<!-- 푸터 -->
 	<div th:replace="~{footer :: footer}"></div>
-    
 </body>
 </html>
