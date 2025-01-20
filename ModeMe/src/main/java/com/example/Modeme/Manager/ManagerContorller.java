@@ -4,6 +4,9 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.Modeme.Manager.Entity.AddItem;
 import com.example.Modeme.Manager.ManagerDTO.AddItemDTO;
@@ -56,13 +60,18 @@ public class ManagerContorller {
 
         // QnA 글 수
         long totalQnAs = qnaRepository.count();
+        
+        // 총 등록된 상품 수
+        long toatalItems  = ar.count();
 
         // 모델에 데이터 추가
         model.addAttribute("totalUsers", totalUsers);
         model.addAttribute("totalQnAs", totalQnAs);
+        model.addAttribute("totalItems", toatalItems);
 
         return "manager/managerMain";
     }
+    
 
     // 상품 등록 폼
     @GetMapping("/new")
@@ -81,12 +90,36 @@ public class ManagerContorller {
         return "redirect:/manager/productDetail/" + savedItem.getId();
     }
 
-    // 상품 리스트 조회
     @GetMapping("/managerProduct")
-    public String getProductList(Model model) {
-        List<AddItem> products = ar.findAll();
+    public String getProductList(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "5") int size,
+        @RequestParam(required = false) String option,
+        @RequestParam(required = false) String keyword,
+        Model model
+    ) {
+        // 페이지네이션과 검색 조건을 고려한 상품 목록 조회
+        Page<AddItem> productPage;
+        
+        if (option != null && keyword != null && !keyword.isBlank()) {
+            // 검색 호출
+            productPage = as.searchProducts(option, keyword, PageRequest.of(page, size));
+        } else {
+            // 기본 목록 호출
+            productPage = as.getProducts(PageRequest.of(page, size));
+        }
+
+        List<AddItem> products = productPage.getContent();
+        int totalPages = productPage.getTotalPages();
+
         model.addAttribute("products", products);
-        return "manager/managerProduct";
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("pageSize", size);
+        model.addAttribute("option", option);
+        model.addAttribute("keyword", keyword);
+
+        return "manager/managerProduct";  // 상품 관리 페이지 반환
     }
 
     // 상품 상세 정보 조회
