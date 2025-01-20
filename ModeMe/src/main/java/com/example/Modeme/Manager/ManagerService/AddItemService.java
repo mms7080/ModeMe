@@ -23,6 +23,7 @@ public class AddItemService {
 	@Transactional
 	public AddItem addItemWithImages(AddItemDTO addItemDTO) {
 		AddItem addItem = new AddItem();
+		addItem.setId(addItemDTO.getId());
 		addItem.setName(addItemDTO.getName());
 		addItem.setStock(addItemDTO.getStock());
 		addItem.setPrice(addItemDTO.getPrice());
