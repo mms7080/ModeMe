@@ -42,6 +42,10 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        // 상품 가격 가져오기
+        const priceElement = document.querySelector(".price");
+        const productPrice = parseInt(priceElement.getAttribute("data-price"), 10);
+
         selectedSizes.forEach((size) => {
             const existingItem = Array.from(selectionContainer.children).find(
                 (item) =>
@@ -61,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <p class="color">${selectedColor}</p>
                 <span class="size">${size}</span>
                 <input type="number" class="quantity-input" value="1" min="1">
-                <span class="price">₩81,900</span>
+                <span class="price" data-price="${productPrice}">₩${productPrice.toLocaleString()}</span>
                 <button class="delete-item" aria-label="삭제">&times;</button>
             `;
 
@@ -88,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const updateTotalPrice = () => {
         const totalPrice = Array.from(selectionContainer.children).reduce((acc, item) => {
             const quantity = parseInt(item.querySelector(".quantity-input").value, 10);
-            const price = 81900;
+            const price = parseInt(item.querySelector(".price").getAttribute("data-price"), 10);
             return acc + quantity * price;
         }, 0);
 
@@ -98,10 +102,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (addButton) {
         addButton.addEventListener("click", addSelectionItems);
     }
-});
 
-
-document.addEventListener("DOMContentLoaded", () => {
+    // Image preview functionality
     const previewImage = document.querySelector(".image-preview img");
     const thumbnails = document.querySelectorAll(".thumbnail img");
 

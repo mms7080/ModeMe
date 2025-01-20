@@ -59,7 +59,7 @@
 			<!-- Product Details -->
 			<div class="product-details">
 				<h2 th:text="${product.name}"></h2>
-				<p class="price" th:text="'₩' + ${product.price}"></p>
+				<p class="price" th:attr="data-price=${product.price}" th:text="'₩' + ${product.price}"></p>
 
 				<!-- Product Options -->
 				<div class="product-options">
