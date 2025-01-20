@@ -101,6 +101,36 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("상품 상세 정보를 입력해주세요.");
         }
     });
+	//사이즈 체크박스
+	document.querySelector('form').addEventListener('submit', function (e) {
+	    e.preventDefault(); // 기본 제출 동작을 막음 (테스트용)
+	    const selectedSizes = Array.from(document.querySelectorAll('input[name="productSize[]"]:checked'))
+	                               .map(input => input.value);
+	    console.log('선택된 사이즈:', selectedSizes);
+	});
+	//사이즈 제약조건
+	form.addEventListener("submit", (event) => {
+	    const selectedSizes = Array.from(
+	        document.querySelectorAll('input[name="productSize[]"]:checked')
+	    );
+	    if (!subcategoryHiddenInput.value || subcategoryHiddenInput.value.trim() === "") {
+	        event.preventDefault();
+	        alert("서브 카테고리를 선택해주세요.");
+	        return;
+	    }
+	    if (!productDescriptionInput.value || productDescriptionInput.value.trim() === "") {
+	        event.preventDefault();
+	        alert("상품 상세 정보를 입력해주세요.");
+	        return;
+	    }
+	    if (selectedSizes.length === 0) {
+	        event.preventDefault();
+	        alert("적어도 하나 이상의 사이즈를 선택해주세요.");
+	        return;
+	    }
+	});
+
+
 
     // **이미지 파일 입력 로직**
     const imageInputs = document.querySelectorAll(".image-inputs div");
@@ -119,3 +149,51 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const sizeCheckboxes = document.querySelectorAll(".size-checkbox");
+    const selectedSizesList = document.getElementById("selected-sizes-list");
+
+    // 사이즈 추가 함수
+    const addSelectedSize = (size) => {
+        // 이미 추가된 사이즈인지 확인
+        if (Array.from(selectedSizesList.children).some((item) => item.textContent === size)) {
+            alert(`${size} 사이즈는 이미 선택되었습니다.`);
+            return;
+        }
+
+        // 리스트 항목 생성
+        const listItem = document.createElement("li");
+        listItem.textContent = size;
+
+        // 삭제 버튼 추가
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "삭제";
+        deleteButton.style.marginLeft = "10px";
+        deleteButton.addEventListener("click", () => {
+            listItem.remove(); // 항목 삭제
+            // 체크박스 상태 해제
+            document.querySelector(`.size-checkbox[value="${size}"]`).checked = false;
+        });
+
+        listItem.appendChild(deleteButton);
+        selectedSizesList.appendChild(listItem);
+    };
+
+    // 체크박스 클릭 이벤트 처리
+    sizeCheckboxes.forEach((checkbox) => {
+        checkbox.addEventListener("change", () => {
+            if (checkbox.checked) {
+                addSelectedSize(checkbox.value);
+            } else {
+                // 체크 해제 시 해당 항목 삭제
+                Array.from(selectedSizesList.children).forEach((item) => {
+                    if (item.textContent.includes(checkbox.value)) {
+                        item.remove();
+                    }
+                });
+            }
+        });
+    });
+});
+

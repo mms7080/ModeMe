@@ -76,14 +76,24 @@
 		    </div>
 		</div>
 
-        <!-- Product Size -->
-        <div class="size-container">
-	        <label class="size-label">상품 사이즈</label>
-	        <select id="size" name="productSize">
-	            <option value="SelectSize">S M L XL</option>
-	            <option value="FreeSize">FreeSize</option>
-	        </select>
-        </div>
+<!-- Product Size -->
+<div class="size-container">
+    <label class="size-label">상품 사이즈</label>
+    <div>
+		<label><input type="checkbox" name="productSizes" value="S"> S</label>
+		<label><input type="checkbox" name="productSizes" value="M"> M</label>
+		<label><input type="checkbox" name="productSizes" value="L"> L</label>
+		<label><input type="checkbox" name="productSizes" value="XL"> XL</label>
+
+    </div>
+</div>
+
+<!-- 선택한 사이즈를 표시할 컨테이너 -->
+<div class="selected-sizes">
+    <h3>선택한 사이즈</h3>
+    <ul id="selected-sizes-list"></ul>
+</div>
+
 
         <!-- Main Images -->
         <div class="main-img-input-container">

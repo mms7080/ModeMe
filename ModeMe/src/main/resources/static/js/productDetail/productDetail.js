@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const sizeButtons = document.querySelectorAll(".size-button");
 
     let selectedColor = null;
-    let selectedSize = null;
+    let selectedSizes = []; // 선택한 사이즈를 리스트로 관리
 
     // Handle color selection
     colorButtons.forEach((button) => {
@@ -21,48 +21,58 @@ document.addEventListener("DOMContentLoaded", () => {
     // Handle size selection
     sizeButtons.forEach((button) => {
         button.addEventListener("click", () => {
-            sizeButtons.forEach((btn) => btn.classList.remove("selected-size"));
-            button.classList.add("selected-size");
-            selectedSize = button.textContent.trim();
+            const size = button.textContent.trim();
+
+            if (selectedSizes.includes(size)) {
+                // 이미 선택된 사이즈면 제거
+                selectedSizes = selectedSizes.filter((s) => s !== size);
+                button.classList.remove("selected-size");
+            } else {
+                // 새로운 사이즈 추가
+                selectedSizes.push(size);
+                button.classList.add("selected-size");
+            }
         });
     });
 
-    // Add selection item
-    const addSelectionItem = () => {
-        if (!selectedColor || !selectedSize) {
+    // Add selection items
+    const addSelectionItems = () => {
+        if (!selectedColor || selectedSizes.length === 0) {
             alert("색상과 사이즈를 모두 선택해주세요.");
             return;
         }
 
-        const existingItem = Array.from(selectionContainer.children).find(
-            (item) =>
-                item.querySelector("p").textContent === selectedColor &&
-                item.querySelector(".size").textContent === selectedSize
-        );
+        selectedSizes.forEach((size) => {
+            const existingItem = Array.from(selectionContainer.children).find(
+                (item) =>
+                    item.querySelector(".color").textContent === selectedColor &&
+                    item.querySelector(".size").textContent === size
+            );
 
-        if (existingItem) {
-            alert("이미 선택된 옵션입니다.");
-            return;
-        }
+            if (existingItem) {
+                alert(`이미 선택된 옵션입니다: ${size}`);
+                return;
+            }
 
-        const itemElement = document.createElement("div");
-        itemElement.className = "selection-item";
-        itemElement.innerHTML = `
-            <b>선택한 상품</b>
-            <p>${selectedColor}</p>
-            <span class="size">${selectedSize}</span>
-            <input type="number" class="quantity-input" value="1" min="1">
-            <span class="price">₩81,900</span>
-            <button class="delete-item" aria-label="삭제">&times;</button>
-        `;
+            const itemElement = document.createElement("div");
+            itemElement.className = "selection-item";
+            itemElement.innerHTML = `
+                <b>선택한 상품</b>
+                <p class="color">${selectedColor}</p>
+                <span class="size">${size}</span>
+                <input type="number" class="quantity-input" value="1" min="1">
+                <span class="price">₩81,900</span>
+                <button class="delete-item" aria-label="삭제">&times;</button>
+            `;
 
-        itemElement.querySelector(".quantity-input").addEventListener("input", updateTotalPrice);
-        itemElement.querySelector(".delete-item").addEventListener("click", () => {
-            itemElement.remove();
-            updateTotalPrice();
+            itemElement.querySelector(".quantity-input").addEventListener("input", updateTotalPrice);
+            itemElement.querySelector(".delete-item").addEventListener("click", () => {
+                itemElement.remove();
+                updateTotalPrice();
+            });
+
+            selectionContainer.appendChild(itemElement);
         });
-
-        selectionContainer.appendChild(itemElement);
 
         resetSelections();
         updateTotalPrice();
@@ -72,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
         colorButtons.forEach((button) => button.classList.remove("selected-color"));
         sizeButtons.forEach((button) => button.classList.remove("selected-size"));
         selectedColor = null;
-        selectedSize = null;
+        selectedSizes = [];
     };
 
     const updateTotalPrice = () => {
@@ -86,9 +96,10 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     if (addButton) {
-        addButton.addEventListener("click", addSelectionItem);
+        addButton.addEventListener("click", addSelectionItems);
     }
 });
+
 
 document.addEventListener("DOMContentLoaded", () => {
     const previewImage = document.querySelector(".image-preview img");

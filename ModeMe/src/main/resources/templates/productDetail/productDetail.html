@@ -65,15 +65,13 @@
 				<div class="product-options">
 					<div>
 						<span class="option-label color"><b>COLOR</b></span>
-						<div class="option-buttons"
-							th:each="color : ${product.colorNames}">
+						<div class="option-buttons" th:each="color : ${product.colorNames}">
 							<button th:text="${color}" class="color-button"></button>
 						</div>
 					</div>
 					<div>
 						<span class="option-label size"><b>SIZE</b></span>
-						<div class="option-buttons"
-							th:each="size : ${product.productSize}">
+						<div class="option-buttons" th:each="size : ${product.productSizes}">
 							<button th:text="${size}" class="size-button"></button>
 						</div>
 					</div>

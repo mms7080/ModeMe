@@ -27,28 +27,28 @@ import com.example.Modeme.User.UserService.UserService;
 public class ManagerContorller {
     @Autowired
     private UserRepository userRepository;
-    
+
     @Autowired
     private AddItemRepository ar;
-    
+
     @Autowired
     private UserService userService;
 
     @Autowired
     private QnaRepository qnaRepository;
-    
+
     @Autowired
     private AddItemService as;
-    
+
     @Autowired
-    Headerlogin keep;
+    private Headerlogin keep;
 
     @ModelAttribute
     public void addAttributes(Model model, Principal principal) {
         keep.headerlogin(model, principal);
     }
-    
-    //관리자 메인
+
+    // 관리자 메인
     @GetMapping("/managerMain")
     public String adminDashboard(Model model) {
         // 총 회원 수
@@ -61,14 +61,17 @@ public class ManagerContorller {
         model.addAttribute("totalUsers", totalUsers);
         model.addAttribute("totalQnAs", totalQnAs);
 
-        return "manager/managerMain"; // 
+        return "manager/managerMain";
     }
-       
+
+    // 상품 등록 폼
     @GetMapping("/new")
     public String addItemForm(Model model) {
-    	return "/manager/managerInput";
+        model.addAttribute("addItemDTO", new AddItemDTO());
+        return "/manager/managerInput";
     }
-    
+
+    // 상품 등록
     @PostMapping("/new")
     public String addItem(@ModelAttribute AddItemDTO addItemDTO) {
         // 상품 등록 및 저장
@@ -77,23 +80,30 @@ public class ManagerContorller {
         // 상품 등록 후 상세 페이지로 리다이렉트
         return "redirect:/manager/productDetail/" + savedItem.getId();
     }
-    
+
+    // 상품 리스트 조회
     @GetMapping("/managerProduct")
     public String getProductList(Model model) {
-    	List<AddItem> products = ar.findAll();
-    	model.addAttribute("products", products);
-    	return "manager/managerProduct";
+        List<AddItem> products = ar.findAll();
+        model.addAttribute("products", products);
+        return "manager/managerProduct";
     }
-    
+
+    // 상품 상세 정보 조회
     @GetMapping("/productDetail/{id}")
     public String getProductDetail(@PathVariable Long id, Model model) {
         // 상품 정보 조회
         AddItem product = ar.findById(id)
                             .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다. ID: " + id));
-        
+
         // 모델에 상품 정보 추가
         model.addAttribute("product", product);
+
+        // 선택한 사이즈를 개별적으로 표시하기 위해 List로 처리
+        if (product.getProductSizes() != null && !product.getProductSizes().isEmpty()) {
+            model.addAttribute("productSizes", product.getProductSizes());
+        }
+
         return "productDetail/productDetail";
     }
 }
-

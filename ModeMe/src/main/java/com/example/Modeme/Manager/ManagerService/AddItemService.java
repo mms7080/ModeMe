@@ -31,7 +31,7 @@ public class AddItemService {
 		addItem.setColorNames(addItemDTO.getColorNames());
 		addItem.setCategory(addItemDTO.getCategory());
 		addItem.setSubcategory(addItemDTO.getSubcategory());
-		addItem.setProductSize(addItemDTO.getProductSize());
+		addItem.setProductSizes(addItemDTO.getProductSizes());
 		addItem.setProductDescription(addItemDTO.getProductDescription());
 		ar.save(addItem);
 		return addItem;

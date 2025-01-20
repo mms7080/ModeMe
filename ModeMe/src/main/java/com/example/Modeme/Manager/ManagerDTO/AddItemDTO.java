@@ -2,22 +2,20 @@ package com.example.Modeme.Manager.ManagerDTO;
 
 import java.util.List;
 
-
-//import com.example.Modeme.Manager.Entity.ProductImage;
+// import com.example.Modeme.Manager.Entity.ProductImage;
 
 public class AddItemDTO {
     private Long id;
     private String name;
     private int stock;
     private int price;
-    private List<String> colors;
-    private List<String> colorNames;
-	private String category;
-	private String subcategory;
-    private String productSize;
-//    private List<ProductImage> images;
-    private String productDescription;
-
+    private List<String> colors; // 상품 색상
+    private List<String> colorNames; // 색상 이름
+    private String category; // 메인 카테고리
+    private String subcategory; // 서브 카테고리
+    private List<String> productSizes; // 상품 사이즈 리스트 (변경됨)
+    private String productDescription; // 상품 상세정보
+    // private List<ProductImage> images; // 이미지 관련 (주석 처리된 상태 유지)
 
     // Getter and Setter methods
     public Long getId() { return id; }
@@ -44,13 +42,12 @@ public class AddItemDTO {
     public String getSubcategory() { return subcategory; }
     public void setSubcategory(String subcategory) { this.subcategory = subcategory; }
 
-    public String getProductSize() { return productSize; }
-    public void setProductSize(String productSize) { this.productSize = productSize; }
-
-//    public List<ProductImage> getImages() { return images; }
-//    public void setImages(List<ProductImage> images) { this.images = images; }
+    public List<String> getProductSizes() { return productSizes; } // 수정된 부분
+    public void setProductSizes(List<String> productSizes) { this.productSizes = productSizes; } // 수정된 부분
 
     public String getProductDescription() { return productDescription; }
     public void setProductDescription(String productDescription) { this.productDescription = productDescription; }
-	
+
+    // public List<ProductImage> getImages() { return images; }
+    // public void setImages(List<ProductImage> images) { this.images = images; }
 }
