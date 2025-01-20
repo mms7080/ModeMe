@@ -9,12 +9,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.Modeme.Manager.Entity.AddItem;
 import com.example.Modeme.Manager.ManagerDTO.AddItemDTO;
@@ -138,5 +140,18 @@ public class ManagerContorller {
         }
 
         return "productDetail/productDetail";
+    }
+    
+ // 상품 삭제 처리
+    @DeleteMapping("/deleteProduct/{id}")
+    @ResponseBody
+    public String deleteProduct(@PathVariable Long id) {
+        try {
+            as.deleteProduct(id);
+            return "상품 삭제 성공";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "상품 삭제 실패";
+        }
     }
 }

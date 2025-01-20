@@ -4,7 +4,9 @@ import java.beans.Transient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.Modeme.Manager.Entity.AddItem;
@@ -39,8 +41,10 @@ public class AddItemService {
 		return addItem;				
 	}
 	
-	// 기본 상품 목록 조회
+	  // 기본 상품 목록 조회 (내림차순 정렬)
     public Page<AddItem> getProducts(Pageable pageable) {
+        // 내림차순 정렬: id 기준으로 내림차순 정렬
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Order.desc("id")));
         return ar.findAll(pageable);
     }
 
@@ -53,6 +57,13 @@ public class AddItemService {
         } else {
             return Page.empty(pageable);  // 잘못된 검색 옵션 처리
         }
+    }
+    
+    // 상품 삭제 메서드
+    @Transactional
+    public void deleteProduct(Long id) {
+        // 상품 삭제 처리
+        ar.deleteById(id);
     }
 }
 		
