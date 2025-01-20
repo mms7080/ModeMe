@@ -37,8 +37,8 @@ public class Category {
 	@Column(name="category_id")
 	private Long id;
 	
-    @Column(name = "name", nullable = false, length = 50) // name 칼럼 추가
-    private String name;
+    @Column(name = "category_name", nullable = false, length = 50) // name 칼럼 추가
+    private String categoryName;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "parent_id")
