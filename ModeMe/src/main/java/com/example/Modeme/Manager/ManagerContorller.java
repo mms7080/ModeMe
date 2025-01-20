@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -62,49 +63,20 @@ public class ManagerContorller {
 
         return "manager/managerMain"; // 
     }
-    
-//    @GetMapping("/manager/new")
-//    public String addItemForm(Principal principal) {
-//    	if (isAdmin(principal)) {
-//    		return "/manager/managerInput";
-//    	}
-//    	return "redirect:/main";
-//    }
-    
+       
     @GetMapping("/new")
     public String addItemForm(Model model) {
     	return "/manager/managerInput";
     }
     
-//    @PostMapping("/manager/new")
-//    public String addItem(@ModelAttribute AddItemDTO addItemDTO, Principal principal) {
-//    	if(isAdmin(principal)) {
-//    		as.addItemWithImages(addItemDTO);
-//    		return "redirect:/managerProduct";
-//    	}
-//    	return "redirect:/managerProduct";
-//    }
     @PostMapping("/new")
     public String addItem(@ModelAttribute AddItemDTO addItemDTO) {
-            // 상품 등록 및 이미지 처리 서비스 호출
-            AddItem savedItem = as.addItemWithImages(addItemDTO);
-            
-            // 상품 등록이 성공적으로 처리되었으면 콘솔에 출력
-            System.out.println("등록된 상품: " + savedItem);
-            
-            // 상품 등록 완료 후 리다이렉트
-            return "redirect:/manager/managerProduct";  // 상품 목록 페이지로 리다이렉트
-            
-        }
-//    
-//    @GetMapping("/managerProduct")
-//    public String getProductList(Principal principal, Model model) {
-//    	if(isAdmin(principal)) {
-//    		List<AddItem> products = ar.findAll();
-//            return "manager/managerProduct";
-//    	}
-//    		return "redirect:/main";
-//    }
+        // 상품 등록 및 저장
+        AddItem savedItem = as.addItemWithImages(addItemDTO);
+
+        // 상품 등록 후 상세 페이지로 리다이렉트
+        return "redirect:/manager/productDetail/" + savedItem.getId();
+    }
     
     @GetMapping("/managerProduct")
     public String getProductList(Model model) {
@@ -113,14 +85,15 @@ public class ManagerContorller {
     	return "manager/managerProduct";
     }
     
-//    
-    private boolean isAdmin(Principal principal) {
-        if (principal != null) {
-            String username = principal.getName();
-            User user = userService.findByUsername(username);
-            return "admin".equals(user.getRole());
-        }
-        return false;
+    @GetMapping("/productDetail/{id}")
+    public String getProductDetail(@PathVariable Long id, Model model) {
+        // 상품 정보 조회
+        AddItem product = ar.findById(id)
+                            .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다. ID: " + id));
+        
+        // 모델에 상품 정보 추가
+        model.addAttribute("product", product);
+        return "productDetail/productDetail";
     }
 }
 
