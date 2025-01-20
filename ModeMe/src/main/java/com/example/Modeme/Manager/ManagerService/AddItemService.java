@@ -30,7 +30,7 @@ public class AddItemService {
 		addItem.setColors(addItemDTO.getColors());
 		addItem.setColorNames(addItemDTO.getColorNames());
 		addItem.setCategory(addItemDTO.getCategory());
-		addItem.setSubcategory(addItem.getSubcategory());
+		addItem.setSubcategory(addItemDTO.getSubcategory());
 		addItem.setProductSize(addItemDTO.getProductSize());
 		addItem.setProductDescription(addItemDTO.getProductDescription());
 		ar.save(addItem);
