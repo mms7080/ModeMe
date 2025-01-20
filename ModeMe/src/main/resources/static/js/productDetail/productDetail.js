@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <p class="color">${selectedColor}</p>
                 <span class="size">${size}</span>
                 <input type="number" class="quantity-input" value="1" min="1">
-                <span class="price" data-price="${productPrice}">₩${productPrice.toLocaleString()}</span>
+                <span class="price" data-price="${productPrice}">${productPrice.toLocaleString()}원</span>
                 <button class="delete-item" aria-label="삭제">&times;</button>
             `;
 
@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return acc + quantity * price;
         }, 0);
 
-        totalPriceElement.textContent = `₩${totalPrice.toLocaleString()}`;
+        totalPriceElement.textContent = `${totalPrice.toLocaleString()} 원`;
     };
 
     if (addButton) {

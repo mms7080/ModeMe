@@ -43,38 +43,43 @@
 				</div>
 				<div class="thumbnail-list">
 					<div class="thumbnail">
-						<img src="image/prdDetailSample/6.jpg" alt="Thumbnail 1" />
+						<img src="/image/prdDetailSample/6.jpg" alt="Thumbnail 1" />
 					</div>
 					<div class="thumbnail">
-						<img src="image/prdDetailSample/3.jpg" alt="Thumbnail 2" />
+						<img src="/image/prdDetailSample/2.jpg" alt="Thumbnail 2" />
 					</div>
 					<div class="thumbnail">
-						<img src="image/prdDetailSample/5.jpg" alt="Thumbnail 3" />
+						<img src="/image/prdDetailSample/5.jpg" alt="Thumbnail 3" />
 					</div>
 				</div>
 			</div>
-
+	
 			<div class="product-void"></div>
 
 			<!-- Product Details -->
 			<div class="product-details">
 				<h2 th:text="${product.name}"></h2>
-				<p class="price" th:attr="data-price=${product.price}" th:text="'₩' + ${product.price}"></p>
+				<p class="price" th:attr="data-price=${product.price}"
+					th:text="${product.price} +'원'"></p>
 
 				<!-- Product Options -->
 				<div class="product-options">
-					<div>
+					<div class="option">
 						<span class="option-label color"><b>COLOR</b></span>
-						<div class="option-buttons" th:each="color : ${product.colorNames}">
+						<div class="option-buttons"
+							th:each="color : ${product.colorNames}">
 							<button th:text="${color}" class="color-button"></button>
 						</div>
 					</div>
-					<div>
+					<div class="option">
 						<span class="option-label size"><b>SIZE</b></span>
-						<div class="option-buttons" th:each="size : ${product.productSizes}">
+						<div class="option-buttons"
+							th:each="size : ${product.productSizes}">
 							<button th:text="${size}" class="size-button"></button>
 						</div>
 					</div>
+
+
 					<button class="add-to-selection">항목 추가</button>
 				</div>
 
@@ -82,7 +87,7 @@
 				<div class="selection"></div>
 
 				<div class="selection-summary">
-					총 가격: <span id="total-price">₩0</span>
+					총 가격: <span id="total-price">0원</span>
 				</div>
 				<!-- 구매 섹션 -->
 				<div class="purchase-section">
@@ -186,7 +191,7 @@
 	</div>
 
 	<!-- Reviews Section -->
-	<div class="reviews" id="prdReview">
+	<div class="reviews container" id="prdReview" >
 
 		<!-- Navigation Menu -->
 		<ul class="menu">
@@ -223,7 +228,7 @@
 	</div>
 
 	<!-- Q&A Section -->
-	<div class="qa-section" id="prdQnA">
+	<div class="qa-section container" id="prdQnA">
 
 		<!-- Navigation Menu -->
 		<ul class="menu">
