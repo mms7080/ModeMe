@@ -55,7 +55,8 @@ public class SecurityConfig {
                 
                 // 공지 관련 권한 설정
                 .requestMatchers("/notices","/notices/**","/manager/**").permitAll() // 공지 목록 누구나 접근 가능
-                .requestMatchers("/notices/new", "/notices/edit/**", "/notices/delete/**").hasRole("ADMIN") // 관리자만 허용
+                .requestMatchers("/notices/new", "/notices/edit/**", "/notices/delete/**","/manager/new","/manager/main","/manager/managerProdudct"
+                				).hasRole("ADMIN") // 관리자만 허용
 
                 // 로그인, 회원가입, 정적 리소스는 모두 접근 가능
                 .requestMatchers(

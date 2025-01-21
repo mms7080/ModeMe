@@ -29,7 +29,6 @@ import com.example.Modeme.User.UserRepository.UserRepository;
 import com.example.Modeme.User.UserService.UserService;
 
 @Controller
-@RequestMapping("/manager")
 public class ManagerContorller {
     @Autowired
     private UserRepository userRepository;
@@ -55,7 +54,7 @@ public class ManagerContorller {
     }
 
     // 관리자 메인
-    @GetMapping("/managerMain")
+    @GetMapping("/manager/managerMain")
     public String adminDashboard(Model model) {
         // 총 회원 수
         long totalUsers = userRepository.count();
@@ -76,23 +75,23 @@ public class ManagerContorller {
     
 
     // 상품 등록 폼
-    @GetMapping("/new")
+    @GetMapping("/manager/new")
     public String addItemForm(Model model) {
         model.addAttribute("addItemDTO", new AddItemDTO());
         return "/manager/managerInput";
     }
 
     // 상품 등록
-    @PostMapping("/new")
+    @PostMapping("/manager/new")
     public String addItem(@ModelAttribute AddItemDTO addItemDTO) {
         // 상품 등록 및 저장
         AddItem savedItem = as.addItemWithImages(addItemDTO);
 
         // 상품 등록 후 상세 페이지로 리다이렉트
-        return "redirect:/manager/productDetail/" + savedItem.getId();
+        return "redirect:/productDetail/productDetail/" + savedItem.getId();
     }
 
-    @GetMapping("/managerProduct")
+    @GetMapping("/manager/managerProduct")
     public String getProductList(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "5") int size,
@@ -125,7 +124,7 @@ public class ManagerContorller {
     }
     
  // 상품 삭제 처리
-    @DeleteMapping("/deleteProduct/{id}")
+    @DeleteMapping("/manager/deleteProduct/{id}")
     @ResponseBody
     public String deleteProduct(@PathVariable Long id) {
         try {
