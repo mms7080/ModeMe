@@ -123,24 +123,6 @@ public class ManagerContorller {
 
         return "manager/managerProduct";  // 상품 관리 페이지 반환
     }
-
-    // 상품 상세 정보 조회
-    @GetMapping("/productDetail/{id}")
-    public String getProductDetail(@PathVariable Long id, Model model) {
-        // 상품 정보 조회
-        AddItem product = ar.findById(id)
-                            .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다. ID: " + id));
-
-        // 모델에 상품 정보 추가
-        model.addAttribute("product", product);
-
-        // 선택한 사이즈를 개별적으로 표시하기 위해 List로 처리
-        if (product.getProductSizes() != null && !product.getProductSizes().isEmpty()) {
-            model.addAttribute("productSizes", product.getProductSizes());
-        }
-
-        return "productDetail/productDetail";
-    }
     
  // 상품 삭제 처리
     @DeleteMapping("/deleteProduct/{id}")
