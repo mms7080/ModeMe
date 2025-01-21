@@ -31,6 +31,9 @@ public class SecurityConfig {
                     "/signin", 
                     "/api/signin",
                     "/signup", 
+                    "/find_id",
+                    "/find_pw",
+                    "/modify",
                     "/logout",
                     "/qna/**",
                     "/notices/**",
@@ -58,6 +61,8 @@ public class SecurityConfig {
                 .requestMatchers(
                     "/signin",
                     "/signup",
+                    "/find_id",
+                    "/find_pw",
                     "/image/**",
                     "/css/**",
                     "/js/**",
