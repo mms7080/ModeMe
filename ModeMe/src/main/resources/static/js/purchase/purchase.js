@@ -50,36 +50,161 @@ function openDaumPostcode() {
 
 // 이메일 입력 변경
 function handleDomainChange() {
-    const emailDomainSelect = document.getElementById("email-domain");
-    const customDomainInput = document.getElementById("custom-domain");
+	const emailDomainSelect = document.getElementById("email-domain");
+	const customDomainInput = document.getElementById("custom-domain");
 
-    if (emailDomainSelect.value === "custom") {
-        customDomainInput.style.display = "block";
-        customDomainInput.focus();
-    } else {
-        customDomainInput.style.display = "none";
-    }
+	if (emailDomainSelect.value === "custom") {
+		customDomainInput.style.display = "block";
+		customDomainInput.focus();
+	} else {
+		customDomainInput.style.display = "none";
+	}
 }
 
-// 카카오페이 API호출
-document.getElementById("payButton").addEventListener("click", function () {
-	console.log("ㅎㅇ")
-    // Kakao SDK 초기화 (JavaScript 키 사용)
-    Kakao.init('DEV581382E3D0577F398E33A1EF7D71AF90A241F'); // 여기에 본인의 JavaScript 키 입력
+// 네이버는 불가능
+// iamport 결제 호출(nice)
+document.getElementById("payButton").addEventListener("click", function() {
+	//주문번호 생성
+	const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+	let merchantUid = 'TD';
+	for (let i = 0; i < 8; i++) {
+		const random = Math.floor(Math.random() * char.length);
+		merchantUid += char[random]
+	}
+	IMP.init('imp00488067'); // i'mport 관리자 페이지 -> 내정보 -> 가맹점식별코드                 
+	IMP.request_pay({
+		pg: 'nice', // 'nice', 'tosspay', 'kakaopay'
+		merchant_uid: merchantUid,
+		name: '결제',
+		amount: 100,
+		buyer_email: 'email@email.com',
+		buyer_name: 'kim jung min',
+		buyer_tel: '010-1234-1234',
 
-    // 결제 요청
-    Kakao.Pay.request({
-        merchant_id: 'YOUR_MERCHANT_ID', // 카카오에서 발급된 가맹점 ID
-        product_name: 'Cashmere Half-neck Knitwear', // 상품 이름
-        total_amount: 34900, // 결제 금액 (KRW 단위)
-        tax_free_amount: 0, // 비과세 금액
-        success_url: 'localhost:9999/main', // 성공 시 이동할 URL
-        fail_url: 'localhost:9999/error', // 실패 시 이동할 URL
-    }).then(function (response) {
-        console.log("결제 성공:", response);
-        alert("결제가 성공적으로 처리되었습니다!");
-    }).catch(function (error) {
-        console.error("결제 실패:", error);
-        alert("결제가 실패했습니다. 다시 시도해주세요.");
-    });
+	}, function(rsp) {
+		if (rsp.success == true) {
+			alert("결제 성공")
+//			$.ajax({
+//				type: "post",
+//				url: "payment.pm",
+//				data: { impUid: rsp.imp_uid, merchantUid: rsp.merchant_uid, poNo: poNo, point: point },
+//				success: (rsp) => {
+//					if (rsp == 'success') {
+//						alert('결제가 완료되었습니다')
+//						location.href = "myPayPoint.mp"
+//					}
+//				},
+//				error: (rsp) => {
+//					console.log(rsp);
+//				}
+//			})
+			//let msg = '결제가 완료되었습니다.';       
+			// msg += '고유ID : ' + rsp.imp_uid;     
+			// msg += '상점 거래ID : ' + rsp.merchant_uid;        
+			// msg += '결제 금액 : ' + rsp.paid_amount;              
+		} else {
+			let msg = '결제에 실패하였습니다.';
+			msg += '에러내용 : ' + rsp.error_msg;
+			alert(msg);
+		}
+	});
 });
+
+
+document.getElementById("kakaopay").addEventListener("click", function() {
+	//주문번호 생성
+	const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+	let merchantUid = 'TD';
+	for (let i = 0; i < 8; i++) {
+		const random = Math.floor(Math.random() * char.length);
+		merchantUid += char[random]
+	}
+	IMP.init('imp00488067'); // i'mport 관리자 페이지 -> 내정보 -> 가맹점식별코드                 
+	IMP.request_pay({
+		pg: 'kakaopay', // 'nice', 'tosspay', 'kakaopay'
+		merchant_uid: merchantUid,
+		name: '결제',
+		amount: 100,
+		buyer_email: 'test@email.com',
+		buyer_name: 'kim jung min',
+		buyer_tel: '010-1234-1234',
+
+	}, function(rsp) {
+		if (rsp.success == true) {
+			alert("결제 성공")
+//			$.ajax({
+//				type: "post",
+//				url: "payment.pm",
+//				data: { impUid: rsp.imp_uid, merchantUid: rsp.merchant_uid, poNo: poNo, point: point },
+//				success: (rsp) => {
+//					if (rsp == 'success') {
+//						alert('결제가 완료되었습니다')
+//						location.href = "myPayPoint.mp"
+//					}
+//				},
+//				error: (rsp) => {
+//					console.log(rsp);
+//				}
+//			})
+			//let msg = '결제가 완료되었습니다.';       
+			// msg += '고유ID : ' + rsp.imp_uid;     
+			// msg += '상점 거래ID : ' + rsp.merchant_uid;        
+			// msg += '결제 금액 : ' + rsp.paid_amount;              
+		} else {
+			let msg = '결제에 실패하였습니다.';
+			msg += '에러내용 : ' + rsp.error_msg;
+			alert(msg);
+		}
+	});
+});
+
+
+document.getElementById("tosspay").addEventListener("click", function() {
+	//주문번호 생성
+	const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+	let merchantUid = 'TD';
+	for (let i = 0; i < 8; i++) {
+		const random = Math.floor(Math.random() * char.length);
+		merchantUid += char[random]
+	}
+	IMP.init('imp00488067'); // i'mport 관리자 페이지 -> 내정보 -> 가맹점식별코드                 
+	IMP.request_pay({
+		pg: 'uplus', // 'nice', 'tosspay', 'kakaopay'
+		merchant_uid: merchantUid,
+		name: '결제',
+		amount: 100,
+		buyer_email: 'test@email.com',
+		buyer_name: 'kim jung min',
+		buyer_tel: '010-1234-1234',
+
+	}, function(rsp) {
+		if (rsp.success == true) {
+			alert("결제 성공")
+//			$.ajax({
+//				type: "post",
+//				url: "payment.pm",
+//				data: { impUid: rsp.imp_uid, merchantUid: rsp.merchant_uid, poNo: poNo, point: point },
+//				success: (rsp) => {
+//					if (rsp == 'success') {
+//						alert('결제가 완료되었습니다')
+//						location.href = "myPayPoint.mp"
+//					}
+//				},
+//				error: (rsp) => {
+//					console.log(rsp);
+//				}
+//			})
+			//let msg = '결제가 완료되었습니다.';       
+			// msg += '고유ID : ' + rsp.imp_uid;     
+			// msg += '상점 거래ID : ' + rsp.merchant_uid;        
+			// msg += '결제 금액 : ' + rsp.paid_amount;              
+		} else {
+			let msg = '결제에 실패하였습니다.';
+			msg += '에러내용 : ' + rsp.error_msg;
+			alert(msg);
+		}
+	});
+});
+
+
+

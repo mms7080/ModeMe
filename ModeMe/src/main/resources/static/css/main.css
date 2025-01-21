@@ -11,7 +11,7 @@ img:hover{
     text-align: center;
     margin: 40px 0 20px;
     font-size: 24px;
-    font-weight: bold;
+/*     font-weight: bold; */
 }
 /* Section 스타일: 가로 80%와 가운데 정렬 */
 section {
@@ -142,7 +142,7 @@ section {
 .category-title {
     text-align: center;
     font-size: 22px;
-    font-weight: bold;
+/*     font-weight: bold; */
     margin: 0;
 }
 .sub-category {

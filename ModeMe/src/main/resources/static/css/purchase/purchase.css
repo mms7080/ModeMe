@@ -15,41 +15,29 @@ body {
     margin: 0 auto; /* 가운데 정렬 */
     margin-bottom:50px;
 }
-
-
-.header {
-	font-size: 1.5rem;
-	font-weight: bold;
-	text-align: center;
-	padding: 10px 0;
-	border-bottom: 1px solid #ddd;
-	margin-bottom: 20px;
+.middle{
+	text-align:center;
 }
-
 .section {
 	margin-bottom: 20px;
 }
-
 .section-title {
 	font-size: 1.1rem;
-	font-weight: bold;
+/* 	font-weight: bold; */
 	margin-bottom: 10px;
 	border-bottom: 1px solid #ddd;
 	padding-bottom: 5px;
 }
-
 .form-row {
 	display: flex;
 	align-items: center;
 	margin-bottom: 10px;
 }
-
 .form-row label {
 	flex: 0 0 120px;
 	font-size: 0.9rem;
-	font-weight: bold;
+/* 	font-weight: bold; */
 }
-
 .form-row input, .form-row select, .coupon-row input {
 	flex: 1;
 	padding: 8px;
@@ -107,7 +95,7 @@ body {
 }
 
 .summary-total {
-	font-weight: bold;
+/* 	font-weight: bold; */
 	font-size: 1rem;
 }
 
@@ -146,4 +134,24 @@ button:hover {
 	background-color: #333;
 	color: #fff;
 	border-radius: 4px;
+}
+
+#kakaopay, #tosspay {
+	display: inline-block; /* 이미지 버튼처럼 보이도록 설정 */
+	margin: 10px; /* 이미지 간 간격 추가 */
+	cursor: pointer;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 약간의 그림자 추가 */
+	transition: transform 0.3s ease, box-shadow 0.3s ease; /* hover 효과의 부드러운 전환 */
+}
+
+#kakaopay:hover, #tosspay:hover {
+	transform: translateY(-5px); /* hover 시 약간 위로 올라가는 효과 */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* hover 시 그림자 강조 */
+}
+
+.payment-buttons {
+	display: flex; /* 플렉스 박스로 설정 */
+	justify-content: center; /* 가운데 정렬 */
+	gap: 20px; /* 이미지 간 간격 */
+	margin-top: 20px; /* 위 내용과 간격 */
 }

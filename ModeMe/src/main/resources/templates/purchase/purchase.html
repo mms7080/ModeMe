@@ -14,7 +14,7 @@
 	<div th:replace="~{header::header}"></div>
 
     <div class="container">
-        <div class="header">모드미 - 주문/결제</div>
+        <div class="middle">모드미 - 주문/결제</div>
         
         <!-- 배송지 섹션 -->
         <div class="section">
@@ -123,7 +123,7 @@
                     <option>계좌이체</option>
                 </select>
             </div>
-            <div class="form-row">
+            <div class="">
                 <input type="checkbox">
                 <label>결제수단 입력정보를 다음에도 사용</label>
             </div>
@@ -131,13 +131,17 @@
 
         <!-- 결제 버튼 -->
 		<button class="button" id="payButton">KRW 34,900 결제하기</button>
-
+		<div class="payment-buttons">
+			<img src="image/kakaopay_icon_medium.png" id="kakaopay" style="width:165px; height:50px; border-radius:30px;">
+			<img src='image/tosspay_icon.JPG' id="tosspay" style="width:165px; height:50px; border-radius:30px;">
+		</div>
     </div>
 
 	<div th:replace="~{footer::footer}"></div>    
 
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-    
+    <script src="https://nsp.pay.naver.com/sdk/js/naverpay.min.js"></script>
+  
 </body>
 </html>
