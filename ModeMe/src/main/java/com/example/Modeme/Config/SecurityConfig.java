@@ -7,6 +7,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -26,6 +31,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ CORS 설정 추가
             .csrf(csrf -> csrf
                 .ignoringRequestMatchers(
                     "/signin", 
@@ -45,7 +51,8 @@ public class SecurityConfig {
                     "/address_default",
                     "/address_delete",
                     "/default_delete",
-                    "/manager/**"
+                    "/manager/**",
+                    "/api/**"
                 )
             )
             .authorizeHttpRequests(auth -> auth
@@ -63,12 +70,15 @@ public class SecurityConfig {
                     "/signup",
                     "/find_id",
                     "/find_pw",
+                    "/modify",
                     "/image/**",
                     "/css/**",
                     "/js/**",
                     "/resources/**",
                     "/",
-                    "/main"
+                    "/main",
+                    "check-username",
+                    "check-email"
                 ).permitAll()
 
                 // 그 외의 모든 요청은 인증 필요
@@ -96,5 +106,19 @@ public class SecurityConfig {
             );
 
         return http.build();
+    }
+
+    // ✅ CORS 설정 추가
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:3000")); // 허용할 도메인 설정
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 허용할 HTTP 메서드
+        configuration.setAllowedHeaders(List.of("*")); // 모든 헤더 허용
+        configuration.setAllowCredentials(true); // 인증 정보 포함 허용
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // 모든 경로에 CORS 적용
+        return source;
     }
 }
