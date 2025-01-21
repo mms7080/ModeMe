@@ -55,7 +55,11 @@ public class ManagerContorller {
 
     // 관리자 메인
     @GetMapping("/manager/managerMain")
-    public String adminDashboard(Model model) {
+    public String adminDashboard(Model model, Principal principal) {
+    	if(principal != null) {
+    		String username = principal.getName();
+    		model.addAttribute("username", username);
+    	}
         // 총 회원 수
         long totalUsers = userRepository.count();
 
@@ -76,14 +80,23 @@ public class ManagerContorller {
 
     // 상품 등록 폼
     @GetMapping("/manager/new")
-    public String addItemForm(Model model) {
+    public String addItemForm(Model model, Principal principal) {
+    	if(principal != null) {
+    		String username = principal.getName();
+    		model.addAttribute("username", username);
+    	}
         model.addAttribute("addItemDTO", new AddItemDTO());
         return "/manager/managerInput";
     }
 
     // 상품 등록
     @PostMapping("/manager/new")
-    public String addItem(@ModelAttribute AddItemDTO addItemDTO) {
+    public String addItem(@ModelAttribute AddItemDTO addItemDTO, Principal principal) {
+    	
+    	if(principal != null) {
+    		String username = principal.getName();
+    		System.out.println("상품 삭제한 사용자:" + username);
+    	}
         // 상품 등록 및 저장
         AddItem savedItem = as.addItemWithImages(addItemDTO);
 
@@ -97,8 +110,13 @@ public class ManagerContorller {
         @RequestParam(defaultValue = "5") int size,
         @RequestParam(required = false) String option,
         @RequestParam(required = false) String keyword,
-        Model model
+        Model model, Principal principal
     ) {
+    	if(principal != null) {
+    		String username = principal.getName();
+    		model.addAttribute("username", username);
+    	}
+    	
         // 페이지네이션과 검색 조건을 고려한 상품 목록 조회
         Page<AddItem> productPage;
         
@@ -126,7 +144,11 @@ public class ManagerContorller {
  // 상품 삭제 처리
     @DeleteMapping("/manager/deleteProduct/{id}")
     @ResponseBody
-    public String deleteProduct(@PathVariable Long id) {
+    public String deleteProduct(@PathVariable Long id, Principal principal) {
+       	if(principal != null) {
+    		String username = principal.getName();
+    		System.out.println("상품 삭제한 사용자:" + username);
+    	}
         try {
             as.deleteProduct(id);
             return "상품 삭제 성공";
