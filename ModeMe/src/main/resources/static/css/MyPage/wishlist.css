@@ -24,7 +24,7 @@ html, body {
 main {
 	margin: 20px;
 	height: 100%;
-	width: 80%;
+	width: 60%;
 	margin: 0 auto;  /* 수평으로 가운데 정렬 */
 }
 
@@ -51,7 +51,6 @@ h1 {
 .wishlist_time {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
     border-top: 1px solid #ddd;
     padding: 10px 0;
     align-items: center;
@@ -82,10 +81,14 @@ h1 {
 }
 
 .wishlistcontent span:nth-child(1) {
-    width: 60px;
-    height: 60px;
-    background-color: #f0f0f0;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.wishlist_null {
+	border-top: 1px solid #ddd;
+    padding: 10px;
+    align-items: center;
+    justify-items: center;
 }

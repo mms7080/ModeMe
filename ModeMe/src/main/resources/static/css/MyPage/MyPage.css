@@ -5,6 +5,7 @@
 	padding: 0;
 	box-sizing: border-box;
 	font-family: 'omyu_pretty';
+	font-size:15px;
 }
 
 @font-face {
@@ -24,7 +25,7 @@ html, body {
 main {
 	margin: 20px;
 	height: 100%;
-	width: 80%;
+	width: 60%;
 	margin: 0 auto; /* 수평으로 가운데 정렬 */
 	display: flex;
 	flex-direction: column;
@@ -43,7 +44,8 @@ h1 {
 	height: 15%;
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
-	border: 5px solid grey;
+	    border: 3px solid #80808082;
+    border-radius: 10px;
 	padding: 10px;
 	font-size: 15px;
 	align-content: center;
@@ -90,7 +92,7 @@ h1 {
 
 .smalltitle {
 	font-size: 10px;
-	color: lightgrey;
+	    color: #808080;
 	align-content: center;
 }
 
