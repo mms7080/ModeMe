@@ -91,4 +91,29 @@ public class UserService {
         user.setRole(role);
         userRepository.save(user);
     }
+
+    @Transactional
+    public void updateUser(String username, UserDTO userDTO) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다: " + username));
+
+        // 이메일 중복 검사 (현재 사용자 제외)
+        if (!user.getEmail().equals(userDTO.getEmail()) && isEmailTaken(userDTO.getEmail())) {
+            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
+        }
+
+        // 수정된 정보 업데이트
+        user.setEmail(userDTO.getEmail());
+        user.setPhone(userDTO.getPhone());
+        user.setBirthdate(userDTO.getBirthdate());
+        user.setGender(userDTO.getGender());
+        user.setPostcode(userDTO.getPostcode());
+        user.setAddress(userDTO.getAddress());
+        user.setAddressDetail(userDTO.getAddressDetail());
+
+        // 명시적으로 기존 데이터 업데이트
+        userRepository.save(user);
+    }
+
+
 }
