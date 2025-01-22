@@ -58,6 +58,10 @@ public class UserController {
     // 회원정보 수정 페이지 (현재 로그인한 사용자 정보 불러오기)
     @GetMapping("/modify")
     public String modifyForm(Model model, Principal principal) {
+        if (principal == null) {
+            return "redirect:/signin"; // 로그인되지 않은 경우 로그인 페이지로 리디렉트
+        }
+
         String username = principal.getName(); // 현재 로그인한 사용자 ID 가져오기
         User user = userService.findByUsername(username); // DB에서 사용자 정보 조회
 
@@ -76,6 +80,7 @@ public class UserController {
         model.addAttribute("userDTO", userDTO);
         return "/Sign/modify"; // 회원정보 수정 페이지
     }
+
 
     @PostMapping("/modify")
     public String modifyProcess(@Valid @ModelAttribute("userDTO") UserDTO userDTO, 
