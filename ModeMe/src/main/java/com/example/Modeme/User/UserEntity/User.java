@@ -3,8 +3,10 @@ package com.example.Modeme.User.UserEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -48,4 +50,8 @@ public class User {
 
     @Column(length = 10, nullable = false) // 권한 필드 추가, 기본값은 user
     private String role = "user"; // 기본값 설정
+
+    @CreationTimestamp // 회원가입 시 자동으로 현재 날짜 및 시간이 입력됨
+    @Column(nullable = false, updatable = false) // 수정 불가능하도록 설정
+    private LocalDateTime createdAt;
 }
