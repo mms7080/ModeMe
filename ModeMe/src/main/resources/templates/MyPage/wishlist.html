@@ -33,8 +33,8 @@
 					th:text="${content.mileage}"></span>
 				<form action="/wishlist_delete" method="post" class="wishlist_form">
 					<input type="hidden" name="wishid" th:value="${content.wishid}" />
-					<button class="wishlist_cart">장바구니 담기</button>
-					<button class="wishlist_delete" type="submit">삭제</button>
+					<button name="action" value="cart" class="wishlist_cart">장바구니 담기</button>
+					<button name="action" value="delete" class="wishlist_delete" type="submit">삭제</button>
 				</form>
 			</div>
 

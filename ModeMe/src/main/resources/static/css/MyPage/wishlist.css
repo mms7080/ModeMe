@@ -5,6 +5,7 @@
 	padding: 0;
 	box-sizing: border-box;
 	font-family: 'omyu_pretty';
+	color:#555;
 }
 
 @font-face {
@@ -47,6 +48,9 @@ h1 {
     justify-items: center;
 }
 
+.wishlistcontent span {
+	color:#333;
+}
 
 .wishlist_time {
     display: grid;

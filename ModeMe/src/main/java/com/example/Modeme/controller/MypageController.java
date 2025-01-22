@@ -87,11 +87,18 @@ import com.example.Modeme.User.UserDTO.Headerlogin;
 			@PostMapping("/wishlist_delete")
 			public String DeleteWish(
 					@AuthenticationPrincipal CustomUserDetails userDetails,
-					@RequestParam(value="wishid") Long wishid
+					@RequestParam(value="wishid") Long wishid,
+					@RequestParam(value="action") String action
 			) {
 				String userid = userDetails.getUsername();
 				
+				if(action.equals("delete")) {
+				
 				wishser.deleteWishlist(userid, wishid);
+				}
+				else {
+					return "/wishlist"; //장바구니 완료되면 insert랑 테이블 연결 시키기
+				}
 				
 				return "redirect:/wishlist";
 			}

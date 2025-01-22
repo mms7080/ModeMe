@@ -42,6 +42,7 @@
 		<p style="color: grey;">○ 주문내역은 최대 6개월까지만 조회 가능합니다.</p>
 		<div class="ordermain">
 			<div class="ordermaintitle">주문 상품 정보</div>
+			<div class="order_main">
 			<div class="ordercontent">
 				<span>주문일자</br>[주문번호]</span>
 				<span>이미지</span>
@@ -58,7 +59,8 @@
 			</div>
 			<div th:unless="${orderList != null && !orderList.isEmpty()}" class="orderlist">
 				<!-- 주문 내역이 없는 경우 -->
-				<div>주문 내역이 없습니다.</div>
+				<div class="order_null">주문 내역이 없습니다.</div>
+			</div>
 			</div>
 		</div>
 	</main>

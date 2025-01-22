@@ -5,6 +5,7 @@
 	padding: 0;
 	box-sizing: border-box;
 	font-family: 'omyu_pretty';
+	color:#555;
 }
 
 @font-face {
@@ -26,9 +27,11 @@ main {
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	width: 80%;
+	width: 60%;
 	margin: 0 auto; /* 수평으로 가운데 정렬 */
 	gap:10px;
+	margin-bottom: 30px;
+	
 }
 
 h1 {
@@ -42,18 +45,17 @@ h1 {
 .addressp {
 	color: grey;
 	text-align:center;
-	font-size:15px;
 	margin-top:10px;
+	font-size:15px;
 }
 
 .defaultaddressbox {
-	border: 3px solid #80808082;
+	border: 3px solid #555;
 	border-radius: 10px;
 }
 
 .addressmain {
-	border: 1px solid grey;
-	margin-bottom: 10px;
+	border: 1px solid lightgrey;
 }
 
 .addresscontent {
@@ -61,14 +63,8 @@ h1 {
 	grid-template-columns: 1fr 1fr 2fr 3fr 1fr;
 	text-align: center;
 	padding:10px;
-	border-bottom: 1px solid grey;
+	border-bottom: 1px solid lightgrey;
 }
-
-.blueline {
-	border: 5px blue solid;
-	margin-bottom: 10px;
-}
-
 .address_time {
 	display: grid;
 	grid-template-columns: 1fr 1fr 2fr 3fr 1fr;
@@ -99,7 +95,7 @@ h1 {
 }
 
 .addresscontent span {
-	font-size: 17px;
+	color:#333;
 }
 
 .addresslist {
@@ -110,6 +106,7 @@ h1 {
 		display: flex;
     flex-direction: column;
 	align-items: flex-end;
+	    height: 7%;
 }
 
 .addressform input {
@@ -123,11 +120,11 @@ h1 {
 	color: white;
 	background-color: black;
 	width: 10%;
-	font-size: 17px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	cursor: pointer;
+	height:100%;
 }
 
 .popup-button {
@@ -221,14 +218,12 @@ h1 {
 }
 
 .addressfooter {
-	margin-bottom:30px;
 	border: 1px solid grey;
 }
 
 .addressnotice {
 	background-color:lightgrey;
 	padding:10px;
-	font-size: 17px;
 }
 
 .addressexplane {
@@ -262,7 +257,6 @@ h1 {
    padding: 8px 12px;
    border: 1px solid #ddd;
    background-color: #fff;
-   font-size: 14px;
    color: #333;
    cursor: pointer;
    transition: background-color .3s ease, color .3s ease;
