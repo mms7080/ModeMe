@@ -15,12 +15,16 @@
     <h1>회원가입</h1>
 
    <!-- 회원가입 시도 결과에 따라 성공/실패 메시지를 파라미터로 받아 팝업 띄우기 -->
-   <div th:if="${param.success}">
-       <script>
-           alert('회원가입이 완료되었습니다!');
-           window.location.href = '/signin'; // 확인 버튼 누르면 로그인 페이지로 이동
-       </script>
-   </div>
+	<div th:if="${param.success}">
+	    <script>
+	        document.addEventListener("DOMContentLoaded", function() {
+	            setTimeout(function() {
+	                alert('회원가입이 완료되었습니다!'); // 팝업 먼저 띄우기
+	                window.location.href = '/signin'; // 확인 버튼 누르면 로그인 페이지로 이동
+	            }, 100); // 약간의 딜레이를 줘서 팝업이 확실히 뜨게 함
+	        });
+	    </script>
+	</div>
    <div th:if="${param.error}">
        <script>
            alert('회원가입 중 오류가 발생했습니다. 다시 시도해주세요.');

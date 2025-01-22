@@ -64,7 +64,7 @@ public class SignupController {
 
         try {
             userService.registerUser(userDTO);
-            return "redirect:/signin?success"; // 🔥 회원가입 성공 시 로그인 페이지로 이동
+            return "redirect:/signup?success=true"; // 🔥 회원가입 성공 시 로그인 페이지로 이동
         } catch (Exception e) {
             model.addAttribute("errorMessage", "회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
             return "/Sign/signup";
