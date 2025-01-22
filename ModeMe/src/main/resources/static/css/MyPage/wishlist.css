@@ -39,3 +39,45 @@ h1 {
 .wishlist {
 	border: 1px solid lightgrey;
 }
+
+.wishlistcontent{
+	display: grid;
+	grid-template-columns: repeat(5,1fr);
+	justify-items: center;
+}
+
+
+.address_time {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+}
+
+.wishlist_delete {
+    background-color: #ff4c4c;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.wishlist_delete:hover {
+    background-color: #ff0000;
+}
+
+.wishlistcontent span, .address_time span {
+    text-align: center;
+    padding: 5px;
+}
+
+.wishlistcontent span:nth-child(1) {
+    width: 60px;
+    height: 60px;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -4,7 +4,51 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyPage</title><!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MyPage</title>
+<link rel="stylesheet" href="/css/MyPage/wishlist.css">
+
+</head>
+<body>
+	<!-- 헤더푸터-->
+	<div th:replace="~{header :: header}"></div>
+
+	<h1>WishList</h1>
+	<main>
+		<div class="wishlist">
+			<div class="wishlistcontent">
+				<span>이미지</span> <span>제품명</span> <span>가격</span> <span>적립금</span> <span>선택</span>
+			</div>
+
+			<div class="address_time"
+				th:if="${wishlist != null && !wishlist.isEmpty()}"
+				th:each="content : ${wishlist}">
+				<span>이미지</span> <span th:text="${content.itemname}"></span> <span
+					th:text="${content.price}"></span> <span
+					th:text="${content.mileage}"></span>
+				<form action="/wishlist_option" method="post">
+					<input type="hidden" name="wishid" value="${content.wishid}" />
+					<button>장바구니 담기</button>
+					<button class="wishlist_delete" type="submit">✖</button>
+				</form>
+			</div>
+
+
+			<div th:unless="${wishlist != null && !wishlist.isEmpty()}">
+				<div class="wishlist">관심상품 내역이 없습니다.</div>
+			</div>
+		</div>
+
+	</main>
+
+	<div th:replace="~{footer :: footer}"></div>
+</body>
+</html>
 <link rel="stylesheet" href="/css/MyPage/wishlist.css">
 
 </head>

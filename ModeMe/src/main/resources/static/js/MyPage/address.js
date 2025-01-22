@@ -54,18 +54,6 @@ let isAlertShown = false; // 알림이 표시되었는지 여부를 기록하는
 function submitAddressForm(event) {
     event.preventDefault();  // 폼 제출 시 새로 고침 방지
 
-    // 폼 데이터 가져오기
-    const name = document.getElementById("recipient").value;
-    const address = document.getElementById("address").value;
-    const phone = document.getElementById("phone").value;
-    const zip = document.getElementById("zip").value;
-
-    // 콘솔에 출력하여 데이터 확인
-    console.log("받는 사람:", recipient);
-    console.log("주소:", address);
-    console.log("전화번호:", phone);
-    console.log("우편번호:", zip);
-
     // 알림이 이미 울렸는지 확인
     if (!isAlertShown) {
         alert("배송지가 등록되었습니다.");
@@ -126,15 +114,3 @@ document.getElementById("addressForm").addEventListener("submit", submitAddressF
 	    document.getElementById("defaultAddress").innerText = address;
 	}
 	
-// 배송지 목록 삭제버튼 클릭시
-function DeleteAddress(addressId){
-	$.ajax({
-		url:'/address_delete',
-		method: 'POST',
-		data: {addressid: addressId},
-		success: function(response) {
-			// 요청이 성공하면 페이지 새로고침
-			
-		}
-	})
-}

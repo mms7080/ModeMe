@@ -1,7 +1,6 @@
 	package com.example.Modeme.controller;
 	
 	import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.Modeme.Config.CustomUserDetails;
 import com.example.Modeme.Mypage.MypageEntity.Address;
 import com.example.Modeme.Mypage.MypageEntity.Defaultaddress;
+import com.example.Modeme.Mypage.MypageEntity.Wishlist;
 import com.example.Modeme.Mypage.MypageRepository.AddressRepository;
 import com.example.Modeme.Mypage.MypageRepository.DefaultaddressRepository;
+import com.example.Modeme.Mypage.MypageRepository.WishlistRepository;
 import com.example.Modeme.Mypage.MypageService.AddressService;
 import com.example.Modeme.Mypage.MypageService.DefaultaddressService;
+import com.example.Modeme.Mypage.MypageService.WishlistService;
 import com.example.Modeme.User.UserDTO.Headerlogin;
 	
 	@Controller
@@ -38,6 +40,11 @@ import com.example.Modeme.User.UserDTO.Headerlogin;
 		   @Autowired
 		   DefaultaddressService defaultser;
 		   
+		   @Autowired
+		   WishlistRepository wishrep;
+		   @Autowired
+		   WishlistService wishser;
+		   
 		    @ModelAttribute //모든 매핑에 추가할 코드
 		    public void addAttributes(Model model, Principal principal) {
 		        keep.headerlogin(model, principal); //로그인 유지 
@@ -54,17 +61,39 @@ import com.example.Modeme.User.UserDTO.Headerlogin;
 			public String Order() {
 				return "/MyPage/order";
 			}
-	
-			// 관심 상품
-			@GetMapping("/wishlist")
-			public String WishList() {
-				return "/MyPage/wishlist";
-			}
-	
+			
 			// 적립금
 			@GetMapping("/mileage")
 			public String Mileage() {
 				return "/MyPage/mileage";
+			}
+
+			// 관심 상품
+			@GetMapping("/wishlist")
+			public String WishList(
+					@AuthenticationPrincipal CustomUserDetails userDetails,
+					Model model
+			) {
+				String userid = userDetails.getUsername();
+			    System.out.println("Logged in User: " + userid); // 로그 추가
+			    
+			    List<Wishlist> wishlist = wishrep.findByUserid(userid);
+			    System.out.println("Wishlist: " + wishlist); // 로그 추가
+
+			    model.addAttribute("wishlist", wishlist);
+			    return "/MyPage/wishlist";
+			}
+			
+			@PostMapping("/wishlist_delete")
+			public String DeleteWish(
+					@AuthenticationPrincipal CustomUserDetails userDetails,
+					@RequestParam(value="wishid") Long wishid
+			) {
+				String userid = userDetails.getUsername();
+				
+				wishser.deleteWishlist(userid, wishid);
+				
+				return "redirect:/wishlist";
 			}
 	
 			// 배송 주소록 관리
