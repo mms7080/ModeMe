@@ -27,6 +27,7 @@ main {
 	height: 100%;
 	width: 60%;
 	margin: 0 auto; /* 수평으로 가운데 정렬 */
+		margin-bottom: 30px;
 }
 
 h1 {
@@ -35,6 +36,13 @@ h1 {
 	color: #333;
 	padding: 20px;
 	margin-bottom: 20px;
+}
+
+.addressp {
+	color: grey;
+	text-align:center;
+	margin-top:10px;
+	font-size:15px;
 }
 
 .greybox {
@@ -54,6 +62,7 @@ h1 {
 	display: flex;
 	flex-direction: row;
 	width: 25%;
+
 }
 
 .daybutton {
@@ -61,10 +70,17 @@ h1 {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	border: none;
+	border:lightgrey 0.5px solid;
 	cursor: pointer;
 	transition: bacground-color 0.3s;
-	font-size: 15px;
+	font-size: 12px;
+	background-color:#7f7f7f;
+	color:white;
+}
+
+.daybutton:hover {
+	background-color: #666666;
+	color:white;
 }
 
 .orderheaderform {
@@ -88,12 +104,18 @@ h1 {
 }
 
 .ordersearch {
-	background-color: black;
+	background-color: #333;
 	color: white;
 	border-radius: 3px;
 	text-align: center;
 	width: 10%;
 	font-size: 15px;
+	height: 100%;
+	cursor:pointer;
+}
+
+.ordersearch:hover {
+	background-color:#555;
 }
 
 .ordercontent {
@@ -129,6 +151,7 @@ h1 {
     padding: 10px;
     align-items: center;
     justify-items: center;
+    text-align: center;
 }
 
 @media ( max-width : 540px) {

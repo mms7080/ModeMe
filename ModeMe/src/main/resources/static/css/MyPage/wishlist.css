@@ -27,6 +27,7 @@ main {
 	height: 100%;
 	width: 60%;
 	margin: 0 auto;  /* 수평으로 가운데 정렬 */
+		margin-bottom: 30px;
 }
 
 h1 {
@@ -37,8 +38,16 @@ h1 {
 	margin-bottom: 20px;
 }
 
+.addressp {
+	color: grey;
+	text-align:center;
+	margin-top:10px;
+	font-size:15px;
+}
+
 .wishlist {
-	border: 1px solid lightgrey;
+	border-top: 1px solid lightgrey;
+	 box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 테이블 그림자 효과 */
 }
 
 .wishlistcontent{
@@ -46,6 +55,8 @@ h1 {
 	grid-template-columns: repeat(5,1fr);
 	align-items: center;
     justify-items: center;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid lightgrey;
 }
 
 .wishlistcontent span {
@@ -55,7 +66,7 @@ h1 {
 .wishlist_time {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    border-top: 1px solid #ddd;
+    border-bottom: 1px solid lightgrey;
     padding: 10px 0;
     align-items: center;
     justify-items: center;
@@ -71,7 +82,6 @@ h1 {
 .wishlist_delete, .wishlist_cart {
     background-color: transparent;
     border: 1px solid grey;
-    color: black;
     cursor: pointer;
 }
 
@@ -95,4 +105,5 @@ h1 {
     padding: 10px;
     align-items: center;
     justify-items: center;
+    text-align: center;
 }
