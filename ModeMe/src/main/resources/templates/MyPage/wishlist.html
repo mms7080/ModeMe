@@ -32,7 +32,7 @@
 					th:text="${content.price}"></span> <span
 					th:text="${content.mileage}"></span>
 				<form action="/wishlist_delete" method="post" class="wishlist_form">
-					<input type="hidden" name="wishid" value="${content.wishid}" />
+					<input type="hidden" name="wishid" th:value="${content.wishid}" />
 					<button class="wishlist_cart">장바구니 담기</button>
 					<button class="wishlist_delete" type="submit">삭제</button>
 				</form>
@@ -40,7 +40,7 @@
 
 
 			<div th:unless="${wishlist != null && !wishlist.isEmpty()}">
-				<div class="wishlist">관심상품 내역이 없습니다.</div>
+				<div class="wishlist_null">관심상품 내역이 없습니다.</div>
 			</div>
 		</div>
 
