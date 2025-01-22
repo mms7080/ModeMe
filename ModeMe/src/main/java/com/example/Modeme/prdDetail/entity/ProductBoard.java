@@ -45,7 +45,7 @@ public class ProductBoard {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "add_item_id")
-    private AddItem AddItem;
+    private AddItem addItem;
 
     @OneToMany(mappedBy = "productBoard", cascade = CascadeType.ALL)
     private List<ProductReview> review;

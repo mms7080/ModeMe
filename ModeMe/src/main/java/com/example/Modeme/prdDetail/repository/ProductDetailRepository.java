@@ -7,5 +7,6 @@ import com.example.Modeme.prdDetail.entity.ProductBoard;
 
 @Repository
 public interface ProductDetailRepository extends JpaRepository<ProductBoard, Long> {
-
+	
+	
 }

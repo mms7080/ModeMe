@@ -17,74 +17,96 @@
 
     <div class="product-edit-container">
         <h1>상품 수정</h1>
-        
-        <div class="product-name">
-        	<label for="name">상품 이름</label>
-        	<input type="text" id="name" placeholder="이름 입력">
-        </div>
-
-        <div class="product-informations">
+		
+		<div class="product-name">
+		    <label for="name">상품 이름</label>
+		    <input type="text" id="name" name="name" placeholder="이름 입력" th:value="${product?.name ?: ''}" required>
+		</div>
+		
+		<div class="product-informations">
 		    <!-- 상품 수량 -->
 		    <span class="product-info">
 		        <label for="stock">상품 수량</label>
-		        <input type="number" id="stock" min="0" placeholder="수량 입력">
+		        <input type="number" id="stock" name="stock" placeholder="수량 입력" th:value="${product?.stock ?: 0}" min="0" required>
 		        <button id="sold-out-btn">품절</button>
 		    </span>
 		
 		    <!-- 상품 가격 -->
 		    <span class="product-info">
 		        <label for="price">상품 가격</label>
-		        <input type="number" id="price" min="0" placeholder="가격 입력">
+		        <input type="number" id="price" name="price" placeholder="가격 입력" th:value="${product?.price ?: 0}" min="0" required>
 		    </span>
 		</div>
 		
 		<div class="product-color-information">
 		    <!-- 색상 입력 섹션 -->
-		    <div class="color-section">
+		    <div class="color-section" th:each="color, iterStat : ${product?.colors ?: {}}">
 		        <span class="color-info">
-		            <label for="color">상품 색상</label>
-		            <input class="color" type="color" id="color" value="#000000">
+		            <label th:for="'color-' + ${iterStat.index}">상품 색상</label>
+		            <input 
+		                class="color" 
+		                type="color" 
+		                id="color-[[${iterStat.index}]]" 
+		                name="colors" 
+		                th:value="${color ?: '#000000'}"
+		            >
 		        </span>
-		        <div class="color-output">R: 0, G: 0, B: 0</div>
-		        <input class="color-name" type="text" placeholder="색상 이름 입력">
-		        <button class="add-color">+</button>
+		        <div class="color-output" th:class="'color-output color-output-' + ${iterStat.index}">
+		            R: 0, G: 0, B: 0
+		        </div>
+		        <input 
+		            class="color-name" 
+		            type="text" 
+		            name="colorNames" 
+		            th:placeholder="'색상 이름 입력'"
+		        >
 		    </div>
+		    <button class="add-color" type="button">+</button>
 		</div>
 
-		<!-- Product Category -->
 		<div class="category-container">
+		    <!-- 메인 카테고리 -->
 		    <div class="main-category">
 		        <label class="main-category-label">상품 카테고리</label>
 		        <div>
 		            <label for="outer" class="category-label">Outer</label>
-		            <input type="radio" id="outer" name="category" value="outer">
+		            <input type="radio" id="outer" name="category" value="outer" 
+		                   th:checked="${product?.category == 'outer'}">
 		        </div>
 		        <div>
 		            <label for="top" class="category-label">Top</label>
-		            <input type="radio" id="top" name="category" value="top">
+		            <input type="radio" id="top" name="category" value="top" 
+		                   th:checked="${product?.category == 'top'}">
 		        </div>
 		        <div>
 		            <label for="bottom" class="category-label">Bottom</label>
-		            <input type="radio" id="bottom" name="category" value="bottom">
+		            <input type="radio" id="bottom" name="category" value="bottom" 
+		                   th:checked="${product?.category == 'bottom'}">
 		        </div>
 		        <div>
 		            <label for="acc" class="category-label">Acc</label>
-		            <input type="radio" id="acc" name="category" value="acc">
+		            <input type="radio" id="acc" name="category" value="acc" 
+		                   th:checked="${product?.category == 'acc'}">
 		        </div>
 		    </div>
-	        <!-- 서브 카테고리가 동적으로 추가됨 -->
+		
+		    <!-- 서브 카테고리 -->
 		    <div class="subcategory" id="subcategory">
+		        <!-- 서브 카테고리는 JS로 동적으로 추가 -->
 		    </div>
 		</div>
-
-        <!-- Product Size -->
-        <div class="size-container">
-	        <label class="size-label">상품 사이즈</label>
-	        <select id="size">
-	            <option value="SelectSize">S M L XL</option>
-	            <option value="FreeSize">FreeSize</option>
-	        </select>
-        </div>
+		<!-- 사이즈 카테고리 -->
+		<div class="size-container">
+		    <label class="size-label">상품 사이즈</label>
+		    <select id="size" name="productSizes">
+		        <option value="SelectSize" th:selected="${product?.productSizes?.contains('SelectSize')}">
+		            S M L XL
+		        </option>
+		        <option value="FreeSize" th:selected="${product?.productSizes?.contains('FreeSize')}">
+		            FreeSize
+		        </option>
+		    </select>
+		</div>
 
         <!-- Main Images -->
         <div class="main-img-input-container">
@@ -107,16 +129,22 @@
 		
         <!-- Rich Text Editor for Product Description -->
 		<div class="RTE-container">
-			<label for="rich-text-editor">상품 상세정보</label>
-			<div id="rich-text-editor" style="height: 300px;"></div>
+		    <label for="rich-text-editor">상품 상세정보</label>
+		    <div id="rich-text-editor" style="height: 300px;" th:data-content="${product?.productDescription ?: ''}">
+		    </div>
+		    <input type="hidden" id="productDescription" name="productDescription" th:value="${product?.productDescription ?: ''}">
 		</div>
 
-		<!-- Buttons -->
-		<div class="buttons">
-		    <button id="save-btn" data-url="/productDetail">수정 완료</button>
-		    <button id="cancel-btn" data-url="/productDetail">수정 취소</button>
-		    <button id="temp-save-btn" data-url="/productDetail">임시 저장</button>
-		</div>
+		<form th:action="@{/productEdit/{id}(id=${product?.id ?: 0})}" method="post">
+		    <div class="buttons">
+    		<input type="hidden" name="_csrf" th:value="${_csrf?.token}">
+		        <button id="save-btn">수정 완료</button>
+		        <button id="cancel-btn">수정 취소</button>
+		        <button id="temp-save-btn">임시 저장</button>
+		    </div>
+		    <input type="hidden" name="id" th:value="${product?.id ?: 0}">
+		</form>
+
     </div>
     
     	<!-- 푸터 -->

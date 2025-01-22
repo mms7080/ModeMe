@@ -16,25 +16,31 @@
         <p class="description">상품 사용후기를 작성해주세요.</p>
 
         <!-- Product Summary -->
-        <div class="product-summary">
-            <div class="product-image" style="background-color: #e0e0e0;"></div>
-            <div class="product-info">
-                <h2>최고로 따뜻한 발마칸 코오트</h2>
-                <p>₩81,900</p>
-                <button>상품 상세보기</button>
-                <button>상품정보 선택</button>
-            </div>
+    <div class="product-summary">
+        <!-- 상품 이미지: 나중에 동적으로 구현 가능 -->
+        <div class="product-image" style="background-color: #e0e0e0;">
+            <img th:src="${addItem?.image ?: '/images/default-product.png'}" alt="상품 이미지">
         </div>
 
-        <!-- Review Form -->
-        <form class="review-form">
-            <!-- Title -->
-            <label for="title">제목</label>
-            <input type="text" class="title" name="title" placeholder="제목을 입력하세요" required>
+        <!-- 상품 정보 -->
+        <div class="product-info">
+            <h2 th:text="${product?.name ?: '상품 이름 없음'}">상품 이름</h2>
+            <p th:text="'₩' + ${product?.price ?: 0}">상품 가격</p>
+            <a th:href="@{/productDetail/{id}(id=${product?.id})}">
+                <button type="button">상품 상세보기</button>
+            </a>
+        </div>
+    </div>
 
-            <!-- Text Editor -->
-            <label for="content">내용</label>
-            <textarea id="content" class="content" rows="10" placeholder="내용을 입력하세요"></textarea>
+        <!-- Review Form -->
+		<form th:action="@{/productDetail/{id}/review(id=${product?.id})}" method="post" class="review-form">
+		    <!-- Title -->
+		    <label for="title">제목</label>
+		    <input type="text" class="title" id="title" name="title" placeholder="제목을 입력하세요" required>
+		
+		    <!-- Content -->
+		    <label for="content">내용</label>
+		    <textarea id="content" class="content" name="content" rows="10" placeholder="내용을 입력하세요" required></textarea>
 
             <!-- File Upload -->
             <div class="file-upload">
@@ -53,18 +59,13 @@
                 </div>
             </div>
 
-			<!-- Password -->
-		    <div class="password-section">
-		        <label for="password">비밀번호</label>
-		        <input type="password" id="password" placeholder="비밀번호를 입력하세요">
-		    </div>
-
 		    <!-- Buttons -->
-		    <div class="form-buttons">
-		        <button type="button" onclick="location.href='/list-url'">목록</button>
-		        <button type="submit" onclick="location.href='/productDetail'" class="upload-button">등록</button>
-		        <button type="button" onclick="location.href='/productDetail'">취소</button>
-		    </div>
+			<div class="form-buttons">
+			    <!-- 등록 버튼 -->
+			    <button type="submit" class="upload-button">등록</button>
+			    <!-- 취소 버튼 -->
+			    <button type="button" onclick="location.href='/productDetail/{id}'">취소</button>
+			</div>
         </form>
     </div>
     

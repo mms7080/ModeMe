@@ -103,9 +103,6 @@
 		</div>
 	</div>
 
-
-
-
 	<!-- Middle Section -->
 	<div class="middle container" id="prdDetail">
 
@@ -223,48 +220,9 @@
 			<button>3</button>
 		</div>
 		<div class="section-action">
-			<a href="/productReviewWrite" class="action-button">리뷰 작성하기</a>
-		</div>
-	</div>
-
-	<!-- Q&A Section -->
-	<div class="qa-section container" id="prdQnA">
-
-		<!-- Navigation Menu -->
-		<ul class="menu">
-			<li><a href="#prdBuy">상품구매</a></li>
-			<li><a href="#prdDetail">상품상세정보</a></li>
-			<li><a href="#prdInfo">상품구매안내</a></li>
-			<li class="selected"><a href="#prdReview">상품후기 <span
-					class="reviewcount">2</span>
-			</a></li>
-			<li><a><b>Q&A</b> <span class="qnacount">2</span> </a></li>
-		</ul>
-
-		<div class="section-header">Q&A</div>
-		<div class="qa-item">
-			<p>
-				<strong>질문:</strong> 이 상품은 다른 색상도 있나요?
-			</p>
-			<p>
-				<strong>답변:</strong> 네, 블랙, 화이트, 그레이 색상이 있습니다.
-			</p>
-		</div>
-		<div class="qa-item">
-			<p>
-				<strong>질문:</strong> 보증 기간이 어떻게 되나요?
-			</p>
-			<p>
-				<strong>답변:</strong> 보증 기간은 1년입니다.
-			</p>
-		</div>
-		<div class="pagination">
-			<button>1</button>
-			<button>2</button>
-			<button>3</button>
-		</div>
-		<div class="section-action">
-			<a href="/productQAWrite" class="action-button">질문 작성하기</a>
+			<a th:href="@{/productDetail/{id}/review(id=${product.id})}">
+			    <button type="button">리뷰 작성</button>
+			</a>
 		</div>
 	</div>
 
