@@ -44,7 +44,7 @@ public class ProductBoard {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "AddItem_id")
+    @JoinColumn(name = "add_item_id")
     private AddItem AddItem;
 
     @OneToMany(mappedBy = "productBoard", cascade = CascadeType.ALL)
