@@ -68,6 +68,8 @@ public class SecurityConfig {
 
                 // 로그인, 회원가입, 정적 리소스는 모두 접근 가능
                 .requestMatchers(
+                	"/api/check-username",
+                	"/api/check-email",
                     "/signin",
                     "/signup",
                     "/find_id",
