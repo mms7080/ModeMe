@@ -97,7 +97,7 @@ h1 {
 .orderprogress {
 	height: 70%;
 	display: grid;
-	grid-template-columns: repeat(5, 1fr);
+	grid-template-columns: repeat(4, 1fr);
 	border-top: 1px solid lightgrey;
 	text-align: center;
 	align-content: center;
