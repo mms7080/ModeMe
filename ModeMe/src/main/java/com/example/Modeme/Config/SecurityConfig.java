@@ -39,7 +39,6 @@ public class SecurityConfig {
                     "/signup", 
                     "/find_id",
                     "/find_pw",
-                    "/modify",
                     "/logout",
                     "/qna/**",
                     "/notices/**",
@@ -72,7 +71,6 @@ public class SecurityConfig {
                     "/signup",
                     "/find_id",
                     "/find_pw",
-                    "/modify",
                     "/image/**",
                     "/css/**",
                     "/js/**",
@@ -83,6 +81,9 @@ public class SecurityConfig {
                     "check-username",
                     "check-email"
                 ).permitAll()
+
+                // ✅ 회원정보 수정 페이지는 로그인한 사용자만 접근 가능
+                .requestMatchers("/modify").authenticated()
 
                 // 그 외의 모든 요청은 인증 필요
                 .anyRequest().authenticated()
