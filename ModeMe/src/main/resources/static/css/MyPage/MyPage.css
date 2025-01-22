@@ -5,7 +5,7 @@
 	padding: 0;
 	box-sizing: border-box;
 	font-family: 'omyu_pretty';
-	font-size:15px;
+	color:#333;
 }
 
 @font-face {
@@ -47,7 +47,6 @@ h1 {
 	    border: 3px solid #80808082;
     border-radius: 10px;
 	padding: 10px;
-	font-size: 15px;
 	align-content: center;
 }
 
@@ -61,7 +60,6 @@ h1 {
 .firstboxcol{
 		display:flex;
 	justify-content: space-between;
-	font-size: 17px;
 }
 
 .rightline {
