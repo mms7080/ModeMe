@@ -87,18 +87,25 @@ public class UserController {
                                 BindingResult bindingResult, 
                                 Principal principal, Model model) {
         if (bindingResult.hasErrors()) {
-            return "/Sign/modify"; // 유효성 검사 실패 시 다시 폼으로 이동
+            return "/Sign/modify"; // 유효성 검사 실패 시 다시 회원정보 수정 페이지로 이동
         }
 
-        String username = principal.getName(); // 현재 로그인한 사용자 ID 가져오기
-        userService.updateUser(username, userDTO); // 회원정보 업데이트
+        if (principal == null) {
+            return "redirect:/signin"; // 로그인 안 한 사용자는 로그인 페이지로 이동
+        }
 
-        // DB에서 갱신된 사용자 정보를 다시 불러와 확인
-        User updatedUser = userService.findByUsername(username);
-        System.out.println("회원정보 수정 완료: " + updatedUser.getEmail() + ", " + updatedUser.getPhone());
+        String username = principal.getName();
+        userService.updateUser(username, userDTO);
 
-        model.addAttribute("successMessage", "회원정보가 성공적으로 수정되었습니다.");
-        return "redirect:/modify?success"; // 수정 완료 후 다시 회원정보 수정 페이지로 이동
+        try {
+            userService.updateUser(username, userDTO); // 회원정보 업데이트
+            System.out.println("✅ 회원정보 수정 성공: " + username);
+            model.addAttribute("successMessage", "회원정보가 성공적으로 수정되었습니다.");
+            return "redirect:/modify?success";
+        } catch (Exception e) {
+            System.out.println("❌ 회원정보 수정 중 오류 발생: " + e.getMessage());
+            model.addAttribute("errorMessage", "회원정보 수정에 실패하였습니다.");
+            return "/Sign/modify";
+        }
     }
-
 }

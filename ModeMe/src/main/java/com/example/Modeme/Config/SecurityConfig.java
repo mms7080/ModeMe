@@ -39,6 +39,7 @@ public class SecurityConfig {
                     "/signup", 
                     "/find_id",
                     "/find_pw",
+                    "/modify",
                     "/logout",
                     "/qna/**",
                     "/notices/**",

@@ -25,10 +25,10 @@
                     <label for="username">아이디</label>
                     <input type="text" id="username" name="username" th:value="${userDTO.username}" readonly>
                 </div>
-                <div class="form-row">
-                    <label for="password">비밀번호 변경</label>
-                    <input type="password" id="password" name="password" placeholder="새 비밀번호 입력 (변경하지 않으려면 비워두세요)">
-                </div>
+				<div class="form-row">
+				    <label for="password">비밀번호 변경</label>
+				    <input type="password" id="password" name="password" placeholder="새 비밀번호 입력 (변경하지 않으려면 비워두세요)">
+				</div>
                 <div class="form-row">
                     <label for="name">이름</label>
                     <input type="text" id="name" name="name" th:value="${userDTO.name}" readonly>
@@ -101,20 +101,35 @@
     }
 
     // 회원정보 수정 후 알림창 띄우고 새로고침
-    document.querySelector(".modify-form").addEventListener("submit", function(event) {
-        event.preventDefault();
-        fetch("/modify", {
-            method: "POST",
-            body: new FormData(this)
-        }).then(response => {
-            if (response.ok) {
-                alert("회원정보가 수정되었습니다.");
-                location.reload();
-            } else {
-                alert("회원정보 수정에 실패했습니다.");
-            }
-        });
-    });
+	document.addEventListener("DOMContentLoaded", function () {
+	    document.querySelector(".modify-form").addEventListener("submit", function (event) {
+	        event.preventDefault();
+	        console.log("🔹 fetch 요청 시작"); // ✅ 디버깅 추가
+	
+	        // ✅ postcode 요소가 로드되었는지 확인
+	        const postcodeInput = document.getElementById("postcode");
+	        if (!postcodeInput) {
+	            console.error("❌ 오류: 'postcode' input 요소를 찾을 수 없습니다.");
+	            return;
+	        }
+	
+	        const formData = new FormData(this);
+	        fetch("/modify", {
+	            method: "POST",
+	            body: formData
+	        }).then(response => {
+	            console.log("🔹 서버 응답 상태:", response.status); // ✅ 응답 상태 확인
+	            if (response.ok) {
+	                alert("회원정보가 수정되었습니다.");
+	                location.reload();
+	            } else {
+	                alert("회원정보 수정에 실패했습니다.");
+	            }
+	        }).catch(error => {
+	            console.log("❌ fetch 요청 오류:", error);
+	        });
+	    });
+	});
     </script>
 </body>
 </html>

@@ -96,12 +96,14 @@ public class UserService {
     public void updateUser(String username, UserDTO userDTO) {
         try {
             User user = userRepository.findByUsername(username)
-                    .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다: " + username));
+                    .orElseThrow(() -> new RuntimeException("❌ 사용자를 찾을 수 없습니다: " + username));
 
-            System.out.println("✅ 기존 데이터: " + user.toString()); // 기존 정보 확인
+            System.out.println("🔹 기존 사용자 정보: " + user.toString()); // 기존 정보 확인
+            System.out.println("🔹 요청된 수정 정보: " + userDTO.toString()); // 수정할 정보 확인
 
             // ✅ 이메일 중복 검사 (현재 사용자 제외)
             if (!user.getEmail().equals(userDTO.getEmail()) && isEmailTaken(userDTO.getEmail())) {
+                System.out.println("❌ 이메일 중복 오류: " + userDTO.getEmail());
                 throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
             }
 

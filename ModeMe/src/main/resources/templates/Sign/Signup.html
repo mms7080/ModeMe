@@ -535,5 +535,25 @@ o 로그 기록
 	    return true; // 모든 검증 통과 시 제출 허용
 	}
 	</script>
+	
+	<script>
+	document.addEventListener("DOMContentLoaded", function () {
+	    document.querySelector(".signup-form").addEventListener("submit", function (event) {
+	        const password = document.getElementById("password").value;
+	        const confirmPassword = document.getElementById("confirmPassword").value;
+	
+	        if (!password || password.length < 10) {
+	            alert("비밀번호는 최소 10자 이상이어야 합니다.");
+	            event.preventDefault();
+	            return;
+	        }
+	
+	        if (password !== confirmPassword) {
+	            alert("비밀번호가 일치하지 않습니다.");
+	            event.preventDefault();
+	        }
+	    });
+	});
+	</script>
 </body>
 </html>
