@@ -80,7 +80,8 @@ public class SecurityConfig {
                     "/",
                     "/main",
                     "check-username",
-                    "check-email"
+                    "check-email",
+                    "/api/**"
                 ).permitAll()
 
                 // ✅ 회원정보 수정 페이지는 로그인한 사용자만 접근 가능
