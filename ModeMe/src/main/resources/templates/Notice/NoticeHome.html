@@ -36,7 +36,7 @@
 		            <td>
 		                <a th:href="@{/notices/view/{id}(id=${notice.id})}" th:text="${notice.title}"></a>
 		            </td>
-		            <td th:text="${notice.author}"></td>
+		            <td th:text="'👩‍💼'+${notice.author}"></td>
 		            <!-- 관리자만 보이는 삭제 버튼 -->
 		            <td th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
 		                <form th:action="@{/notices/delete/{id}(id=${notice.id})}" method="post" onsubmit="return confirmDelete();">
