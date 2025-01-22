@@ -1,6 +1,8 @@
 package com.example.Modeme.prdDetail.entity;
 
 import java.util.List;
+
+import com.example.Modeme.Manager.Entity.AddItem;
 import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.prdDetail.entity.ProductQA.TitleCategory;
 
@@ -42,8 +44,8 @@ public class ProductBoard {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @JoinColumn(name = "AddItem_id")
+    private AddItem AddItem;
 
     @OneToMany(mappedBy = "productBoard", cascade = CascadeType.ALL)
     private List<ProductReview> review;
