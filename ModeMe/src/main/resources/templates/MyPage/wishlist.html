@@ -25,16 +25,16 @@
 				<span>이미지</span> <span>제품명</span> <span>가격</span> <span>적립금</span> <span>선택</span>
 			</div>
 
-			<div class="address_time"
+			<div class="wishlist_time"
 				th:if="${wishlist != null && !wishlist.isEmpty()}"
 				th:each="content : ${wishlist}">
 				<span>이미지</span> <span th:text="${content.itemname}"></span> <span
 					th:text="${content.price}"></span> <span
 					th:text="${content.mileage}"></span>
-				<form action="/wishlist_option" method="post">
+				<form action="/wishlist_delete" method="post" class="wishlist_form">
 					<input type="hidden" name="wishid" value="${content.wishid}" />
-					<button>장바구니 담기</button>
-					<button class="wishlist_delete" type="submit">✖</button>
+					<button class="wishlist_cart">장바구니 담기</button>
+					<button class="wishlist_delete" type="submit">삭제</button>
 				</form>
 			</div>
 
@@ -45,24 +45,6 @@
 		</div>
 
 	</main>
-
-	<div th:replace="~{footer :: footer}"></div>
-</body>
-</html>
-<link rel="stylesheet" href="/css/MyPage/wishlist.css">
-
-</head>
-<body>
-	<!-- 헤더푸터-->
-	<div th:replace="~{header :: header}"></div>
-	
-	<h1>WishList</h1>
-	<main>
-		<div class="wishlist">
-			관심상품 내역이 없습니다.
-		</div>
-	</main>
-	
 	<div th:replace="~{footer :: footer}"></div>
 </body>
 </html>

@@ -43,29 +43,37 @@ h1 {
 .wishlistcontent{
 	display: grid;
 	grid-template-columns: repeat(5,1fr);
-	justify-items: center;
+	align-items: center;
+    justify-items: center;
 }
 
 
-.address_time {
+.wishlist_time {
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr 1fr 1fr;
+    grid-template-columns: repeat(5, 1fr);
     gap: 10px;
-    margin-bottom: 10px;
-    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #ddd;
     padding: 10px 0;
+    align-items: center;
+    justify-items: center;
 }
 
-.wishlist_delete {
-    background-color: #ff4c4c;
-    border: none;
-    color: white;
-    padding: 5px 10px;
+.wishlist_form {
+	display: flex;
+	flex-direction: column;
+	gap:5px;
+	    width: 45%;
+}
+
+.wishlist_delete, .wishlist_cart {
+    background-color: transparent;
+    border: 1px solid grey;
+    color: black;
     cursor: pointer;
 }
 
-.wishlist_delete:hover {
-    background-color: #ff0000;
+.wishlist_delete:hover, .wishlist_cart:hover {
+    background-color: #f0f0f0;
 }
 
 .wishlistcontent span, .address_time span {

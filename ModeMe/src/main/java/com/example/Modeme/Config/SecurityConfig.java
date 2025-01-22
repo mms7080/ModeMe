@@ -51,6 +51,7 @@ public class SecurityConfig {
                     "/address_default",
                     "/address_delete",
                     "/default_delete",
+                    "/wishlist_delete",
                     "/manager/**",
                     "/api/**"
                 )
@@ -75,6 +76,7 @@ public class SecurityConfig {
                     "/css/**",
                     "/js/**",
                     "/resources/**",
+                    "/wishlist_delete",
                     "/",
                     "/main",
                     "check-username",
