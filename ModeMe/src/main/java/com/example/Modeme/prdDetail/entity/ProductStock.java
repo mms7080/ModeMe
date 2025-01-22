@@ -1,6 +1,12 @@
 package com.example.Modeme.prdDetail.entity;
 
+import java.util.List;
+
+import com.example.Modeme.Manager.Entity.AddItem;
+
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -33,15 +39,20 @@ public class ProductStock {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    @JoinColumn(name = "add_item_id", nullable = false)
+    private AddItem additem;
 
     @Column(nullable = false)
     private String color;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "size_id", nullable = false) // 필드 이름 변경
-    private Fit sizes;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "size_id", nullable = false) // 필드 이름 변경
+//    private Fit sizes;
+    
+    @ElementCollection
+    @CollectionTable(name = "item_sizes", joinColumns = @JoinColumn(name = "add_item_id"))
+    @Column(name = "item_size")
+    private List<String> productSizes;
 
     @Column(nullable = false)
     private int stock;
