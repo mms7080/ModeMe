@@ -12,7 +12,7 @@
 	<div th:replace="~{header :: header}"></div>
 
 	<main>
-		<h1>NOTICE</h1>
+		<h1>📋NOTICE</h1>
 
 		<!-- 공지 작성 버튼 -->
 		<div class="write-notice" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
@@ -40,7 +40,7 @@
 		            <!-- 관리자만 보이는 삭제 버튼 -->
 		            <td th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
 		                <form th:action="@{/notices/delete/{id}(id=${notice.id})}" method="post" onsubmit="return confirmDelete();">
-		                    <button type="submit">삭제</button>
+		                    <button type="submit">❌</button>
 		                </form>
 		            </td>
 		        </tr>
