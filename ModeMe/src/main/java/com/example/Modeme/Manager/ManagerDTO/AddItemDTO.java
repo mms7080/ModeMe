@@ -2,6 +2,8 @@ package com.example.Modeme.Manager.ManagerDTO;
 
 import java.util.List;
 
+import com.example.Modeme.Manager.Entity.ItemColor;
+
 // import com.example.Modeme.Manager.Entity.ProductImage;
 
 public class AddItemDTO {
