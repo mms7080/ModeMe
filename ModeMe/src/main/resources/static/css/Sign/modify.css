@@ -8,6 +8,7 @@ body {
 
 .modify-container {
     max-width: 800px;
+    width: 100%;
     margin: 50px auto;
     padding: 20px;
 }
@@ -49,9 +50,17 @@ h1 {
     margin-bottom: 5px;
 }
 
-.form-row input,
-.form-row select {
+.form-row input{
     width: 95%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.form-row select{
+	width: 99%;
     padding: 10px;
     font-size: 14px;
     border: 1px solid #ddd;
@@ -122,3 +131,65 @@ h1 {
 .btn-cancel:hover {
     background-color: #bbb;
 }
+
+/* 버튼 기본 스타일 (회원가입 페이지와 동일한 스타일 적용) */
+.btn-black {
+    height: 30px; /* 다른 input과 동일한 높이 */
+    padding: 5px 10px; /* 내부 여백 조정 */
+    font-size: 14px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.btn-black:hover {
+    background-color: #444;
+}
+
+/* 주소 입력 필드와 버튼 정렬 */
+.address-container {
+    display: flex;
+    align-items: center; /* 버튼과 인풋 수직 정렬 */
+    gap: 10px; /* 버튼과 우편번호 입력창 사이 여백 */
+    width: 98%;
+}
+
+/* 우편번호 입력 필드 크기 조정 */
+.address-container input {
+    flex: 2; /* 비율 유지 */
+    height: 25px; /* 다른 input과 동일한 높이 */
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* 주소 찾기 버튼 크기 */
+.address-container .btn-black {
+    flex: 1; /* 비율 유지 */
+    height: 36px; /* 동일한 높이 */
+    font-size: 14px;
+    padding: 5px 10px;
+    width: auto; /* 버튼의 고정 너비 제거 */
+    max-width: 150px; /* 최대 너비 설정 */
+    white-space: nowrap; /* 텍스트가 줄 바꿈되지 않도록 설정 */
+}
+
+/* 기본주소 & 상세주소 스타일 */
+#address, #address-detail {
+    width: 96.5%;
+    height: 25px; /* 동일한 높이 */
+    margin-top: 10px; /* 주소 입력 칸끼리 간격 추가 */
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+
+
+

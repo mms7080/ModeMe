@@ -44,7 +44,7 @@ public class SignupController {
 
     // 회원가입 처리
     @PostMapping("/signup")
-    public String signupProcess(@Valid UserDTO userDTO, BindingResult bindingResult, Model model) {
+    public String signupProcess(@Valid @ModelAttribute("userDTO") UserDTO userDTO, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "/Sign/signup"; // 유효성 오류 발생 시 다시 폼으로 이동
         }
@@ -63,10 +63,12 @@ public class SignupController {
 
         try {
             userService.registerUser(userDTO);
-            return "redirect:/signup?success";
+            model.addAttribute("signupSuccess", true); // 회원가입 성공 여부 전달
+            return "/Sign/signup"; // 회원가입 성공 시 다시 폼으로 이동 (JavaScript에서 처리)
         } catch (Exception e) {
             model.addAttribute("errorMessage", "회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
             return "/Sign/signup";
         }
     }
+
 }
