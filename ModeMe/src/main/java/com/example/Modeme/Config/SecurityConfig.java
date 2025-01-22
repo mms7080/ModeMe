@@ -53,7 +53,8 @@ public class SecurityConfig {
                     "/default_delete",
                     "/wishlist_delete",
                     "/manager/**",
-                    "/api/**"
+                    "/api/**",
+                    "/productDetail/**"
                 )
             )
             .authorizeHttpRequests(auth -> auth
