@@ -1,5 +1,7 @@
 package com.example.Modeme.purchase.dto;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,13 +26,13 @@ public class Purchase {
 	@Column(nullable = false)
 	private int productNumber; // 상품PK
 	
-	@Column(nullable = false)
-	private int productPrice; // 상품가격 - 상품정보에서 가져오기?
+//	@Column(nullable = false)
+//	private int productPrice; // 상품가격 - 상품정보에서 가져오기?
 	
 	@Column(nullable = false)
 	private int productMany; // 상품갯수
 	
-	private int deliveryFee; // 배송비
+//	private int deliveryFee; // 배송비
 	
 //	private String isHearted; // 관심상품유무 - 상품정보에서 가져오기?
 	
@@ -40,4 +42,9 @@ public class Purchase {
 	@Column(nullable = false)
 	private String addressDetail; // 상세주소
 	
+	@Column(nullable = false)
+	private int totalPrice; // 전체금액
+	
+	@Column(nullable = false)
+	private LocalDateTime orderDate = LocalDateTime.now();
 }

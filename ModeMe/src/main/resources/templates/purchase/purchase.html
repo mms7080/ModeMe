@@ -1,147 +1,145 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="css/purchase/purchase.css" rel="stylesheet">
-    <script src="js/purchase/purchase.js" defer></script>
-    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
-	<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
-    <title>모드미 - 주문/결제</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="css/purchase/purchase.css" rel="stylesheet">
+<script src="js/purchase/purchase.js" defer></script>
+<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+<script src="http://code.jquery.com/jquery-latest.min.js"
+	type="text/javascript"></script>
+<title>모드미 - 주문/결제</title>
 </head>
 <body>
 
 	<div th:replace="~{header::header}"></div>
+	<form action="/purchaseSuccess" method="post">
+		<div class="container">
+			<div class="middle">모드미 - 주문/결제</div>
 
-    <div class="container">
-        <div class="middle">모드미 - 주문/결제</div>
-        
-        <!-- 배송지 섹션 -->
-        <div class="section">
-            <div class="section-title">배송지</div>
-            <div class="form-row">
-                <label>받는사람</label>
-                <input type="text" placeholder="이름">
-            </div>
-            <div class="form-row">
-                <label>주소</label>
-                <input id="sample6_postcode" type="text" placeholder="우편번호" style="flex: 0 0 120px; margin-right: 10px;">
-                <button id="addBtn" onclick="openDaumPostcode()">주소검색</button>
-            </div>
-            <div class="form-row">
-                <label></label>
-                <input id="sample6_address" type="text" placeholder="기본주소">
-                <input id="extraaddress" type="text" placeholder="참고항목">
-            </div>
-            <div class="form-row">
-                <label></label>
-                <input id="sample6_detailAddress" type="text" placeholder="상세주소">
-            </div>
-            <div class="form-row">
-                <label>휴대전화</label>
-                <select style="flex: 0 0 80px; margin-right: 10px;">
-                    <option>010</option>
-                    <option>011</option>
-                </select>
-                <input type="text" placeholder="1234" style="flex: 1; margin-right: 10px;">
-                <input type="text" placeholder="5678" style="flex: 1;">
-            </div>
-            <div class="form-row">
-				<label>이메일</label>
-				<input id="email-username" type="text" placeholder="아이디" style="flex: 1; margin-right: 5px;">
-				<span>@</span>
-				<select id="email-domain" onchange="handleDomainChange()" style="flex: 1; margin-left: 5px;">
-					<option value="gmail.com">google.com</option>
-					<option value="naver.com">naver.com</option>
-					<option value="daum.net">daum.net</option>
-					<option value="custom">직접 입력</option>
-				</select>
-				<input id="custom-domain" type="text" placeholder="직접 입력" style="display: none; flex: 1; margin-left: 5px;">
+			<!-- 배송지 섹션 -->
+			<div class="section">
+				<div class="section-title">배송지</div>
+				<div class="form-row">
+					<label>받는사람</label>
+					<input type="text" placeholder="이름">
+				</div>
+				<div class="form-row">
+					<label>주소</label>
+						<input name="postcode" id="sample6_postcode" type="text" placeholder="우편번호" style="flex: 0 0 120px; margin-right: 10px;">
+					<button id="addBtn" onclick="openDaumPostcode()">주소검색</button>
+				</div>
+				<div class="form-row">
+					<label></label>
+					<input name="address" id="sample6_address" type="text" placeholder="기본주소">
+					<input name="extraAddress" id="extraaddress" type="text" placeholder="참고항목">
+				</div>
+				<div class="form-row">
+					<label></label>
+					<input name="detailAddress" id="sample6_detailAddress" type="text" placeholder="상세주소">
+				</div>
+				<div class="form-row">
+					<label>휴대전화</label>
+					<select id="firstPhone" style="flex: 0 0 80px; margin-right: 10px;">
+						<option>010</option>
+						<option>011</option>
+						<option>016</option>
+					</select>
+					<input type="text" placeholder="12345678" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
+					<input type="hidden" name="phone" id="phoneNumber">
+				</div>
+				<div class="form-row">
+					<label>이메일</label>
+					<input id="email-username" type="text" placeholder="아이디" style="flex: 1; margin-right: 5px;">
+					<span>@</span>
+					<select id="email-domain" onchange="handleDomainChange()" style="flex: 1; margin-left: 5px;">
+						<option value="gmail.com">google.com</option>
+						<option value="naver.com">naver.com</option>
+						<option value="daum.net">daum.net</option>
+						<option value="custom">직접 입력</option>
+					</select>
+					<input id="custom-domain" type="text" placeholder="직접 입력" style="display: none; flex: 1; margin-left: 5px;">
+				</div>
 			</div>
-        </div>
-        
-        <!-- 주문상품 섹션 -->
-        <div class="section">
-            <div class="section-title">주문상품</div>
-            <div class="product-item">
-                <img src="image/026.jpg" alt="상품 이미지">
-                <div class="product-details">
-                    <p>Cashmere Half-neck Knitwear</p>
-                    <p>₩36,900</p>
-                </div>
-            </div>
-        </div>
 
-        <!-- 할인/쿠폰 섹션 -->
-        <div class="section">
-            <div class="section-title">할인/쿠폰</div>
-            <div class="coupon-row">
-                <label>현재 적립금</label>
-                <span id="current-points">0원</span> <!-- 적립금 표시 -->
-            </div>
-            <div class="coupon-row">
-                <label>적립금 사용</label>
-                <input id="use-points" placeholder="0" min="0" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" /> <!-- 적립금 입력 -->
-                <button id="use-all-points">전액사용</button> <!-- 전액사용 버튼 -->
-            </div>
-            <div class="coupon-row">
-                <label>할인 금액</label>
-                <span id="discount-amount">-₩0</span> <!-- 할인 금액 표시 -->
-            </div>
-        </div>
-        
-        <!-- 결제정보 섹션 -->
-        <div class="section">
-            <div class="section-title">결제정보</div>
-            <div class="summary-row">
-                <span>주문상품</span>
-                <span>₩36,900</span>
-            </div>
-            <div class="summary-row">
-                <span>배송비</span>
-                <span>₩0</span>
-            </div>
-            <div class="summary-row">
-                <span>할인/적립금</span>
-                <span>-₩2,000</span>
-            </div>
-            <div class="summary-row summary-total">
-                <span>최종 결제 금액</span>
-                <span>₩34,900</span>
-            </div>
-        </div>
+			<!-- 주문상품 섹션 -->
+			<div class="section">
+				<div class="section-title">주문상품</div>
+				<div class="product-item">
+					<img src="image/026.jpg" alt="상품 이미지">
+					<div class="product-details">
+						<p>Cashmere Half-neck Knitwear</p>
+						<p>₩36,900</p>
+					</div>
+				</div>
+			</div>
 
-        <!-- 결제수단 섹션 -->
-        <div class="section">
-            <div class="section-title">결제수단</div>
-            <div class="form-row">
-                <label>결제수단</label>
-                <select>
-                    <option>무통장입금</option>
-                    <option>신용카드</option>
-                    <option>가상계좌</option>
-                    <option>계좌이체</option>
-                </select>
-            </div>
-            <div class="">
-                <input type="checkbox">
-                <label>결제수단 입력정보를 다음에도 사용</label>
-            </div>
-        </div>
+			<!-- 할인/쿠폰 섹션 -->
+			<div class="section">
+				<div class="section-title">할인/쿠폰</div>
+				<div class="coupon-row">
+					<label>현재 적립금</label> <span id="current-points">0원</span>
+					<!-- 적립금 표시 -->
+				</div>
+				<div class="coupon-row">
+					<label>적립금 사용</label> <input id="use-points" placeholder="0" min="0" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
+					<!-- 적립금 입력 -->
+					<button id="use-all-points">전액사용</button>
+					<!-- 전액사용 버튼 -->
+				</div>
+				<div class="coupon-row">
+					<label>할인 금액</label>
+					<span id="discount-amount">-₩0</span>
+					<!-- 할인 금액 표시 -->
+				</div>
+			</div>
 
-        <!-- 결제 버튼 -->
-		<button class="button" id="payButton">KRW 34,900 결제하기</button>
-		<div class="payment-buttons">
-			<img src="image/kakaopay_icon_medium.png" id="kakaopay" style="width:165px; height:50px; border-radius:30px;">
-			<img src='image/tosspay_icon.JPG' id="tosspay" style="width:165px; height:50px; border-radius:30px;">
+			<!-- 결제정보 섹션 -->
+			<div class="section">
+				<div class="section-title">결제정보</div>
+				<div class="summary-row">
+					<span>주문상품</span> <span>₩36,900</span>
+				</div>
+				<div class="summary-row">
+					<span>배송비</span> <span>₩0</span>
+				</div>
+				<div class="summary-row">
+					<span>할인/적립금</span> <span>-₩2,000</span>
+				</div>
+				<div class="summary-row summary-total">
+					<span>최종 결제 금액</span> <span>₩34,900</span>
+				</div>
+			</div>
+
+			<!-- 결제수단 섹션 -->
+			<div class="section">
+				<div class="section-title">결제수단</div>
+				<div class="form-row">
+					<label>결제수단</label> <select>
+						<option>무통장입금</option>
+						<option>신용카드</option>
+						<option>가상계좌</option>
+						<option>계좌이체</option>
+					</select>
+				</div>
+				<div class="">
+					<input type="checkbox"> <label>결제수단 입력정보를 다음에도 사용</label>
+				</div>
+			</div>
+
+			<!-- 결제 버튼 -->
+			<button class="button" id="payButton">KRW 34,900 결제하기</button>
+			<div class="payment-buttons">
+				<img src="image/kakaopay_icon_medium.png" id="kakaopay" style="width: 165px; height: 50px; border-radius: 30px;">
+				<img src='image/tosspay_icon.JPG' id="tosspay" style="width: 165px; height: 50px; border-radius: 30px;">
+			</div>
 		</div>
-    </div>
 
-	<div th:replace="~{footer::footer}"></div>    
+		<div th:replace="~{footer::footer}"></div>
 
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-    <script src="https://nsp.pay.naver.com/sdk/js/naverpay.min.js"></script>
-  
+		<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+		<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+		<script src="https://nsp.pay.naver.com/sdk/js/naverpay.min.js"></script>
+	</form>
 </body>
 </html>
