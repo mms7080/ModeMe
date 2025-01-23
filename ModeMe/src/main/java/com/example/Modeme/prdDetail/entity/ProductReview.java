@@ -50,8 +50,8 @@ public class ProductReview {
 	@Column(nullable = false, length = 500)
 	private String content;
 
-	@ElementCollection
-	@CollectionTable(name = "review_images", joinColumns = @JoinColumn(name = "review_id"))
-	@Column(name = "image_path", nullable = true)
-	private List<String> images = new ArrayList<>();
+//	@ElementCollection
+//	@CollectionTable(name = "review_images", joinColumns = @JoinColumn(name = "review_id"))
+//	@Column(name = "image_path", nullable = true)
+//	private List<String> images = new ArrayList<>();
 }
