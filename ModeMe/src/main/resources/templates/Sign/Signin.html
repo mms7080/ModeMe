@@ -6,8 +6,8 @@
     <title>로그인</title>
     <link rel="stylesheet" href="/css/Sign/Signin.css">
     <!-- 네이버 SDK -->
-<!--     <script src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js" charset="utf-8"></script>
-    카카오 SDK
+    <script src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js" charset="utf-8"></script>
+<!--    카카오 SDK
     <script src="https://developers.kakao.com/sdk/js/kakao.js"></script> -->
 </head>
 <body>
@@ -58,80 +58,90 @@
     <!-- 푸터 -->
     <div th:replace="~{footer :: footer}"></div>
 
-    <!-- 카카오 로그인 Script -->
-    <script>
-         // 카카오 로그인 초기화
-        Kakao.init('337dc51e65db835d92140237621c8f56'); // 본인의 JavaScript 키 입력
-        console.log(Kakao.isInitialized());
+	<script>
+	document.addEventListener("DOMContentLoaded", function () {
+	    /** ================= ✅ 카카오 로그인 ================= **/
+	    Kakao.init('337dc51e65db835d92140237621c8f56'); // 📌 본인의 JavaScript 키 입력
+	    console.log(Kakao.isInitialized());
 
-        function loginWithKakao() {
-            Kakao.Auth.login({
-                success: function(authObj) {
-                    alert('카카오 로그인 성공!');
-                    console.log(authObj);
-                },
-                fail: function(err) {
-                    alert('카카오 로그인 실패!');
-                    console.log(err);
-                }
-            });
-        }
-    </script>
-
-    <!-- 네이버 로그인 Script -->
-    <script>
-         // 네이버 로그인 초기화
-        const naverLogin = new naver.LoginWithNaverId({
-            clientId: "L2yk1g6sJC3EhfnnBVtN", // 네이버 애플리케이션 Client ID
-            callbackUrl: "http://localhost:9999/naver_callback", // Redirect URI 설정
-            loginButton: { color: "green", type: 2, height: 50 }, // 버튼 스타일
-            isPopup: true // 팝업 방식 로그인
-        });
-
-        // 초기화 실행
-        naverLogin.init();
-
-        // 네이버 로그인 버튼에 이벤트 연결
-        document.getElementById("custom-naver-login-button").addEventListener("click", function () {
-            naverLogin.authorize(); // 네이버 로그인 요청
-        }); 
-
-         // 네이버 로그인 상태 확인
-        naverLogin.getLoginStatus(function (status) {
-            if (status) {
-                const email = naverLogin.user.getEmail();
-                const nickname = naverLogin.user.getNickName();
-                if (!email) {
-                    alert("이메일 정보 제공을 동의해주세요.");
-                    naverLogin.reprompt();
-                    return;
-                }
-                alert(`네이버 로그인 성공! 환영합니다, ${nickname}님!`);
-                console.log(`Email: ${email}, Nickname: ${nickname}`);
-            }
-        }); 
-    </script>
-    
-    <script>
-	   	 document.addEventListener("DOMContentLoaded", function () {
-	        const usernameInput = document.getElementById("username");
-	        const rememberCheckbox = document.getElementById("remember");
-	
-	        // 1️⃣ 저장된 아이디가 있으면 자동 입력
-	        if (localStorage.getItem("savedUsername")) {
-	            usernameInput.value = localStorage.getItem("savedUsername");
-	            rememberCheckbox.checked = true;
-	        }
-	
-	        // 2️⃣ 로그인 버튼 클릭 시 아이디 저장 여부 체크
-	        document.querySelector(".login-form").addEventListener("submit", function () {
-	            if (rememberCheckbox.checked) {
-	                localStorage.setItem("savedUsername", usernameInput.value);
-	            } else {
-	                localStorage.removeItem("savedUsername");
+	    function loginWithKakao() {
+	        Kakao.Auth.login({
+	            success: function(authObj) {
+	                alert('카카오 로그인 성공!');
+	                console.log(authObj);
+	            },
+	            fail: function(err) {
+	                alert('카카오 로그인 실패!');
+	                console.log(err);
 	            }
 	        });
+	    }
+
+	    /** ================= ✅ 네이버 로그인 ================= **/
+	    const naverLogin = new naver.LoginWithNaverId({
+	        clientId: "L2yk1g6sJC3EhfnnBVtN",
+	        callbackUrl: "http://localhost:9999/api/auth/naver/callback",
+	        loginButton: { color: "green", type: 2, height: 50 },
+	        isPopup: true
 	    });
+
+	    naverLogin.init();
+
+	    const clientId = "L2yk1g6sJC3EhfnnBVtN";
+	    const redirectUri = "http://localhost:9999/api/auth/naver/callback";
+	    const state = "randomState";
+
+	    document.getElementById("custom-naver-login-button").addEventListener("click", function (event) {
+	        event.preventDefault(); // 기본 동작 방지
+
+	        const popupWidth = 500;
+	        const popupHeight = 600;
+	        const left = (window.screen.width - popupWidth) / 2;
+	        const top = (window.screen.height - popupHeight) / 2;
+
+	        const loginPopup = window.open(
+	            `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&state=${state}`,
+	            "naverLoginPopup",
+	            `width=${popupWidth},height=${popupHeight},left=${left},top=${top},scrollbars=yes`
+	        );
+
+	        if (!loginPopup || loginPopup.closed || typeof loginPopup.closed === "undefined") {
+	            alert("팝업이 차단되었습니다. 팝업 차단을 해제해주세요.");
+	        }
+	    });
+
+	    naverLogin.getLoginStatus(function (status) {
+	        if (status) {
+	            const email = naverLogin.user.getEmail();
+	            const nickname = naverLogin.user.getNickName();
+	            if (!email) {
+	                alert("이메일 정보 제공을 동의해주세요.");
+	                naverLogin.reprompt();
+	                return;
+	            }
+	            alert(`네이버 로그인 성공! 환영합니다, ${nickname}님!`);
+	            console.log(`Email: ${email}, Nickname: ${nickname}`);
+	        }
+	    });
+
+	    /** ================= ✅ 아이디 저장 기능 ================= **/
+	    const usernameInput = document.getElementById("username");
+	    const rememberCheckbox = document.getElementById("remember");
+
+	    if (localStorage.getItem("savedUsername")) {
+	        usernameInput.value = localStorage.getItem("savedUsername");
+	        rememberCheckbox.checked = true;
+	    }
+
+	    document.querySelector(".login-form").addEventListener("submit", function () {
+	        if (rememberCheckbox.checked) {
+	            localStorage.setItem("savedUsername", usernameInput.value);
+	        } else {
+	            localStorage.removeItem("savedUsername");
+	        }
+	    });
+	});
+
 	</script>
 	    
 </body>
