@@ -27,4 +27,9 @@ public class ItemSize {
 
     @Column(name = "item_size")
     private String itemSize;
+    
+    @Override
+    public String toString() {
+        return itemSize;
+    }
 }

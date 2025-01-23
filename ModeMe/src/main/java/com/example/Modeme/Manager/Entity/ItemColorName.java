@@ -27,4 +27,9 @@ public class ItemColorName {
 
     @Column(name = "color_name")
     private String colorName;
+    
+    @Override
+    public String toString() {
+        return colorName;
+    }
 }
