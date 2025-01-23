@@ -40,19 +40,15 @@ public class ProductStock {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "add_item_id", nullable = false)
-    private AddItem additem;
+    private AddItem addItem;
 
     @Column(nullable = false)
     private String color;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "size_id", nullable = false) // 필드 이름 변경
-//    private Fit sizes;
-    
     @ElementCollection
     @CollectionTable(name = "item_sizes", joinColumns = @JoinColumn(name = "add_item_id"))
     @Column(name = "item_size")
-    private List<String> productSizes;
+    private List<String> productSizes; // 상품 사이즈 리스트
 
     @Column(nullable = false)
     private int stock;

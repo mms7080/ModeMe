@@ -1,7 +1,6 @@
 package com.example.Modeme.prdDetail.controller;
 
 import java.security.Principal;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,14 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.Modeme.Manager.Entity.AddItem;
 import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
-import com.example.Modeme.Manager.ManagerService.AddItemService;
-import com.example.Modeme.Notice.Noticedto.NoticeDto;
 import com.example.Modeme.QnA.QnARepository.QnaRepository;
 import com.example.Modeme.User.UserDTO.Headerlogin;
 import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.User.UserRepository.UserRepository;
 import com.example.Modeme.User.UserService.UserService;
-import com.example.Modeme.prdDetail.entity.ProductBoard;
 import com.example.Modeme.prdDetail.entity.ProductReview;
 import com.example.Modeme.prdDetail.repository.ProductReviewRepository;
 import com.example.Modeme.prdDetail.service.ProductDetailService;
@@ -129,9 +125,10 @@ public class ProductDetailController {
 	
 	@GetMapping("/{id}/review")
 	public String reviewWritePage(@PathVariable Long id, Model model, Principal principal) {
-	    System.out.println("Requested ProductBoard ID: " + id);
-	    ProductBoard productBoard = detailService.findProductById(id);
-	    model.addAttribute("product", productBoard.getAddItem());
+	    System.out.println("Requested AddItem ID: " + id);
+	    AddItem addItem = addItemRepository.findById(id).orElseThrow(() ->
+	    new IllegalArgumentException("상품을 찾을 수 없습니다. ID: " + id));
+	    model.addAttribute("product", addItem);
 	    return "/productDetail/productReviewWrite";
 	}
 

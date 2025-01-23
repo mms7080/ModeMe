@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.User.UserService.UserService;
-import com.example.Modeme.prdDetail.entity.ProductBoard;
+import com.example.Modeme.Manager.Entity.AddItem;
+import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
 import com.example.Modeme.prdDetail.entity.ProductReview;
-import com.example.Modeme.prdDetail.repository.ProductDetailRepository;
 import com.example.Modeme.prdDetail.repository.ProductReviewRepository;
 
 import jakarta.transaction.Transactional;
@@ -18,7 +18,7 @@ import jakarta.transaction.Transactional;
 public class ProductDetailService {
 	
 	@Autowired
-	private final ProductDetailRepository detailRepository;
+	private final AddItemRepository addItemRepository;
 	
 	@Autowired
 	private final ProductReviewRepository reviewRepository;
@@ -26,33 +26,33 @@ public class ProductDetailService {
 	@Autowired
     private final UserService userService;
 
-    public ProductDetailService(ProductDetailRepository detailRepository, ProductReviewRepository reviewRepository, UserService userService) {
-        this.detailRepository = detailRepository;
+    public ProductDetailService(AddItemRepository addItemRepository, ProductReviewRepository reviewRepository, UserService userService) {
+        this.addItemRepository = addItemRepository;
         this.userService = userService;
         this.reviewRepository = reviewRepository;
     }
 	
     @Transactional
-    public void saveReview(Long productBoardId, ProductReview review, String username) {
-        ProductBoard productBoard = detailRepository.findById(productBoardId)
-                .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다. ID: " + productBoardId));
+    public void saveReview(Long addItemId, ProductReview review, String username) {
+        AddItem addItem = addItemRepository.findById(addItemId)
+                .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다. ID: " + addItemId));
 
         User user = userService.findByUsername(username);
 
-        review.setProductBoard(productBoard);
+        review.setAddItem(addItem);
         review.setUsers(user);
 
         reviewRepository.save(review);
     }
 
-    public List<ProductReview> getReviewsByProductId(Long productBoardId) {
-        return reviewRepository.findByProductBoardId(productBoardId);
+    public List<ProductReview> getReviewsByProductId(Long addItemId) {
+        return reviewRepository.findByAddItemId(addItemId);
     }
 
-    public ProductBoard findProductById(Long id) {
-        return detailRepository.findById(id)
+    public AddItem findProductById(Long id) {
+        return addItemRepository.findById(id)
                 .orElseThrow(() -> {
-                    System.err.println("ProductBoard ID " + id + " not found in database");
+                    System.err.println("AddItem ID " + id + " not found in database");
                     return new IllegalArgumentException("상품을 찾을 수 없습니다. ID: " + id);
                 });
     }

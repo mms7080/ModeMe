@@ -3,6 +3,7 @@ package com.example.Modeme.prdDetail.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.Modeme.Manager.Entity.AddItem;
 import com.example.Modeme.User.UserEntity.User;
 
 import jakarta.persistence.CollectionTable;
@@ -34,10 +35,10 @@ public class ProductReview {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ReviewSeq")
 	@Column(name = "review_id")
 	private long id;
-
+	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "product_board_id", nullable = false)
-	private ProductBoard productBoard;
+    @JoinColumn(name = "add_item_id", nullable = false)
+    private AddItem addItem;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
