@@ -1,7 +1,9 @@
 	package com.example.Modeme.controller;
 	
 	import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,12 +25,17 @@ import com.example.Modeme.Mypage.MypageService.AddressService;
 import com.example.Modeme.Mypage.MypageService.DefaultaddressService;
 import com.example.Modeme.Mypage.MypageService.WishlistService;
 import com.example.Modeme.User.UserDTO.Headerlogin;
+import com.example.Modeme.User.UserEntity.User;
+import com.example.Modeme.User.UserRepository.UserRepository;
 	
 	@Controller
 	public class MypageController {
 		
 		   @Autowired
 		   Headerlogin keep; // 로그인 유지 재사용 Headerlogin 클래스
+		   
+		   @Autowired
+		   UserRepository userrep;
 		   
 		   @Autowired
 		   AddressRepository addressrep;
@@ -64,7 +71,21 @@ import com.example.Modeme.User.UserDTO.Headerlogin;
 			
 			// 적립금
 			@GetMapping("/mileage")
-			public String Mileage() {
+			public String Mileage(
+					@AuthenticationPrincipal CustomUserDetails userDetails,
+					Model model		
+			) {
+				String userid = userDetails.getUsername();
+				
+				Optional<User> user = userrep.findByUsername(userid);
+				
+				// Optional<User>에서 createdAt 값 추출
+			    LocalDateTime userDate = user.map(User::getCreatedAt) // createdAt 필드 접근
+			                                 .orElse(null); // 값이 없으면 null 처리
+				
+			 // 모델에 추가
+			    model.addAttribute("mileage_list", userDate);
+				
 				return "/MyPage/mileage";
 			}
 
@@ -75,10 +96,8 @@ import com.example.Modeme.User.UserDTO.Headerlogin;
 					Model model
 			) {
 				String userid = userDetails.getUsername();
-			    System.out.println("Logged in User: " + userid); // 로그 추가
 			    
 			    List<Wishlist> wishlist = wishrep.findByUserid(userid);
-			    System.out.println("Wishlist: " + wishlist); // 로그 추가
 
 			    model.addAttribute("wishlist", wishlist);
 			    return "/MyPage/wishlist";
