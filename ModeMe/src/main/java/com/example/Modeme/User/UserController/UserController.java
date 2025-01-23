@@ -1,14 +1,19 @@
 package com.example.Modeme.User.UserController;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.Modeme.User.UserDTO.Headerlogin;
 import com.example.Modeme.User.UserDTO.UserDTO;
@@ -51,6 +56,45 @@ public class UserController {
     @GetMapping("/find_pw")
     public String findPw() {
         return "/Sign/find_pw"; // 비밀번호 찾기 HTML 경로
+    }
+    
+    /** ======================== [ 아이디 찾기 ] ======================== **/
+
+    @PostMapping("/find_id")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> findId(@RequestParam("name") String name,
+                                                      @RequestParam(value = "contact", required = false) String contact,
+                                                      @RequestParam("findMethod") String findMethod) {
+        Map<String, Object> response = new HashMap<>();
+
+        System.out.println("🔹 요청된 이름: " + name);
+        System.out.println("🔹 요청된 연락처: " + contact);
+        System.out.println("🔹 찾기 방법: " + findMethod);
+
+        if (contact == null || contact.isEmpty()) {
+            response.put("success", false);
+            response.put("error", "이메일 또는 전화번호를 입력해야 합니다.");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        String maskedUsername = null;
+        if ("email".equals(findMethod)) {
+            maskedUsername = userService.findUsernameByNameAndEmail(name, contact);
+        } else if ("phone".equals(findMethod)) {
+            maskedUsername = userService.findUsernameByNameAndPhone(name, contact);
+        }
+
+        if (maskedUsername != null) {
+            response.put("success", true);
+            response.put("username", maskedUsername);
+            System.out.println("✅ 찾은 아이디: " + maskedUsername);
+        } else {
+            response.put("success", false);
+            response.put("error", "일치하는 회원 정보가 없습니다.");
+            System.out.println("❌ 일치하는 정보 없음");
+        }
+
+        return ResponseEntity.ok(response);
     }
 
     /** ======================== [ 회원정보 수정 ] ======================== **/

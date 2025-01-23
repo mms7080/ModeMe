@@ -10,50 +10,56 @@
     <!-- 헤더 -->
     <div th:replace="~{header :: header}"></div>
 
-    <!-- 아이디 찾기 본문 -->
-    <main class="find-container">
-        <h1>아이디 찾기</h1>
-        <form action="/find-id" method="post" class="find-form">
-            <!-- 회원유형 -->
-            <div class="form-row">
-                <label for="member-type">회원유형</label>
-                <select id="member-type" name="memberType" required>
-                    <option value="personal">개인회원</option>
-                    <option value="personal-business">개인 사업자회원</option>
-                </select>
-            </div>
-            <!-- 찾기 방법 -->
-            <div class="form-row">
-                <label>찾기 방법</label>
-                <div class="radio-group">
-                    <input type="radio" id="email" name="findMethod" value="email" onclick="toggleFields('email')" checked>
-                    <label for="email">이메일</label>
-                    <input type="radio" id="phone" name="findMethod" value="phone" onclick="toggleFields('phone')">
-                    <label for="phone">휴대폰번호</label>
-                </div>
-            </div>
-            <!-- 이름 -->
-            <div class="form-row">
-                <label for="name">이름</label>
-                <input type="text" id="name" name="name" placeholder="이름" required>
-            </div>
-            <!-- 이메일로 찾기 -->
-            <div class="form-row email-fields">
-                <label for="email-input">이메일</label>
-                <input type="email" id="email-input" name="email" placeholder="example@email.com" required>
-            </div>
-			<!-- 휴대폰번호로 찾기 -->
-			<div class="form-row phone-fields" style="display: none;">
-			    <label for="phone-input">휴대폰 번호</label>
-			    <div class="phone-input-group">
-			        <input type="text" name="phonePart1" placeholder="010" maxlength="3" required>
-			        <input type="text" name="phonePart2" placeholder="1234" maxlength="4" required>
-			        <input type="text" name="phonePart3" placeholder="5678" maxlength="4" required>
-			    </div>
-			</div>
-            <button type="submit" class="find-btn">확인</button>
-        </form>
-    </main>
+    <!-- 아이디 찾기 본문 -->	
+	<main class="find-container">
+	    <h1>아이디 찾기</h1>
+	    
+	    <!-- 아이디 찾기 폼 -->
+	    <div id="find-form">
+	        <div class="form-row">
+	            <label for="member-type">회원유형</label>
+	            <select id="member-type" name="memberType" required>
+	                <option value="personal">개인회원</option>
+	                <option value="personal-business">개인 사업자회원</option>
+	            </select>
+	        </div>
+	
+	        <div class="form-row">
+	            <label>찾기 방법</label>
+	            <div class="radio-group">
+	                <input type="radio" id="email" name="findMethod" value="email" onclick="toggleFields('email')" checked>
+	                <label for="email">이메일</label>
+	                <input type="radio" id="phone" name="findMethod" value="phone" onclick="toggleFields('phone')">
+	                <label for="phone">휴대폰번호</label>
+	            </div>
+	        </div>
+	
+	        <div class="form-row">
+	            <label for="name">이름</label>
+	            <input type="text" id="name" name="name" placeholder="이름" required>
+	        </div>
+	
+	        <div class="form-row email-fields">
+	            <label for="email-input">이메일</label>
+	            <input type="email" id="email-input" name="email" placeholder="example@email.com" required>
+	        </div>
+	
+	        <div class="form-row phone-fields" style="display: none;">
+	            <label for="phone-input">휴대폰 번호</label>
+	            <input type="text" id="phone-input" name="phone" placeholder="01012345678" maxlength="11" required>
+	        </div>
+	
+	        <button type="button" class="find-btn" onclick="findId()">확인</button>
+	    </div>
+	
+		<!-- 결과 출력 (초기에는 숨김) -->
+		<div id="find-result" style="display: none; text-align: center; margin-top: 20px;">
+		    <div id="result-message" class="result-message"></div>
+		    <button type="button" class="retry-btn" onclick="resetForm()">다시 찾기</button>
+		</div>
+
+	</main>
+
 
     <!-- 푸터 -->
     <div th:replace="~{footer :: footer}"></div>
@@ -72,5 +78,56 @@
             }
         }
     </script>
+    
+	<script>
+	function findId() {
+	    const findMethod = document.querySelector('input[name="findMethod"]:checked').value;
+	    const name = document.getElementById('name').value;
+	    let contact = "";
+	
+	    if (findMethod === "email") {
+	        contact = document.getElementById('email-input').value;
+	    } else {
+	        contact = document.getElementById('phone-input').value;
+	    }
+	
+	    console.log("🔹 요청 보내는 중...", { name, contact, findMethod });
+	
+	    fetch("/find_id", {
+	        method: "POST",
+	        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+	        body: new URLSearchParams({ name: name, contact: contact, findMethod: findMethod })
+	    })
+	    .then(response => response.json())
+	    .then(data => {
+	        console.log("🔹 서버 응답:", data);
+	
+	        // 폼 숨기고 결과 영역 표시
+	        document.getElementById("find-form").style.display = "none";
+	        document.getElementById("find-result").style.display = "flex"; // 🔹 flex로 변경
+	        document.getElementById("find-result").style.flexDirection = "column";
+	        document.getElementById("find-result").style.justifyContent = "center";
+	        document.getElementById("find-result").style.alignItems = "center";
+	
+	        // 결과 메시지 업데이트
+	        const resultMessage = document.getElementById("result-message");
+	        resultMessage.style.color = data.success ? "green" : "red";
+	        resultMessage.innerHTML = data.success
+	            ? `<strong>아이디:</strong> ${data.username}`
+	            : "일치하는 회원 정보가 없습니다.";
+	    })
+	    .catch(error => console.error("❌ AJAX 요청 오류:", error));
+	}
+	
+	// 다시 찾기 기능
+	function resetForm() {
+	    document.getElementById("find-form").style.display = "block";
+	    document.getElementById("find-result").style.display = "none";
+	}
+	</script>
+
+
+
+    
 </body>
 </html>

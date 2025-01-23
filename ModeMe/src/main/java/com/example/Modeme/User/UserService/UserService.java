@@ -1,13 +1,15 @@
 package com.example.Modeme.User.UserService;
 
+import java.util.Optional;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.Modeme.User.UserDTO.UserDTO;
 import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.User.UserRepository.UserRepository;
 
-import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -130,4 +132,33 @@ public class UserService {
             throw new RuntimeException("회원정보 수정 중 오류 발생: " + e.getMessage());
         }
     }
+    
+    public String findUsernameByNameAndContact(String name, String email, String phone) {
+        if (email != null && !email.isEmpty()) {
+            return findUsernameByNameAndEmail(name, email);
+        } else if (phone != null && !phone.isEmpty()) {
+            return findUsernameByNameAndPhone(name, phone);
+        } else {
+            return null; // 이메일과 전화번호 모두 입력되지 않은 경우
+        }
+    }
+
+    // 아이디 마스킹 (앞 4자리만 노출)
+    private String maskUsername(String username) {
+        if (username.length() <= 4) {
+            return "XXXX"; // 4자리 이하인 경우 모두 X로 처리
+        }
+        return username.substring(0, 4) + "X".repeat(username.length() - 4);
+    }
+
+    public String findUsernameByNameAndEmail(String name, String email) {
+        Optional<User> userOptional = userRepository.findByNameAndEmail(name, email);
+        return userOptional.map(user -> maskUsername(user.getUsername())).orElse(null);
+    }
+
+    public String findUsernameByNameAndPhone(String name, String phone) {
+        Optional<User> userOptional = userRepository.findByNameAndPhone(name, phone);
+        return userOptional.map(user -> maskUsername(user.getUsername())).orElse(null);
+    }
+
 }
