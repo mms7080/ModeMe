@@ -23,6 +23,8 @@ import com.example.Modeme.prdDetail.repository.ProductReviewRepository;
 import com.example.Modeme.prdDetail.service.ProductDetailService;
 import com.example.Modeme.prdDetail.service.ProductEditService;
 
+import jakarta.transaction.Transactional;
+
 @Controller
 @RequestMapping("/productDetail")
 public class ProductDetailController {
@@ -84,11 +86,11 @@ public class ProductDetailController {
     // 상품 수정 페이지 렌더링
     @GetMapping("/productEdit/{id}")
     public String getProductEditPage(@PathVariable Long id, Principal principal, Model model) {
-        AddItem item = editService.findById(id);
-        if (item == null) {
+    	AddItem product = editService.findById(id);
+        if (product == null) {
             throw new IllegalArgumentException("해당 상품을 찾을 수 없습니다. ID: " + id);
         }
-        model.addAttribute("product", item);
+        model.addAttribute("product", product); 
         return "/productDetail/productEdit";
     }
 
@@ -96,13 +98,13 @@ public class ProductDetailController {
     @PostMapping("/productEdit/{id}")
     public String updateProduct(@PathVariable Long id, @ModelAttribute AddItem updatedItem, Principal principal) {
         try {
-        	System.out.println("Updated Item: " + updatedItem);
-            editService.updateItem(id, updatedItem);
-            return "redirect:/productDetail/" + id;
+            System.out.println("수정 요청 처리: ID = " + id);
+            editService.updateItem(id, updatedItem); // 데이터 수정
+            System.out.println("컨트롤러: 수정 요청 처리 완료.");
+            return "redirect:/productDetail/" + id; // 수정 후 상세 페이지로 이동
         } catch (Exception e) {
-            // 에러 처리 로직
-            e.printStackTrace();
-            return "redirect:/productEdit/" + id + "?error=true";
+            e.printStackTrace(); // 에러 로그 출력
+            return "redirect:/productEdit/" + id + "?error=true"; // 수정 실패 시 리다이렉트
         }
     }
 
@@ -125,21 +127,45 @@ public class ProductDetailController {
 	
 	@GetMapping("/{id}/review")
 	public String reviewWritePage(@PathVariable Long id, Model model, Principal principal) {
-	    System.out.println("Requested AddItem ID: " + id);
-	    AddItem addItem = addItemRepository.findById(id).orElseThrow(() ->
-	    new IllegalArgumentException("상품을 찾을 수 없습니다. ID: " + id));
-	    model.addAttribute("product", addItem);
-	    return "/productDetail/productReviewWrite";
+	    // 로그인한 사용자 확인
+	    if (principal == null) {
+	        throw new IllegalArgumentException("로그인이 필요합니다.");
+	    }
+	    // 상품 데이터 조회
+	    System.out.println("Product ID: " + id);
+	    AddItem product = addItemRepository.findById(id)
+	            .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다. ID: " + id));
+	    // 모델에 데이터 추가
+	    model.addAttribute("product", product);
+	    return "/productDetail/productReviewWrite"; // 리뷰 작성 페이지
+	}
+	
+	@PostMapping("/{id}/review")
+	@Transactional
+	public String saveReview(
+	        @PathVariable Long id, 
+	        @ModelAttribute ProductReview review, 
+	        Principal principal) {
+	    // 로그인한 사용자 확인
+	    if (principal == null) {
+	        throw new IllegalArgumentException("로그인이 필요합니다.");
+	    }
+	    // 상품 조회
+	    AddItem product = addItemRepository.findById(id)
+	            .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다. ID: " + id));
+	    // 사용자 조회
+	    User user = userService.findByUsername(principal.getName());
+	    // 리뷰 데이터 설정
+	    review.setId(null); // 새 리뷰로 저장
+	    review.setAddItem(product);
+	    review.setUsers(user);
+	    reviewRepository.save(review); // 리뷰 저장
+	    // 저장 후 상세 페이지로 리다이렉트
+	    System.out.println("리뷰 저장 요청 도착. ID: " + id);
+	    System.out.println("리뷰 데이터: " + review);
+	    return "redirect:/productDetail/" + id;
 	}
 
-
-    // 리뷰 저장
-    @PostMapping("/{id}/review")
-    public String saveReview(@PathVariable Long id, @ModelAttribute ProductReview review, Principal principal) {
-        detailService.saveReview(id, review, principal.getName());
-        return "redirect:/productDetail/" + id;
-    }
-    
-    
-
 }
+
+

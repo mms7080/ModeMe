@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="/css/productDetail/reviewWrite.css">
 </head>
 <body>
-
 	<!-- 헤더 -->
 	<div th:replace="~{header :: header}"></div>
 
@@ -16,31 +15,32 @@
         <p class="description">상품 사용후기를 작성해주세요.</p>
 
         <!-- Product Summary -->
-    <div class="product-summary">
-        <!-- 상품 이미지: 나중에 동적으로 구현 가능 -->
-        <div class="product-image" style="background-color: #e0e0e0;">
-            <img th:src="${addItem?.image ?: '/images/default-product.png'}" alt="상품 이미지">
-        </div>
+	    <div class="product-summary">
+	        <!-- 상품 이미지: 나중에 동적으로 구현 가능 -->
+	        <div class="product-image" style="background-color: #e0e0e0;">
+	            <img th:src="${addItem?.image ?: '/images/default-product.png'}" alt="상품 이미지">
+	        </div>
+	
+	        <!-- 상품 정보 -->
+	        <div class="product-info">
+	            <h2 th:text="${product?.name ?: '상품 이름 없음'}">상품 이름</h2>
+	            <p th:text="'₩' + ${product?.price ?: 0}">상품 가격</p>
+	            <a th:href="@{/productDetail/{id}(id=${product?.id})}">
+	                <button type="button">상품 상세보기</button>
+	            </a>
+	        </div>
+	    </div>
 
-        <!-- 상품 정보 -->
-        <div class="product-info">
-            <h2 th:text="${product?.name ?: '상품 이름 없음'}">상품 이름</h2>
-            <p th:text="'₩' + ${product?.price ?: 0}">상품 가격</p>
-            <a th:href="@{/productDetail/{id}(id=${product?.id})}">
-                <button type="button">상품 상세보기</button>
-            </a>
-        </div>
-    </div>
-
-        <!-- Review Form -->
-		<form th:action="@{/productDetail/{id}/review(id=${product?.id})}" method="post" class="review-form">
-		    <!-- Title -->
+        <!-- Review Form -->		    
+		<form th:action="@{/productDetail/{id}/review(id=${product.id ?: 0})}" method="post">
+		    <!-- 제목 -->
 		    <label for="title">제목</label>
 		    <input type="text" class="title" id="title" name="title" placeholder="제목을 입력하세요" required>
 		
-		    <!-- Content -->
+		    <!-- 내용 -->
 		    <label for="content">내용</label>
 		    <textarea id="content" class="content" name="content" rows="10" placeholder="내용을 입력하세요" required></textarea>
+		    
 
             <!-- File Upload -->
             <div class="file-upload">
@@ -61,6 +61,8 @@
 
 		    <!-- Buttons -->
 			<div class="form-buttons">
+				<!-- CSRF 토큰 추가 -->
+	    		<input type="hidden" name="_csrf" th:value="${_csrf.token}">
 			    <!-- 등록 버튼 -->
 			    <button type="submit" class="upload-button">등록</button>
 			    <!-- 취소 버튼 -->

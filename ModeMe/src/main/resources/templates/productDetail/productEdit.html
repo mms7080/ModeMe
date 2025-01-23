@@ -16,6 +16,8 @@
 	<div th:replace="~{header :: header}"></div>
 
     <div class="product-edit-container">
+    
+    <form th:action="@{/productEdit/{id}(id=${product?.id ?: 0})}" method="post">
         <h1>상품 수정</h1>
 		
 		<div class="product-name">
@@ -40,27 +42,19 @@
 		
 		<div class="product-color-information">
 		    <!-- 색상 입력 섹션 -->
-		    <div class="color-section" th:each="color, iterStat : ${product?.colors ?: {}}">
-		        <span class="color-info">
-		            <label th:for="'color-' + ${iterStat.index}">상품 색상</label>
-		            <input 
-		                class="color" 
-		                type="color" 
-		                id="color-[[${iterStat.index}]]" 
-		                name="colors" 
-		                th:value="${color ?: '#000000'}"
-		            >
-		        </span>
-		        <div class="color-output" th:class="'color-output color-output-' + ${iterStat.index}">
-		            R: 0, G: 0, B: 0
-		        </div>
-		        <input 
-		            class="color-name" 
-		            type="text" 
-		            name="colorNames" 
-		            th:placeholder="'색상 이름 입력'"
-		        >
-		    </div>
+			<div class="color-section" th:each="colorName, iterStat : ${product?.colorNames ?: {}}">
+			    <!-- 색상 정보 -->
+			    <span class="color-info">
+			        <label th:for="'color-' + ${iterStat.index}">상품 색상</label>
+			        <input class="color" type="color" id="color-[[${iterStat.index}]]" name="colors" th:value="${product?.colors[iterStat.index] ?: '#000000'}">
+			    </span>
+			    <!-- 색상 출력 -->
+			    <div class="color-output" th:class="'color-output color-output-' + ${iterStat.index}">
+			        R: 0, G: 0, B: 0
+			    </div>
+			    <!-- 색상 이름 입력 -->
+			    <input class="color-name" type="text" name="colorNames" th:placeholder="'색상 이름 입력'" th:value="${colorName.colorName}">
+			</div>
 		    <button class="add-color" type="button">+</button>
 		</div>
 
@@ -91,9 +85,12 @@
 		    </div>
 		
 		    <!-- 서브 카테고리 -->
-		    <div class="subcategory" id="subcategory">
-		        <!-- 서브 카테고리는 JS로 동적으로 추가 -->
-		    </div>
+			<div class="subcategory" id="subcategory" th:attr="data-selected-subcategory=${product.subcategory}">
+			    <!-- JavaScript로 동적 서브카테고리 생성 -->
+			</div>
+
+
+			
 		</div>
 		<!-- 사이즈 카테고리 -->
 		<div class="size-container">
@@ -135,14 +132,14 @@
 		    <input type="hidden" id="productDescription" name="productDescription" th:value="${product?.productDescription ?: ''}">
 		</div>
 
-		<form th:action="@{/productEdit/{id}(id=${product?.id ?: 0})}" method="post">
+		
+		    <!-- CSRF 토큰 추가 -->
+		    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
 		    <div class="buttons">
-    		<input type="hidden" name="_csrf" th:value="${_csrf?.token}">
-		        <button id="save-btn">수정 완료</button>
-		        <button id="cancel-btn">수정 취소</button>
-		        <button id="temp-save-btn">임시 저장</button>
+		        <button id="save-btn" type="submit">수정 완료</button>
+		        <button id="cancel-btn" type="button">수정 취소</button>
 		    </div>
-		    <input type="hidden" name="id" th:value="${product?.id ?: 0}">
+			<input type="hidden" name="id" th:value="${product?.id ?: 0}">
 		</form>
 
     </div>

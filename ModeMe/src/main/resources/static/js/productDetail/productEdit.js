@@ -1,6 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const mainCategoryInputs = document.querySelectorAll('input[name="category"]');
-    const subcategoryContainer = document.getElementById("subcategory");
     const mainCategoryLabels = document.querySelectorAll('label[for]');
 	const colorInputs = document.querySelectorAll(".color");
 	    
@@ -29,17 +27,25 @@ document.addEventListener("DOMContentLoaded", () => {
             colorOutput.textContent = `R: ${rgb.r}, G: ${rgb.g}, B: ${rgb.b}`;
         });
     });
+});
 
-	// 서브 카테고리 데이터
+document.addEventListener("DOMContentLoaded", () => {
+    const mainCategoryInputs = document.querySelectorAll('input[name="category"]');
+    const subcategoryContainer = document.getElementById("subcategory");
+
+    // 서브카테고리 데이터
     const subcategories = {
         outer: ["점퍼", "가디건", "자켓", "코트"],
         top: ["티셔츠", "민소매", "셔츠/블라우스", "니트", "후드/맨투맨"],
         bottom: ["데님", "팬츠", "슬랙스", "스커트", "트레이닝"]
     };
 
+    // 저장된 서브카테고리 값 가져오기
+    const currentSubcategory = subcategoryContainer.getAttribute("data-selected-subcategory");
+	console.log("현재 선택된 서브카테고리:", currentSubcategory);
+
     // 초기 서브카테고리 설정
     const currentCategory = document.querySelector('input[name="category"]:checked')?.value;
-    const currentSubcategory = subcategoryContainer.getAttribute("data-selected-subcategory");
     updateSubcategories(currentCategory, currentSubcategory);
 
     // 메인 카테고리 변경 시 서브카테고리 업데이트
@@ -51,6 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 서브카테고리 업데이트 함수
     function updateSubcategories(category, selectedSubcategory = null) {
+		
         const subItems = subcategories[category] || [];
         subcategoryContainer.innerHTML = ""; // 기존 서브카테고리 초기화
 
@@ -64,9 +71,9 @@ document.addEventListener("DOMContentLoaded", () => {
             subItemInput.name = "subcategory";
             subItemInput.value = item;
 
-            // 선택된 서브카테고리 유지
+            // 저장된 서브카테고리를 초기 선택
             if (item === selectedSubcategory) {
-                subItemInput.checked = true;
+                subItemInput.checked = true; // 선택된 서브카테고리 체크
             }
 
             subItemDiv.appendChild(subItemInput);
@@ -179,9 +186,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-
-
-
 document.addEventListener("DOMContentLoaded", () => {
     const buttons = document.querySelectorAll(".buttons button");
 
@@ -236,5 +240,3 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = redirectUrl; // 상세 페이지로 이동
     });
 });
-
-

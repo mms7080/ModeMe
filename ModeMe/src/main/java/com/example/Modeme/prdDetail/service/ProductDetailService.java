@@ -31,23 +31,6 @@ public class ProductDetailService {
         this.userService = userService;
         this.reviewRepository = reviewRepository;
     }
-	
-    @Transactional
-    public void saveReview(Long addItemId, ProductReview review, String username) {
-        AddItem addItem = addItemRepository.findById(addItemId)
-                .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다. ID: " + addItemId));
-
-        User user = userService.findByUsername(username);
-
-        review.setAddItem(addItem);
-        review.setUsers(user);
-
-        reviewRepository.save(review);
-    }
-
-    public List<ProductReview> getReviewsByProductId(Long addItemId) {
-        return reviewRepository.findByAddItemId(addItemId);
-    }
 
     public AddItem findProductById(Long id) {
         return addItemRepository.findById(id)
@@ -56,6 +39,24 @@ public class ProductDetailService {
                     return new IllegalArgumentException("상품을 찾을 수 없습니다. ID: " + id);
                 });
     }
+    
+    @Transactional
+    public void saveReview(Long addItemId, ProductReview review, String username) {
+        AddItem product = addItemRepository.findById(addItemId)
+                .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다. ID: " + addItemId));
 
+        User user = userService.findByUsername(username); // 사용자 정보 가져오기
+        
+        System.out.println("AddItem: " + product);
+        System.out.println("User: " + user);
+        System.out.println("Title: " + review.getTitle());
+        System.out.println("Content: " + review.getContent());
+
+        // 리뷰 데이터 설정
+        review.setAddItem(product);
+        review.setUsers(user);
+
+        reviewRepository.save(review); // 리뷰 저장
+    }
 	
 }

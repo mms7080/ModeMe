@@ -9,7 +9,5 @@ import com.example.Modeme.prdDetail.entity.ProductReview;
 
 @Repository
 public interface ProductReviewRepository extends JpaRepository<ProductReview, Long> {
-
-	List<ProductReview> findByAddItemId(Long addItemId);
-	
+    List<ProductReview> findByAddItemId(Long addItemId);
 }
