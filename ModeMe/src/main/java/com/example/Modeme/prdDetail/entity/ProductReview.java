@@ -34,7 +34,7 @@ public class ProductReview {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ReviewSeq")
 	@Column(name = "review_id")
-	private long id;
+	private Long id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "add_item_id", nullable = false)
