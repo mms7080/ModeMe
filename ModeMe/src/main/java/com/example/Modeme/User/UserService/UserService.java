@@ -107,6 +107,12 @@ public class UserService {
                 throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
             }
 
+            // ✅ 비밀번호 변경 처리 (입력값이 있는 경우만)
+            if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+                String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
+                user.setPassword(encodedPassword);
+            }
+
             // ✅ 수정할 정보 업데이트
             user.setEmail(userDTO.getEmail());
             user.setPhone(userDTO.getPhone());
