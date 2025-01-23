@@ -111,5 +111,28 @@
             }
         }); 
     </script>
+    
+    <script>
+	   	 document.addEventListener("DOMContentLoaded", function () {
+	        const usernameInput = document.getElementById("username");
+	        const rememberCheckbox = document.getElementById("remember");
+	
+	        // 1️⃣ 저장된 아이디가 있으면 자동 입력
+	        if (localStorage.getItem("savedUsername")) {
+	            usernameInput.value = localStorage.getItem("savedUsername");
+	            rememberCheckbox.checked = true;
+	        }
+	
+	        // 2️⃣ 로그인 버튼 클릭 시 아이디 저장 여부 체크
+	        document.querySelector(".login-form").addEventListener("submit", function () {
+	            if (rememberCheckbox.checked) {
+	                localStorage.setItem("savedUsername", usernameInput.value);
+	            } else {
+	                localStorage.removeItem("savedUsername");
+	            }
+	        });
+	    });
+	</script>
+	    
 </body>
 </html>
