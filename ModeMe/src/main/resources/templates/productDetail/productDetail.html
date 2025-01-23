@@ -15,9 +15,12 @@
 	<div class="top container" id="prdBuy">
 
 		<!-- Admin Action Buttons Section -->
-		<div class="admin-buttons" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
-			<span> <a href="/manager/managerProduct" class="admin-delete-button">삭제</a> 
-				<a th:href="@{/productDetail/productEdit/{id}(id=${product.id})}" class="admin-edit-button">수정</a>
+		<div class="admin-buttons"
+			th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+			<span> <a href="/manager/managerProduct"
+				class="admin-delete-button">삭제</a> <a
+				th:href="@{/productDetail/productEdit/{id}(id=${product.id})}"
+				class="admin-edit-button">수정</a>
 			</span>
 		</div>
 
@@ -36,24 +39,30 @@
 		<!-- Product Section -->
 		<div class="product-section">
 			<!-- Product Images -->
+			<!-- Product Images -->
 			<div class="product-images">
 				<div class="image-preview">
-					<img src="image/prdDetailSample/4.jpg" alt="Main Preview"
-						class="preview-image" />
+					<!-- 메인 이미지 미리보기 -->
+					<img src="/image/prdDetailSample/4.jpg" alt="Main Preview"
+						class="preview-image" id="main-preview" />
 				</div>
 				<div class="thumbnail-list">
+					<!-- 썸네일 이미지 -->
 					<div class="thumbnail">
-						<img src="/image/prdDetailSample/6.jpg" alt="Thumbnail 1" />
+						<img src="/image/prdDetailSample/6.jpg" alt="Thumbnail 1"
+							class="thumbnail-image" />
 					</div>
 					<div class="thumbnail">
-						<img src="/image/prdDetailSample/2.jpg" alt="Thumbnail 2" />
+						<img src="/image/prdDetailSample/2.jpg" alt="Thumbnail 2"
+							class="thumbnail-image" />
 					</div>
 					<div class="thumbnail">
-						<img src="/image/prdDetailSample/5.jpg" alt="Thumbnail 3" />
+						<img src="/image/prdDetailSample/5.jpg" alt="Thumbnail 3"
+							class="thumbnail-image" />
 					</div>
 				</div>
 			</div>
-	
+
 			<div class="product-void"></div>
 
 			<!-- Product Details -->
@@ -65,21 +74,26 @@
 				<!-- Product Options -->
 				<div class="product-options">
 					<div class="option">
-				        <span class="option-label color"><b>COLOR</b></span>
-				        <div class="option-buttons" th:each="color : ${product.colorNames}">
-				            <button th:text="${color.colorName}" class="color-button"></button>
-				        </div>
-				    </div>
-				    <div class="option">
-				        <span class="option-label size"><b>SIZE</b></span>
-				        <div class="option-buttons" th:each="size : ${product.productSizes}">
-				            <button th:text="${size.itemSize}" class="size-button"></button>
-				        </div>
-				    </div>
+						<span class="option-label color"><b>COLOR</b></span>
+						<div class="option-buttons"
+							th:each="color : ${product.colorNames}">
+							<button th:text="${color.colorName}" class="color-button"></button>
+						</div>
+					</div>
+					<div></div>
+					<div class="option">
+						<span class="option-label size"><b>SIZE</b></span>
+						<div class="option-buttons"
+							th:each="size : ${product.productSizes}">
+							<button th:text="${size.itemSize}" class="size-button"></button>
+						</div>
+					</div>
 
 
-					<button class="add-to-selection">항목 추가</button>
+
 				</div>
+				<button class="add-to-selection" style="margin-bottom: 50px;">항목
+					추가</button>
 
 				<!-- Selection Section -->
 				<div class="selection"></div>
@@ -186,7 +200,7 @@
 	</div>
 
 	<!-- Reviews Section -->
-	<div class="reviews container" id="prdReview" >
+	<div class="reviews container" id="prdReview">
 
 		<!-- Navigation Menu -->
 		<ul class="menu">
@@ -200,24 +214,23 @@
 		</ul>
 
 		<div class="section-header">상품후기</div>
-		
-		
+
+
 		<div class="review-item" th:each="review : ${reviews}">
 			<p>
 				<strong th:text="${review.users.username}"></strong>
 			</p>
 			<p th:text="${review.content}">리뷰 내용</p>
 			<!-- 현재 로그인한 사용자와 작성자가 동일한 경우에만 수정/삭제 버튼 표시 -->
-		    <div th:if="${review.users.username == #authentication.name}">
-		        <a th:href="@{/productDetail/review/{id}/edit(id=${review.id})}">
-		            <button type="button">수정</button>
-		        </a>
-		        <a th:href="@{/productDetail/review/{id}/delete(id=${review.id})}">
-		            <button type="button">삭제</button>
-		        </a>
-		    </div>
+			<div th:if="${review.users.username == #authentication.name}">
+				<a th:href="@{/productDetail/review/{id}/edit(id=${review.id})}">
+					<button type="button">수정</button>
+				</a> <a th:href="@{/productDetail/review/{id}/delete(id=${review.id})}">
+					<button type="button">삭제</button>
+				</a>
+			</div>
 		</div>
-		
+
 		<div class="pagination">
 			<button>1</button>
 			<button>2</button>
@@ -225,13 +238,75 @@
 		</div>
 		<div class="section-action">
 			<a th:href="@{/productDetail/{id}/review(id=${product.id})}">
-			    <button type="button">리뷰 작성</button>
+				<button type="button">리뷰 작성</button>
 			</a>
 		</div>
 	</div>
 
 	<!-- 푸터 -->
 	<div th:replace="~{footer :: footer}"></div>
+	<script defer>
+document.addEventListener('DOMContentLoaded', () => {
+    const optionButtons = document.querySelectorAll('.option-buttons button');
+    const selectionSummary = document.querySelector('.selection-summary');
+    const totalPriceElement = document.getElementById("total-price");
+    const priceElement = document.querySelector(".price");
 
+    let productPrice = parseInt(priceElement.getAttribute("data-price"), 10);
+
+    // 포맷팅된 가격으로 표시
+    const formatPrice = (price) => {
+        return price.toLocaleString('en').replace(/,/g, '.'); // 천 단위 구분자를 '.'로 변경
+    };
+
+    // 초기 가격 설정
+    priceElement.textContent = `${formatPrice(productPrice)}원`;
+
+    optionButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const group = button.parentElement;
+            const groupType = group.previousElementSibling.textContent.trim(); // COLOR or SIZE
+
+            // If the button is already selected, unselect it and clear related selection
+            if (button.classList.contains('selected')) {
+                button.classList.remove('selected');
+                updateSummary(groupType, '');
+            } else {
+                // Deselect all buttons in the same group
+                group.querySelectorAll('.selected').forEach(selectedButton => {
+                    selectedButton.classList.remove('selected');
+                });
+
+                // Select the clicked button
+                button.classList.add('selected');
+                updateSummary(groupType, button.textContent.trim());
+            }
+        });
+    });
+
+    function updateSummary(type, value) {
+        const summaryText = document.querySelector(`#summary-${type.toLowerCase()}`);
+
+        if (summaryText) {
+            if (value) {
+                summaryText.textContent = `${type}: ${value}`;
+            } else {
+                summaryText.textContent = '';
+            }
+        }
+    }
+
+    const updateTotalPrice = () => {
+        const totalPrice = Array.from(document.querySelectorAll('.selection-item')).reduce((total, item) => {
+            const quantity = parseInt(item.querySelector('.quantity-input').value, 10);
+            const itemPrice = parseInt(item.querySelector('.price').getAttribute('data-price'), 10);
+            return total + quantity * itemPrice;
+        }, 0);
+
+        totalPriceElement.textContent = `${formatPrice(totalPrice)} 원`;
+    };
+});
+
+    </script>
 </body>
 </html>

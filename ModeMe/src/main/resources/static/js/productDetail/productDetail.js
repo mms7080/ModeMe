@@ -5,9 +5,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const colorButtons = document.querySelectorAll(".color-button");
     const sizeButtons = document.querySelectorAll(".size-button");
+	
+	const thumbnails = document.querySelectorAll(".thumbnail-image");
+	const mainPreview = document.getElementById("main-preview");
 
     let selectedColor = null;
     let selectedSizes = []; // 선택한 사이즈를 리스트로 관리
+	
+	//썸네일 클릭 이벤트
+	thumbnails.forEach((thumbnail) => {
+	       thumbnail.addEventListener("click", function () {
+	           // 썸네일 이미지를 메인 미리보기 이미지로 설정
+	           mainPreview.src = thumbnail.src;
+	       });
+	   });
 
     // Handle color selection
     colorButtons.forEach((button) => {
@@ -103,25 +114,4 @@ document.addEventListener("DOMContentLoaded", () => {
         addButton.addEventListener("click", addSelectionItems);
     }
 
-    // Image preview functionality
-    const previewImage = document.querySelector(".image-preview img");
-    const thumbnails = document.querySelectorAll(".thumbnail img");
-
-    thumbnails.forEach((thumbnail) => {
-        thumbnail.addEventListener("click", () => {
-            const currentPreviewSrc = previewImage.src;
-            const currentPreviewAlt = previewImage.alt;
-
-            previewImage.src = thumbnail.src;
-            previewImage.alt = thumbnail.alt;
-
-            thumbnail.src = currentPreviewSrc;
-            thumbnail.alt = currentPreviewAlt;
-        });
-    });
-
-    if (thumbnails.length > 0) {
-        previewImage.src = thumbnails[0].src;
-        previewImage.alt = thumbnails[0].alt;
-    }
 });

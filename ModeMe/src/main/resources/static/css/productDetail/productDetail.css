@@ -1,476 +1,287 @@
-@font-face {
-	font-family: 'omyu_pretty';
-	src:
-		url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/omyu_pretty.woff2')
-		format('woff2');
-	font-weight: normal;
-	font-style: normal;
-}
-
-* {
-	font-family: 'omyu_pretty';
-}
-
-html {
-	scroll-behavior: smooth;
-}
-
-body {
-	margin: 0;
-	padding: 0;
-}
-
-/* Admin Buttons Section */
-.admin-buttons {
-	top: 20px;
-	right: 20px;
-	display: flex;
-	gap: 10px; /* 버튼 간 간격 */
-}
-
-/* Admin Buttons Section */
-.admin-buttons {
-	/* position: absolute; 페이지 오른쪽 상단에 고정 */
-	top: 20px;
-	right: 20px;
-	display: flex;
-	gap: 10px; /* 버튼 간 간격 */
-}
-
-/* Delete Button */
-.admin-buttons .admin-delete-button {
-	padding: 10px 20px;
-	font-size: 14px;
-	font-weight: bold;
-	text-decoration: none;
-	text-align: center;
-	color: #fff;
-	background-color: #ff6666; /* 삭제 버튼 색상 */
-	transition: background-color 0.3s ease;
-	cursor: pointer;
-}
-
-.admin-buttons .admin-delete-button:hover {
-	background-color: #ff3333; /* Hover 시 더 강렬한 빨간색 */
-}
-
-.admin-buttons .admin-delete-button:active {
-	background-color: #cc0000; /* Active 상태 */
-}
-
-/* Edit Button */
-.admin-buttons .admin-edit-button {
-	padding: 10px 20px;
-	font-size: 14px;
-	font-weight: bold;
-	text-decoration: none;
-	text-align: center;
-	color: #fff;
-	background-color: #333; /* 수정 버튼 색상 */
-	transition: background-color 0.3s ease;
-	cursor: pointer;
-}
-
-.admin-buttons .admin-edit-button:hover {
-	background-color: #555; /* Hover 시 밝은 회색 */
-}
-
-.admin-buttons .admin-edit-button:active {
-	background-color: #111; /* Active 상태 */
-}
-
-/* Navigation Menu */
-.menu {
-	display: flex;
-	justify-content: center;
-	gap: 20px;
-	margin: 20px 0;
-	padding: 0;
-	list-style: none;
-}
-
-.menu li {
-	font-size: 16px;
-}
-
-.menu a {
-	text-decoration: none;
-	color: #666;
-	font-weight: normal;
-}
-
-.menu .selected a {
-	font-weight: bold;
-	color: #333;
-}
-
-.container {
-	width: 80%;
-	margin: 0 auto;
-	padding: 20px;
-	align-content: center;
-}
-
-.product-section {
-	display: flex;
-	gap: 20px;
-	margin-bottom: 40px;
-}
-
-.product-images {
-	width: 47%;
-}
-
-.image-preview {
-	width: 100%;
-	aspect-ratio: 3/4; /* 세로 4 : 가로 3 비율 유지 */
-	background-color: #e0e0e0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	overflow: hidden; /* 넘치는 부분 숨김 */
-}
-
-.image-preview img {
-	max-width: 100%;
-	max-height: 100%;
-	object-fit: cover; /* 이미지 비율 유지하며 꽉 채우기 */
-}
-
-.thumbnail-list {
-	display: flex;
-	gap: 10px;
-	margin-top: 10px;
-}
-
-.thumbnail {
-	width: 80px;
-	height: 80px;
-	background-color: #e0e0e0;
-	overflow: hidden; /* 넘치는 부분 숨김 */
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	cursor: pointer; /* 클릭 가능 표시 */
-}
-
-.thumbnail img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover; /* 썸네일 비율 유지하며 꽉 채우기 */
-}
-
-.product-void {
-	width: 6%;
-}
-
-.product-details {
-	width: 47%;
-}
-
-.product-details .price {
-	font-size: 24px;
-	color: #333;
-	margin: 20px 0;
-}
-
-/* Product Options */
-.product-options {
-	display: flex;
-	flex-direction: column;
-	gap: 20px;
-	margin: 20px 0;
-}
-
-.product-options .option {
-	display: flex;
-	align-items: center;
-	gap: 15px; /* 옵션명과 버튼들 사이 간격 */
-}
-
-.option-label {
-	flex: 0 0 70px; /* 옵션명 고정 너비 */
-	font-size: 16px;
-	color: #333;
-}
-
-.option-buttons {
-    display: flex;
-    gap: 10px; /* 버튼 간 간격 */
-    flex-wrap: wrap; /* 버튼이 줄 바꿈 없이 한 줄에 표시 */
-    justify-content: flex-start; /* 왼쪽 정렬 */
-}
-
-
-.option-buttons button {
-	padding: 10px 15px;
-	border: 1px solid #ddd;
-	background-color: #fff;
-	color: #333; /* 기본 텍스트 색상 */
-	cursor: pointer;
-	transition: background-color 0.3s, border-color 0.3s; /* 부드러운 변화 */
-}
-
-/* Highlight selected color and size */
-.option-buttons button.selected-color, .option-buttons button.selected-size
-	{
-	border-color: #333; /* 선택된 버튼 강조 */
-	background-color: #e0e0e0; /* 선택된 버튼 배경색 */
-	font-weight: bold;
-	color: #333; /* 텍스트는 항상 명확하게 보이도록 */
-}
-
-.option-buttons button:hover {
-	background-color: #f5f5f5;
-}
-
-.add-to-selection {
-	width: 25%;
-	padding: 10px 20px;
-	font-size: 14px;
-	font-weight: bold;
-	color: #fff;
-	background-color: #333;
-	border: none;
-	cursor: pointer;
-	transition: background-color 0.3s ease;
-}
-
-.add-to-selection:hover {
-	background-color: #555;
-}
-
-.add-to-selection:active {
-	background-color: #111;
-}
-
-.add-to-selection:disabled {
-	background-color: #ddd;
-	color: #999;
-	cursor: not-allowed;
-}
-
-/* Selection Section */
-.selection {
-	margin-top: 20px;
-}
-
-.selection-item {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: 10px 0;
-	border-bottom: 1px solid #ddd;
-	position: relative;
-}
-
-.selection-item:last-child {
-	border-bottom: none;
-}
-
-.selection-item b {
-	flex: 2;
-}
-
-.selection-item p {
-	flex: 0.5;
-}
-
-.selection-item .size {
-	flex: 0.5;
-	text-align: center;
-}
-
-.selection-item input {
-	width: 50px;
-	text-align: center;
-}
-
-.selection-item .price {
-	flex: 1;
-	text-align: right;
-}
-
-/* Highlight selected color and size */
-.selected-color {
-	background-color: #c0c0c0;
-	color: #fff;
-}
-
-.selected-size {
-	background-color: #c0c0c0;
-	color: #fff;
-}
-
-/* Delete Button */
-.selection-item .delete-item {
-	font-size: 20px;
-	font-weight: bold;
-	color: #ff6666;
-	background-color: transparent;
-	border: none;
-	cursor: pointer;
-	line-height: 1;
-	margin-left: 10px;
-}
-
-.selection-item .delete-item:hover {
-	color: #ff3333;
-}
-
-.selection-summary {
-	margin-top: 10px;
-	font-weight: bold;
-	font-size: 18px;
-	text-align: right;
-}
-
-.purchase-section {
-	margin-top: 30px;
-	display: flex;
-	gap: 10px;
-}
-
-.purchase-section button {
-	padding: 15px;
-	font-size: 16px;
-	background-color: #333;
-	color: #fff;
-	border: none;
-	cursor: pointer;
-	flex: 1;
-}
-
-.purchase-section button:hover {
-	background-color: #555;
-}
-
-.reviews, .qa-section {
-	margin-top: 40px;
-}
-
-.section-header {
-	font-size: 20px;
-	border-bottom: 1px solid #ddd;
-	padding-bottom: 10px;
-}
-
-.review-item, .qa-item {
-	border-bottom: 1px solid #ddd;
-	padding: 15px 0;
-}
-
-.review-item:last-child, .qa-item:last-child {
-	border-bottom: none;
-}
-
-.pagination {
-	display: flex;
-	justify-content: center;
-	margin-top: 20px;
-	gap: 10px;
-}
-
-.pagination button {
-	padding: 5px 10px;
-	background-color: #f5f5f5;
-	border: 1px solid #ddd;
-	cursor: pointer;
-}
-
-.section-action {
-	text-align: right;
-	margin-top: 10px;
-}
-
-.action-button {
-	display: inline-block;
-	padding: 10px 20px;
-	background-color: #333;
-	color: #fff;
-	text-decoration: none;
-	border-radius: 5px;
-	font-size: 14px;
-}
-
-.action-button:hover {
-	background-color: #555;
-}
-
-.bottom.container {
-	font-family: helvetica;
-	margin-top: 40px;
-	padding: 20px;
-	line-height: 1.6;
-}
-
-.bottom.container h3 {
-	font-size: 18px;
-	font-weight: bold;
-	margin-top: 20px;
-}
-
-.bottom.container p {
-	margin-top: 10px;
-}
-
-.bottom.container ul {
-	margin-top: 10px;
-	list-style-type: disc;
-	padding-left: 20px;
-}
-
-.bottom.container ul li {
-	margin-bottom: 10px;
-}
-/* Product Options */
-.product-options {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin: 20px 0;
-}
-
-.product-options .option {
-    display: flex;
-    align-items: center;
-    gap: 15px; /* 옵션명과 버튼들 사이 간격 */
-}
-
-.option-label {
-    flex: 0 0 70px; /* 옵션명 고정 너비 */
-    font-size: 16px;
-    color: #333;
-}
-
-.option-buttons {
-    display: flex;
-    flex-wrap: wrap; /* 버튼들이 한 줄을 넘을 경우 줄 바꿈 */
-    gap: 10px; /* 버튼 간의 간격 */
-    justify-content: flex-start; /* 버튼을 왼쪽 정렬 */
-    align-items: center; /* 세로 가운데 정렬 */
-}
-
-.option-buttons button {
-    display: inline-flex; /* 버튼을 inline-flex로 설정 */
-    padding: 10px 15px;
-    border: 1px solid #ddd;
-    background-color: #fff;
-    color: #333;
-    cursor: pointer;
-    transition: background-color 0.3s, border-color 0.3s;
-    white-space: nowrap; /* 버튼 내 텍스트가 줄 바뀌지 않도록 설정 */
-}
-
-/* 선택된 버튼 강조 */
-.option-buttons button.selected-color, .option-buttons button.selected-size {
-    border-color: #333;
-    background-color: #e0e0e0;
-    font-weight: bold;
-}
-
-/* Hover 효과 */
-.option-buttons button:hover {
-    background-color: #f5f5f5;
-}
-
+    @font-face {
+        font-family: 'omyu_pretty';
+        src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/omyu_pretty.woff2') format('woff2');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'omyu_pretty', sans-serif;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        color: #333;
+        line-height: 1.6;
+    }
+
+    .container {
+        width: 80%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .admin-buttons {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 20px;
+    }
+
+    .admin-buttons a {
+        text-decoration: none;
+        padding: 10px 20px;
+        margin: 0 5px;
+        border-radius: 5px;
+        color: #fff;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+
+    .admin-delete-button {
+        background-color: #e74c3c;
+    }
+
+    .admin-delete-button:hover {
+        background-color: #c0392b;
+    }
+
+    .admin-edit-button {
+        background-color: #3498db;
+    }
+
+    .admin-edit-button:hover {
+        background-color: #2980b9;
+    }
+
+    .menu {
+        display: flex;
+        justify-content: center;
+        list-style: none;
+        margin: 20px 0;
+        gap: 20px;
+    }
+
+    .menu a {
+        text-decoration: none;
+        color: #666;
+        font-size: 16px;
+    }
+
+    .menu .selected a {
+        font-weight: bold;
+        color: #000;
+    }
+
+    .product-section {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    .product-images {
+        flex: 1 1 50%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .image-preview {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        background-color: #e0e0e0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border-radius: 10px;
+    }
+
+    .image-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .thumbnail-list {
+        display: flex;
+        gap: 10px;
+    }
+
+    .thumbnail {
+        flex: 0 0 80px;
+        height: 80px;
+        background-color: #e0e0e0;
+        border-radius: 5px;
+        overflow: hidden;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .thumbnail img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .product-details {
+        flex: 1 1 50%;
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 20px;
+       
+    }
+
+    .product-details h2 {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .price {
+        font-size: 20px;
+        color: black;
+        margin: 10px 0 20px;
+      
+    }
+
+    .product-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .option {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .option-label {
+        font-size: 16px;
+        font-weight: bold;
+        color: #555;
+    }
+
+    .option-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .option-buttons button {
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        background-color: white;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: all 0.3s;
+    }
+
+    .option-buttons button.selected {
+        background-color: #ecf5fb;
+        font-weight: bold;
+    }
+
+    .option-buttons button:hover {
+        background-color: #e0e0e0;
+    }
+
+    .add-to-selection {
+        padding: 10px 20px;
+        background-color: #3498db;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .add-to-selection:hover {
+        background-color: #2980b9;
+    }
+
+    .selection-summary {
+        margin-top: 20px;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: right;
+    }
+
+    .purchase-section {
+        display: flex;
+        gap: 10px;
+        margin-top: 50px;
+    }
+
+    .purchase-section button {
+        flex: 1;
+        padding: 15px;
+        font-size: 16px;
+        font-weight: bold;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .purchase-section button:hover {
+        background-color: #555;
+    }
+
+    .reviews {
+        margin-top: 40px;
+    }
+
+    .reviews .section-header {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .review-item {
+        background-color: #fff;
+        border-radius: 5px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .review-item p {
+        margin: 5px 0;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .pagination button {
+        padding: 8px 15px;
+        background-color: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .pagination button:hover {
+        background-color: #e0e0e0;
+    }
