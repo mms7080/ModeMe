@@ -54,6 +54,7 @@ public class SecurityConfig {
                     "/wishlist_delete",
                     "/manager/**",
                     "/api/**",
+                    "/productDetail/productEdit/**",
                     "/productDetail/**"
                 )
             )
@@ -66,6 +67,9 @@ public class SecurityConfig {
                 .requestMatchers("/notices","/notices/**").permitAll() // 공지 목록 누구나 접근 가능
                 .requestMatchers("/notices/new", "/notices/edit/**", "/notices/delete/**","/manager/**").hasRole("ADMIN") // 관리자만 허용
 
+                // 상품 관련 권한 설정
+                .requestMatchers("/productDetail/productEdit/**").hasRole("ADMIN") // 관리자만 허용
+                
                 // 로그인, 회원가입, 정적 리소스는 모두 접근 가능
                 .requestMatchers(
                 	"/api/check-username",
@@ -79,6 +83,7 @@ public class SecurityConfig {
                     "/js/**",
                     "/resources/**",
                     "/wishlist_delete",
+                    "/productDetail/**",
                     "/",
                     "/main",
                     "check-username",
@@ -87,7 +92,7 @@ public class SecurityConfig {
                 ).permitAll()
 
                 // ✅ 회원정보 수정 페이지는 로그인한 사용자만 접근 가능
-                .requestMatchers("/modify").authenticated()
+                .requestMatchers("/modify", "/productDetail/{id}/review").authenticated()
 
                 // 그 외의 모든 요청은 인증 필요
                 .anyRequest().authenticated()
