@@ -113,6 +113,9 @@ public class AddItemService {
     @Transactional
     public void deleteProduct(Long id) {
         // 상품 삭제 처리
+    	inr.deleteById(id);
+    	icr.deleteById(id);
+    	isr.deleteById(id);
         ar.deleteById(id);
     }
 }

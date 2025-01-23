@@ -32,18 +32,19 @@ public class AddItem {
     @Column(nullable = false)
     private int price; // 상품 가격
 
-    @OneToMany(mappedBy = "addItem", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "addItem", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<ItemColor> colors; // 상품 색상
 
-    @OneToMany(mappedBy = "addItem", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "addItem", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<ItemColorName> colorNames; // 색상 이름
+
 
     @Column(nullable = false)
     private String category; // 메인 카테고리
 
     private String subcategory; // 서브 카테고리
 
-    @OneToMany(mappedBy = "addItem", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "addItem", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<ItemSize> productSizes; // 상품 사이즈 리스트
 
     @Lob
