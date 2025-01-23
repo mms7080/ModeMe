@@ -1,9 +1,15 @@
 package com.example.Modeme.prdDetail.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.Modeme.Manager.Entity.AddItem;
+import com.example.Modeme.Manager.Entity.ItemColor;
+import com.example.Modeme.Manager.Entity.ItemColorName;
+import com.example.Modeme.Manager.Entity.ItemSize;
+import com.example.Modeme.Manager.ManagerDTO.AddItemDTO;
 import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
 import com.example.Modeme.prdDetail.repository.ProductDetailRepository;
 
@@ -28,26 +34,46 @@ public class ProductEditService {
                 .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다. ID: " + id));
     }
 
-    // 상품 수정
+    // 상품 업데이트
     @Transactional
-    public void updateItem(Long id, AddItem updatedItem) {
-    	System.out.println("테스트");
+    public void updateProduct(Long id, AddItemDTO updatedItem) {
         AddItem existingItem = addItemRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다. ID: " + id));
 
-        // 필드 업데이트
+        // 기존 데이터 업데이트
         existingItem.setName(updatedItem.getName());
         existingItem.setStock(updatedItem.getStock());
         existingItem.setPrice(updatedItem.getPrice());
-        existingItem.setColors(updatedItem.getColors());
-        existingItem.setColorNames(updatedItem.getColorNames());
         existingItem.setCategory(updatedItem.getCategory());
         existingItem.setSubcategory(updatedItem.getSubcategory());
-        existingItem.setProductSizes(updatedItem.getProductSizes());
         existingItem.setProductDescription(updatedItem.getProductDescription());
-        System.out.println("테스트");
-        // 명시적으로 저장
-        addItemRepository.save(existingItem);
+
+        // 색상 매핑
+        List<ItemColor> updatedColors = updatedItem.getColors().stream()
+                .map(color -> {
+                    ItemColor itemColor = new ItemColor();
+                    itemColor.setColor(color);
+                    itemColor.setAddItem(existingItem);
+                    return itemColor;
+                })
+                .toList();
+        existingItem.getColors().clear(); // 기존 데이터 제거
+        existingItem.getColors().addAll(updatedColors);
+
+        // 색상 이름 매핑
+        List<ItemColorName> updatedColorNames = updatedItem.getColorNames().stream()
+                .map(colorName -> {
+                    ItemColorName itemColorName = new ItemColorName();
+                    itemColorName.setColorName(colorName);
+                    itemColorName.setAddItem(existingItem);
+                    return itemColorName;
+                })
+                .toList();
+        existingItem.getColorNames().clear();
+        existingItem.getColorNames().addAll(updatedColorNames);
+
     }
+ }
+
+
 	
-}

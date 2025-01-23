@@ -15,9 +15,9 @@
 	<div class="top container" id="prdBuy">
 
 		<!-- Admin Action Buttons Section -->
-		<div class="admin-buttons">
-			<span> <a href="/main" class="admin-delete-button">삭제</a> <a
-				href="/productEdit" class="admin-edit-button">수정</a>
+		<div class="admin-buttons" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+			<span> <a href="/manager/managerProduct" class="admin-delete-button">삭제</a> 
+				<a th:href="@{/productDetail/productEdit/{id}(id=${product.id})}" class="admin-edit-button">수정</a>
 			</span>
 		</div>
 

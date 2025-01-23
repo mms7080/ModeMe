@@ -127,7 +127,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     [{ color: [] }, { background: [] }],
                     [{ font: [] }],
                     [{ align: [] }],
-                    ["image"], // 이미지 삽입 버튼 추가
                     ["clean"],
                 ],
                 handlers: {
@@ -198,45 +197,5 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.error("URL이 설정되지 않았습니다.");
             }
         });
-    });
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-    const saveButton = document.getElementById("save-btn");
-    const cancelButton = document.getElementById("cancel-btn");
-    const form = document.querySelector("form");
-
-    // 수정 완료 버튼 동작
-    saveButton.addEventListener("click", async (event) => {
-        event.preventDefault(); // 기본 폼 제출 방지
-        const actionUrl = form.action; // 폼의 action URL 가져오기
-        const formData = new FormData(form); // 폼 데이터 생성
-
-        try {
-            const response = await fetch(actionUrl, {
-                method: "POST",
-                body: formData,
-            });
-
-            if (response.ok) {
-                const id = formData.get("id"); // hidden 필드에서 id 가져오기
-                const redirectUrl = `/productDetail/${id}`; // 상세 페이지 URL 생성
-                window.location.href = redirectUrl; // 상세 페이지로 이동
-            } else {
-                console.error("저장 중 오류 발생:", response.statusText);
-                alert("수정 중 문제가 발생했습니다.");
-            }
-        } catch (error) {
-            console.error("저장 요청 중 오류 발생:", error);
-            alert("저장 요청을 처리할 수 없습니다.");
-        }
-    });
-
-    // 수정 취소 버튼 동작
-    cancelButton.addEventListener("click", (event) => {
-        event.preventDefault(); // 기본 동작 방지
-        const id = form.querySelector('input[name="id"]').value; // hidden 필드에서 id 가져오기
-        const redirectUrl = `/productDetail/${id}`; // 상세 페이지 URL 생성
-        window.location.href = redirectUrl; // 상세 페이지로 이동
     });
 });

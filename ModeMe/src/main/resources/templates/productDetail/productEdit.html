@@ -12,140 +12,98 @@
 </head>
 <body>
 
-	<!-- 헤더 -->
-	<div th:replace="~{header :: header}"></div>
+<!-- 헤더 -->
+<div th:replace="~{header :: header}"></div>
 
-    <div class="product-edit-container">
-    
-    <form th:action="@{/productEdit/{id}(id=${product?.id ?: 0})}" method="post">
+<div class="product-edit-container">
+    <form th:action="@{/productDetail/productEdit/{id}(id=${product.id})}" method="post">
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}">
         <h1>상품 수정</h1>
-		
-		<div class="product-name">
-		    <label for="name">상품 이름</label>
-		    <input type="text" id="name" name="name" placeholder="이름 입력" th:value="${product?.name ?: ''}" required>
-		</div>
-		
-		<div class="product-informations">
-		    <!-- 상품 수량 -->
-		    <span class="product-info">
-		        <label for="stock">상품 수량</label>
-		        <input type="number" id="stock" name="stock" placeholder="수량 입력" th:value="${product?.stock ?: 0}" min="0" required>
-		        <button id="sold-out-btn">품절</button>
-		    </span>
-		
-		    <!-- 상품 가격 -->
-		    <span class="product-info">
-		        <label for="price">상품 가격</label>
-		        <input type="number" id="price" name="price" placeholder="가격 입력" th:value="${product?.price ?: 0}" min="0" required>
-		    </span>
-		</div>
-		
-		<div class="product-color-information">
-		    <!-- 색상 입력 섹션 -->
-			<div class="color-section" th:each="colorName, iterStat : ${product?.colorNames ?: {}}">
-			    <!-- 색상 정보 -->
-			    <span class="color-info">
-			        <label th:for="'color-' + ${iterStat.index}">상품 색상</label>
-			        <input class="color" type="color" id="color-[[${iterStat.index}]]" name="colors" th:value="${product?.colors[iterStat.index] ?: '#000000'}">
-			    </span>
-			    <!-- 색상 출력 -->
-			    <div class="color-output" th:class="'color-output color-output-' + ${iterStat.index}">
-			        R: 0, G: 0, B: 0
-			    </div>
-			    <!-- 색상 이름 입력 -->
-			    <input class="color-name" type="text" name="colorNames" th:placeholder="'색상 이름 입력'" th:value="${colorName.colorName}">
-			</div>
-		    <button class="add-color" type="button">+</button>
-		</div>
-
-		<div class="category-container">
-		    <!-- 메인 카테고리 -->
-		    <div class="main-category">
-		        <label class="main-category-label">상품 카테고리</label>
-		        <div>
-		            <label for="outer" class="category-label">Outer</label>
-		            <input type="radio" id="outer" name="category" value="outer" 
-		                   th:checked="${product?.category == 'outer'}">
-		        </div>
-		        <div>
-		            <label for="top" class="category-label">Top</label>
-		            <input type="radio" id="top" name="category" value="top" 
-		                   th:checked="${product?.category == 'top'}">
-		        </div>
-		        <div>
-		            <label for="bottom" class="category-label">Bottom</label>
-		            <input type="radio" id="bottom" name="category" value="bottom" 
-		                   th:checked="${product?.category == 'bottom'}">
-		        </div>
-		        <div>
-		            <label for="acc" class="category-label">Acc</label>
-		            <input type="radio" id="acc" name="category" value="acc" 
-		                   th:checked="${product?.category == 'acc'}">
-		        </div>
-		    </div>
-		
-		    <!-- 서브 카테고리 -->
-			<div class="subcategory" id="subcategory" th:attr="data-selected-subcategory=${product.subcategory}">
-			    <!-- JavaScript로 동적 서브카테고리 생성 -->
-			</div>
-
-
-			
-		</div>
-		<!-- 사이즈 카테고리 -->
-		<div class="size-container">
-		    <label class="size-label">상품 사이즈</label>
-		    <select id="size" name="productSizes">
-		        <option value="SelectSize" th:selected="${product?.productSizes?.contains('SelectSize')}">
-		            S M L XL
-		        </option>
-		        <option value="FreeSize" th:selected="${product?.productSizes?.contains('FreeSize')}">
-		            FreeSize
-		        </option>
-		    </select>
-		</div>
-
-        <!-- Main Images -->
-        <div class="main-img-input-container">
-	        <label class="img-input-label">메인 이미지</label>
-	        <div class="image-inputs">
-	        	<div>
-		            <input type="file" id="image1">
-	        	</div>
-	        	<div>
-		            <input type="file" id="image2">
-	        	</div>
-	        	<div>
-		            <input type="file" id="image3">
-	        	</div>
-	        	<div>
-		            <input type="file" id="image4">
-	        	</div>
-	        </div>
+        <div class="product-name">
+            <label for="name">상품 이름</label>
+            <input type="text" id="name" name="name" placeholder="이름 입력" th:value="${product?.name ?: ''}" required>
         </div>
-		
-        <!-- Rich Text Editor for Product Description -->
-		<div class="RTE-container">
-		    <label for="rich-text-editor">상품 상세정보</label>
-		    <div id="rich-text-editor" style="height: 300px;" th:data-content="${product?.productDescription ?: ''}">
-		    </div>
-		    <input type="hidden" id="productDescription" name="productDescription" th:value="${product?.productDescription ?: ''}">
-		</div>
 
-		
-		    <!-- CSRF 토큰 추가 -->
-		    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
-		    <div class="buttons">
-		        <button id="save-btn" type="submit">수정 완료</button>
-		        <button id="cancel-btn" type="button">수정 취소</button>
-		    </div>
-			<input type="hidden" name="id" th:value="${product?.id ?: 0}">
-		</form>
+        <div class="product-informations">
+            <span class="product-info">
+                <label for="stock">상품 수량</label>
+                <input type="number" id="stock" name="stock" placeholder="수량 입력" th:value="${product?.stock ?: 0}" min="0" required>
+                <button id="sold-out-btn" type="button">품절</button>
+            </span>
+            <span class="product-info">
+                <label for="price">상품 가격</label>
+                <input type="number" id="price" name="price" placeholder="가격 입력" th:value="${product?.price ?: 0}" min="0" required>
+            </span>
+        </div>
 
-    </div>
-    
-    	<!-- 푸터 -->
-	<div th:replace="~{footer :: footer}"></div>
-    
+        <div class="product-color-information">
+            <div class="color-section" th:each="colorName, iterStat : ${product?.colorNames ?: {}}">
+                <span class="color-info">
+                    <label th:for="'color-' + ${iterStat.index}">상품 색상</label>
+                    <input class="color" type="color" id="color-[[${iterStat.index}]]" name="colors" th:value="${product?.colors[iterStat.index] ?: '#000000'}">
+                </span>
+                <div class="color-output" th:class="'color-output color-output-' + ${iterStat.index}">R: 0, G: 0, B: 0</div>
+                <input class="color-name" type="text" name="colorNames" th:placeholder="'색상 이름 입력'" th:value="${colorName.colorName}">
+            </div>
+            <button class="add-color" type="button">+</button>
+        </div>
+
+        <div class="category-container">
+            <div class="main-category">
+                <label class="main-category-label">상품 카테고리</label>
+                <div>
+                    <label for="outer" class="category-label">Outer</label>
+                    <input type="radio" id="outer" name="category" value="outer" th:checked="${product?.category == 'outer'}">
+                </div>
+                <div>
+                    <label for="top" class="category-label">Top</label>
+                    <input type="radio" id="top" name="category" value="top" th:checked="${product?.category == 'top'}">
+                </div>
+                <div>
+                    <label for="bottom" class="category-label">Bottom</label>
+                    <input type="radio" id="bottom" name="category" value="bottom" th:checked="${product?.category == 'bottom'}">
+                </div>
+                <div>
+                    <label for="acc" class="category-label">Acc</label>
+                    <input type="radio" id="acc" name="category" value="acc" th:checked="${product?.category == 'acc'}">
+                </div>
+            </div>
+            <div class="subcategory" id="subcategory" th:attr="data-selected-subcategory=${product.subcategory}">
+                <!-- JavaScript로 동적 서브카테고리 생성 -->
+            </div>
+        </div>
+
+        <div class="size-container">
+            <label class="size-label">상품 사이즈</label>
+            <select id="size" name="productSizes">
+                <option value="SelectSize" th:selected="${product?.productSizes?.contains('SelectSize')}">S M L XL</option>
+                <option value="FreeSize" th:selected="${product?.productSizes?.contains('FreeSize')}">FreeSize</option>
+            </select>
+        </div>
+
+        <div class="main-img-input-container">
+            <label class="img-input-label">메인 이미지</label>
+            <div class="image-inputs">
+                <div><input type="file" id="image1" name="image1"></div>
+                <div><input type="file" id="image2" name="image2"></div>
+                <div><input type="file" id="image3" name="image3"></div>
+                <div><input type="file" id="image4" name="image4"></div>
+            </div>
+        </div>
+
+        <div class="RTE-container">
+            <label for="rich-text-editor">상품 상세정보</label>
+            <div id="rich-text-editor" style="height: 300px;" th:data-content="${product?.productDescription ?: ''}"></div>
+            <input type="hidden" id="productDescription" name="productDescription" th:value="${product?.productDescription ?: ''}">
+        </div>
+
+        <div class="updatebuttons">
+            <button id="save-btn" type="submit">수정 완료</button>
+        </div>
+        <input type="hidden" name="id" th:value="${product?.id ?: 0}">
+    </form>
+</div>
+
+<div th:replace="~{footer :: footer}"></div>
 </body>
 </html>

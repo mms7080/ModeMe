@@ -299,7 +299,7 @@ input[type="radio"]:not(:checked) + .category-label {
 
 
 /* Button Container */
-.buttons {
+.updatebuttons {
     display: flex;
     justify-content: flex-end; /* 버튼을 오른쪽 정렬 */
     gap: 10px; /* 버튼 간 간격 */
@@ -307,7 +307,7 @@ input[type="radio"]:not(:checked) + .category-label {
 }
 
 /* Buttons Style */
-.buttons button {
+.updatebuttons button {
     padding: 10px 20px;
     font-size: 14px;
     border: 1px solid #ddd;
@@ -319,7 +319,7 @@ input[type="radio"]:not(:checked) + .category-label {
 }
 
 /* Hover Effect */
-.buttons button:hover {
+.updatebuttons button:hover {
     background-color: #333;
     color: #fff;
 }
