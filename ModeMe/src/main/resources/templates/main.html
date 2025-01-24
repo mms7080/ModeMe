@@ -6,6 +6,31 @@
 <title>ModeMe</title>
 <link href="css/main.css" rel="stylesheet">
 <script src="js/main.js" defer></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<style>
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 30%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+</style>
 </head>
 <body>
 
@@ -13,17 +38,32 @@
 
 	<section style="width:60%;">
 		<h2 class="section-title">Weekly Best</h2>
-		<div class="carousel-container">
-			<button class="carousel-btn prev-btn">&#8249;</button>
-			<div class="carousel">
-				<img src="image/026.jpg" alt="Weekly Best Item 1"> <img
-					src="image/026.jpg" alt="Weekly Best Item 2"> <img
-					src="image/026.jpg" alt="Weekly Best Item 3"> <img
-					src="image/026.jpg" alt="Weekly Best Item 4"> <img
-					src="image/026.jpg" alt="Weekly Best Item 5"> <img
-					src="image/026.jpg" alt="Weekly Best Item 6">
+		<div class="swiper mySwiper">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide">
+					<img src="image/026.jpg">
+				</div>
+				<div class="swiper-slide">
+					<img src="image/026.jpg">
+				</div>
+				<div class="swiper-slide">
+					<img src="image/026.jpg">
+				</div>
+				<div class="swiper-slide">
+					<img src="image/026.jpg">
+				</div>
+				<div class="swiper-slide">
+					<img src="image/026.jpg">
+				</div>
+				<div class="swiper-slide">
+					<img src="image/026.jpg">
+				</div>
 			</div>
-			<button class="carousel-btn next-btn">&#8250;</button>
+			<div class="swiper-button-next" style="color:black;"></div>
+			<div class="swiper-button-prev" style="color:black;"></div>
+			<div class="autoplay-progress">
+		      <span></span>
+		    </div>
 		</div>
 	</section>
 
@@ -138,6 +178,26 @@
 	<div style="height:100px;"></div>
 
 	<div th:replace="~{footer::footer}"></div>
-
+	
+	
+	<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+	<script>
+		var swiper = new Swiper(".mySwiper", {
+	      spaceBetween: 30,
+	      centeredSlides: true,
+	      autoplay: {
+	        delay: 2500,
+	        disableOnInteraction: false,
+	      },
+	      pagination: {
+	        el: ".swiper-pagination",
+	        clickable: true,
+	      },
+	      navigation: {
+	        nextEl: ".swiper-button-next",
+	        prevEl: ".swiper-button-prev",
+	      },
+	    });
+	</script>
 </body>
 </html>
