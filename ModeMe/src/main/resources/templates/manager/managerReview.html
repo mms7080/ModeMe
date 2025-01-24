@@ -24,12 +24,12 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>1</td>
-					<td>빈티지 체크셔츠</td>
-					<td>김테스트</td>
-					<td>test01</td>
-					<td>테스트 리뷰입니다.</td>
+				<tr th:each="review:${productReviews}">
+					<td th:text="${review.id}"></td>
+					<td th:text="${review.addItem.name}"></td> <!-- 상품명 -->
+					 <td th:text="${review.users.username}"></td> 
+					 <td th:text="${review.users.name}"></td> 
+					 <td th:text="${review.title}"></td>
 					<td>
 						<button>삭제</button>
 					</td>

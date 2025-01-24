@@ -27,6 +27,8 @@ import com.example.Modeme.User.UserDTO.Headerlogin;
 import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.User.UserRepository.UserRepository;
 import com.example.Modeme.User.UserService.UserService;
+import com.example.Modeme.prdDetail.entity.ProductReview;
+import com.example.Modeme.prdDetail.repository.ProductReviewRepository;
 
 @Controller
 public class ManagerContorller {
@@ -35,6 +37,9 @@ public class ManagerContorller {
 
     @Autowired
     private AddItemRepository ar;
+    
+    @Autowired
+    private ProductReviewRepository prs;
 
     @Autowired
     private UserService userService;
@@ -156,5 +161,16 @@ public class ManagerContorller {
             e.printStackTrace();
             return "상품 삭제 실패";
         }
+    }   
+    
+    @GetMapping("/manager/managerReview")
+    public String postReviews(Principal principal, Model model) {
+    	if(principal != null) {
+    		String username = principal.getName();
+    		model.addAttribute("username", username);
+    	}
+    	List<ProductReview> productReviews = prs.findAll();
+    	model.addAttribute("productReviews", productReviews);
+    	return "manager/managerReview";
     }
 }
