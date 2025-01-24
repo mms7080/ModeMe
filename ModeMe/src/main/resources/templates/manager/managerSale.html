@@ -14,6 +14,26 @@
 
     <main>
         <h1>주문 관리</h1>    
+        
+        <div class="dashboardHeader">
+			<div class="infoBox">
+				<h3>입금 전</h3>
+				<p>0개</p>
+			</div>
+			<div class="infoBox">
+				<h3>배송준비 중</h3>
+				<p>0개</p>
+			</div>
+			<div class="infoBox">
+				<h3>배송 중</h3>
+				<p>0개</p>
+			</div>
+			<div class="infoBox">
+				<h3>배송완료</h3>
+				<p>0개</p>
+			</div>
+		</div>
+        
 
         <!-- 매출 차트 (월별 및 카테고리별) -->
         <div class="chart-section">
@@ -38,10 +58,10 @@
                     <th>주문정보</th>
                     <th>수량</th>
                     <th>상품금액</th>
-                    <th>주문상태</th>
                     <th>주문아이디</th>
                     <th>주문자</th>
                     <th>결제방법</th>
+                    <th>주문상태</th>
                 </tr>
             </thead>
             <tbody>
@@ -52,10 +72,17 @@
                     <td>빈티지 체크셔츠</td>
                     <td>1</td>
                     <td>18000</td>
-                    <td>완료</td>
                     <td>test01</td>
                     <td>홍길동</td>
                     <td>카드결제</td>
+                    <td>
+                    	<select id="orderStatus">
+                    		<option value="before"> 입금 전 </option>
+                    		<option value="ready"> 배송준비 중 </option>
+                    		<option value="delivery"> 배송 중 </option>
+                    		<option value="done"> 배송완료 </option>                    		
+                    	</select>
+                    </td>
                 </tr>
                 <tr>
                     <td>2</td>
@@ -64,10 +91,17 @@
                     <td>코튼 팬츠</td>
                     <td>2</td>
                     <td>40000</td>
-                    <td>완료</td>
                     <td>test02</td>
                     <td>김철수</td>
                     <td>현금결제</td>
+                    <td>
+                    	<select>
+                    		<option value="before"> 입금 전 </option>
+                    		<option value="ready"> 배송준비 중 </option>
+                    		<option value="delivery"> 배송 중 </option>
+                    		<option value="done"> 배송완료 </option>                    		
+                    	</select>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -82,7 +116,7 @@
         <div class="search-section">
             <label for="search-option">검색 옵션:</label> 
             <select id="search-option">
-                <option value="Order">주문자</option>
+                <option value="OrderStatus">주문 상태</option>
                 <option value="how">결제방법</option>
                 <option value="id">주문아이디</option>
             </select>
