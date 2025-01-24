@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>리뷰관리</title>
 <link rel="stylesheet" href="/css/manager/managerReview.css">
+<script defer src="/js/manager/managerReview.js"></script>
 </head>
 <body>
 	<!-- 헤더푸터-->
@@ -18,20 +19,27 @@
 					<th>상품명</th>
 					<th>작성자</th>
 					<th>아이디</th>
-					<th>내용</th>
+					<th>제목</th>
 					<th></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="review : ${productReviews}">
 					<td th:text="${review.id}"></td>
-					<td th:text="${review.addItem.name}"></td> <!-- 상품명 -->
-					<td th:text="${review.users.username}"></td> <!-- 작성자 -->
-					<td th:text="${review.users.name}"></td> <!-- 작성자 이름 -->
-					<td th:text="${review.title}"></td> <!-- 리뷰 제목 -->
+					<td th:text="${review.addItem.name}"></td>
+					<!-- 상품명 -->
+					<td th:text="${review.users.username}"></td>
+					<!-- 작성자 -->
+					<td th:text="${review.users.name}"></td>
+					<!-- 작성자 이름 -->
+					<td><a
+						th:href="@{'/productDetail/productDetail/' + ${review.addItem.id}}" th:text="${review.title}">
+						</a>
+					</td>
+					<!-- 리뷰 제목 -->
 					<td>
 						<!-- data-id로 리뷰 ID를 전달하여 JavaScript로 삭제 처리 -->
-						<button th:attr="data-id=${review.id}" onclick="deleteReview(this)">삭제</button>
+						<button class="deleteButton" th:data-id="${review.id}">삭제</button>
 					</td>
 				</tr>
 			</tbody>
@@ -39,29 +47,30 @@
 
 		<div class="pagination">
 			<!-- 이전 페이지 버튼 -->
-<button th:if="${currentPage > 0}"
-    th:attr="onclick='location.href=\'/manager/managerReview?page=' + (${currentPage} - 1) + '&size=' + ${pageSize} + '&option=' + ${option} + '&keyword=' + ${keyword} + '\';'">&lt;</button>
+			<button th:if="${currentPage > 0}"
+				th:attr="onclick='location.href=\'/manager/managerReview?page=' + (${currentPage} - 1) + '&size=' + ${pageSize} + '&option=' + ${option} + '&keyword=' + ${keyword} + '\';'">&lt;</button>
 
-<!-- 페이지 번호 -->
-<span th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-    th:classappend="${i == currentPage} ? 'active' : ''"
-    th:attr="onclick='location.href=\'/manager/managerReview?page=' + ${i} + '&size=' + ${pageSize} + '&option=' + ${option} + '&keyword=' + ${keyword} + '\';'"
-    th:text="${i + 1}"></span>
+			<!-- 페이지 번호 -->
+			<span th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+				th:classappend="${i == currentPage} ? 'active' : ''"
+				th:attr="onclick='location.href=\'/manager/managerReview?page=' + ${i} + '&size=' + ${pageSize} + '&option=' + ${option} + '&keyword=' + ${keyword} + '\';'"
+				th:text="${i + 1}"></span>
 
-<!-- 다음 페이지 버튼 -->
-<button th:if="${currentPage < totalPages - 1}"
-    th:attr="onclick='location.href=\'/manager/managerReview?page=' + (${currentPage} + 1) + '&size=' + ${pageSize} + '&option=' + ${option} + '&keyword=' + ${keyword} + '\';'">&gt;</button>
+			<!-- 다음 페이지 버튼 -->
+			<button th:if="${currentPage < totalPages - 1}"
+				th:attr="onclick='location.href=\'/manager/managerReview?page=' + (${currentPage} + 1) + '&size=' + ${pageSize} + '&option=' + ${option} + '&keyword=' + ${keyword} + '\';'">&gt;</button>
 		</div>
 
 		<div class="search-section">
 			<form method="get" action="/manager/managerReview">
-				<label for="search-option">검색 옵션:</label>
-				<select id="search-option" name="option">
+				<label for="search-option">검색 옵션:</label> <select id="search-option"
+					name="option">
 					<!-- 검색 옵션이 null이 아닐 경우 선택 -->
 					<option value="user" th:selected="${option == 'user'}">작성자</option>
-					<option value="productName" th:selected="${option == 'productName'}">상품명</option>
-				</select>
-				<input type="text" id="search-input" name="keyword" placeholder="검색어를 입력하세요" th:value="${keyword}">
+					<option value="productName"
+						th:selected="${option == 'productName'}">상품명</option>
+				</select> <input type="text" id="search-input" name="keyword"
+					placeholder="검색어를 입력하세요" th:value="${keyword != null ? keyword : ''}">
 				<button type="submit">검색</button>
 			</form>
 		</div>

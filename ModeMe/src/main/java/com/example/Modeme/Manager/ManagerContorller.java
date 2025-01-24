@@ -22,6 +22,7 @@ import com.example.Modeme.Manager.Entity.AddItem;
 import com.example.Modeme.Manager.ManagerDTO.AddItemDTO;
 import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
 import com.example.Modeme.Manager.ManagerService.AddItemService;
+import com.example.Modeme.Manager.ManagerService.ManagerReviewService;
 import com.example.Modeme.QnA.QnARepository.QnaRepository;
 import com.example.Modeme.User.UserDTO.Headerlogin;
 import com.example.Modeme.User.UserEntity.User;
@@ -40,6 +41,9 @@ public class ManagerContorller {
     
     @Autowired
     private ProductReviewRepository prs;
+    
+    @Autowired
+    private ManagerReviewService mrs;
 
     @Autowired
     private UserService userService;
@@ -73,11 +77,15 @@ public class ManagerContorller {
         
         // 총 등록된 상품 수
         long toatalItems  = ar.count();
+        
+        // 총 등록된 리뷰 수
+        long totalReviews  = prs.count();
 
         // 모델에 데이터 추가
         model.addAttribute("totalUsers", totalUsers);
         model.addAttribute("totalQnAs", totalQnAs);
         model.addAttribute("totalItems", toatalItems);
+        model.addAttribute("totalReviews", totalReviews);
 
         return "manager/managerMain";
     }
@@ -163,7 +171,6 @@ public class ManagerContorller {
         }
     }   
     
- // 리뷰 목록 페이지네이션 및 검색 처리
     @GetMapping("/manager/managerReview")
     public String getReviews(
             @RequestParam(defaultValue = "0") int page,
@@ -172,25 +179,22 @@ public class ManagerContorller {
             @RequestParam(required = false) String keyword,
             Model model, Principal principal) {
 
+        // keyword가 null인 경우 빈 문자열로 설정
+        if (keyword == null) {
+            keyword = "";
+        }
+
         // 페이지네이션 설정
         Pageable pageable = PageRequest.of(page, size);
 
         Page<ProductReview> productReviewPage;
 
-        if (option != null && keyword != null && !keyword.isBlank()) {
-            if ("user".equals(option)) {
-                // 작성자 기준 검색
-                productReviewPage = prs.findByUsersUsernameContaining(keyword, pageable);
-            } else if ("productName".equals(option)) {
-                // 상품명 기준 검색
-                productReviewPage = prs.findByAddItemNameContaining(keyword, pageable);
-            } else {
-                // 기본 목록 조회
-                productReviewPage = prs.findAll(pageable);
-            }
+        if (option != null && !keyword.isBlank()) {
+            // 검색 호출
+            productReviewPage = mrs.searchReviews(option, keyword, pageable);
         } else {
-            // 기본 목록 조회
-            productReviewPage = prs.findAll(pageable);
+            // 기본 목록 호출
+            productReviewPage = mrs.getReviews(pageable);
         }
 
         List<ProductReview> productReviews = productReviewPage.getContent();
@@ -205,5 +209,18 @@ public class ManagerContorller {
         model.addAttribute("keyword", keyword);
 
         return "manager/managerReview";  // 리뷰 관리 페이지 반환
+    }
+
+    // 리뷰 삭제 처리
+    @DeleteMapping("/manager/deleteReview/{id}")
+    @ResponseBody
+    public String deleteReview(@PathVariable Long id) {
+        try {
+            prs.deleteById(id); // 리뷰 삭제
+            return "리뷰 삭제 성공";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "리뷰 삭제 실패";
+        }
     }
 }
