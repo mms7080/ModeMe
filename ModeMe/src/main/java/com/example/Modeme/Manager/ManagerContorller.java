@@ -163,14 +163,47 @@ public class ManagerContorller {
         }
     }   
     
+ // 리뷰 목록 페이지네이션 및 검색 처리
     @GetMapping("/manager/managerReview")
-    public String postReviews(Principal principal, Model model) {
-    	if(principal != null) {
-    		String username = principal.getName();
-    		model.addAttribute("username", username);
-    	}
-    	List<ProductReview> productReviews = prs.findAll();
-    	model.addAttribute("productReviews", productReviews);
-    	return "manager/managerReview";
+    public String getReviews(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false) String option,
+            @RequestParam(required = false) String keyword,
+            Model model, Principal principal) {
+
+        // 페이지네이션 설정
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<ProductReview> productReviewPage;
+
+        if (option != null && keyword != null && !keyword.isBlank()) {
+            if ("user".equals(option)) {
+                // 작성자 기준 검색
+                productReviewPage = prs.findByUsersUsernameContaining(keyword, pageable);
+            } else if ("productName".equals(option)) {
+                // 상품명 기준 검색
+                productReviewPage = prs.findByAddItemNameContaining(keyword, pageable);
+            } else {
+                // 기본 목록 조회
+                productReviewPage = prs.findAll(pageable);
+            }
+        } else {
+            // 기본 목록 조회
+            productReviewPage = prs.findAll(pageable);
+        }
+
+        List<ProductReview> productReviews = productReviewPage.getContent();
+        int totalPages = productReviewPage.getTotalPages();
+
+        // 모델에 데이터 추가
+        model.addAttribute("productReviews", productReviews);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("pageSize", size);
+        model.addAttribute("option", option);
+        model.addAttribute("keyword", keyword);
+
+        return "manager/managerReview";  // 리뷰 관리 페이지 반환
     }
 }
