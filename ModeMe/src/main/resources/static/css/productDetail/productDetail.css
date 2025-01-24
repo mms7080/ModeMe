@@ -214,11 +214,15 @@
         background-color: #2980b9;
     }
 
-    .selection-summary {
-        margin-top: 20px;
-        font-size: 18px;
-        font-weight: bold;
-        text-align: right;
+  .selection-summary {
+    margin-top: 24px; /* 살짝 더 넓은 간격 */
+    font-size: 16px; /* 폰트 크기를 조금 줄여 세련된 느낌 */
+    font-weight: 600; /* 너무 굵지 않은 반굵은 스타일 */
+    text-align: right; /* 오른쪽 정렬 유지 */
+    color: #333; /* 부드러운 어두운 색상 */
+    border-top: 1px solid #ddd; /* 구분선 추가 */
+    padding-top: 12px; /* 구분선과 텍스트 사이 간격 */
+    
     }
 
     .purchase-section {
