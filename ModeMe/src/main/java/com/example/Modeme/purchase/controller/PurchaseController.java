@@ -10,13 +10,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.Modeme.Manager.Entity.AddItem;
 import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
 import com.example.Modeme.User.UserDTO.Headerlogin;
 import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.User.UserRepository.UserRepository;
+import com.example.Modeme.purchase.dao.PurchaseRepository;
+import com.example.Modeme.purchase.dto.Purchase;
 
 @Controller
 public class PurchaseController {
@@ -28,6 +32,9 @@ public class PurchaseController {
 	
 	@Autowired
 	private UserRepository ur;
+	
+	@Autowired
+	private PurchaseRepository pr;
 	
 	@ModelAttribute //모든 매핑에 추가할 코드
     public void addAttributes(Model model, Principal principal) {
@@ -46,7 +53,9 @@ public class PurchaseController {
 		AddItem a = as.get();
 		model.addAttribute("u",u);
 		model.addAttribute("a", a);
+		model.addAttribute("aId", a.getId());
 		return "/purchase/purchase";
+		// productDetail 에서 상품정보를 purchase 로 넘기는 방법좀
 	}
 	
 	// ProductController 로 옮기면 좋음
@@ -82,4 +91,28 @@ public class PurchaseController {
 		return "redirect:/order"; // 결제 성공 후 주문내역으로 ㄱㄱ
 	}
 	
+	@GetMapping("/insertPurchase")
+	@ResponseBody
+	public String insertPurchase(@RequestParam("aId") int aId, @RequestParam("userId") int uId,
+			@RequestParam("address") String address, @RequestParam("addressDetail") String addrDetail,
+			@RequestParam("totalPrice") int price, @RequestParam("impUid") String impUid,
+			@RequestParam("merchantUid") String merchantUid) {
+		Purchase p = new Purchase();
+		p.setUserId(uId);
+		p.setProductNumber(aId);
+		p.setProductMany(1);
+		p.setAddress(address);
+		p.setAddressDetail(addrDetail);
+//		p.setImpUid(impUid);
+//		p.setMerchantUid(merchantUid);
+		
+		pr.save(p);
+		
+		
+		
+		
+		
+		
+		return "success";
+	}
 }

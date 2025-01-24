@@ -47,4 +47,10 @@ public class Purchase {
 	
 	@Column(nullable = false)
 	private LocalDateTime orderDate = LocalDateTime.now();
+	
+//	@Column(nullable = false)
+//	private String impUid;
+//	
+//	@Column(nullable = false)
+//	private String merchantUid;
 }

@@ -61,9 +61,15 @@ function handleDomainChange() {
 	}
 }
 
+
+
 // 네이버는 불가능
 // iamport 결제 호출(nice)
 document.getElementById("payButton").addEventListener("click", function() {
+	const address = document.getElementById("sample6_address").value
+	const addressDetail = document.getElementById("sample6_detailAddress").value
+	const finalPrice = document.getElementById("finalPrice").innerText.slice(1)
+	
 	//주문번호 생성
 	const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 	let merchantUid = 'TD';
@@ -76,32 +82,34 @@ document.getElementById("payButton").addEventListener("click", function() {
 		pg: 'nice', // 'nice', 'tosspay', 'kakaopay'
 		merchant_uid: merchantUid,
 		name: '결제',
-		amount: 100,
-		buyer_email: 'email@email.com',
-		buyer_name: 'kim jung min',
-		buyer_tel: '010-1234-1234',
+		amount: finalPrice,
+		buyer_email: user.email,
+		buyer_name: user.name,
+		buyer_tel: user.phone,
 
 	}, function(rsp) {
 		if (rsp.success == true) {
 			alert("결제 성공")
-//			$.ajax({
-//				type: "post",
-//				url: "payment.pm",
-//				data: { impUid: rsp.imp_uid, merchantUid: rsp.merchant_uid, poNo: poNo, point: point },
-//				success: (rsp) => {
-//					if (rsp == 'success') {
-//						alert('결제가 완료되었습니다')
-//						location.href = "myPayPoint.mp"
-//					}
-//				},
-//				error: (rsp) => {
-//					console.log(rsp);
-//				}
-//			})
-			//let msg = '결제가 완료되었습니다.';       
-			// msg += '고유ID : ' + rsp.imp_uid;     
-			// msg += '상점 거래ID : ' + rsp.merchant_uid;        
-			// msg += '결제 금액 : ' + rsp.paid_amount;              
+			$.ajax({
+				type: "post",
+				url: "insertPurchase",
+				data: {aId:aId, userId:user.id, totalPrice:finalPrice,
+					address:address, addressDetail:addressDetail,
+					 impUid: rsp.imp_uid, merchantUid: rsp.merchant_uid,},
+				success: (rsp) => {
+					if (rsp == 'success') {
+						alert('결제가 완료되었습니다')
+						location.href = "/order"
+					}
+				},
+				error: (rsp) => {
+					console.log(rsp);
+				}
+			})
+			let msg = '결제가 완료되었습니다.';       
+			msg += '고유ID : ' + rsp.imp_uid;
+			msg += '상점 거래ID : ' + rsp.merchant_uid;        
+			msg += '결제 금액 : ' + rsp.paid_amount;              
 		} else {
 			let msg = '결제에 실패하였습니다.';
 			msg += '에러내용 : ' + rsp.error_msg;
@@ -112,6 +120,9 @@ document.getElementById("payButton").addEventListener("click", function() {
 
 
 document.getElementById("kakaopay").addEventListener("click", function() {
+	const address = document.getElementById("sample6_address").value
+	const addressDetail = document.getElementById("sample6_detailAddress").value
+	const finalPrice = document.getElementById("finalPrice").innerText.slice(1)
 	//주문번호 생성
 	const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 	let merchantUid = 'TD';
@@ -124,32 +135,34 @@ document.getElementById("kakaopay").addEventListener("click", function() {
 		pg: 'kakaopay', // 'nice', 'tosspay', 'kakaopay'
 		merchant_uid: merchantUid,
 		name: '결제',
-		amount: 100,
-		buyer_email: 'test@email.com',
-		buyer_name: 'kim jung min',
-		buyer_tel: '010-1234-1234',
+		amount: finalPrice,
+		buyer_email: user.email,
+		buyer_name: user.name,
+		buyer_tel: user.phone,
 
 	}, function(rsp) {
 		if (rsp.success == true) {
 			alert("결제 성공")
-//			$.ajax({
-//				type: "post",
-//				url: "payment.pm",
-//				data: { impUid: rsp.imp_uid, merchantUid: rsp.merchant_uid, poNo: poNo, point: point },
-//				success: (rsp) => {
-//					if (rsp == 'success') {
-//						alert('결제가 완료되었습니다')
-//						location.href = "myPayPoint.mp"
-//					}
-//				},
-//				error: (rsp) => {
-//					console.log(rsp);
-//				}
-//			})
-			//let msg = '결제가 완료되었습니다.';       
-			// msg += '고유ID : ' + rsp.imp_uid;     
-			// msg += '상점 거래ID : ' + rsp.merchant_uid;        
-			// msg += '결제 금액 : ' + rsp.paid_amount;              
+			$.ajax({
+				type: "get",
+				url: "insertPurchase",
+				data: {aId:aId, userId:user.id, totalPrice:finalPrice,
+					address:address, addressDetail:addressDetail,
+					 impUid: rsp.imp_uid, merchantUid: rsp.merchant_uid,},
+				success: (rsp) => {
+					if (rsp == 'success') {
+						alert('결제가 완료되었습니다')
+						location.href = "/order"
+					}
+				},
+				error: (rsp) => {
+					console.log(rsp);
+				}
+			})
+			let msg = '결제가 완료되었습니다.';       
+			msg += '고유ID : ' + rsp.imp_uid;
+			msg += '상점 거래ID : ' + rsp.merchant_uid;        
+			msg += '결제 금액 : ' + rsp.paid_amount;              
 		} else {
 			let msg = '결제에 실패하였습니다.';
 			msg += '에러내용 : ' + rsp.error_msg;
@@ -160,6 +173,9 @@ document.getElementById("kakaopay").addEventListener("click", function() {
 
 
 document.getElementById("tosspay").addEventListener("click", function() {
+	const address = document.getElementById("sample6_address").value
+	const addressDetail = document.getElementById("sample6_detailAddress").value
+	const finalPrice = document.getElementById("finalPrice").innerText.slice(1)
 	//주문번호 생성
 	const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 	let merchantUid = 'TD';
@@ -172,32 +188,34 @@ document.getElementById("tosspay").addEventListener("click", function() {
 		pg: 'uplus', // 'nice', 'tosspay', 'kakaopay'
 		merchant_uid: merchantUid,
 		name: '결제',
-		amount: 100,
-		buyer_email: 'test@email.com',
-		buyer_name: 'kim jung min',
-		buyer_tel: '010-1234-1234',
+		amount: finalPrice,
+		buyer_email: user.email,
+		buyer_name: user.name,
+		buyer_tel: user.phone,
 
 	}, function(rsp) {
 		if (rsp.success == true) {
 			alert("결제 성공")
-//			$.ajax({
-//				type: "post",
-//				url: "payment.pm",
-//				data: { impUid: rsp.imp_uid, merchantUid: rsp.merchant_uid, poNo: poNo, point: point },
-//				success: (rsp) => {
-//					if (rsp == 'success') {
-//						alert('결제가 완료되었습니다')
-//						location.href = "myPayPoint.mp"
-//					}
-//				},
-//				error: (rsp) => {
-//					console.log(rsp);
-//				}
-//			})
-			//let msg = '결제가 완료되었습니다.';       
-			// msg += '고유ID : ' + rsp.imp_uid;     
-			// msg += '상점 거래ID : ' + rsp.merchant_uid;        
-			// msg += '결제 금액 : ' + rsp.paid_amount;              
+			$.ajax({
+				type: "post",
+				url: "insertPurchase",
+				data: {aId:aId, userId:user.id, totalPrice:finalPrice,
+					address:address, addressDetail:addressDetail,
+					 impUid: rsp.imp_uid, merchantUid: rsp.merchant_uid,},
+				success: (rsp) => {
+					if (rsp == 'success') {
+						alert('결제가 완료되었습니다')
+						location.href = "/order"
+					}
+				},
+				error: (rsp) => {
+					console.log(rsp);
+				}
+			})
+			let msg = '결제가 완료되었습니다.';       
+			msg += '고유ID : ' + rsp.imp_uid;
+			msg += '상점 거래ID : ' + rsp.merchant_uid;        
+			msg += '결제 금액 : ' + rsp.paid_amount;              
 		} else {
 			let msg = '결제에 실패하였습니다.';
 			msg += '에러내용 : ' + rsp.error_msg;

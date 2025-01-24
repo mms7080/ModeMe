@@ -106,10 +106,10 @@
 					<span>배송비</span> <span>₩0</span>
 				</div>
 				<div class="summary-row">
-					<span>할인/적립금</span> <span>-₩2,000</span>
+					<span>할인/적립금</span> <span>-₩2000</span>
 				</div>
 				<div class="summary-row summary-total">
-					<span>최종 결제 금액</span> <span>₩34,900</span>
+					<span>최종 결제 금액</span> <span id="finalPrice">₩34900</span>
 				</div>
 			</div>
 
@@ -142,6 +142,8 @@
 	</form>
 	<script th:inline="javascript" defer>
 		const user = /*[[${u}]]*/'null';
+		const aId = /*[[${aId}]]*/null;
+		
 		
 		let phoneBehind = user.phone.slice(3)
 		document.getElementById("phoneNum").value = phoneBehind;

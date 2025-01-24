@@ -9,5 +9,7 @@ import com.example.Modeme.purchase.dto.Purchase;
 @Repository
 @Scope("singleton")
 public interface PurchaseRepository extends JpaRepository<Purchase, Long>{
-
+	
+	
+	
 }
