@@ -1,6 +1,7 @@
 package com.example.Modeme.prdDetail.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -113,10 +114,16 @@ public class ProductDetailController {
     // 상품 상세 정보 조회
     @GetMapping("/productDetail/{id}")
     public String getProductDetail(@PathVariable Long id, Model model, Principal principal) {
-        System.out.println("상품 상세 페이지 요청: ID = " + id);
+        // 상품 정보 조회
         AddItem product = addItemRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다. ID: " + id));
+
+        // 리뷰 데이터 조회
+        List<ProductReview> reviews = reviewRepository.findByAddItemId(id);
+
+        // 모델에 데이터 추가
         model.addAttribute("product", product);
+        model.addAttribute("reviews", reviews);
 
         if (product.getProductSizes() != null && !product.getProductSizes().isEmpty()) {
             model.addAttribute("productSizes", product.getProductSizes());
@@ -124,6 +131,7 @@ public class ProductDetailController {
 
         return "/productDetail/productDetail";
     }
+
 
     @GetMapping("/{id}/review")
     public String reviewWritePage(@PathVariable Long id, Model model, Principal principal) {
@@ -158,6 +166,8 @@ public class ProductDetailController {
         reviewRepository.save(review);
 
         System.out.println("리뷰 저장 완료");
-        return "redirect:/productDetail/" + id;
+        // 정확한 상세 페이지로 리다이렉트
+        return "redirect:/productDetail/productDetail/" + id;
     }
+
 }
