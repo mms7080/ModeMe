@@ -26,7 +26,11 @@ public class PurchaseController {
 	@Autowired
 	private ProductRepository pr;
 	 */
-	
+//	결제페이지
+	@GetMapping("/purchase")
+	public String purchase() {
+		return "/purchase/purchase";
+	}
 	
 	// ProductController 로 옮기면 좋음
 	@GetMapping("/proList")

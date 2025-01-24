@@ -1,6 +1,7 @@
 package com.example.Modeme.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,12 +9,29 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.example.Modeme.Manager.Entity.AddItem;
+import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
 import com.example.Modeme.User.UserDTO.Headerlogin;
+import com.example.Modeme.User.UserRepository.UserRepository;
+import com.example.Modeme.prdDetail.repository.ProductDetailRepository;
+import com.example.Modeme.prdDetail.service.ProductEditService;
 
 @Controller
 public class ViewController {
 	@Autowired
 	Headerlogin keep; // 로그인 유지 재사용 Headerlogin 클래스
+	
+	@Autowired
+	private UserRepository ur;
+	
+	@Autowired
+	private AddItemRepository air;
+	
+	@Autowired
+	private ProductDetailRepository pdr;
+	
+	@Autowired
+	private ProductEditService pes;
 	
     @ModelAttribute //모든 매핑에 추가할 코드
     public void addAttributes(Model model, Principal principal) {
@@ -68,20 +86,19 @@ public class ViewController {
 		return "/productDetail/productEdit";
 	}
 
-	// 결제페이지
-	@GetMapping("/purchase")
-	public String purchase() {
-		return "/purchase/purchase";
-	}
 
 	// 메인페이지
 	@GetMapping("/")
-	public String mainView() {
+	public String mainView(Model model) {
+		List<AddItem> aList = air.findAll();
+		model.addAttribute("aList", aList);
 		return "/main";
 	}
 
 	@GetMapping("/main")
-	public String mainView2() {
+	public String mainView2(Model model) {
+		List<AddItem> aList = air.findAll();
+		model.addAttribute("aList", aList);
 		return "/main";
 	}
 	

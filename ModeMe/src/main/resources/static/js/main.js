@@ -40,3 +40,13 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 // 하트 클릭시 색 변경
 
+// 상품 클릭시 상세로 이동
+const products = document.getElementsByClassName('product-grid')
+for(const p of products){
+	p.addEventListener('click', (e)=>{
+		if(e.target.tagName == 'IMG' || e.target.tagName == 'P'){
+			let pNum = e.target.parentElement.children[0].value
+			location.href = "/productDetail/productDetail/" + pNum;
+		}
+	})
+}
