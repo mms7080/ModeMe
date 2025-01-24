@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<base href="/"/>
 <link href="css/purchase/purchase.css" rel="stylesheet">
 <script src="js/purchase/purchase.js" defer></script>
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
@@ -22,21 +23,22 @@
 				<div class="section-title">배송지</div>
 				<div class="form-row">
 					<label>받는사람</label>
-					<input type="text" placeholder="이름">
+					<input type="text" placeholder="이름" th:value="${u.name}">
 				</div>
 				<div class="form-row">
 					<label>주소</label>
-						<input name="postcode" id="sample6_postcode" type="text" placeholder="우편번호" style="flex: 0 0 120px; margin-right: 10px;">
-					<button id="addBtn" onclick="openDaumPostcode()">주소검색</button>
+						<input name="postcode" id="sample6_postcode" type="text" placeholder="우편번호"
+						 style="flex: 0 0 120px; margin-right: 10px;" th:value="${u.postcode}">
+					<button type="button" id="addBtn" onclick="openDaumPostcode()">주소검색</button>
 				</div>
 				<div class="form-row">
 					<label></label>
-					<input name="address" id="sample6_address" type="text" placeholder="기본주소">
+					<input name="address" id="sample6_address" type="text" placeholder="기본주소" th:value="${u.address}">
 					<input name="extraAddress" id="extraaddress" type="text" placeholder="참고항목">
 				</div>
 				<div class="form-row">
 					<label></label>
-					<input name="detailAddress" id="sample6_detailAddress" type="text" placeholder="상세주소">
+					<input name="detailAddress" id="sample6_detailAddress" type="text" placeholder="상세주소" th:value="${u.addressDetail}">
 				</div>
 				<div class="form-row">
 					<label>휴대전화</label>
@@ -45,7 +47,7 @@
 						<option>011</option>
 						<option>016</option>
 					</select>
-					<input type="text" placeholder="12345678" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
+					<input id="phoneNum" type="text" placeholder="12345678" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
 					<input type="hidden" name="phone" id="phoneNumber">
 				</div>
 				<div class="form-row">
@@ -53,10 +55,10 @@
 					<input id="email-username" type="text" placeholder="아이디" style="flex: 1; margin-right: 5px;">
 					<span>@</span>
 					<select id="email-domain" onchange="handleDomainChange()" style="flex: 1; margin-left: 5px;">
-						<option value="gmail.com">google.com</option>
-						<option value="naver.com">naver.com</option>
-						<option value="daum.net">daum.net</option>
-						<option value="custom">직접 입력</option>
+						<option id="gmail" value="gmail.com">gmail.com</option>
+						<option id="naver" value="naver.com">naver.com</option>
+						<option id="daum" value="daum.net">daum.net</option>
+						<option id="else" value="custom">직접 입력</option>
 					</select>
 					<input id="custom-domain" type="text" placeholder="직접 입력" style="display: none; flex: 1; margin-left: 5px;">
 				</div>
@@ -68,8 +70,8 @@
 				<div class="product-item">
 					<img src="image/026.jpg" alt="상품 이미지">
 					<div class="product-details">
-						<p>Cashmere Half-neck Knitwear</p>
-						<p>₩36,900</p>
+						<p>[[${a.name}]]</p>
+						<p>₩[[${a.price}]]</p>
 					</div>
 				</div>
 			</div>
@@ -84,7 +86,7 @@
 				<div class="coupon-row">
 					<label>적립금 사용</label> <input id="use-points" placeholder="0" min="0" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
 					<!-- 적립금 입력 -->
-					<button id="use-all-points">전액사용</button>
+					<button type="button" id="use-all-points">전액사용</button>
 					<!-- 전액사용 버튼 -->
 				</div>
 				<div class="coupon-row">
@@ -98,7 +100,7 @@
 			<div class="section">
 				<div class="section-title">결제정보</div>
 				<div class="summary-row">
-					<span>주문상품</span> <span>₩36,900</span>
+					<span>주문상품</span> <span>₩[[${a.price}]]</span>
 				</div>
 				<div class="summary-row">
 					<span>배송비</span> <span>₩0</span>
@@ -116,19 +118,16 @@
 				<div class="section-title">결제수단</div>
 				<div class="form-row">
 					<label>결제수단</label> <select>
-						<option>무통장입금</option>
+<!-- 						<option>무통장입금</option> -->
 						<option>신용카드</option>
-						<option>가상계좌</option>
-						<option>계좌이체</option>
+<!-- 						<option>가상계좌</option> -->
+<!-- 						<option>계좌이체</option> -->
 					</select>
-				</div>
-				<div class="">
-					<input type="checkbox"> <label>결제수단 입력정보를 다음에도 사용</label>
 				</div>
 			</div>
 
 			<!-- 결제 버튼 -->
-			<button class="button" id="payButton">KRW 34,900 결제하기</button>
+			<button type="button" class="button" id="payButton">KRW 34,900 결제하기</button>
 			<div class="payment-buttons">
 				<img src="image/kakaopay_icon_medium.png" id="kakaopay" style="width: 165px; height: 50px; border-radius: 30px;">
 				<img src='image/tosspay_icon.JPG' id="tosspay" style="width: 165px; height: 50px; border-radius: 30px;">
@@ -141,5 +140,27 @@
 		<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 		<script src="https://nsp.pay.naver.com/sdk/js/naverpay.min.js"></script>
 	</form>
+	<script th:inline="javascript" defer>
+		const user = /*[[${u}]]*/'null';
+		
+		let phoneBehind = user.phone.slice(3)
+		document.getElementById("phoneNum").value = phoneBehind;
+		
+		let emails = user.email.split('@')
+		document.getElementById('email-username').value = emails[0]
+		if(emails[1] == 'gmail.com'){
+			document.getElementById("gmail").selected = true
+		} else if(emails[1] =='naver.com'){
+			document.getElementById('naver').selected = true
+		} else if(emails[1] == 'daum.net'){
+			document.getElementById('daum').selected = true
+		} else{
+			const opt = document.createElement('option')
+			opt.innerText = emails[1]
+			opt.id = "plusDomain"
+			document.getElementById('email-domain').appendChild(opt)
+			opt.selected = true
+		}
+	</script>
 </body>
 </html>

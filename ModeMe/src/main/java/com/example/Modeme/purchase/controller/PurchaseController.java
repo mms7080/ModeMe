@@ -2,20 +2,32 @@ package com.example.Modeme.purchase.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.Modeme.Manager.Entity.AddItem;
+import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
 import com.example.Modeme.User.UserDTO.Headerlogin;
+import com.example.Modeme.User.UserEntity.User;
+import com.example.Modeme.User.UserRepository.UserRepository;
 
 @Controller
 public class PurchaseController {
 	@Autowired
 	Headerlogin keep;
+	
+	@Autowired
+	private AddItemRepository air;
+	
+	@Autowired
+	private UserRepository ur;
 	
 	@ModelAttribute //모든 매핑에 추가할 코드
     public void addAttributes(Model model, Principal principal) {
@@ -27,8 +39,13 @@ public class PurchaseController {
 	private ProductRepository pr;
 	 */
 //	결제페이지
-	@GetMapping("/purchase")
-	public String purchase() {
+	@GetMapping("/purchase/{id}")
+	public String purchase(Model model, @PathVariable Long id, Principal prin) {
+		User u = ur.findByUsername(prin.getName()).get();
+		Optional<AddItem> as = air.findById(id);
+		AddItem a = as.get();
+		model.addAttribute("u",u);
+		model.addAttribute("a", a);
 		return "/purchase/purchase";
 	}
 	

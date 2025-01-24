@@ -103,8 +103,8 @@
 				</div>
 				<!-- 구매 섹션 -->
 				<div class="purchase-section">
-					<a href="#" class="buyNow">
-						<button>바로 구매하기</button>
+					<a th:href="@{/purchase/{id}(id=${product.id})}" class="buyNow">
+						<button id="">바로 구매하기</button>
 					</a> <a href="#">
 						<button>장바구니 담기</button>
 					</a> <a href="#">
