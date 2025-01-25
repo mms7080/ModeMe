@@ -32,18 +32,23 @@ public class Mileage {
 		)
 	private Long mileageid;
 	
+	//사용자 아이디
 	@Column
 	private String userid;
 	
+	//마일리지 적립일
 	@Column
 	private LocalDateTime createAt;
 	
+	//마일리지 적립금
 	@Column
 	private int mileage = 2000;
 	
+	//주문번호
 	@Column
 	private String ordernum;
 	
+	//마일리지 적립 내용
 	@Column
 	private String content;
 }
