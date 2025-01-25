@@ -2,6 +2,7 @@
 	
 	import java.security.Principal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,23 +73,27 @@ import com.example.Modeme.User.UserRepository.UserRepository;
 			// 적립금
 			@GetMapping("/mileage")
 			public String Mileage(
-					@AuthenticationPrincipal CustomUserDetails userDetails,
-					Model model		
+			        @AuthenticationPrincipal CustomUserDetails userDetails,
+			        Model model
 			) {
-				String userid = userDetails.getUsername();
-				
-				Optional<User> user = userrep.findByUsername(userid);
-				
-				// Optional<User>에서 createdAt 값 추출
+			    String userid = userDetails.getUsername();
+			    
+			    Optional<User> user = userrep.findByUsername(userid);
+			    
+			    // Optional<User>에서 createdAt 값 추출
 			    LocalDateTime userDate = user.map(User::getCreatedAt) // createdAt 필드 접근
 			                                 .orElse(null); // 값이 없으면 null 처리
-				
-			 // 모델에 추가
-			    model.addAttribute("mileage_list", userDate);
-				
-				return "/MyPage/mileage";
-			}
 
+   			 // userDate를 String으로 변환 및 형식 지정
+			    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			    String formattedDate = userDate.format(formatter);
+
+			    // 모델에 추가
+			    model.addAttribute("mileage_list", formattedDate);
+			    
+			    return "/MyPage/mileage";
+			}
+			
 			// 관심 상품
 			@GetMapping("/wishlist")
 			public String WishList(
