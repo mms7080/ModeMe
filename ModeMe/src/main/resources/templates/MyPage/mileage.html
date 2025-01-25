@@ -47,6 +47,12 @@
 			<div class="mileagecontent">
 				<span th:text="${mileage_list}"></span> <span>2,000원</span> <span></span> <span>신규회원 적립금</span>
 			</div>
+			<div class="mileagecontent" th:each=${content:mileage_all}>
+				<span th:text="${content.createAt}"></span>
+				<span th:text="${content.mileage}"></span>
+				<span th:text="${content.ordernum}"></span>
+				<span th:text="${content.content}"></span>
+			</div>
 			</div>
 		</div>
 

@@ -91,6 +91,8 @@ import com.example.Modeme.User.UserRepository.UserRepository;
 			    // 모델에 추가
 			    model.addAttribute("mileage_list", formattedDate);
 			    
+			    //주문내역 생성과 동시에 마일리지 적립 -> 주문내역 먼저 생성 후 마일리지 작업
+			    
 			    return "/MyPage/mileage";
 			}
 			
