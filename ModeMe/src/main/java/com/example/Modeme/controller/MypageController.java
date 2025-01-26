@@ -28,6 +28,8 @@ import com.example.Modeme.Mypage.MypageService.WishlistService;
 import com.example.Modeme.User.UserDTO.Headerlogin;
 import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.User.UserRepository.UserRepository;
+import com.example.Modeme.purchase.dao.PurchaseRepository;
+import com.example.Modeme.purchase.dto.Purchase;
 	
 	@Controller
 	public class MypageController {
@@ -35,6 +37,11 @@ import com.example.Modeme.User.UserRepository.UserRepository;
 		   @Autowired
 		   Headerlogin keep; // 로그인 유지 재사용 Headerlogin 클래스
 		   
+		   // 주문 내역을 받아오기 위함
+		   @Autowired
+		   PurchaseRepository purrep;
+		   
+		   // 회원가입일 받아오기 위함
 		   @Autowired
 		   UserRepository userrep;
 		   
@@ -66,7 +73,16 @@ import com.example.Modeme.User.UserRepository.UserRepository;
 	
 			// 주문내역 조회
 			@GetMapping("/order")
-			public String Order() {
+			public String Order(
+					 @AuthenticationPrincipal CustomUserDetails userDetails,
+				        Model model	
+			) {
+				String userid = userDetails.getUsername();
+				
+				List<Purchase> user = purrep.findByUsername(userid);
+				
+				model.addAttribute("purchase_list",user);
+				
 				return "/MyPage/order";
 			}
 			

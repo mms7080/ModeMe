@@ -120,7 +120,7 @@ h1 {
 
 .ordercontent {
 	display: grid;
-	grid-template-columns: repeat(7, 1fr);
+	grid-template-columns: repeat(6, 1fr);
 	justify-items: center;
 	align-items: center;
 	    padding: 5px;
@@ -128,6 +128,14 @@ h1 {
 
 .ordercontent span {
 		    color:#333;
+}
+
+.online {
+	border-top: 1px solid lightgrey;
+}
+
+.center {
+	text-align:center;
 }
 
 .ordermain {

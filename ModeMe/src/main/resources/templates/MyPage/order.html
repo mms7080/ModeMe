@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Order</title>
 <link rel="stylesheet" href="/css/MyPage/order.css">
+<script defer src="js/MyPage/order.js"></script>
 
 </head>
 <body>
@@ -51,18 +52,28 @@
 				<span>수량</span>
 				<span>상품구매금액</span>
 				<span>주문처리상태</span>
-				<span>취소/교환/반품</span>
 			</div>
 			
 			<!-- 주문 내역이 있을 경우 (orderList model명)-->
-			<div th:if="${orderList != null && !orderList.isEmpty()}">
-				<div>주문 내역이 있습니다.</div>
-			</div>
-			<div th:unless="${orderList != null && !orderList.isEmpty()}" class="orderlist">
-				<!-- 주문 내역이 없는 경우 -->
-				<div class="order_null">주문 내역이 없습니다.</div>
-			</div>
-			</div>
+			<div th:if="${purchase_list != null && !purchase_list.isEmpty()}">
+    <div class="ordercontent online" th:each="content : ${purchase_list}">
+   		 <div class="center">
+   	<span th:text="${#temporals.format(content.orderDate, 'yyyy-MM-dd')}"></span></br>
+
+   		 	 <span th:text="${content.id}"></span>
+   		 </div>
+        <span>이미지</span>
+        <span th:text="${content.itemname}"></span>
+        <span th:text="${content.productMany}"></span>
+        <span th:text="${content.totalPrice}"></span>
+        <span>주문처리상태</span>
+    </div>
+</div>
+
+<div th:unless="${purchase_list != null && !purchase_list.isEmpty()}" class="orderlist">
+    <div class="order_null">주문 내역이 없습니다.</div>
+</div>
+
 		</div>
 	</main>
 

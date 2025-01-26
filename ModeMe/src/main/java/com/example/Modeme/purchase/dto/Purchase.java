@@ -54,6 +54,9 @@ public class Purchase {
 	@Column
 	private String process; //주문 상태처리 (입금전, 배송완료 등등)
 	
+	@Column
+	private String username; //유저 아이디
+	
 //	@Column(nullable = false)
 //	private String impUid;
 //	

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.Modeme.Config.CustomUserDetails;
 import com.example.Modeme.Manager.Entity.AddItem;
 import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
 import com.example.Modeme.User.UserDTO.Headerlogin;
@@ -96,7 +98,10 @@ public class PurchaseController {
 	public String insertPurchase(@RequestParam("aId") int aId, @RequestParam("userId") int uId,
 			@RequestParam("address") String address, @RequestParam("addressDetail") String addrDetail,
 			@RequestParam("totalPrice") int price, @RequestParam("impUid") String impUid,
-			@RequestParam("merchantUid") String merchantUid, @RequestParam("itemname") String itemname) {
+			@RequestParam("merchantUid") String merchantUid, @RequestParam("itemname") String itemname,
+			 @AuthenticationPrincipal CustomUserDetails userDetails) {
+		String userid = userDetails.getUsername();
+		
 		Purchase p = new Purchase();
 		p.setUserId(uId);
 		p.setProductNumber(aId);
@@ -104,6 +109,7 @@ public class PurchaseController {
 		p.setAddress(address);
 		p.setAddressDetail(addrDetail);
 		p.setItemname(itemname);
+		p.setUsername(userid);
 //		p.setImpUid(impUid);
 //		p.setMerchantUid(merchantUid);
 		
