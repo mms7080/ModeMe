@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>리뷰 수정</title>
+</head>
+<body>
+    <h1>리뷰 수정</h1>
+    <form th:action="@{/review/{reviewId}/edit(reviewId=${review.id})}" method="post">
+        <label for="title">제목</label>
+        <input type="text" id="title" name="title" th:value="${review.title}" required>
+        <label for="content">내용</label>
+        <textarea id="content" name="content" rows="10" th:text="${review.content}" required></textarea>
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+        <button type="submit">수정 완료</button>
+    </form>
+</body>
+</html>
