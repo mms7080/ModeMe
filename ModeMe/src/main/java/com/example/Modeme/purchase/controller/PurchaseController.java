@@ -96,13 +96,14 @@ public class PurchaseController {
 	public String insertPurchase(@RequestParam("aId") int aId, @RequestParam("userId") int uId,
 			@RequestParam("address") String address, @RequestParam("addressDetail") String addrDetail,
 			@RequestParam("totalPrice") int price, @RequestParam("impUid") String impUid,
-			@RequestParam("merchantUid") String merchantUid) {
+			@RequestParam("merchantUid") String merchantUid, @RequestParam("itemname") String itemname) {
 		Purchase p = new Purchase();
 		p.setUserId(uId);
 		p.setProductNumber(aId);
 		p.setProductMany(1);
 		p.setAddress(address);
 		p.setAddressDetail(addrDetail);
+		p.setItemname(itemname);
 //		p.setImpUid(impUid);
 //		p.setMerchantUid(merchantUid);
 		

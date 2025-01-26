@@ -123,6 +123,8 @@ document.getElementById("kakaopay").addEventListener("click", function() {
 	const address = document.getElementById("sample6_address").value
 	const addressDetail = document.getElementById("sample6_detailAddress").value
 	const finalPrice = document.getElementById("finalPrice").innerText.slice(1)
+	const itemName = document.querySelector(".product-details p").innerText;
+
 	//주문번호 생성
 	const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 	let merchantUid = 'TD';
@@ -146,18 +148,25 @@ document.getElementById("kakaopay").addEventListener("click", function() {
 			$.ajax({
 				type: "get",
 				url: "insertPurchase",
-				data: {aId:aId, userId:user.id, totalPrice:finalPrice,
-					address:address, addressDetail:addressDetail,
-					 impUid: rsp.imp_uid, merchantUid: rsp.merchant_uid,},
-				success: (rsp) => {
-					if (rsp == 'success') {
-						alert('결제가 완료되었습니다')
-						location.href = "/order"
-					}
-				},
-				error: (rsp) => {
-					console.log(rsp);
-				}
+								data: {
+									aId: aId,
+									userId: user.id,
+									totalPrice: finalPrice,
+									address: address,
+									addressDetail: addressDetail,
+									impUid: rsp.imp_uid,
+									merchantUid: rsp.merchant_uid,
+									itemname: itemName // itemname 추가
+								},
+								success: (rsp) => {
+									if (rsp == 'success') {
+										alert('결제가 완료되었습니다');
+										location.href = "/order";
+									}
+								},
+								error: (rsp) => {
+									console.log(rsp);
+								}
 			})
 			let msg = '결제가 완료되었습니다.';       
 			msg += '고유ID : ' + rsp.imp_uid;
