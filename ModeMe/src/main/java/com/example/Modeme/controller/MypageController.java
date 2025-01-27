@@ -74,7 +74,39 @@ import com.example.Modeme.purchase.dto.Purchase;
 		
 			// 마이페이지
 			@GetMapping("/mypage")
-			public String MyPage() {
+			public String MyPage(
+					@AuthenticationPrincipal CustomUserDetails userDetails,
+			        Model model	
+			) {
+				String userid = userDetails.getUsername();
+				 List<Mileage> mileageList = milerep.findByUserid(userid);
+				 
+				// 총 적립금
+			    int total = mileser.getTotalMileage(userid) + 2000;
+			    model.addAttribute("total_mileage",total);
+			    
+			  //사용된 마일리지 합산
+			    int totalUsedMileage = mileageList.stream()
+			            .mapToInt(Mileage::getUsedMileage)  // 각 사용된 마일리지 항목을 더함
+			            .sum();
+			    model.addAttribute("usedMileage",totalUsedMileage);
+			    
+			  //사용 가능 적립금
+			    int availableMileage = total - totalUsedMileage;
+			    model.addAttribute("availableMileage",availableMileage);
+			    
+			    // 거래 횟수
+			    int count = purrep.countByUsername(userid);
+			    model.addAttribute("count",count);
+			    
+			    List<Purchase> purchaseList = purrep.findByUsername(userid);
+			    
+			    // 총 거래 금액
+			    int totalprice = purchaseList.stream()
+			            .mapToInt(Purchase::getTotalPrice)  // 각 사용된 마일리지 항목을 더함
+			            .sum();
+			    model.addAttribute("totalprice",totalprice);
+				
 				return "/MyPage/MyPage";
 			}
 	
@@ -100,7 +132,6 @@ import com.example.Modeme.purchase.dto.Purchase;
 			        @RequestParam(name = "usedMileage", defaultValue = "0") int usedMileage,
 			        Model model
 			) {
-				 System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaa usedMileage 값: " + usedMileage);  // 값 확인
 			    String userid = userDetails.getUsername();
 			   
 			    mileser.saveMileage(userid, usedMileage);

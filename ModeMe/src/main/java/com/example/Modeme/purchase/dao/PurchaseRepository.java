@@ -14,5 +14,6 @@ import com.example.Modeme.purchase.dto.Purchase;
 public interface PurchaseRepository extends JpaRepository<Purchase, Long>{
 	List<Purchase> findByUsername(String username);
 	
-	
+	int countByUsername(String username);
+
 }
