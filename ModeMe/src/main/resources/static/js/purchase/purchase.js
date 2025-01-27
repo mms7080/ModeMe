@@ -233,5 +233,28 @@ document.getElementById("tosspay").addEventListener("click", function() {
 	});
 });
 
+document.getElementById("use-points").addEventListener("input", function() {
+    const usedMileage = document.getElementById("use-points").value; // 사용자가 입력한 마일리지 값
+    console.log("사용할 마일리지: " + usedMileage); // 콘솔에서 확인
+
+    // 입력값이 비어있지 않으면 요청을 보냄
+    if (usedMileage !== "") {
+        $.ajax({
+            type: "get",  // HTTP 메서드
+            url: "/mileage",  // 요청 URL
+            data: { usedMileage: usedMileage },  // 전송할 데이터
+            success: (rsp) => {
+                if (rsp == 'success') {
+                    alert('적립 사용 됨');
+                    location.href = "/mileage";
+                }
+            },
+            error: (rsp) => {
+                console.log(rsp);
+            }
+        });
+    }
+});
+
 
 

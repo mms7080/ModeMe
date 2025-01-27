@@ -97,15 +97,31 @@ import com.example.Modeme.purchase.dto.Purchase;
 			@GetMapping("/mileage")
 			public String Mileage(
 			        @AuthenticationPrincipal CustomUserDetails userDetails,
+			        @RequestParam(name = "usedMileage", defaultValue = "0") int usedMileage,
 			        Model model
 			) {
+				 System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaa usedMileage 값: " + usedMileage);  // 값 확인
 			    String userid = userDetails.getUsername();
+			   
+			    mileser.saveMileage(userid, usedMileage);
 			    
-			    int totalMileage = mileser.getTotalMileage(userid);
-		        
-		        // 모델에 총 마일리지 값 추가
-		        model.addAttribute("totalMileage", totalMileage);
+			    List<Mileage> mileageList = milerep.findByUserid(userid);
 			    
+			    // 총 적립금
+			    int total = mileser.getTotalMileage(userid) + 2000;
+			    model.addAttribute("total_mileage",total);
+
+			    //사용된 마일리지 합산
+			    int totalUsedMileage = mileageList.stream()
+			            .mapToInt(Mileage::getUsedMileage)  // 각 사용된 마일리지 항목을 더함
+			            .sum();
+			    
+			    model.addAttribute("usedMileage",totalUsedMileage);
+			    
+			    //사용 가능 적립금
+			    int availableMileage = total - totalUsedMileage;
+			    model.addAttribute("availableMileage",availableMileage);
+
 			    Optional<User> user = userrep.findByUsername(userid);
 			    
 			    LocalDateTime userDate = user.map(User::getCreatedAt)
@@ -113,10 +129,6 @@ import com.example.Modeme.purchase.dto.Purchase;
 
 			    // 모델에 추가
 			    model.addAttribute("mileage_list",userDate); // 생성일 전달
-			    
-			    mileser.saveMileage(userid);
-			    
-			    List<Mileage> mileageList = milerep.findByUserid(userid);
 
 			    // 마일리지 리스트 모델에 추가
 			    model.addAttribute("mileage_all", mileageList); // 마일리지 목록 전달
@@ -127,7 +139,7 @@ import com.example.Modeme.purchase.dto.Purchase;
 			    
 			    return "/MyPage/mileage";
 			}
-			
+		
 			// 관심 상품
 			@GetMapping("/wishlist")
 			public String WishList(

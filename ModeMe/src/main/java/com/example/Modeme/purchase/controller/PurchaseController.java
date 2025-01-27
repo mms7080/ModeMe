@@ -110,6 +110,7 @@ public class PurchaseController {
 		p.setAddressDetail(addrDetail);
 		p.setItemname(itemname);
 		p.setUsername(userid);
+		p.setTotalPrice(price);
 //		p.setImpUid(impUid);
 //		p.setMerchantUid(merchantUid);
 		

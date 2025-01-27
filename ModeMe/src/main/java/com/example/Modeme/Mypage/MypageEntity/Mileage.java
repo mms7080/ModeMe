@@ -51,4 +51,8 @@ public class Mileage {
 	//마일리지 적립 내용
 	@Column
 	private String content;
+	
+	@Column
+    private int usedMileage; // 사용된 적립금
+	
 }

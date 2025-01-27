@@ -19,7 +19,7 @@
 		<div class="MileageHeader">
 			<div class="firstbox rightline">
 				<div class="firstboxspan">
-					<span>총적립금</span> <span th:text="${totalMileage}"></span>
+					<span>총적립금</span> <span th:text="${total_mileage+'원'}"></span>
 				</div>
 				
 				<div class="firstboxspan">
@@ -28,10 +28,10 @@
 			</div>
 			<div class="firstbox">
 				<div class="firstboxspan">
-					<span>사용가능 적립금</span> <span>2,000원</span>
+					<span>사용가능 적립금</span> <span th:text="${availableMileage+'원'}"></span>
 				</div>
 				<div class="firstboxspan">
-					<span>사용된 적립금</span> <span>0원</span>
+					<span>사용된 적립금</span> <span th:text="${usedMileage+'원'}"></span>
 				</div>
 			</div>
 		</div>
