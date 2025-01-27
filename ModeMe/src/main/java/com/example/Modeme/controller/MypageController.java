@@ -2,7 +2,6 @@
 	
 	import java.security.Principal;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,12 +17,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.Modeme.Config.CustomUserDetails;
 import com.example.Modeme.Mypage.MypageEntity.Address;
 import com.example.Modeme.Mypage.MypageEntity.Defaultaddress;
+import com.example.Modeme.Mypage.MypageEntity.Mileage;
 import com.example.Modeme.Mypage.MypageEntity.Wishlist;
 import com.example.Modeme.Mypage.MypageRepository.AddressRepository;
 import com.example.Modeme.Mypage.MypageRepository.DefaultaddressRepository;
+import com.example.Modeme.Mypage.MypageRepository.MileageRepository;
 import com.example.Modeme.Mypage.MypageRepository.WishlistRepository;
 import com.example.Modeme.Mypage.MypageService.AddressService;
 import com.example.Modeme.Mypage.MypageService.DefaultaddressService;
+import com.example.Modeme.Mypage.MypageService.MileageService;
 import com.example.Modeme.Mypage.MypageService.WishlistService;
 import com.example.Modeme.User.UserDTO.Headerlogin;
 import com.example.Modeme.User.UserEntity.User;
@@ -60,6 +62,11 @@ import com.example.Modeme.purchase.dto.Purchase;
 		   @Autowired
 		   WishlistService wishser;
 		   
+		   @Autowired
+		   MileageService mileser;
+		   @Autowired
+		   MileageRepository milerep;
+		   
 		    @ModelAttribute //모든 매핑에 추가할 코드
 		    public void addAttributes(Model model, Principal principal) {
 		        keep.headerlogin(model, principal); //로그인 유지 
@@ -94,18 +101,27 @@ import com.example.Modeme.purchase.dto.Purchase;
 			) {
 			    String userid = userDetails.getUsername();
 			    
+			    int totalMileage = mileser.getTotalMileage(userid);
+		        
+		        // 모델에 총 마일리지 값 추가
+		        model.addAttribute("totalMileage", totalMileage);
+			    
 			    Optional<User> user = userrep.findByUsername(userid);
 			    
-			    // Optional<User>에서 createdAt 값 추출
-			    LocalDateTime userDate = user.map(User::getCreatedAt) // createdAt 필드 접근
-			                                 .orElse(null); // 값이 없으면 null 처리
-
-   			 // userDate를 String으로 변환 및 형식 지정
-			    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			    String formattedDate = userDate.format(formatter);
+			    LocalDateTime userDate = user.map(User::getCreatedAt)
+			    		.orElse(null);
 
 			    // 모델에 추가
-			    model.addAttribute("mileage_list", formattedDate);
+			    model.addAttribute("mileage_list",userDate); // 생성일 전달
+			    
+			    mileser.saveMileage(userid);
+			    
+			    List<Mileage> mileageList = milerep.findByUserid(userid);
+
+			    // 마일리지 리스트 모델에 추가
+			    model.addAttribute("mileage_all", mileageList); // 마일리지 목록 전달
+			    
+			    
 			    
 			    //주문내역 생성과 동시에 마일리지 적립 -> 주문내역 먼저 생성 후 마일리지 작업
 			    
