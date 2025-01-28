@@ -95,6 +95,15 @@ h1 {
     justify-content: center;
 }
 
+.totalUsersLink {
+    text-decoration: none; /* 링크에 밑줄 없애기 */
+}
+
+.totalUsersLink:hover {
+    text-decoration: none; /* hover 상태에서도 밑줄 없애기 */
+}
+
+
 .dashboardButtonDetail h3 {
     font-size: 16px;
     margin-bottom: 8px;

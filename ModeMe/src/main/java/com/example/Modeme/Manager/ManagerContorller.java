@@ -14,20 +14,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.Modeme.Manager.Entity.AddItem;
 import com.example.Modeme.Manager.ManagerDTO.AddItemDTO;
+import com.example.Modeme.Manager.ManagerDTO.UserDataDTO;
 import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
 import com.example.Modeme.Manager.ManagerService.AddItemService;
 import com.example.Modeme.Manager.ManagerService.ManagerReviewService;
+import com.example.Modeme.Manager.ManagerService.ManagerUserService;
 import com.example.Modeme.QnA.QnARepository.QnaRepository;
 import com.example.Modeme.User.UserDTO.Headerlogin;
 import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.User.UserRepository.UserRepository;
-import com.example.Modeme.User.UserService.UserService;
 import com.example.Modeme.prdDetail.entity.ProductReview;
 import com.example.Modeme.prdDetail.repository.ProductReviewRepository;
 
@@ -46,7 +46,7 @@ public class ManagerContorller {
     private ManagerReviewService mrs;
 
     @Autowired
-    private UserService userService;
+    private ManagerUserService mus;
 
     @Autowired
     private QnaRepository qnaRepository;
@@ -223,4 +223,52 @@ public class ManagerContorller {
             return "리뷰 삭제 실패";
         }
     }
+    
+    // 모든 회원 정보 검색
+    @GetMapping("/manager/users")
+    public String getUserManagementPage(
+            @RequestParam(defaultValue = "0") int page, 
+            @RequestParam(defaultValue = "5") int size, 
+            @RequestParam(required = false) String option, 
+            @RequestParam(required = false) String keyword, 
+            Model model, Principal principal) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> userPage;
+
+        // role 검색시 '관리자' -> 'admin', '일반' -> 'user'로 변환
+        if ("role".equals(option) && keyword != null) {
+            if ("관리자".equals(keyword)) {
+                keyword = "admin"; // '관리자'를 'admin'으로 변환
+            } else if ("일반".equals(keyword)) {
+                keyword = "user"; // '일반'을 'user'로 변환
+            }
+        }
+
+        // 검색 옵션에 따라 사용자 검색
+        if ("username".equals(option)) {
+            userPage = userRepository.findByUsernameContaining(keyword, pageable);
+        } else if ("role".equals(option)) {
+            userPage = userRepository.findByRoleContaining(keyword, pageable);
+        } else {
+            userPage = userRepository.findAll(pageable);
+        }
+
+        // User -> UserDataDTO 변환
+        Page<UserDataDTO> userDtoPage = userPage.map(user -> {
+            Long qnaCount = qnaRepository.countByUser(user);
+            Long reviewCount = prs.countByUsers(user);
+            return new UserDataDTO(user, qnaCount, reviewCount);
+        });
+
+        model.addAttribute("users", userDtoPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", userDtoPage.getTotalPages());
+        model.addAttribute("pageSize", size);
+        model.addAttribute("option", option);
+        model.addAttribute("keyword", keyword);
+
+        return "manager/managerUser";
+    }
+
 }

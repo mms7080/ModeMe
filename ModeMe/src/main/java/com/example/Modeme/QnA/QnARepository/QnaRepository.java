@@ -15,6 +15,9 @@ import com.example.Modeme.User.UserEntity.User;
 public interface QnaRepository extends JpaRepository<Qna, Long> {
     // 사용자별 QnA 조회
     List<Qna> findByUser(User user);
+    
+    // 사용자별 QnA 수 조회
+    Long countByUser(User user); 
 
     // 이전 공지 (현재 ID보다 작은 값 중 가장 큰 값)
     Optional<Qna> findTop1ByIdLessThanOrderByIdDesc(Long id);

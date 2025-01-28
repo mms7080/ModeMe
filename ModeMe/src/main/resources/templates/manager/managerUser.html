@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>유저관리</title>
+<link rel="stylesheet" href="/css/manager/managerUser.css">
+</head>
+<body>
+	<!-- 헤더푸터-->
+	<div th:replace="~{header :: header}"></div>
+
+	<main>
+		<h1>유저관리</h1>
+		<table class="notice-table">
+			<thead>
+				<tr>
+					<th>번호</th>
+					<th>유저명</th>
+					<th>아이디</th>
+					<th>이메일</th>
+					<th>가입일</th>
+					<th>회원유형</th>
+					<th>리뷰/QnA</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="user : ${users}">
+					<td th:text="${user.id}"></td>
+					<td th:text="${user.name}"></td>
+					<td th:text="${user.username}"></td>
+					<td th:text="${user.email}"></td>
+					<td th:text="${user.createdAt}"></td>
+					<td th:text="${user.role}"></td>
+					<td
+						th:text="${user.reviewCount != null ? user.reviewCount : 0} + '/' + (${user.qnaCount != null ? user.qnaCount : 0})"></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="pagination">
+			<!-- 이전 페이지 버튼 -->
+			<button th:if="${currentPage > 0}"
+				th:attr="onclick='location.href=\'/manager/managerReview?page=' + (${currentPage} - 1) + '&size=' + ${pageSize} + '&option=' + (${option != null ? option : ''}) + '&keyword=' + (${keyword != null ? keyword : ''}) + '\';'">
+				&lt;</button>
+
+			<!-- 페이지 번호 -->
+			<span th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+				th:classappend="${i == currentPage} ? 'active' : ''"
+				th:attr="onclick='location.href=\'/manager/managerReview?page=' + ${i} + '&size=' + ${pageSize} + '&option=' + (${option != null ? option : ''}) + '&keyword=' + (${keyword != null ? keyword : ''}) + '\';'"
+				th:text="${i + 1}"></span>
+
+			<!-- 다음 페이지 버튼 -->
+			<button th:if="${currentPage < totalPages - 1}"
+				th:attr="onclick='location.href=\'/manager/managerReview?page=' + (${currentPage} + 1) + '&size=' + ${pageSize} + '&option=' + (${option != null ? option : ''}) + '&keyword=' + (${keyword != null ? keyword : ''}) + '\';'">
+				&gt;</button>
+		</div>
+		<!-- 검색 섹션 -->
+		<div class="search-section">
+			<form method="get" action="/manager/users">
+				<label for="search-option">검색 옵션:</label> <select id="search-option"
+					name="option">
+					<option value="username" th:selected="${option == 'username'}">아이디</option>
+					<option value="role" th:selected="${option == 'role'}">회원유형</option>
+				</select> <input type="text" id="search-input" name="keyword"
+					placeholder="검색어를 입력하세요"
+					th:value="${keyword != null ? keyword : ''}">
+				<button type="submit">검색</button>
+			</form>
+		</div>
+	</main>
+
+	<div th:replace="~{footer :: footer}"></div>
+</body>
+</html>
