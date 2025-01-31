@@ -59,6 +59,7 @@ public class ViewController {
 	// 장바구니
 	@GetMapping("/shoppingcart")
 	public String shoppingcart() {
+		
 		return "/purchase/shoppingCart";
 	}
 

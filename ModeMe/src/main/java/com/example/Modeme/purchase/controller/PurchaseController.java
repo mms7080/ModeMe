@@ -5,13 +5,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -22,7 +23,9 @@ import com.example.Modeme.User.UserDTO.Headerlogin;
 import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.User.UserRepository.UserRepository;
 import com.example.Modeme.purchase.dao.PurchaseRepository;
+import com.example.Modeme.purchase.dao.ShoppingCartRepository;
 import com.example.Modeme.purchase.dto.Purchase;
+import com.example.Modeme.purchase.dto.ShoppingCart;
 
 @Controller
 public class PurchaseController {
@@ -38,15 +41,22 @@ public class PurchaseController {
 	@Autowired
 	private PurchaseRepository pr;
 	
+	@Autowired
+	private ShoppingCartRepository scr;
+	
 	@ModelAttribute //모든 매핑에 추가할 코드
     public void addAttributes(Model model, Principal principal) {
         keep.headerlogin(model, principal); //로그인 유지 
     }
 	
-	/*
-	@Autowired
-	private ProductRepository pr;
-	 */
+	@GetMapping("/cart/add")
+	public ResponseEntity<String> addToCart(@RequestBody ShoppingCart cartItem, @AuthenticationPrincipal CustomUserDetails userDetails)	{
+		cartItem.setUserId(userDetails.getUser().getId());
+		scr.save(cartItem);
+		return ResponseEntity.ok("success");
+	} 
+	
+	
 //	결제페이지
 	@GetMapping("/purchase/{id}")
 	public String purchase(Model model, @PathVariable Long id, Principal prin) {
@@ -115,11 +125,6 @@ public class PurchaseController {
 //		p.setMerchantUid(merchantUid);
 		
 		pr.save(p);
-		
-		
-		
-		
-		
 		
 		return "success";
 	}

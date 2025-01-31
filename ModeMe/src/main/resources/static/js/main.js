@@ -1,26 +1,5 @@
-// 화살표로 슬라이드인데 변경예정
-const carousel = document.querySelector('.carousel');
-const prevBtn = document.querySelector('.prev-btn');
-const nextBtn = document.querySelector('.next-btn');
-
 // Define slide step size
 const slideStep = 220; // Image width + gap
-
-// Event listeners for buttons
-prevBtn.addEventListener('click', () => {
-    carousel.scrollBy({
-        left: -slideStep,
-        behavior: 'smooth',
-    });
-});
-
-nextBtn.addEventListener('click', () => {
-    carousel.scrollBy({
-        left: slideStep,
-        behavior: 'smooth',
-    });
-});
-// 화살표로 슬라이드인데 변경예정
 
 
 // 하트 클릭시 색 변경
@@ -50,3 +29,34 @@ for(const p of products){
 		}
 	})
 }
+
+// 장바구니에 추가
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".plus-icon").forEach(icon => {
+        icon.addEventListener("click", function () {
+            const productCard = this.closest(".product-card");
+            const productId = productCard.querySelector("input[type='hidden']").value;
+			console.log(productId)
+            const productName = productCard.querySelector("p:first-of-type").innerText;
+
+            $.ajax({
+                type: "GET",
+                url: "/cart/add",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    productId: productId,
+                    productName: productName,
+                    quantity: 1 // 항상 1개 추가
+                }),
+                success: function (response) {
+                    if (response === "success") {
+                        alert("장바구니에 추가되었습니다!");
+                    }
+                },
+                error: function (error) {
+                    console.error("장바구니 추가 오류:", error);
+                }
+            });
+        });
+    });
+});
