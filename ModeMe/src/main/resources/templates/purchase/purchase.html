@@ -67,11 +67,11 @@
 			<!-- 주문상품 섹션 -->
 			<div class="section">
 				<div class="section-title">주문상품</div>
-				<div class="product-item">
+				<div th:each="item:${items}" class="product-item">
 					<img src="image/026.jpg" alt="상품 이미지">
 					<div class="product-details">
-						<p>[[${a.name}]]</p>
-						<p>₩[[${a.price}]]</p>
+						<p>[[${item.name}]]</p>
+						<p>₩[[${item.price}]]</p>
 					</div>
 				</div>
 			</div>
@@ -141,8 +141,8 @@
 		<script src="https://nsp.pay.naver.com/sdk/js/naverpay.min.js"></script>
 	</form>
 	<script th:inline="javascript" defer>
-		const user = /*[[${u}]]*/'null';
-		const aId = /*[[${aId}]]*/null;
+		const user = /*[[${user}]]*/'null';
+		const aId = /*[[${a.Id}]]*/null;
 		
 		
 		let phoneBehind = user.phone.slice(3)

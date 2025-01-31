@@ -24,19 +24,18 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // 폼 생성 후 POST 요청
-        let form = document.createElement("form");
-        form.method = "POST";
-        form.action = "/purchase";
-        form.style.display = "none";
-
-        let input = document.createElement("input");
-        input.type = "hidden";
-        input.name = "items";
-        input.value = JSON.stringify(selectedItems);
-        form.appendChild(input);
-
-        document.body.appendChild(form);
-        form.submit();
+        $.ajax({
+            type: "POST",
+            url: "/purchase",
+            contentType: "application/json",
+            data: JSON.stringify({ items: selectedItems }),
+            success: function (response) {
+                window.location.href = response; // 결제 페이지 이동
+            },
+            error: function (error) {
+                console.error("Error:", error);
+                alert("오류가 발생했습니다.");
+            }
+        });
     });
 });

@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,6 +26,7 @@ import com.example.Modeme.User.UserRepository.UserRepository;
 import com.example.Modeme.purchase.dao.PurchaseRepository;
 import com.example.Modeme.purchase.dao.ShoppingCartRepository;
 import com.example.Modeme.purchase.dto.Purchase;
+import com.example.Modeme.purchase.dto.PurchaseRequest;
 import com.example.Modeme.purchase.dto.ShoppingCart;
 
 @Controller
@@ -57,17 +59,26 @@ public class PurchaseController {
 	} 
 	
 	
-//	결제페이지
+	// 결제페이지
 	@GetMapping("/purchase/{id}")
 	public String purchase(Model model, @PathVariable Long id, Principal prin) {
 		User u = ur.findByUsername(prin.getName()).get();
 		Optional<AddItem> as = air.findById(id);
 		AddItem a = as.get();
-		model.addAttribute("u",u);
-		model.addAttribute("a", a);
-		model.addAttribute("aId", a.getId());
+		model.addAttribute("user",u);
+		model.addAttribute("items", a);
+//		model.addAttribute("aId", a.getId());
 		return "/purchase/purchase";
-		// productDetail 에서 상품정보를 purchase 로 넘기는 방법좀
+	}
+	// 결제페이지(장바구니에서 넘어올때)
+	@PostMapping("/purchase")
+	public String purchaseMultipleItems(@RequestBody PurchaseRequest purchaseRequest, 
+	                                    Model model, 
+	                                    @AuthenticationPrincipal CustomUserDetails userDetails) {
+	    model.addAttribute("user", userDetails.getUser());
+	    model.addAttribute("items", purchaseRequest.getItems()); // 여러 상품 추가
+
+	    return "/purchase/purchase"; // 여러 상품 결제 페이지 반환
 	}
 	
 	// ProductController 로 옮기면 좋음

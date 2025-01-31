@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import com.example.Modeme.Manager.Entity.AddItem;
 import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
 import com.example.Modeme.User.UserDTO.Headerlogin;
+import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.User.UserRepository.UserRepository;
 import com.example.Modeme.prdDetail.repository.ProductDetailRepository;
 import com.example.Modeme.prdDetail.service.ProductEditService;
+import com.example.Modeme.purchase.dao.ShoppingCartRepository;
 
 @Controller
 public class ViewController {
@@ -32,6 +34,9 @@ public class ViewController {
 	
 	@Autowired
 	private ProductEditService pes;
+	
+	@Autowired
+	private ShoppingCartRepository scr;
 	
     @ModelAttribute //모든 매핑에 추가할 코드
     public void addAttributes(Model model, Principal principal) {
@@ -58,8 +63,9 @@ public class ViewController {
 	}
 	// 장바구니
 	@GetMapping("/shoppingcart")
-	public String shoppingcart() {
-		
+	public String shoppingcart(Principal prin) {
+		User u = ur.findByUsername(prin.getName()).get();
+		u.getId();
 		return "/purchase/shoppingCart";
 	}
 

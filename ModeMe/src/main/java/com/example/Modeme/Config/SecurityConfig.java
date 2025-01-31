@@ -55,7 +55,8 @@ public class SecurityConfig {
                     "/manager/**",
                     "/api/**",
                     "/productDetail/productEdit/**",
-                    "/productDetail/**"
+                    "/productDetail/**",
+                    "/purchase"
                 )
             )
             .authorizeHttpRequests(auth -> auth
