@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.example.Modeme.Manager.Entity.AddItem;
 import com.example.Modeme.User.UserEntity.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,7 +37,7 @@ public class ProductReview {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "add_item_id", nullable = false)
-    private AddItem addItem;
+	private AddItem addItem;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
