@@ -2,7 +2,9 @@ package com.example.Modeme.Manager.ManagerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.Modeme.Manager.ManagerDTO.UserDataDTO;
@@ -24,7 +26,8 @@ public class ManagerUserService {
 	private QnaRepository qnaRepository;
 
 	public Page<UserDataDTO> getUserDataWithCounts(Pageable pageable) {
-		Page<User> users = userRepository.findAll(pageable);
+		Pageable sortedPageable = PageRequest.of( pageable.getPageNumber(),pageable.getPageSize(),Sort.by(Sort.Order.desc("id")) );
+		Page<User> users = userRepository.findAll(sortedPageable);
 
 		// User 엔티티를 UserDataDTO로 변환하며 QnA 및 리뷰 개수 계산
 		return users.map(user -> {
