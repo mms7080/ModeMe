@@ -2,6 +2,7 @@ package com.example.Modeme.Manager;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,10 +20,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.Modeme.Manager.Entity.AddItem;
 import com.example.Modeme.Manager.ManagerDTO.AddItemDTO;
+import com.example.Modeme.Manager.ManagerDTO.ProductSaleDTO;
 import com.example.Modeme.Manager.ManagerDTO.UserDataDTO;
 import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
 import com.example.Modeme.Manager.ManagerService.AddItemService;
 import com.example.Modeme.Manager.ManagerService.ManagerReviewService;
+import com.example.Modeme.Manager.ManagerService.ManagerSaleService;
 import com.example.Modeme.Manager.ManagerService.ManagerUserService;
 import com.example.Modeme.QnA.QnARepository.QnaRepository;
 import com.example.Modeme.User.UserDTO.Headerlogin;
@@ -47,6 +50,9 @@ public class ManagerContorller {
 
     @Autowired
     private ManagerUserService mus;
+    
+    @Autowired
+    private ManagerSaleService mss;
 
     @Autowired
     private QnaRepository qnaRepository;
@@ -270,5 +276,44 @@ public class ManagerContorller {
 
         return "manager/managerUser";
     }
+    
+    @GetMapping("/manager/ManagerSale")
+    public String getSaleData(
+        @RequestParam(defaultValue = "0") int page,  // 기본값 0으로 설정
+        @RequestParam(defaultValue = "5") int size,  // 기본값 5로 설정
+        @RequestParam(required = false) String newProcess,  // 주문 상태 변경을 위한 newProcess 파라미터
+        Model model, Principal principal) {
 
+        // 페이지 네이션 처리: 페이지와 사이즈 값을 Pageable 객체로 생성
+        Pageable pageable = PageRequest.of(page, size);
+
+        // 주문 상태가 변경되어야 한다면, newProcess 파라미터에 따른 처리 (예: 'before', 'ready', 'delivery', 'done' 등)
+        // 판매 데이터를 가져오기 (newProcess 파라미터가 null이 아닌 경우 상태를 반영)
+        Page<ProductSaleDTO> saleData = mss.getSaleData(pageable, newProcess);
+
+        // 월별 판매 금액 데이터를 가져오기
+        Map<String, Integer> salesByMonth = mss.getSalesByMonth();
+
+        // 카테고리별 판매 금액 데이터를 가져오기
+        Map<String, Integer> salesByCategory = mss.getSalesByCategory();
+        
+        // 주문 상태별 개수 데이터를 가져오기
+        Map<String, Long> orderCountByProcess = mss.getOrderCountByProcess();
+
+        // 모델에 데이터 추가 (뷰에서 사용할 수 있도록 전달)
+        model.addAttribute("saleData", saleData);
+        model.addAttribute("salesByMonth", salesByMonth);
+        model.addAttribute("salesByCategory", salesByCategory);
+        model.addAttribute("orderCountByProcess", orderCountByProcess);  // 주문 상태별 개수 추가
+
+        // 페이지네이션 정보 (현재 페이지와 총 페이지 수)
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", saleData.getTotalPages());
+        model.addAttribute("pageSize", size);  // 페이지 크기 추가 (뷰에서 페이지 크기를 사용하려면 필요)
+
+        return "manager/managerSale"; // 뷰 이름 반환
+    }
+
+    
+    
 }

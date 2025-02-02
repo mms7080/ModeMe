@@ -1,133 +1,209 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>주문 관리</title>
-    <link rel="stylesheet" href="/css/manager/managerSale.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script defer src="/js/manager/managerSale.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>주문 관리</title>
+<link rel="stylesheet" href="/css/manager/managerSale.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script defer src="/js/manager/managerSale.js"></script>
 </head>
 <body>
-    <!-- 헤더 -->
-    <div th:replace="~{header :: header}"></div>
+	<!-- 헤더 -->
+	<div th:replace="~{header :: header}"></div>
 
-    <main>
-        <h1>주문 관리</h1>    
-        
-        <div class="dashboardHeader">
+	<main>
+		<h1>주문 관리</h1>
+
+		<div class="dashboardHeader">
 			<div class="infoBox">
 				<h3>입금 전</h3>
-				<p>0개</p>
+				<p
+					th:text="${#strings.isEmpty(orderCountByProcess['before']) ? 0 : orderCountByProcess['before']}+'건'">0건</p>
 			</div>
 			<div class="infoBox">
 				<h3>배송준비 중</h3>
-				<p>0개</p>
+				<p
+					th:text="${#strings.isEmpty(orderCountByProcess['ready']) ? 0 : orderCountByProcess['ready']}+'건'">0건</p>
 			</div>
 			<div class="infoBox">
 				<h3>배송 중</h3>
-				<p>0개</p>
+				<p
+					th:text="${#strings.isEmpty(orderCountByProcess['delivery']) ? 0 : orderCountByProcess['delivery']}+'건'">0건</p>
 			</div>
 			<div class="infoBox">
 				<h3>배송완료</h3>
-				<p>0개</p>
+				<p
+					th:text="${#strings.isEmpty(orderCountByProcess['done']) ? 0 : orderCountByProcess['done']}+'건'">0건</p>
 			</div>
 		</div>
-        
 
-        <!-- 매출 차트 (월별 및 카테고리별) -->
-        <div class="chart-section">
-            <!-- 월별 차트 -->
-            <div class="chart-container">
-                <canvas id="salesChartMonthly"></canvas>
-            </div>
 
-            <!-- 카테고리별 차트 -->
-            <div class="chart-container">
-                <canvas id="salesChartCategory"></canvas>
-            </div>
-        </div>
+		<!-- 매출 차트 (월별 및 카테고리별) -->
+		<div class="chart-section">
+			<!-- 월별 차트 -->
+			<div class="chart-container">
+				<canvas id="salesChartMonthly"></canvas>
+			</div>
 
-        <!-- 주문 테이블 -->
-        <table class="notice-table">
-            <thead>
-                <tr>
-                    <th>번호</th>
-                    <th>주문일시</th>
-                    <th>카테고리</th>
-                    <th>주문정보</th>
-                    <th>수량</th>
-                    <th>상품금액</th>
-                    <th>주문아이디</th>
-                    <th>주문자</th>
-                    <th>결제방법</th>
-                    <th>주문상태</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>2025-01-09</td>
-                    <td>top</td>
-                    <td>빈티지 체크셔츠</td>
-                    <td>1</td>
-                    <td>18000</td>
-                    <td>test01</td>
-                    <td>홍길동</td>
-                    <td>카드결제</td>
-                    <td>
-                    	<select id="orderStatus">
-                    		<option value="before"> 입금 전 </option>
-                    		<option value="ready"> 배송준비 중 </option>
-                    		<option value="delivery"> 배송 중 </option>
-                    		<option value="done"> 배송완료 </option>                    		
-                    	</select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>2025-02-08</td>
-                    <td>bottom</td>
-                    <td>코튼 팬츠</td>
-                    <td>2</td>
-                    <td>40000</td>
-                    <td>test02</td>
-                    <td>김철수</td>
-                    <td>현금결제</td>
-                    <td>
-                    	<select>
-                    		<option value="before"> 입금 전 </option>
-                    		<option value="ready"> 배송준비 중 </option>
-                    		<option value="delivery"> 배송 중 </option>
-                    		<option value="done"> 배송완료 </option>                    		
-                    	</select>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+			<!-- 카테고리별 차트 -->
+			<div class="chart-container">
+				<canvas id="salesChartCategory"></canvas>
+			</div>
+		</div>
 
-        <!-- 페이지네이션 -->
-        <div class="pagination">
-            <button>&lt;</button>
-            <span>1</span>
-            <button>&gt;</button>
-        </div>
-                <!-- 검색 섹션 -->
-        <div class="search-section">
-            <label for="search-option">검색 옵션:</label> 
-            <select id="search-option">
-                <option value="OrderStatus">주문 상태</option>
-                <option value="how">결제방법</option>
-                <option value="id">주문아이디</option>
-            </select>
-            <input type="text" id="search-input" placeholder="검색어를 입력하세요">
-            <button onclick="searchNotice()">검색</button>
-        </div>
-        
-    </main>
+		<!-- 주문 테이블 -->
+		<table class="notice-table">
+			<thead>
+				<tr>
+					<th>번호</th>
+					<th>주문일시</th>
+					<th>카테고리</th>
+					<th>주문정보</th>
+					<th>수량</th>
+					<th>상품금액</th>
+					<th>주문아이디</th>
+					<th>주문자</th>
+					<th>주문상태</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="sale : ${saleData}">
+					<td th:text="${sale.id}"></td>
+					<td th:text="${sale.orderDate}"></td>
+					<td th:text="${sale.category}"></td>
+					<td th:text="${sale.itemname}"></td>
+					<td th:text="${sale.productMany}"></td>
+					<td th:text="${sale.totalPrice}"></td>
+					<td th:text="${sale.username}"></td>
+					<td th:text="${sale.name}"></td>
+					<td><select th:value="${sale.process}">
+							<option value="before" th:selected="${sale.process == 'before'}">입금
+								전</option>
+							<option value="ready" th:selected="${sale.process == 'ready'}">배송준비
+								중</option>
+							<option value="delivery"
+								th:selected="${sale.process == 'delivery'}">배송 중</option>
+							<option value="done" th:selected="${sale.process == 'done'}">배송완료</option>
+					</select></td>
+				</tr>
+			</tbody>
+		</table>
 
-    <!-- 푸터 -->
-    <div th:replace="~{footer :: footer}"></div>
+		<div class="pagination">
+			<!-- 이전 버튼 -->
+			<button th:if="${currentPage > 0}"
+				th:onclick="|window.location.href='/manager/ManagerSale?page=${currentPage - 1}&size=${pageSize}'|">&lt;</button>
 
-</body>  
+			<!-- 페이지 번호 -->
+			<span th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+				th:classappend="${i == currentPage} ? 'active' : ''"
+				th:onclick="|window.location.href='/manager/ManagerSale?page=${i}&size=${pageSize}'|"
+				th:text="${i + 1}"> </span>
+
+			<!-- 다음 버튼 -->
+			<button th:if="${currentPage < totalPages - 1}"
+				th:onclick="|window.location.href='/manager/ManagerSale?page=${currentPage + 1}&size=${pageSize}'|">&gt;</button>
+		</div>
+
+		<div class="search-section">
+			<label for="search-option">검색 옵션:</label> <select id="search-option">
+				<option value="OrderStatus">주문 상태</option>
+				<option value="id">주문아이디</option>
+			</select> <input type="text" id="search-input" placeholder="검색어를 입력하세요">
+			<button onclick="searchNotice()">검색</button>
+		</div>
+
+	</main>
+
+	<!-- 푸터 -->
+	<div th:replace="~{footer :: footer}"></div>
+
+	<!-- 매출 데이터를 JavaScript로 전달 -->
+	<script th:inline="javascript">
+        /* 서버에서 전달받은 월별 매출 데이터 */
+        const salesByMonth = /*[[${salesByMonth}]]*/ {};
+        /* 서버에서 전달받은 카테고리별 매출 데이터 */
+        const salesByCategory = /*[[${salesByCategory}]]*/ {};
+
+        // 월별 매출 데이터 집계
+        const months = [
+            '2025-01', '2025-02', '2025-03', '2025-04', 
+            '2025-05', '2025-06', '2025-07', '2025-08', 
+            '2025-09', '2025-10', '2025-11', '2025-12'
+        ];
+
+        const chartDataMonthly = months.map(month => salesByMonth[month] || 0);
+
+        // 카테고리별 매출 데이터 집계
+        const categories = ['outer', 'top', 'bottom', 'ops', 'acc'];
+        const chartDataCategory = categories.map(category => salesByCategory[category] || 0);
+
+        // 월별 차트
+        const ctxMonthly = document.getElementById('salesChartMonthly').getContext('2d');
+        const salesChartMonthly = new Chart(ctxMonthly, {
+            type: 'line',
+            data: {
+                labels: months.map(m => m.replace('2025-', '') + '월'),
+                datasets: [{
+                    label: '매출 금액',
+                    data: chartDataMonthly,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: { display: true, text: '월별 매출 금액 (2025)' }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // 카테고리별 차트
+        const ctxCategory = document.getElementById('salesChartCategory').getContext('2d');
+        const salesChartCategory = new Chart(ctxCategory, {
+            type: 'bar',
+            data: {
+                labels: categories.map(c => c.toUpperCase()), // 카테고리 대문자로 표시
+                datasets: [{
+                    label: '매출 금액',
+                    data: chartDataCategory,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: { display: true, text: '카테고리별 매출 금액 (2025)' }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
+</body>
 </html>
