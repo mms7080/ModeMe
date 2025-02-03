@@ -87,6 +87,7 @@ public class SecurityConfig {
                     "/resources/**",
                     "/wishlist_delete",
                     "/productDetail/**",
+                    "/productDetail/review/**",
                     "/",
                     "/main",
                     "check-username",
@@ -95,7 +96,7 @@ public class SecurityConfig {
                 ).permitAll()
 
                 // ✅ 회원정보 수정 페이지는 로그인한 사용자만 접근 가능
-                .requestMatchers("/modify", "/productDetail/{id}/review").authenticated()
+                .requestMatchers("/modify", "/productDetail/{id}/review", "/productDetail/review/**").authenticated()
 
                 // 그 외의 모든 요청은 인증 필요
                 .anyRequest().authenticated()
