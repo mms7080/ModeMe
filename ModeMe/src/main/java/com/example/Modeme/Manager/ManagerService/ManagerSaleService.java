@@ -33,39 +33,47 @@ public class ManagerSaleService {
     @Autowired
     private UserRepository ur;
 
-    public Page<ProductSaleDTO> getSaleData(Pageable pageable, String newProcess) {
+    public Page<ProductSaleDTO> getSaleData(Pageable pageable, String newProcess, String searchOption, String keyword) {
         // 페이지네이션을 내림차순으로 정렬
         Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Order.desc("orderDate"))); // orderDate로 내림차순 정렬
 
-        // 주문 목록을 페이징 처리하여 가져옴
-        Page<Purchase> purchases = pr.findAll(sortedPageable);
-
+        // 조건에 맞는 주문 목록을 페이징 처리하여 가져옴
+        Page<Purchase> purchases;
+        
+        // 검색 옵션에 따라 처리
+        if ("process".equals(searchOption) && keyword != null) {
+            purchases = pr.findByProcess(keyword, sortedPageable);  // 주문 상태로 검색
+        } else if ("orderInfo".equals(searchOption) && keyword != null) {
+            // 주문정보 (itemname만 기준으로 검색)
+            purchases = pr.findByItemnameContaining(keyword, sortedPageable);  // itemname만을 포함하는 검색
+        } else {
+            purchases = pr.findAll(sortedPageable);  // 기본적으로 모든 주문 가져오기
+        }
         // 각 주문에 대해 상품 카테고리 및 기타 정보를 추가하여 DTO로 변환
         return purchases.map(purchase -> {
-            // 1. 주문 상태(process)가 비어 있거나 null이면 "before"로 수정
+            // 주문 상태 변경 로직
             if (purchase.getProcess() == null || purchase.getProcess().isEmpty()) {
-                purchase.setProcess("before");  // process 값을 "before"로 설정
-                pr.save(purchase);  // 수정된 엔티티를 저장
+                purchase.setProcess("before");
+                pr.save(purchase);
             } else if (newProcess != null && !newProcess.isEmpty()) {
-                // 2. process 값이 newProcess로 제공되면 수정
                 purchase.setProcess(newProcess);
-                pr.save(purchase);  // 수정된 엔티티를 저장
+                pr.save(purchase);
             }
 
-            // 3. 상품 정보를 가져와서 카테고리 정보를 포함한 DTO를 생성
-            String category = ar.findById((long) purchase.getProductNumber())  // Long 타입으로 변환
-                                    .map(item -> item.getCategory())  // AddItem에서 카테고리 가져오기
-                                    .orElse("기타");  // 카테고리가 없을 경우 "기타"로 설정
+            // 상품 카테고리 정보 가져오기
+            String category = ar.findById((long) purchase.getProductNumber())
+                                .map(item -> item.getCategory())
+                                .orElse("기타");
 
-            // 4. 주문 일시를 형식에 맞게 변환
+            // 유저 이름 가져오기
+            String name = ur.findById((long) purchase.getUserId())
+                            .map(User::getName)
+                            .orElse("Unknown User");
+
+            // 주문 일시 형식 변환
             String formattedOrderDate = formatDate(purchase.getOrderDate());
 
-            // 5. 유저 ID로 유저 이름을 가져오기
-            String name = ur.findById((long) purchase.getUserId())
-                            .map(User::getName)  // 유저 이름을 가져옴
-                            .orElse("Unknown User");  // 유저가 없으면 기본값 "Unknown User" 설정
-
-            // 6. ProductSaleDTO 생성하여 반환
+            // ProductSaleDTO 생성
             return new ProductSaleDTO(
                 purchase.getId(),
                 Date.valueOf(formattedOrderDate),
@@ -75,7 +83,7 @@ public class ManagerSaleService {
                 purchase.getTotalPrice(),
                 purchase.getUsername(),
                 name,
-                purchase.getProcess()  // 수정된 process 값 사용
+                purchase.getProcess()
             );
         });
     }

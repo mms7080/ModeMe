@@ -1,6 +1,7 @@
 package com.example.Modeme.Manager;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -34,9 +36,14 @@ import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.User.UserRepository.UserRepository;
 import com.example.Modeme.prdDetail.entity.ProductReview;
 import com.example.Modeme.prdDetail.repository.ProductReviewRepository;
+import com.example.Modeme.purchase.dao.PurchaseRepository;
+import com.example.Modeme.purchase.dto.Purchase;
 
 @Controller
 public class ManagerContorller {
+	@Autowired
+	private PurchaseRepository pr;
+	
     @Autowired
     private UserRepository userRepository;
 
@@ -283,21 +290,22 @@ public class ManagerContorller {
         @RequestParam(defaultValue = "0") int page,  // 기본값 0으로 설정
         @RequestParam(defaultValue = "5") int size,  // 기본값 5로 설정
         @RequestParam(required = false) String newProcess,  // 주문 상태 변경을 위한 newProcess 파라미터
+        @RequestParam(required = false) String searchOption,  // 검색 옵션
+        @RequestParam(required = false) String keyword,  // 검색어
         Model model, Principal principal) {
 
         // 페이지 네이션 처리: 페이지와 사이즈 값을 Pageable 객체로 생성
         Pageable pageable = PageRequest.of(page, size);
 
-        // 주문 상태가 변경되어야 한다면, newProcess 파라미터에 따른 처리 (예: 'before', 'ready', 'delivery', 'done' 등)
-        // 판매 데이터를 가져오기 (newProcess 파라미터가 null이 아닌 경우 상태를 반영)
-        Page<ProductSaleDTO> saleData = mss.getSaleData(pageable, newProcess);
+        // 판매 데이터를 가져오기 (newProcess, searchOption, keyword 파라미터에 따른 처리)
+        Page<ProductSaleDTO> saleData = mss.getSaleData(pageable, newProcess, searchOption, keyword);
 
         // 월별 판매 금액 데이터를 가져오기
         Map<String, Integer> salesByMonth = mss.getSalesByMonth();
 
         // 카테고리별 판매 금액 데이터를 가져오기
         Map<String, Integer> salesByCategory = mss.getSalesByCategory();
-        
+
         // 주문 상태별 개수 데이터를 가져오기
         Map<String, Long> orderCountByProcess = mss.getOrderCountByProcess();
 
@@ -305,16 +313,14 @@ public class ManagerContorller {
         model.addAttribute("saleData", saleData);
         model.addAttribute("salesByMonth", salesByMonth);
         model.addAttribute("salesByCategory", salesByCategory);
-        model.addAttribute("orderCountByProcess", orderCountByProcess);  // 주문 상태별 개수 추가
+        model.addAttribute("orderCountByProcess", orderCountByProcess);
 
         // 페이지네이션 정보 (현재 페이지와 총 페이지 수)
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", saleData.getTotalPages());
-        model.addAttribute("pageSize", size);  // 페이지 크기 추가 (뷰에서 페이지 크기를 사용하려면 필요)
+        model.addAttribute("pageSize", size);
 
         return "manager/managerSale"; // 뷰 이름 반환
     }
-
-    
     
 }

@@ -38,7 +38,6 @@
 			</div>
 		</div>
 
-
 		<!-- 매출 차트 (월별 및 카테고리별) -->
 		<div class="chart-section">
 			<!-- 월별 차트 -->
@@ -106,12 +105,21 @@
 				th:onclick="|window.location.href='/manager/ManagerSale?page=${currentPage + 1}&size=${pageSize}'|">&gt;</button>
 		</div>
 
+		<!-- 검색 섹션 -->
 		<div class="search-section">
-			<label for="search-option">검색 옵션:</label> <select id="search-option">
-				<option value="OrderStatus">주문 상태</option>
-				<option value="id">주문아이디</option>
-			</select> <input type="text" id="search-input" placeholder="검색어를 입력하세요">
-			<button onclick="searchNotice()">검색</button>
+			<form method="get" action="/manager/ManagerSale">
+				<label for="search-option">검색 옵션:</label> <select id="search-option"
+					name="searchOption">
+					<option value="process" th:selected="${searchOption == 'process'}">주문상태</option>
+					<option value="orderInfo"
+						th:selected="${searchOption == 'orderInfo'}">주문정보</option>
+					<!-- 주문정보 검색 옵션 추가 -->
+				</select> <input type="text" id="search-input" name="keyword"
+					placeholder="검색어를 입력하세요"
+					th:value="${keyword != null ? keyword : ''}">
+
+				<button type="submit">검색</button>
+			</form>
 		</div>
 
 	</main>
@@ -121,12 +129,9 @@
 
 	<!-- 매출 데이터를 JavaScript로 전달 -->
 	<script th:inline="javascript">
-        /* 서버에서 전달받은 월별 매출 데이터 */
         const salesByMonth = /*[[${salesByMonth}]]*/ {};
-        /* 서버에서 전달받은 카테고리별 매출 데이터 */
         const salesByCategory = /*[[${salesByCategory}]]*/ {};
 
-        // 월별 매출 데이터 집계
         const months = [
             '2025-01', '2025-02', '2025-03', '2025-04', 
             '2025-05', '2025-06', '2025-07', '2025-08', 
@@ -135,11 +140,9 @@
 
         const chartDataMonthly = months.map(month => salesByMonth[month] || 0);
 
-        // 카테고리별 매출 데이터 집계
         const categories = ['outer', 'top', 'bottom', 'ops', 'acc'];
         const chartDataCategory = categories.map(category => salesByCategory[category] || 0);
 
-        // 월별 차트
         const ctxMonthly = document.getElementById('salesChartMonthly').getContext('2d');
         const salesChartMonthly = new Chart(ctxMonthly, {
             type: 'line',
@@ -167,12 +170,11 @@
             }
         });
 
-        // 카테고리별 차트
         const ctxCategory = document.getElementById('salesChartCategory').getContext('2d');
         const salesChartCategory = new Chart(ctxCategory, {
             type: 'bar',
             data: {
-                labels: categories.map(c => c.toUpperCase()), // 카테고리 대문자로 표시
+                labels: categories.map(c => c.toUpperCase()),
                 datasets: [{
                     label: '매출 금액',
                     data: chartDataCategory,
