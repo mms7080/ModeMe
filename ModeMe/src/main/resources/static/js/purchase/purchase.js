@@ -123,8 +123,22 @@ document.getElementById("kakaopay").addEventListener("click", function() {
 	const address = document.getElementById("sample6_address").value
 	const addressDetail = document.getElementById("sample6_detailAddress").value
 	const finalPrice = document.getElementById("finalPrice").innerText.slice(1)
-	const itemName = document.querySelector(".product-details p").innerText;
+	const productElements = document.querySelectorAll(".product-details p");
+	
+	// 상품 여러개면 배열로 저장
+	let itemName = Array.from(productElements).map(el => el.innerText);
 
+	// 주문번호 생성 함수
+    function generateMerchantUid() {
+        const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let merchantUid = 'TD';
+        for (let i = 0; i < 8; i++) {
+            const random = Math.floor(Math.random() * char.length);
+            merchantUid += char[random];
+        }
+        return merchantUid;
+    }
+	
 	//주문번호 생성
 	const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 	let merchantUid = 'TD';
@@ -133,6 +147,8 @@ document.getElementById("kakaopay").addEventListener("click", function() {
 		merchantUid += char[random]
 	}
 	IMP.init('imp00488067'); // i'mport 관리자 페이지 -> 내정보 -> 가맹점식별코드                 
+	
+	// 
 	IMP.request_pay({
 		pg: 'kakaopay', // 'nice', 'tosspay', 'kakaopay'
 		merchant_uid: merchantUid,

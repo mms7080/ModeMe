@@ -54,7 +54,7 @@ public class PurchaseController {
 	
 	@PostMapping("/cart/add")
 	public ResponseEntity<String> addToCart(@RequestBody ShoppingCart cartItem, @AuthenticationPrincipal CustomUserDetails userDetails)	{
-		System.out.println("장바구니추가");
+		
 		cartItem.setUserId(userDetails.getUser().getId());
 		scr.save(cartItem);
 		return ResponseEntity.ok("success");
@@ -72,6 +72,8 @@ public class PurchaseController {
 		pi.setProductId(a.getId());
 		pi.setPrice(a.getPrice());
 		pi.setProductName(a.getName());
+		List<PurchaseItem> piList = new ArrayList<>();
+		piList.add(pi);
 		model.addAttribute("items", pi);
 //		model.addAttribute("aId", a.getId());
 		return "/purchase/purchase";
@@ -128,16 +130,16 @@ public class PurchaseController {
 		return "/product/productList";
 	}
 	
-	@GetMapping("/purchaseAccept")
-	public String purchaseAccept(
-			@RequestParam("prodNum") List<Integer> pNums,
-			@RequestParam("prodMany") List<Integer> pManys,
-			@RequestParam(name="address", required=false, defaultValue="입력없음") String address,
-			@RequestParam(name="addressDetail", required=false, defaultValue="입력없음") String addressDetail
-			) {
-		// 구매를 한 상품의 갯수만큼 purchase 객체 생성 & 정보 입력 후 디비에 저장
-		return "redirect:/order"; // 결제 성공 후 주문내역으로 ㄱㄱ
-	}
+//	@GetMapping("/purchaseAccept")
+//	public String purchaseAccept(
+//			@RequestParam("prodNum") List<Integer> pNums,
+//			@RequestParam("prodMany") List<Integer> pManys,
+//			@RequestParam(name="address", required=false, defaultValue="입력없음") String address,
+//			@RequestParam(name="addressDetail", required=false, defaultValue="입력없음") String addressDetail
+//			) {
+//		// 구매를 한 상품의 갯수만큼 purchase 객체 생성 & 정보 입력 후 디비에 저장
+//		return "redirect:/order"; // 결제 성공 후 주문내역으로 ㄱㄱ
+//	}
 	
 	@GetMapping("/insertPurchase")
 	@ResponseBody

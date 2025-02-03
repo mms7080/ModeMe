@@ -142,7 +142,8 @@
 	</form>
 	<script th:inline="javascript" defer>
 		const user = /*[[${user}]]*/'null';
-		
+		const aId = /*[[${items.productId}]]*/'null'; // 단일(바로결제) 의 경우 items 는 PurchaseItem 이라는 단일객체
+		// 장바구니에서 넘어온 경우에는 items 는 List<PurchaseItem>
 		
 		let phoneBehind = user.phone.slice(3)
 		document.getElementById("phoneNum").value = phoneBehind;
