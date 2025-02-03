@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const productName = productCard.querySelector("p:first-of-type").innerText;
 
             $.ajax({
-                type: "GET",
+                type: "POST",
                 url: "/cart/add",
                 contentType: "application/json",
                 data: JSON.stringify({

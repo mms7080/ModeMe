@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelector(".checkout-btn").addEventListener("click", function () {
+		var form = document.createElement("form");
+		form.method = 'POST';
+		form.action = "/purchase";
         let selectedItems = [];
 
         document.querySelectorAll(".product-table tbody tr").forEach(row => {
@@ -18,24 +21,29 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             }
         });
-
         if (selectedItems.length === 0) {
             alert("결제할 상품을 선택해주세요.");
             return;
         }
+		
+		selectedItems.forEach(function(item, index) {
+	        // 각각의 데이터에 대해 hidden input 필드를 생성
+	        form.appendChild(createHiddenInput("productId", item.productId));
+	        form.appendChild(createHiddenInput("productName", item.productName));
+	        form.appendChild(createHiddenInput("price", item.price));
+	        form.appendChild(createHiddenInput("quantity", item.quantity));
+	    });
 
-        $.ajax({
-            type: "POST",
-            url: "/purchase",
-            contentType: "application/json",
-            data: JSON.stringify({ items: selectedItems }),
-            success: function (response) {
-                window.location.href = response; // 결제 페이지 이동
-            },
-            error: function (error) {
-                console.error("Error:", error);
-                alert("오류가 발생했습니다.");
-            }
-        });
+	    // 폼을 body에 추가하고, 폼을 제출하여 서버로 전송
+	    document.body.appendChild(form);
+	    form.submit();
     });
 });
+
+function createHiddenInput(name, value) {
+    var input = document.createElement("input");
+    input.type = "hidden";
+    input.name = name;
+    input.value = value;
+    return input;
+}

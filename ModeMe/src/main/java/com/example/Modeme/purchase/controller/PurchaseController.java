@@ -1,6 +1,7 @@
 package com.example.Modeme.purchase.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +27,7 @@ import com.example.Modeme.User.UserRepository.UserRepository;
 import com.example.Modeme.purchase.dao.PurchaseRepository;
 import com.example.Modeme.purchase.dao.ShoppingCartRepository;
 import com.example.Modeme.purchase.dto.Purchase;
-import com.example.Modeme.purchase.dto.PurchaseRequest;
+import com.example.Modeme.purchase.dto.PurchaseItem;
 import com.example.Modeme.purchase.dto.ShoppingCart;
 
 @Controller
@@ -51,8 +52,9 @@ public class PurchaseController {
         keep.headerlogin(model, principal); //로그인 유지 
     }
 	
-	@GetMapping("/cart/add")
+	@PostMapping("/cart/add")
 	public ResponseEntity<String> addToCart(@RequestBody ShoppingCart cartItem, @AuthenticationPrincipal CustomUserDetails userDetails)	{
+		System.out.println("장바구니추가");
 		cartItem.setUserId(userDetails.getUser().getId());
 		scr.save(cartItem);
 		return ResponseEntity.ok("success");
@@ -66,20 +68,43 @@ public class PurchaseController {
 		Optional<AddItem> as = air.findById(id);
 		AddItem a = as.get();
 		model.addAttribute("user",u);
-		model.addAttribute("items", a);
+		PurchaseItem pi = new PurchaseItem();
+		pi.setProductId(a.getId());
+		pi.setPrice(a.getPrice());
+		pi.setProductName(a.getName());
+		model.addAttribute("items", pi);
 //		model.addAttribute("aId", a.getId());
 		return "/purchase/purchase";
 	}
+	
 	// 결제페이지(장바구니에서 넘어올때)
 	@PostMapping("/purchase")
-	public String purchaseMultipleItems(@RequestBody PurchaseRequest purchaseRequest, 
-	                                    Model model, 
-	                                    @AuthenticationPrincipal CustomUserDetails userDetails) {
-	    model.addAttribute("user", userDetails.getUser());
-	    model.addAttribute("items", purchaseRequest.getItems()); // 여러 상품 추가
+	public String purchaseMultipleItems(
+		@RequestParam List<Long> productId, // 폼으로 전송된 productId 리스트 받기
+	    @RequestParam List<String> productName, // 폼으로 전송된 productName 리스트 받기
+	    @RequestParam List<Integer> price, // 폼으로 전송된 price 리스트 받기
+	    @RequestParam List<Integer> quantity, // 폼으로 전송된 quantity 리스트 받기
+	    Principal prin,
+	    Model model) {
+		User u = ur.findByUsername(prin.getName()).get();
+	    List<PurchaseItem> items = new ArrayList<>();
+	    
+	    for (int i = 0; i < productId.size(); i++) {
+	        PurchaseItem item = new PurchaseItem();
+	        item.setProductId(productId.get(i));
+	        item.setProductName(productName.get(i));
+	        item.setPrice(price.get(i));
+	        item.setQuantity(quantity.get(i));
+	        items.add(item);
+	    }
+	    // 모델에 유저 정보와 상품 목록을 추가
+	    model.addAttribute("user", u);
+	    model.addAttribute("items", items);  // 받은 items 리스트를 모델에 추가
 
-	    return "/purchase/purchase"; // 여러 상품 결제 페이지 반환
+	    // 결제 페이지로 리디렉션
+	    return "/purchase/purchase";
 	}
+
 	
 	// ProductController 로 옮기면 좋음
 	@GetMapping("/proList")

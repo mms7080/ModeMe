@@ -1,7 +1,10 @@
 package com.example.Modeme.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +20,7 @@ import com.example.Modeme.User.UserRepository.UserRepository;
 import com.example.Modeme.prdDetail.repository.ProductDetailRepository;
 import com.example.Modeme.prdDetail.service.ProductEditService;
 import com.example.Modeme.purchase.dao.ShoppingCartRepository;
+import com.example.Modeme.purchase.dto.ShoppingCart;
 
 @Controller
 public class ViewController {
@@ -63,9 +67,22 @@ public class ViewController {
 	}
 	// 장바구니
 	@GetMapping("/shoppingcart")
-	public String shoppingcart(Principal prin) {
+	public String shoppingcart(Principal prin, Model model) {
 		User u = ur.findByUsername(prin.getName()).get();
-		u.getId();
+		List<ShoppingCart> sList = scr.findByUserId(u.getId()); // 유저에게 있는 상품 목록들 찾아올꺼임
+		
+		Set<Long> productIdSet = new HashSet<>();
+		List<AddItem> itemList = new ArrayList<>();
+		
+		for(ShoppingCart sc : sList) {
+			Long productId = sc.getProductId();
+			if(!productIdSet.contains(productId)) {
+				productIdSet.add(productId);
+				air.findById(productId).ifPresent(itemList::add);
+			}
+		}
+		model.addAttribute("sList", sList);
+		model.addAttribute("itemList", itemList);
 		return "/purchase/shoppingCart";
 	}
 
@@ -113,12 +130,6 @@ public class ViewController {
 	@GetMapping("/outer")
 	public String outer() {
 		return "/product/productList";
-	}
-	
-	// CART 장바구니
-	@GetMapping("/shopcart")
-	public String shoppingCart() {
-		return "/purchase/shoppingCart";
 	}
 	
 	// 관리자 상품 등록

@@ -37,24 +37,28 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr th:each="i : ${itemList}" th:attr="data-product-id=${i.id}">
                 	<td>
                 		<input type="checkbox">
                 	</td>
                     <td><img src="image/026.jpg" alt="상품"></td>
-                    <td>나핑 코듀로이 후드 & 팬츠 (3C)</td>
-                    <td>KRW 48,500</td>
-                    <td>
-                    	<input type="number" value="1" style="width:30px;">
-                    </td>
-                    <td>49원</td>
-                    <td>무료</td>
-                    <td>KRW 48,500</td>
-                    <td class="button-group-vertical">
-						<button>주문하기</button>
-						<button>관심상품등록</button>
-						<button>삭제</button>
-                    </td>
+                    <td>[[${i.name}]]</td>
+                    <td>KRW [[${i.price}]]</td>
+                   	<th:block th:each="s : ${sList}">
+                   		<th:block th:if="${i.id == s.productId}">
+		                    <td>
+	                    		<input type="number" th:value="${s.quantity}" style="width:30px;">
+		                    </td>
+		                    <td>수정필요</td>
+		                    <td>모름</td>
+		                    <td th:text="${s.quantity * i.price} + '원'"></td>
+		                    <td class="button-group-vertical">
+								<button>주문하기</button>
+								<button>관심상품등록</button>
+								<button>삭제</button>
+		                    </td>
+	                    </th:block>
+                   	</th:block>
                 </tr>
             </tbody>
         </table>
