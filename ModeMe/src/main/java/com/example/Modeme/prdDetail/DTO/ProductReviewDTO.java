@@ -4,6 +4,7 @@ import java.time.format.DateTimeFormatter;
 
 import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.prdDetail.entity.ProductReview;
+import com.example.Modeme.prdDetail.repository.ReviewLikeRepository;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -55,17 +56,15 @@ public class ProductReviewDTO {
                     .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         }
         long count = likeRepo.countByReview(review);
-        boolean liked = false;
-        if (currentUser != null) {
-            liked = likeRepo.findByUserAndReview(currentUser, review).isPresent();
-        }
+        boolean liked = (currentUser != null) && likeRepo.findByUserAndReview(currentUser, review).isPresent();
+
         return new ProductReviewDTO(
             review.getId(),
             review.getTitle(),
             review.getContent(),
             formattedTime,
             review.getUsers().getUsername(),
-            count,
+            count, 
             liked
         );
     }
