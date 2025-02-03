@@ -64,6 +64,7 @@
 					<th>주문아이디</th>
 					<th>주문자</th>
 					<th>주문상태</th>
+					<th> </th>
 				</tr>
 			</thead>
 			<tbody>
@@ -76,7 +77,9 @@
 					<td th:text="${sale.totalPrice}"></td>
 					<td th:text="${sale.username}"></td>
 					<td th:text="${sale.name}"></td>
-					<td><select th:value="${sale.process}">
+					<td>
+						<!-- process 상태를 변경하는 select box --> <select
+						class="process-select" data-sale-id="${sale.id}">
 							<option value="before" th:selected="${sale.process == 'before'}">입금
 								전</option>
 							<option value="ready" th:selected="${sale.process == 'ready'}">배송준비
@@ -84,7 +87,16 @@
 							<option value="delivery"
 								th:selected="${sale.process == 'delivery'}">배송 중</option>
 							<option value="done" th:selected="${sale.process == 'done'}">배송완료</option>
-					</select></td>
+					</select>
+					</td>
+					<td>
+						<!-- 수정 버튼 -->
+						<button class="update-process-btn"
+							th:attr="data-sale-id=${sale.id}">수정</button> 
+						<!-- 삭제 버튼 -->
+						<button class="delete-process-btn"
+							th:attr="data-sale-id=${sale.id}">삭제</button>
+					</td>
 				</tr>
 			</tbody>
 		</table>

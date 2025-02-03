@@ -21,6 +21,8 @@ import com.example.Modeme.User.UserRepository.UserRepository;
 import com.example.Modeme.purchase.dao.PurchaseRepository;
 import com.example.Modeme.purchase.dto.Purchase;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class ManagerSaleService {
 
@@ -138,6 +140,24 @@ public class ManagerSaleService {
             .collect(Collectors.groupingBy(Purchase::getProcess, Collectors.counting()));
     }
     
-    
+    @Transactional
+    public String updateSaleProcess(Long id, String newProcess) {
+        if (newProcess == null || newProcess.isEmpty()) {
+            throw new IllegalArgumentException("변경할 주문 상태가 올바르지 않습니다.");
+        }
+
+        return pr.findById(id)
+            .map(purchase -> {
+                if (!newProcess.equals(purchase.getProcess())) { // 상태가 다를 경우에만 변경
+                    purchase.setProcess(newProcess);
+                    pr.save(purchase);
+                    return "주문 상태가 '" + newProcess + "'(으)로 변경되었습니다.";
+                }
+                return "이미 '" + newProcess + "' 상태입니다.";
+            })
+            .orElseThrow(() -> new IllegalArgumentException("해당 주문을 찾을 수 없습니다."));
+    }
+
+   
 }
 

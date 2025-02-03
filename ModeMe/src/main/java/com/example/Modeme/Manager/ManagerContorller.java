@@ -1,15 +1,17 @@
 package com.example.Modeme.Manager;
 
 import java.security.Principal;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,20 +32,16 @@ import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
 import com.example.Modeme.Manager.ManagerService.AddItemService;
 import com.example.Modeme.Manager.ManagerService.ManagerReviewService;
 import com.example.Modeme.Manager.ManagerService.ManagerSaleService;
-import com.example.Modeme.Manager.ManagerService.ManagerUserService;
 import com.example.Modeme.QnA.QnARepository.QnaRepository;
 import com.example.Modeme.User.UserDTO.Headerlogin;
 import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.User.UserRepository.UserRepository;
 import com.example.Modeme.prdDetail.entity.ProductReview;
 import com.example.Modeme.prdDetail.repository.ProductReviewRepository;
-import com.example.Modeme.purchase.dao.PurchaseRepository;
-import com.example.Modeme.purchase.dto.Purchase;
+
 
 @Controller
 public class ManagerContorller {
-	@Autowired
-	private PurchaseRepository pr;
 	
     @Autowired
     private UserRepository userRepository;
@@ -51,13 +50,11 @@ public class ManagerContorller {
     private AddItemRepository ar;
     
     @Autowired
-    private ProductReviewRepository prs;
+    private ProductReviewRepository prr;
     
     @Autowired
     private ManagerReviewService mrs;
 
-    @Autowired
-    private ManagerUserService mus;
     
     @Autowired
     private ManagerSaleService mss;
@@ -93,7 +90,7 @@ public class ManagerContorller {
         long toatalItems  = ar.count();
         
         // 총 등록된 리뷰 수
-        long totalReviews  = prs.count();
+        long totalReviews  = prr.count();
 
         // 모델에 데이터 추가
         model.addAttribute("totalUsers", totalUsers);
@@ -230,7 +227,7 @@ public class ManagerContorller {
     @ResponseBody
     public String deleteReview(@PathVariable Long id) {
         try {
-            prs.deleteById(id); // 리뷰 삭제
+            prr.deleteById(id); // 리뷰 삭제
             return "리뷰 삭제 성공";
         } catch (Exception e) {
             e.printStackTrace();
@@ -270,7 +267,7 @@ public class ManagerContorller {
         // User -> UserDataDTO 변환
         Page<UserDataDTO> userDtoPage = userPage.map(user -> {
             Long qnaCount = qnaRepository.countByUser(user);
-            Long reviewCount = prs.countByUsers(user);
+            Long reviewCount = prr.countByUsers(user);
             return new UserDataDTO(user, qnaCount, reviewCount);
         });
 
@@ -323,4 +320,29 @@ public class ManagerContorller {
         return "manager/managerSale"; // 뷰 이름 반환
     }
     
-}
+   
+    @PutMapping("/manager/ManagerSale/{saleId}")
+    @ResponseBody
+    public ResponseEntity<String> updateSaleProcess(
+        @PathVariable Long saleId,
+        @RequestBody Map<String, String> requestData) {
+
+        String newProcess = requestData.get("newProcess");
+
+        // newProcess 값이 없는 경우 예외 처리
+        if (newProcess == null || newProcess.isEmpty()) {
+            return ResponseEntity.badRequest().body("변경할 주문 상태를 입력해주세요.");
+        }
+
+        try {
+            String resultMessage = mss.updateSaleProcess(saleId, newProcess);
+            return ResponseEntity.ok(resultMessage);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류가 발생했습니다.");
+        }
+    }
+
+
+} 
