@@ -113,7 +113,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	if (addButton) {
 		addButton.addEventListener("click", addSelectionItems);
 	}
-
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -176,3 +175,254 @@ document.addEventListener('DOMContentLoaded', () => {
 		totalPriceElement.textContent = `${formatPrice(totalPrice)} 원`;
 	};
 });
+
+// 페이지네이션 로직
+document.addEventListener("DOMContentLoaded", function() {
+	const reviewListContainer = document.querySelector(".review-list");
+	const paginationContainer = document.querySelector(".pagination");
+
+	if (!paginationContainer || !reviewListContainer) {
+		console.error("🚨 페이지네이션 또는 리뷰 리스트 컨테이너를 찾을 수 없습니다.");
+		return;
+	}
+
+	let totalPages = parseInt(paginationContainer.dataset.totalPages, 10) || 1;
+	let currentPage = parseInt(paginationContainer.dataset.currentPage, 10) || 0;
+	let productId = paginationContainer.dataset.productId;
+
+	function fetchReviews(page) {
+		fetch(`/productDetail/${productId}/reviews?page=${page}`)
+			.then(response => {
+				if (!response.ok) {
+					throw new Error(`서버 응답 오류: ${response.status}`);
+				}
+				return response.json();
+			})
+			.then(data => {
+				// 기존 리뷰 리스트 초기화
+				reviewListContainer.innerHTML = "";
+
+				data.reviews.forEach(review => {
+					const reviewItem = document.createElement("div");
+					reviewItem.classList.add("review-item");
+					reviewItem.innerHTML = `
+                   <h4>${review.title}</h4>
+                   <p>${review.content}</p>
+                   <small>${review.commentedTime}</small>
+
+                   <!-- 좋아요 버튼 -->
+                   <div class="like-section">
+                       <button type="button" class="like-button ${review.liked ? 'liked' : ''}" data-review-id="${review.id}">
+                           <span class="like-text">좋아요</span>
+                       </button>
+                       <span class="like-count" id="like-count-${review.id}">${review.likeCount}</span>
+                   </div>
+               `;
+					reviewListContainer.appendChild(reviewItem);
+				});
+
+				// 페이지네이션 업데이트
+				updatePagination(data.currentPage);
+
+				// 새로운 리뷰에 대해 좋아요 버튼 이벤트 리스너 다시 설정
+				setupLikeButtons();
+			})
+			.catch(error => console.error("🚨 리뷰 데이터 로드 실패:", error));
+	}
+
+	function updatePagination(page) {
+		paginationContainer.innerHTML = ""; // 기존 버튼 초기화
+		let startPage = Math.floor(page / 10) * 10;
+		let endPage = Math.min(startPage + 10, totalPages);
+
+		// 이전 페이지 버튼
+		if (startPage > 0) {
+			let prevButton = document.createElement("button");
+			prevButton.textContent = " < ";
+			prevButton.addEventListener("click", () => fetchReviews(startPage - 1));
+			paginationContainer.appendChild(prevButton);
+		}
+
+		// 페이지 버튼 생성
+		for (let i = startPage; i < endPage; i++) {
+			let pageButton = document.createElement("button");
+			pageButton.textContent = i + 1;
+			pageButton.dataset.page = i;
+
+			if (i === page) {
+				pageButton.disabled = true; // 현재 페이지 버튼 비활성화
+			}
+
+			pageButton.addEventListener("click", function() {
+				fetchReviews(parseInt(this.dataset.page, 10));
+			});
+
+			paginationContainer.appendChild(pageButton);
+		}
+
+		// 다음 페이지 버튼
+		if (endPage < totalPages) {
+			let nextButton = document.createElement("button");
+			nextButton.textContent = " > ";
+			nextButton.addEventListener("click", () => fetchReviews(endPage));
+			paginationContainer.appendChild(nextButton);
+		}
+	}
+
+	// 좋아요 로직
+	document.addEventListener("DOMContentLoaded", function() {
+		document.querySelectorAll(".like-button").forEach(button => {
+			button.addEventListener("click", function() {
+				toggleLike(this);
+			});
+		});
+	});
+
+	function toggleLike(button) {
+		const reviewId = button.getAttribute("data-review-id");
+		console.log("좋아요 클릭됨! reviewId:", reviewId); // 로그 추가 (디버깅용)
+		if (!reviewId) {
+			console.error("리뷰 ID를 찾을 수 없습니다.");
+			return;
+		}
+
+		const csrfToken = document.querySelector("meta[name='_csrf']").content;
+		const csrfHeader = document.querySelector("meta[name='_csrf_header']").content;
+
+		fetch(`/productDetail/review/${reviewId}/like`, {
+			method: "POST",
+			credentials: "include",
+			headers: {
+				"Content-Type": "application/json",
+				[csrfHeader]: csrfToken
+			}
+		})
+			.then(response => {
+				if (!response.ok) {
+					throw new Error(`HTTP error! status: ${response.status}`);
+				}
+				return response.json();
+			})
+			.then(data => {
+				if (data.liked) {
+					button.classList.add("liked");
+				} else {
+					button.classList.remove("liked");
+				}
+
+				// 좋아요 개수 업데이트
+				const likeCountElem = document.getElementById(`like-count-${reviewId}`);
+				if (likeCountElem) {
+					likeCountElem.textContent = data.likeCount;
+				}
+			})
+			.catch(error => console.error("좋아요 토글 에러:", error));
+	}
+
+	updatePagination(currentPage);
+});
+
+// 좋아요 로직
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".like-button").forEach(button => {
+        button.addEventListener("click", function () {
+            let reviewId = this.dataset.reviewId;
+            
+            // 🔹 버튼이 클릭되었을 때 reviewId 확인
+            console.log(`👍 좋아요 요청 - 리뷰 ID: ${reviewId}`);
+
+            fetch(`/productDetail/review/${reviewId}/like`, {
+                method: "POST",
+                credentials: "include"
+            })
+            .then(response => {
+                console.log(`📌 서버 응답 상태 코드: ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                console.log("🔥 좋아요 응답 데이터:", data);
+
+                if (data.liked) {
+                    this.classList.add("liked");
+                } else {
+                    this.classList.remove("liked");
+                }
+
+                // 🔹 좋아요 개수 업데이트
+                let likeCountElem = document.querySelector(`#like-count-${reviewId}`);
+                
+                if (!likeCountElem) {
+                    console.warn(`🚨 like-count-${reviewId} 요소를 찾을 수 없습니다. 요소를 다시 로드합니다.`);
+                    
+                    // 🔹 동적으로 다시 요소를 찾음
+                    setTimeout(() => {
+						console.log("🔥 모든 like-count 요소:", document.querySelectorAll("[id^='like-count-']"));
+
+                        likeCountElem = document.querySelector(`#like-count-${reviewId}`);
+                        if (likeCountElem) {
+                            likeCountElem.textContent = data.likeCount;
+                        } else {
+                            console.error(`⛔ 여전히 like-count-${reviewId} 요소를 찾을 수 없습니다.`);
+                        }
+                    }, 500);
+                } else {
+                    likeCountElem.textContent = data.likeCount;
+                }
+            })
+            .catch(error => console.error("🚨 좋아요 토글 에러:", error));
+        });
+    });
+});
+
+
+/*document.addEventListener("DOMContentLoaded", function () {
+    // 좋아요 버튼에 대한 이벤트 리스너 추가
+    document.querySelectorAll(".like-button").forEach(button => {
+		console.log(`버튼 ID: ${button.dataset.reviewId}`);
+        button.addEventListener("click", function () {
+            let reviewId = this.dataset.reviewId;
+            
+            // 🔹 클릭한 리뷰 ID를 확인
+            console.log(`👍 좋아요 요청 - 리뷰 ID: ${reviewId}`);
+
+            fetch(`/productDetail/review/${reviewId}/like`, {
+                method: "POST",
+                credentials: "include"
+            })
+                .then(response => {
+                    console.log(`📌 서버 응답 상태 코드: ${response.status}`);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("🔥 좋아요 응답 데이터:", data);
+
+                    if (data.liked) {
+                        this.classList.add("liked");
+                    } else {
+                        this.classList.remove("liked");
+                    }
+
+                    // 🔹 좋아요 개수 요소 찾기
+                    let likeCountElem = document.querySelector(`#like-count-${reviewId}`);
+                    
+                    if (!likeCountElem) {
+                        console.warn(`🚨 like-count-${reviewId} 요소를 찾을 수 없습니다.`);
+                    } else {
+                        likeCountElem.textContent = data.likeCount;
+                    }
+                })
+                .catch(error => console.error("🚨 좋아요 토글 에러:", error));
+        });
+    });
+});*/
+
+
+
+
+
+
+
+
+
+

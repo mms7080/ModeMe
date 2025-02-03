@@ -9,8 +9,7 @@
 <body>
 	<!-- 헤더 -->
 	<div th:replace="~{header :: header}"></div>
-
-    <div class="review-container">
+	<div class="review-container">
         <h1>REVIEW</h1>
         <p class="description">상품 사용후기를 작성해주세요.</p>
 
@@ -20,7 +19,7 @@
 	        <div class="product-image" style="background-color: #e0e0e0;">
 	            <img th:src="${addItem?.image ?: '/images/default-product.png'}" alt="상품 이미지">
 	        </div>
-	
+			
 	        <!-- 상품 정보 -->
 	        <div class="product-info">
 	            <h2 th:text="${product?.name ?: '상품 이름 없음'}">상품 이름</h2>
@@ -70,7 +69,6 @@
 			</div>
         </form>
     </div>
-    
     	<!-- 푸터 -->
 	<div th:replace="~{footer :: footer}"></div>
     

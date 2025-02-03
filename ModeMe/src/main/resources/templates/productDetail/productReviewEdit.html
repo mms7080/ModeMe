@@ -2,17 +2,90 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>리뷰 수정</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Edit</title>
+    <link rel="stylesheet" href="/css/productDetail/reviewWrite.css">
 </head>
 <body>
-    <h1>리뷰 수정</h1>
-    <form th:action="@{/review/{reviewId}/edit(reviewId=${review.id})}" method="post">
-        <label for="title">제목</label>
-        <input type="text" id="title" name="title" th:value="${review.title}" required>
-        <label for="content">내용</label>
-        <textarea id="content" name="content" rows="10" th:text="${review.content}" required></textarea>
-        <input type="hidden" name="_csrf" th:value="${_csrf.token}">
-        <button type="submit">수정 완료</button>
-    </form>
+    <!-- <h1>리뷰 수정</h1>
+	<form th:action="@{/productDetail/review/{reviewId}/edit(reviewId=${review.id ?: 0})}" method="post">
+	    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+	    <label for="title">제목</label>
+	    <input type="text" id="title" name="title" th:value="${review.title}" required>
+	    <label for="content">내용</label>
+	    <textarea id="content" name="content" th:text="${review.content}" rows="10" required></textarea>
+	    <button type="submit">수정 완료</button>
+	</form> -->
+	
+	
+	<!-- 헤더 -->
+	<div th:replace="~{header :: header}"></div>
+	<div class="review-container">
+        <h1>REVIEW</h1>
+        <p class="description">상품 사용후기를 작성해주세요.</p>
+
+        <!-- Product Summary -->
+	    <div class="product-summary">
+	        <!-- 상품 이미지: 나중에 동적으로 구현 가능 -->
+	        <div class="product-image" style="background-color: #e0e0e0;">
+	            <img th:src="${addItem?.image ?: '/images/default-product.png'}" alt="상품 이미지">
+	        </div>
+			
+	        <!-- 상품 정보 -->
+	        <div class="product-info">
+	            <h2 th:text="${product?.name ?: '상품 이름 없음'}">상품 이름</h2>
+	            <p th:text="'₩' + ${product?.price ?: 0}">상품 가격</p>
+	            <a th:href="@{/productDetail/{id}(id=${product?.id})}">
+	                <button type="button">상품 상세보기</button>
+	            </a>
+	        </div>
+	    </div>
+
+        <!-- Review Form -->
+		<form th:action="@{/productDetail/review/{reviewId}/edit(reviewId=${review.id ?: 0})}" method="post">
+		
+		
+		
+		    <!-- 제목 -->
+		    <label for="title">제목</label>
+		    <input type="text" class="title" id="title" name="title" th:value="${review.title}" placeholder="제목을 입력하세요" required>
+		
+		    <!-- 내용 -->
+		    <label for="content">내용</label>
+		    <textarea id="content" class="content" name="content" rows="10" placeholder="내용을 입력하세요" th:text="${review.content}" required></textarea>
+		    
+
+            <!-- File Upload -->
+            <div class="file-upload">
+                <label>사진등록</label>
+                <div class="file-input-group">
+                    <input type="file" id="file1">
+                </div>
+                <div class="file-input-group">
+                    <input type="file" id="file2">
+                </div>
+                <div class="file-input-group">
+                    <input type="file" id="file3">
+                </div>
+                <div class="file-input-group">
+                    <input type="file" id="file4">
+                </div>
+            </div>
+
+		    <!-- Buttons -->
+			<div class="form-buttons">
+				<!-- CSRF 토큰 추가 -->
+	    		<input type="hidden" name="_csrf" th:value="${_csrf.token}">
+			    <!-- 등록 버튼 -->
+			    <button type="submit" class="upload-button">수정완료</button>
+			    <!-- 취소 버튼 -->
+			    <button type="button" onclick="location.href='/productDetail/productDetail/{id}'">취소</button>
+			</div>
+        </form>
+    </div>
+    	<!-- 푸터 -->
+	<div th:replace="~{footer :: footer}"></div>
+	
+	
 </body>
 </html>
