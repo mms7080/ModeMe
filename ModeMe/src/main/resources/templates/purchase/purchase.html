@@ -70,7 +70,7 @@
 				<div th:each="i:${items}" class="product-item">
 					<img src="image/026.jpg" alt="상품 이미지">
 					<div class="product-details">
-						<p>[[${i.productName}]]</p>
+						<p class="productNames">[[${i.productName}]]</p>
 						<p>₩[[${i.price}]]</p>
 					</div>
 				</div>
@@ -142,8 +142,14 @@
 	</form>
 	<script th:inline="javascript" defer>
 		const user = /*[[${user}]]*/'null';
-		const aId = /*[[${items.productId}]]*/'null'; // 단일(바로결제) 의 경우 items 는 PurchaseItem 이라는 단일객체
+		const items = /*[[${items}]]*/'null'; // 단일(바로결제) 의 경우 items 는 PurchaseItem 이라는 단일객체
 		// 장바구니에서 넘어온 경우에는 items 는 List<PurchaseItem>
+		let aId;
+// 		if(items.length >= 2){
+			
+// 		} else{
+// 			aId = items[0].productId;
+// 		}
 		
 		let phoneBehind = user.phone.slice(3)
 		document.getElementById("phoneNum").value = phoneBehind;

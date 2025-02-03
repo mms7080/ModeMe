@@ -72,9 +72,9 @@ public class PurchaseController {
 		pi.setProductId(a.getId());
 		pi.setPrice(a.getPrice());
 		pi.setProductName(a.getName());
-		List<PurchaseItem> piList = new ArrayList<>();
+		List<PurchaseItem> piList = new ArrayList<>(); // 리스트형태로 model
 		piList.add(pi);
-		model.addAttribute("items", pi);
+		model.addAttribute("items", piList);
 //		model.addAttribute("aId", a.getId());
 		return "/purchase/purchase";
 	}
@@ -143,27 +143,33 @@ public class PurchaseController {
 	
 	@GetMapping("/insertPurchase")
 	@ResponseBody
-	public String insertPurchase(@RequestParam("aId") int aId, @RequestParam("userId") int uId,
-			@RequestParam("address") String address, @RequestParam("addressDetail") String addrDetail,
-			@RequestParam("totalPrice") int price, @RequestParam("impUid") String impUid,
-			@RequestParam("merchantUid") String merchantUid, @RequestParam("itemname") String itemname,
-			 @AuthenticationPrincipal CustomUserDetails userDetails) {
-		String userid = userDetails.getUsername();
-		
-		Purchase p = new Purchase();
-		p.setUserId(uId);
-		p.setProductNumber(aId);
-		p.setProductMany(1);
-		p.setAddress(address);
-		p.setAddressDetail(addrDetail);
-		p.setItemname(itemname);
-		p.setUsername(userid);
-		p.setTotalPrice(price);
-//		p.setImpUid(impUid);
-//		p.setMerchantUid(merchantUid);
-		
-		pr.save(p);
-		
-		return "success";
+	public String insertPurchase(@RequestParam("aId") String aIds, @RequestParam("userId") int uId,
+	                             @RequestParam("address") String address, @RequestParam("addressDetail") String addrDetail,
+	                             @RequestParam("totalPrice") int price, @RequestParam("impUid") String impUid,
+	                             @RequestParam("merchantUid") String merchantUid, @RequestParam("itemname") String itemnames,
+	                             Principal prin) {
+		User u = ur.findByUsername(prin.getName()).get();
+	    String userid = u.getName();
+
+	    String[] itemNamesArray = itemnames.split(",");
+	    String[] aIdArray = aIds.split(",");
+
+	    // 각 상품 개별 저장
+	    for (int i = 0; i < itemNamesArray.length; i++) {
+	        Purchase p = new Purchase();
+	        p.setUserId(uId);
+	        p.setProductNumber(Integer.parseInt(aIdArray[i])); // 개별 상품 ID 저장
+	        p.setProductMany(1);
+	        p.setAddress(address);
+	        p.setAddressDetail(addrDetail);
+	        p.setItemname(itemNamesArray[i].trim()); // 개별 상품명 저장
+	        p.setUsername(userid);
+	        p.setTotalPrice(price / itemNamesArray.length); // 총 가격을 상품 개수로 나눠 저장 가능
+
+	        pr.save(p);
+	    }
+
+	    return "success";
 	}
+
 }
