@@ -2,6 +2,8 @@ package com.example.Modeme.User.UserController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,6 +27,12 @@ public class SignupController {
     @GetMapping("/signup")
     public String signupForm(Model model) {
         model.addAttribute("userDTO", new UserDTO());
+
+        // 🔥 로그인 상태 확인 후 모델에 추가 (null 방지)
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        boolean isLoggedIn = auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal());
+        model.addAttribute("loggedIn", isLoggedIn); // 항상 true/false 값을 가지도록 설정
+
         return "/Sign/signup"; // 회원가입 HTML 경로
     }
 

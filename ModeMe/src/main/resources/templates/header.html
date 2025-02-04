@@ -17,10 +17,11 @@
                 <form id="logout-form" action="/logout" method="POST" style="display: inline;">
                     <a href="#" onclick="document.getElementById('logout-form').submit();" class="login" th:text="${loggedIn} ? 'LOGOUT' : 'LOGIN'"></a>
                 </form>
-                <span id="points-tooltip" class="points-tooltip">+2000P</span>
+                <span id="points-tooltip" class="points-tooltip" th:if="${loggedIn != null and !loggedIn}">+2000P</span>
+                <a href="/signup" th:if="${!loggedIn}">JOIN</a>
                 <a href="/order">ORDER</a>
                 <a href="/shoppingcart">CART</a>
-                <a href="/mypage">MY PAGE</a>
+                <a href="/mypage">MY PAGE</a>        
             </div>
             <!--상단바 오른쪽 -->
             <div class="right-menu">
