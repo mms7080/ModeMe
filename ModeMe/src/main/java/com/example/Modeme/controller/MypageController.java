@@ -72,43 +72,66 @@ import com.example.Modeme.purchase.dto.Purchase;
 		        keep.headerlogin(model, principal); //로그인 유지 
 		    }
 		
-			// 마이페이지
-			@GetMapping("/mypage")
-			public String MyPage(
-					@AuthenticationPrincipal CustomUserDetails userDetails,
-			        Model model	
-			) {
-				String userid = userDetails.getUsername();
-				 List<Mileage> mileageList = milerep.findByUserid(userid);
-				 
-				// 총 적립금
-			    int total = mileser.getTotalMileage(userid) + 2000;
-			    model.addAttribute("total_mileage",total);
-			    
-			  //사용된 마일리지 합산
-			    int totalUsedMileage = mileageList.stream()
-			            .mapToInt(Mileage::getUsedMileage)  // 각 사용된 마일리지 항목을 더함
-			            .sum();
-			    model.addAttribute("usedMileage",totalUsedMileage);
-			    
-			  //사용 가능 적립금
-			    int availableMileage = total - totalUsedMileage;
-			    model.addAttribute("availableMileage",availableMileage);
-			    
-			    // 거래 횟수
-			    int count = purrep.countByUsername(userid);
-			    model.addAttribute("count",count);
-			    
-			    List<Purchase> purchaseList = purrep.findByUsername(userid);
-			    
-			    // 총 거래 금액
-			    int totalprice = purchaseList.stream()
-			            .mapToInt(Purchase::getTotalPrice)  // 각 사용된 마일리지 항목을 더함
-			            .sum();
-			    model.addAttribute("totalprice",totalprice);
-				
-				return "/MyPage/MyPage";
-			}
+		    // 📌 마이페이지 - 주문 상태 추가
+		    @GetMapping("/mypage")
+		    public String MyPage(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
+		        String userid = userDetails.getUsername();
+		        List<Mileage> mileageList = milerep.findByUserid(userid);
+
+		        // 총 적립금
+		        int total = mileser.getTotalMileage(userid) + 2000;
+		        model.addAttribute("total_mileage", total);
+
+		        // 사용된 마일리지 합산
+		        int totalUsedMileage = mileageList.stream().mapToInt(Mileage::getUsedMileage).sum();
+		        model.addAttribute("usedMileage", totalUsedMileage);
+
+		        // 사용 가능 적립금
+		        int availableMileage = total - totalUsedMileage;
+		        model.addAttribute("availableMileage", availableMileage);
+
+		        // 거래 횟수
+		        int count = purrep.countByUsername(userid);
+		        model.addAttribute("count", count);
+
+		        List<Purchase> purchaseList = purrep.findByUsername(userid);
+
+		        // 총 거래 금액
+		        int totalprice = purchaseList.stream().mapToInt(Purchase::getTotalPrice).sum();
+		        model.addAttribute("totalprice", totalprice);
+
+		        for (Purchase p : purchaseList) {
+		            System.out.println("주문번호: " + p.getId() + ", 상태: '" + p.getProcess() + "'");
+		        }
+
+		        // 주문 상태별 개수 계산 (before -> 입금전, ready -> 배송준비중, delivery -> 배송중, done -> 배송완료)
+		        long countBeforePayment = purchaseList.stream()
+		            .filter(p -> p.getProcess() != null && "before".equals(p.getProcess().trim()))
+		            .count();
+		        long countPreparing = purchaseList.stream()
+		            .filter(p -> p.getProcess() != null && "ready".equals(p.getProcess().trim()))
+		            .count();
+		        long countShipping = purchaseList.stream()
+		            .filter(p -> p.getProcess() != null && "delivery".equals(p.getProcess().trim()))
+		            .count();
+		        long countDelivered = purchaseList.stream()
+		            .filter(p -> p.getProcess() != null && "done".equals(p.getProcess().trim()))
+		            .count();
+		        
+		        // 🔍 상태별 개수 확인
+		        System.out.println("입금전: " + countBeforePayment);
+		        System.out.println("배송준비중: " + countPreparing);
+		        System.out.println("배송중: " + countShipping);
+		        System.out.println("배송완료: " + countDelivered);
+		        System.out.println("조회된 주문 개수: " + purchaseList.size());
+
+		        model.addAttribute("countBeforePayment", countBeforePayment);
+		        model.addAttribute("countPreparing", countPreparing);
+		        model.addAttribute("countShipping", countShipping);
+		        model.addAttribute("countDelivered", countDelivered);
+
+		        return "/MyPage/MyPage";
+		    }
 	
 			// 주문내역 조회
 			@GetMapping("/order")

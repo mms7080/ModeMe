@@ -42,18 +42,20 @@
 					3개월 기준)</span>
 			</div>
 			<div class="orderprogress">
-				<div class="rightline" id="orderbefore">
-					<span>입금전</span> <span>0</span>
-				</div>
-				<div class="rightline" id="orderprepare">
-					<span>배송준비중</span> <span>0</span>
-				</div>
-				<div class="rightline" id="ordering">
-					<span>배송중</span> <span>0</span>
-				</div>
-				<div id="orderfinish">
-					<span>배송완료</span> <span>0</span>
-				</div>
+			    <div class="rightline" id="orderbefore">
+			        <span>입금전</span> <span th:text="${countBeforePayment}">0</span>
+			    </div>
+			    <div class="rightline" id="orderprepare">
+			        <span>배송준비중</span> <span th:text="${countPreparing}">0</span>
+			    </div>
+			    <div class="rightline" id="ordering">
+			        <span>배송중</span> <span th:text="${countShipping}">0</span>
+			    </div>
+			    <div id="orderfinish">
+			        <span>배송완료</span> <span th:text="${countDelivered}">0</span>
+			    </div>
+			</div>
+
 				<!-- <div id="ordertotal">
 					<ul style="list-style-type: circle; list-style-position: inside;">
 						<li>취소 : <span>0</span></li>
