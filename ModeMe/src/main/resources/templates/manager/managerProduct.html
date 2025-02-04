@@ -38,7 +38,8 @@
 					<td th:text="${product.colorNames}"></td>
 					<td th:text="${product.stock}"></td>
 					<td>
-						<button id="modfiyButton">수정</button>
+						<button id="modifyButton" class="admin-edit-button"
+							th:data-product-id="${product.id}">수정</button>
 						<button class="deleteButton" th:data-id="${product.id}">삭제</button>
 					</td>
 				</tr>

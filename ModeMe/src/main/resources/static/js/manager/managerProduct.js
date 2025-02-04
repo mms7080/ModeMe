@@ -35,3 +35,20 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const modifyButton = document.getElementById("modifyButton");
+
+    if (modifyButton) {
+        modifyButton.addEventListener("click", function() {
+            const productId = this.getAttribute("data-product-id"); // 버튼에 id 속성 추가 필요
+            if (productId) {
+                window.location.href = `/productDetail/productEdit/${productId}`;
+            } else {
+                alert("상품 ID를 찾을 수 없습니다.");
+            }
+        });
+    }
+});
+
+ 
