@@ -58,3 +58,41 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+// 모든 삭제 버튼에 이벤트 리스너 추가
+    const deleteButtons = document.querySelectorAll(".delete-process-btn");
+    deleteButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            const saleId = this.getAttribute("data-sale-id");
+
+            console.log("삭제할 saleId:", saleId); // 디버깅 로그
+
+            if (!saleId) {
+                alert("오류: 주문 ID가 없습니다.");
+                return;
+            }
+
+            if (!confirm("정말 이 주문을 삭제하시겠습니까?")) {
+                return; // 사용자가 취소하면 삭제 중단
+            }
+
+            // ✅ Fetch 요청 (주문 삭제)
+            fetch(`/manager/ManagerSale/${saleId}`, {
+                method: "DELETE"
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("서버 요청 실패: " + response.status);
+                }
+                return response.text();
+            })
+            .then(data => {
+                alert(data);
+                location.reload();
+            })
+            .catch(error => {
+                console.error("오류 발생:", error);
+                alert("주문 삭제 중 오류가 발생했습니다.");
+            });
+        });
+    });

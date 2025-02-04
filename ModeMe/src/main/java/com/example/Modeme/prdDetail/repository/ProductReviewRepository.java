@@ -15,6 +15,8 @@ public interface ProductReviewRepository extends JpaRepository<ProductReview, Lo
     List<ProductReview> findByAddItemId(Long addItemId);
     // 리뷰 삭제
     void deleteById(Long reviewId);
+    //  특정 상품의 모든 리뷰 삭제 
+    void deleteByAddItemId(Long addItemId);
     // 상품 리뷰 갯수
     int countByAddItemId(Long addItemId);
     // 페이지네이션

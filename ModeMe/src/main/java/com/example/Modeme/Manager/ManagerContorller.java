@@ -38,10 +38,14 @@ import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.User.UserRepository.UserRepository;
 import com.example.Modeme.prdDetail.entity.ProductReview;
 import com.example.Modeme.prdDetail.repository.ProductReviewRepository;
+import com.example.Modeme.purchase.dao.PurchaseRepository;
 
 
 @Controller
 public class ManagerContorller {
+	
+	@Autowired
+	private PurchaseRepository pr;
 	
     @Autowired
     private UserRepository userRepository;
@@ -344,5 +348,15 @@ public class ManagerContorller {
         }
     }
 
+    @DeleteMapping("/manager/ManagerSale/{saleId}")
+    public ResponseEntity<String> deleteOrder(@PathVariable Long saleId) {
+        try {
+            pr.deleteById(saleId);
+            return ResponseEntity.ok("주문이 성공적으로 삭제되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .body("주문 삭제 중 오류 발생");
+        }
+    }
 
 } 

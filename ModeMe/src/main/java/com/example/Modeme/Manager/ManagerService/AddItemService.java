@@ -22,6 +22,7 @@ import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
 import com.example.Modeme.Manager.ManagerRepository.itemColorNameRepository;
 import com.example.Modeme.Manager.ManagerRepository.itemColorRepository;
 import com.example.Modeme.Manager.ManagerRepository.itemSizeRepository;
+import com.example.Modeme.prdDetail.repository.ProductReviewRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -30,6 +31,9 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class AddItemService {
+	@Autowired
+	private ProductReviewRepository prr;
+	
 	@Autowired
 	private AddItemRepository ar;	
 	
@@ -113,10 +117,12 @@ public class AddItemService {
     @Transactional
     public void deleteProduct(Long id) {
         // 상품 삭제 처리
+    	prr.deleteByAddItemId(id);
     	inr.deleteById(id);
     	icr.deleteById(id);
     	isr.deleteById(id);
         ar.deleteById(id);
+        
     }
 }
 		

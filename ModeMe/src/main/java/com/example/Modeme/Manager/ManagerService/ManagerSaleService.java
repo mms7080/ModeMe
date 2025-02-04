@@ -65,7 +65,7 @@ public class ManagerSaleService {
             // 상품 카테고리 정보 가져오기
             String category = ar.findById((long) purchase.getProductNumber())
                                 .map(item -> item.getCategory())
-                                .orElse("기타");
+                                .orElse("상품없음");
 
             // 유저 이름 가져오기
             String name = ur.findById((long) purchase.getUserId())
