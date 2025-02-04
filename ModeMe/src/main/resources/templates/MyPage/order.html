@@ -9,74 +9,82 @@
 
 </head>
 <body>
-	<!-- 헤더푸터-->
-	<div th:replace="~{header :: header}"></div>
+   <!-- 헤더푸터-->
+   <div th:replace="~{header :: header}"></div>
 
-	<h1><span>📜</span> 주문내역 조회 </br>
-	<p class="addressp">고객님께서 주문하신 상품의 주문내역을 확인하실수 있습니다.</p></h1>
-	<main>
-		<div class="OrderHeader">
-			<div class="greybox">
-				<select class="orderselect">
-					<option>입금전</option>
-					<option>배송준비중</option>
-					<option>배송중</option>
-					<option>배송완료</option>
-					<option>취소</option>
-					<option>교환</option>
-					<option>반품</option>
-				</select> <span class="daybuttons">
-					<button class="daybutton">오늘</button>
-					<button class="daybutton">1주일</button>
-					<button class="daybutton">1개월</button>
-					<button class="daybutton">3개월</button>
-					<button class="daybutton">6개월</button>
-				</span>
-				<form class="orderheaderform">
-						<input type="date" id="startdate" name="startdate" required>
-						~
-						<input type="date" id="enddate" name="enddate" required>
-					<button class="ordersearch">조회</button>
-				</form>
-			</div>
-		</div>
-		<p style="color: grey;">○ 주문내역은 최대 6개월까지만 조회 가능합니다.</p>
-		<div class="ordermain">
-			<div class="ordermaintitle">주문 상품 정보</div>
-			<div class="order_main">
-			<div class="ordercontent">
-				<span>주문일자</br>[주문번호]</span>
-				<span>이미지</span>
-				<span>상품정보</span>
-				<span>수량</span>
-				<span>상품구매금액</span>
-				<span>주문처리상태</span>
-			</div>
-			
-			<!-- 주문 내역이 있을 경우 (orderList model명)-->
-			<div th:if="${purchase_list != null && !purchase_list.isEmpty()}">
-    <div class="ordercontent online" th:each="content : ${purchase_list}">
-   		 <div class="center">
-   	<span th:text="${#temporals.format(content.orderDate, 'yyyy-MM-dd')}"></span></br>
+   <h1>
+      <span>📜</span> 주문내역 조회 </br>
+      <p class="addressp">고객님께서 주문하신 상품의 주문내역을 확인하실수 있습니다.</p>
+   </h1>
+   <main>
+      <div class="OrderHeader">
+         <div class="greybox">
+            <select class="orderselect">
+               <option>입금전</option>
+               <option>배송준비중</option>
+               <option>배송중</option>
+               <option>배송완료</option>
+               <option>취소</option>
+               <option>교환</option>
+               <option>반품</option>
+            </select> <span class="daybuttons">
+               <button class="daybutton">오늘</button>
+               <button class="daybutton">1주일</button>
+               <button class="daybutton">1개월</button>
+               <button class="daybutton">3개월</button>
+               <button class="daybutton">6개월</button>
+            </span>
+            <form class="orderheaderform">
+               <input type="date" id="startdate" name="startdate" required>
+               ~ <input type="date" id="enddate" name="enddate" required>
+               <button class="ordersearch">조회</button>
+            </form>
+         </div>
+      </div>
+      <p style="color: grey;">○ 주문내역은 최대 6개월까지만 조회 가능합니다.</p>
+      <div class="ordermain">
+         <div class="ordermaintitle">주문 상품 정보</div>
+         <div class="order_main">
+            <div class="ordercontent">
+               <span>주문일자</br>[주문번호]
+               </span> <span>이미지</span> <span>상품정보</span> <span>수량</span> <span>상품구매금액</span>
+               <span>주문처리상태</span>
+            </div>
 
-   		 	 <span th:text="${content.id}"></span>
-   		 </div>
-        <span>이미지</span>
-        <span th:text="${content.itemname}"></span>
-        <span th:text="${content.productMany}"></span>
-        <span th:text="${content.totalPrice}"></span>
-        <span>주문처리상태</span>
-    </div>
-</div>
+            <!-- 주문 내역이 있을 경우 (orderList model명)-->
+            <div th:if="${purchase_list != null && !purchase_list.isEmpty()}">
+               <div class="ordercontent online"
+                  th:each="content : ${purchase_list}">
+                  <div class="center">
+                     <span
+                        th:text="${#temporals.format(content.orderDate, 'yyyy-MM-dd')}"></span></br>
 
-<div th:unless="${purchase_list != null && !purchase_list.isEmpty()}" class="orderlist">
-    <div class="order_null">주문 내역이 없습니다.</div>
-</div>
+                     <span th:text="${content.id}"></span>
+                  </div>
+                  <span>이미지</span> <span th:text="${content.itemname}"></span> <span
+                     th:text="${content.productMany}"></span> <span
+                     th:text="${content.totalPrice}"></span> <span
+                     th:switch="${content.process}"> 
+                     <span th:case="'before'">입금 전</span> 
+                     <span th:case="'ready'">배송준비 중</span>
+                     <span th:case="'delivery'">배송 중</span> 
+                     <span th:case="'done'">배송완료</span>
+                     <span th:case="*">기타</span> <!-- 예상치 못한 값 처리 -->
+                  </span>
 
-		</div>
-	</main>
+               </div>
+            </div>
 
-	<div th:replace="~{footer :: footer}"></div>
+            <div
+               th:unless="${purchase_list != null && !purchase_list.isEmpty()}"
+               class="orderlist">
+               <div class="order_null">주문 내역이 없습니다.</div>
+            </div>
+
+         </div>
+   </main>
+
+   <div th:replace="~{footer :: footer}"></div>
 
 </body>
 </html>
