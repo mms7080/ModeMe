@@ -289,3 +289,30 @@
     .pagination button:hover {
         background-color: #e0e0e0;
     }
+    .rich-text-content {
+    text-align: center; /* 텍스트 가운데 정렬 */
+    width: 60%; /* 너비 조정 */
+    margin: 20px auto; /* 가운데 정렬 */
+    line-height: 1.6; /* 가독성을 위한 줄 간격 */
+    font-size: 16px; /* 글씨 크기 조정 */
+}
+
+/* 돋보기 효과를 위한 스타일 */
+.image-preview {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 500px; /* 원하는 크기로 조정 */
+}
+
+.preview-image {
+    width: 100%;
+    cursor: zoom-in; /* 마우스 포인터를 돋보기 모양으로 변경 */
+    transition: transform 0.2s ease-in-out;
+}
+
+.image-preview:hover .preview-image {
+    transform: scale(1.5); /* 1.5배 확대 */
+}
+
+    

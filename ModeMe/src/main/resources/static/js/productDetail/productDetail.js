@@ -373,6 +373,46 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+    document.addEventListener("DOMContentLoaded", () => {
+    const thumbnails = document.querySelectorAll(".thumbnail-image");
+    const mainPreview = document.getElementById("main-preview");
+
+    // 최초 메인 이미지 저장
+    const initialMainImageSrc = mainPreview.src;
+    let currentMainImageSrc = initialMainImageSrc; // 현재 메인 이미지 추적
+
+    thumbnails.forEach((thumbnail) => {
+        thumbnail.addEventListener("click", function () {
+            let clickedThumbnailSrc = this.src;
+
+            // 클릭한 썸네일이 현재 메인 이미지인 경우, 초기 이미지로 되돌림
+            if (clickedThumbnailSrc === currentMainImageSrc) {
+                mainPreview.src = initialMainImageSrc;
+                currentMainImageSrc = initialMainImageSrc;
+            } else {
+                // 메인 이미지와 썸네일 이미지를 교체
+                mainPreview.src = clickedThumbnailSrc;
+                this.src = currentMainImageSrc;
+                currentMainImageSrc = clickedThumbnailSrc;
+            }
+        });
+    });
+
+    // 메인 이미지 확대 기능 (돋보기 효과)
+    mainPreview.addEventListener("mousemove", function (e) {
+        const rect = mainPreview.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width * 100;
+        const y = (e.clientY - rect.top) / rect.height * 100;
+
+        mainPreview.style.transformOrigin = `${x}% ${y}%`;
+        mainPreview.style.transform = "scale(2)"; // 2배 확대
+    });
+
+    mainPreview.addEventListener("mouseleave", function () {
+        mainPreview.style.transform = "scale(1)"; // 원래 크기로 복구
+    });
+});
+
 
 
 /*document.addEventListener("DOMContentLoaded", function () {

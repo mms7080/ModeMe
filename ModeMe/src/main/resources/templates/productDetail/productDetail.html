@@ -122,15 +122,16 @@
 		</ul>
 
 		<div class="product-description">
-			<div class="image-placeholder"
-				style="width: 60%; height: 300px; background-color: #e0e0e0; margin: 20px auto;"></div>
-			<div class="image-placeholder"
-				style="width: 60%; height: 400px; background-color: #e0e0e0; margin: 20px auto;"></div>
-			<div class="image-placeholder"
-				style="width: 60%; height: 500px; background-color: #e0e0e0; margin: 20px auto;"></div>
-			<div class="rich-text-content" th:utext="${productDescription}"></div>
-		</div>
-	</div>
+    <!-- 상품 이미지 추가 -->
+    <div class="image-placeholder"
+         th:each="imageUrl : ${product.imageUrls}">
+        <img th:src="${imageUrl}" alt="상품 상세 이미지"
+             style="width: 60%; display: block; margin: 20px auto;" />
+    </div>
+
+    <!-- 상품 상세 설명 -->
+    <div class="rich-text-content" th:utext="${productDescription}"></div>
+</div>
 
 	<!-- Bottom Section -->
 	<div class="bottom container" id="prdInfo">
