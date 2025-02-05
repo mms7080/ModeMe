@@ -36,7 +36,6 @@ document.addEventListener("DOMContentLoaded", function () {
         icon.addEventListener("click", function () {
             const productCard = this.closest(".product-card");
             const productId = productCard.querySelector("input[type='hidden']").value;
-			console.log(productId)
             const productName = productCard.querySelector("p:first-of-type").innerText;
 
             $.ajax({
@@ -46,11 +45,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 data: JSON.stringify({
                     productId: productId,
                     productName: productName,
-                    quantity: 1 // 항상 1개 추가
+                    quantity: 1
                 }),
                 success: function (response) {
                     if (response === "success") {
                         alert("장바구니에 추가되었습니다!");
+                    } else if (response === "exists") {
+                        alert("이미 장바구니에 있는 상품입니다!");
                     }
                 },
                 error: function (error) {
@@ -60,3 +61,4 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+

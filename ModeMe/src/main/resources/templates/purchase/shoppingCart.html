@@ -17,15 +17,15 @@
         <h1>장바구니</h1>
 
         <div class="summary">
-            <div>총 상품 금액: <strong>KRW 48,500</strong></div>
+            <div>총 상품 금액: <strong>KRW </strong></div>
             <div>배송비: <strong>KRW 0</strong></div>
-            <div>합계: <strong>KRW 48,500</strong></div>
+            <div>합계: <strong>KRW </strong></div>
         </div>
 
         <table class="product-table">
             <thead>
                 <tr>
-                	<th>선택</th>
+                	<th><input type="checkbox" id="select-all"></th>
                     <th>이미지</th>
                     <th>상품명</th>
                     <th>판매가</th>
@@ -38,12 +38,12 @@
             </thead>
             <tbody>
                 <tr th:each="i : ${itemList}" th:attr="data-product-id=${i.id}">
-                	<td>
-                		<input type="checkbox">
+                	<td class="select-cell">
+                		<input class="item-checkbox" type="checkbox">
                 	</td>
                     <td><img src="image/026.jpg" alt="상품"></td>
                     <td>[[${i.name}]]</td>
-                    <td>KRW [[${i.price}]]</td>
+                    <td><span th:text="${#numbers.formatInteger(i.price, 3, 'COMMA')} + '원'"></span></td>
                    	<th:block th:each="s : ${sList}">
                    		<th:block th:if="${i.id == s.productId}">
 		                    <td>
@@ -51,11 +51,11 @@
 		                    </td>
 		                    <td>수정필요</td>
 		                    <td>모름</td>
-		                    <td th:text="${s.quantity * i.price} + '원'"></td>
+		                    <td th:text="${#numbers.formatInteger(s.quantity * i.price, 3, 'COMMA')} + '원'"></td>
 		                    <td class="button-group-vertical">
 								<button>주문하기</button>
 								<button>관심상품등록</button>
-								<button>삭제</button>
+								<button class="delete-btn">삭제</button>
 		                    </td>
 	                    </th:block>
                    	</th:block>
@@ -64,7 +64,7 @@
         </table>
 
         <div class="total">
-            총 결제 금액: <strong>KRW 48,500</strong>
+            총 결제 금액: <strong>KRW </strong>
         </div>
 
         <div class="button-group">

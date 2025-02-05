@@ -70,8 +70,11 @@
 				<div th:each="i:${items}" class="product-item">
 					<img src="image/026.jpg" alt="상품 이미지">
 					<div class="product-details">
-						<p class="productNames">[[${i.productName}]]</p>
-						<p>₩[[${i.price}]]</p>
+						<p class="product-names">[[${i.productName}]]</p>
+						<p class="product-quantity">[[${i.quantity == 0 ? 1 : i.quantity}]]개</p>
+						<p class="product-total">
+							₩[[${#numbers.formatInteger((i.quantity == 0 ? 1 : i.quantity) * i.price, 3, 'COMMA')}]]
+						</p>
 					</div>
 				</div>
 			</div>
@@ -97,29 +100,31 @@
 			</div>
 
 			<!-- 결제정보 섹션 -->
-			<div class="section" th:each="i : ${items}">
-				<div class="section-title">결제정보</div>
-				<div class="summary-row">
-					<span>주문상품</span> <span>₩[[${i.price}]]</span>
-				</div>
-				<div class="summary-row">
-					<span>배송비</span> <span>₩0</span>
-				</div>
-				<div class="summary-row">
-					<span>할인/적립금</span> <span>-₩2000</span>
-				</div>
-				<div class="summary-row summary-total">
-					<span>최종 결제 금액</span> <span id="finalPrice">₩34900</span>
-				</div>
+			<!-- 결제정보 섹션 -->
+			<div class="section">
+			    <div class="section-title">결제정보</div>
+			    <div class="summary-row">
+			        <span>주문상품</span> <span id="orderAmount">₩0</span>
+			    </div>
+			    <div class="summary-row">
+			        <span>배송비</span> <span id="deliveryFee">₩0</span>
+			    </div>
+			    <div class="summary-row">
+			        <span>할인/적립금</span> <span id="discountAmount">₩0</span>
+			    </div>
+			    <div class="summary-row summary-total">
+			        <span>최종 결제 금액</span> <span id="finalAmount">₩0</span>
+			    </div>
 			</div>
+
 
 			<!-- 결제수단 섹션 -->
 			<div class="section">
 				<div class="section-title">결제수단</div>
 				<div class="form-row">
 					<label>결제수단</label> <select>
-<!-- 						<option>무통장입금</option> -->
-						<option>신용카드</option>
+						<option value="bank-transfer">무통장입금</option>
+						<option value="credit-card">신용카드</option>
 <!-- 						<option>가상계좌</option> -->
 <!-- 						<option>계좌이체</option> -->
 					</select>
@@ -127,7 +132,7 @@
 			</div>
 
 			<!-- 결제 버튼 -->
-			<button type="button" class="button" id="payButton">KRW 34,900 결제하기</button>
+			<button type="button" class="button" id="payButton">결제하기</button>
 			<div class="payment-buttons">
 				<img src="image/kakaopay_icon_medium.png" id="kakaopay" style="width: 165px; height: 50px; border-radius: 30px;">
 				<img src='image/tosspay_icon.JPG' id="tosspay" style="width: 165px; height: 50px; border-radius: 30px;">
@@ -142,8 +147,8 @@
 	</form>
 	<script th:inline="javascript" defer>
 		const user = /*[[${user}]]*/'null';
-		const items = /*[[${items}]]*/'null'; // 단일(바로결제) 의 경우 items 는 PurchaseItem 이라는 단일객체
-		// 장바구니에서 넘어온 경우에는 items 는 List<PurchaseItem>
+		const items = /*[[${items}]]*/'null'; // items 는 list 형태
+		
 		let aId;
 // 		if(items.length >= 2){
 			
