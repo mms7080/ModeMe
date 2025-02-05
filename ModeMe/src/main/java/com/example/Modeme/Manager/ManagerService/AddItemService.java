@@ -155,6 +155,9 @@ public class AddItemService {
     	icr.deleteById(id);
     	isr.deleteById(id);
         ar.deleteById(id);
+        // 4️⃣ 이미지 정보 삭제
+        productImageRepository.deleteByAddItemId(id);
+
         
     }
     
