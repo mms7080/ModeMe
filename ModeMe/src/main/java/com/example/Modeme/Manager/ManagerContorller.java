@@ -149,14 +149,14 @@ public class ManagerContorller {
         @RequestParam(required = false) String keyword,
         Model model, Principal principal
     ) {
-    	if(principal != null) {
-    		String username = principal.getName();
-    		model.addAttribute("username", username);
-    	}
-    	
+        if (principal != null) {
+            String username = principal.getName();
+            model.addAttribute("username", username);
+        }
+
         // 페이지네이션과 검색 조건을 고려한 상품 목록 조회
         Page<AddItem> productPage;
-        
+
         if (option != null && keyword != null && !keyword.isBlank()) {
             // 검색 호출
             productPage = as.searchProducts(option, keyword, PageRequest.of(page, size));
@@ -168,15 +168,24 @@ public class ManagerContorller {
         List<AddItem> products = productPage.getContent();
         int totalPages = productPage.getTotalPages();
 
+        // 첫 번째 이미지 URL 가져오기
+        List<String> firstImageUrls = new ArrayList<>();
+        for (AddItem product : products) {
+            String firstImageUrl = as.getFirstImageUrl(product.getId());
+            firstImageUrls.add(firstImageUrl);
+        }
+
         model.addAttribute("products", products);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("pageSize", size);
         model.addAttribute("option", option);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("firstImageUrls", firstImageUrls);  // 첫 번째 이미지 URL 리스트 전달
 
         return "manager/managerProduct";  // 상품 관리 페이지 반환
     }
+
     
  // 상품 삭제 처리
     @DeleteMapping("/manager/deleteProduct/{id}")

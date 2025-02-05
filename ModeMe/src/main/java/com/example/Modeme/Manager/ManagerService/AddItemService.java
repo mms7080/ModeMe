@@ -165,6 +165,16 @@ public class AddItemService {
     public List<AddItem> searchItems(String keyword) {
         return ar.findByNameContainingIgnoreCase(keyword);
     }
+    
+    public String getFirstImageUrl(Long productId) {
+        // AddItem 엔티티를 가져온 후 첫 번째 이미지 URL 반환
+        AddItem addItem = ar.findById(productId).orElse(null);
+        if (addItem != null && !addItem.getImageUrls().isEmpty()) {
+            return addItem.getImageUrls().get(0);  // 첫 번째 이미지 URL 반환
+        }
+        return null;  // 이미지가 없으면 null 반환
+    }
 }
+
 		
 
