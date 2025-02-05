@@ -41,16 +41,19 @@
                 	<td class="select-cell">
                 		<input class="item-checkbox" type="checkbox">
                 	</td>
-                    <td><img src="image/026.jpg" alt="상품"></td>
+                    <td>
+					  <img th:src="${(i.imageUrls != null and not #lists.isEmpty(i.imageUrls)) ? i.imageUrls[0] : '/image/default.jpg'}" 
+					       alt="상품 이미지" class="thumbnail-image" />
+					</td>
                     <td>[[${i.name}]]</td>
                     <td><span th:text="${#numbers.formatInteger(i.price, 3, 'COMMA')} + '원'"></span></td>
                    	<th:block th:each="s : ${sList}">
                    		<th:block th:if="${i.id == s.productId}">
 		                    <td>
-	                    		<input type="number" th:value="${s.quantity}" style="width:30px;">
+	                    		<input type="number" th:value="${s.quantity}" style="width:30px;" min="1">
 		                    </td>
 		                    <td>수정필요</td>
-		                    <td>모름</td>
+		                    <td>무료</td>
 		                    <td th:text="${#numbers.formatInteger(s.quantity * i.price, 3, 'COMMA')} + '원'"></td>
 		                    <td class="button-group-vertical">
 								<button>주문하기</button>
