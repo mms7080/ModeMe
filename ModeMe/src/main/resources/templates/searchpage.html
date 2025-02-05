@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ModeMe</title>
+<link href="css/main.css" rel="stylesheet">
+<script src="js/main.js" defer></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+</head>
+<body>
+
+	<div th:replace="~{header::header}"></div>
+
+
+	<!-- thymeleaf 적용된 리스트목록칸 -->
+<section>
+    <h2 class="section-title">🔎 검색 결과 : <span style="color: #666666;">"[[${searchKeyword}]]"</span></h2>
+    
+    <div class="product-grid">
+        <div th:if="${aList.size() > 0}" th:each="p : ${aList}" class="product-card">
+            <input type="hidden" th:value="${p.id}">
+            <img src="image/026.jpg" alt="">
+            <div class="hover-icons">
+                <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
+                <svg class="plus-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M12 5v14m-7-7h14"/>
+                </svg>
+            </div>
+            <p>[[${p.name}]]</p>
+            <p>[[${p.price}]]</p>
+            <div class="color-dots">
+                <span th:each="colors : ${p.colors}" class="color-dot" th:style="'background-color:' + ${colors}"></span>
+            </div>
+        </div>
+
+        <!-- 검색 결과가 없을 때 -->
+        <div th:if="${aList.size() == 0}" class="no-results">
+            <p>❌ "<span style="color: red;">[[${searchKeyword}]]</span>"에 대한 검색 결과가 없습니다.</p>
+        </div>
+    </div>
+</section>
+	<div style="height:100px;"></div>
+	
+	<div th:replace="~{footer::footer}"></div>
+</body>
+</html>

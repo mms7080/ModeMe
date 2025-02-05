@@ -1,6 +1,7 @@
 package com.example.Modeme.Manager.ManagerService;
 
 import java.beans.Transient;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -123,6 +124,11 @@ public class AddItemService {
     	isr.deleteById(id);
         ar.deleteById(id);
         
+    }
+    
+ // 상품 검색 메서드 추가
+    public List<AddItem> searchItems(String keyword) {
+        return ar.findByNameContainingIgnoreCase(keyword);
     }
 }
 		

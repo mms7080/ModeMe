@@ -133,7 +133,33 @@
                 alert("죄송합니다. 브라우저에서 즐겨찾기 추가를 지원하지 않습니다.");
             }
         });
-        // 
+       // 검색 기능
+		document.addEventListener("DOMContentLoaded", function () {
+		    const searchInput = document.querySelector(".search-input");
+		    const searchButton = document.querySelector(".search-button");
+		
+		    function performSearch() {
+		        const keyword = searchInput.value.trim();
+		        if (keyword) {
+		            window.location.href = `/search?keyword=${encodeURIComponent(keyword)}`;
+		        }
+		    }
+		
+		    // 검색 버튼 클릭 시 검색 실행
+		    searchButton.addEventListener("click", function () {
+		        performSearch();
+		    });
+		
+		    // 엔터 키 입력 시 검색 실행
+		    searchInput.addEventListener("keypress", function (event) {
+		        if (event.key === "Enter") {
+		            event.preventDefault(); // 폼 제출 방지
+		            performSearch();
+		        }
+		    });
+		});
+
+
 
 
     </script>

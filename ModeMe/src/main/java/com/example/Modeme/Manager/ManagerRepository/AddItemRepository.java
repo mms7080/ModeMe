@@ -1,5 +1,7 @@
 package com.example.Modeme.Manager.ManagerRepository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +17,6 @@ public interface AddItemRepository extends JpaRepository<AddItem, Long>{
 
     // 상품명으로 검색
     Page<AddItem> findByNameContaining(String name, Pageable pageable);
+    //상품 검색
+    List<AddItem> findByNameContainingIgnoreCase(String keyword);
 }
