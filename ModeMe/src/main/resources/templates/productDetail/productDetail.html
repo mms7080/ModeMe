@@ -44,22 +44,16 @@
 			<div class="product-images">
 				<div class="image-preview">
 					<!-- 메인 이미지 미리보기 -->
-					<img src="/image/prdDetailSample/4.jpg" alt="Main Preview"
-						class="preview-image" id="main-preview" />
+				<img th:if="${not #lists.isEmpty(product.imageUrls)}"
+						th:src="${#lists.isEmpty(product.imageUrls) ? '/image/default.jpg' : product.imageUrls[0]}"
+						alt="Main Preview" class="preview-image" id="main-preview" />
 				</div>
 				<div class="thumbnail-list">
 					<!-- 썸네일 이미지 -->
-					<div class="thumbnail">
-						<img src="/image/prdDetailSample/6.jpg" alt="Thumbnail 1"
-							class="thumbnail-image" />
-					</div>
-					<div class="thumbnail">
-						<img src="/image/prdDetailSample/2.jpg" alt="Thumbnail 2"
-							class="thumbnail-image" />
-					</div>
-					<div class="thumbnail">
-						<img src="/image/prdDetailSample/5.jpg" alt="Thumbnail 3"
-							class="thumbnail-image" />
+					<div class="thumbnail"
+						th:each="imageUrl, iterStat : ${product.imageUrls}"
+						th:if="${iterStat.index > 0}">
+						<img th:src="${imageUrl}" alt="Thumbnail" class="thumbnail-image" />
 					</div>
 				</div>
 			</div>
