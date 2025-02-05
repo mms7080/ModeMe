@@ -56,13 +56,13 @@
 			<thead>
 				<tr>
 					<th>번호</th>
+					<th>상품이미지</th>
 					<th>주문일시</th>
 					<th>카테고리</th>
 					<th>주문정보</th>
 					<th>수량</th>
 					<th>상품금액</th>
 					<th>주문아이디</th>
-					<th>주문자</th>
 					<th>주문상태</th>
 					<th> </th>
 				</tr>
@@ -70,13 +70,15 @@
 			<tbody>
 				<tr th:each="sale : ${saleData}">
 					<td th:text="${sale.id}"></td>
+					<td>
+						<img th:src="@{${sale.imageUrl}}" alt="상품 이미지" style="width: 50px; height: 50px;"/>
+					</td>
 					<td th:text="${sale.orderDate}"></td>
 					<td th:text="${sale.category}"></td>
 					<td th:text="${sale.itemname}"></td>
 					<td th:text="${sale.productMany}"></td>
 					<td th:text="${sale.totalPrice}"></td>
 					<td th:text="'🙍‍♂️'+${sale.username}"></td>
-					<td th:text="${sale.name}"></td>
 					<td>
 						<!-- process 상태를 변경하는 select box --> <select
 						class="process-select" data-sale-id="${sale.id}">

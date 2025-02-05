@@ -306,17 +306,17 @@ public class ManagerContorller {
     
     @GetMapping("/manager/ManagerSale")
     public String getSaleData(
-        @RequestParam(defaultValue = "0") int page,  // 기본값 0으로 설정
-        @RequestParam(defaultValue = "5") int size,  // 기본값 5로 설정
-        @RequestParam(required = false) String newProcess,  // 주문 상태 변경을 위한 newProcess 파라미터
-        @RequestParam(required = false) String searchOption,  // 검색 옵션
-        @RequestParam(required = false) String keyword,  // 검색어
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "5") int size,
+        @RequestParam(required = false) String newProcess,
+        @RequestParam(required = false) String searchOption,
+        @RequestParam(required = false) String keyword,
         Model model, Principal principal) {
 
         // 페이지 네이션 처리: 페이지와 사이즈 값을 Pageable 객체로 생성
         Pageable pageable = PageRequest.of(page, size);
 
-        // 판매 데이터를 가져오기 (newProcess, searchOption, keyword 파라미터에 따른 처리)
+        // 판매 데이터를 가져오기
         Page<ProductSaleDTO> saleData = mss.getSaleData(pageable, newProcess, searchOption, keyword);
 
         // 월별 판매 금액 데이터를 가져오기
@@ -334,13 +334,14 @@ public class ManagerContorller {
         model.addAttribute("salesByCategory", salesByCategory);
         model.addAttribute("orderCountByProcess", orderCountByProcess);
 
-        // 페이지네이션 정보 (현재 페이지와 총 페이지 수)
+        // 페이지네이션 정보
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", saleData.getTotalPages());
         model.addAttribute("pageSize", size);
 
         return "manager/managerSale"; // 뷰 이름 반환
     }
+
     
    
     @PutMapping("/manager/ManagerSale/{saleId}")

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.Modeme.Manager.ManagerDTO.ProductSaleDTO;
 import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
+import com.example.Modeme.Manager.ManagerRepository.ProductImageRepository;
 import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.User.UserRepository.UserRepository;
 import com.example.Modeme.purchase.dao.PurchaseRepository;
@@ -34,6 +36,10 @@ public class ManagerSaleService {
 
     @Autowired
     private UserRepository ur;
+    
+    @Autowired
+    private ProductImageRepository pir;
+
 
     public Page<ProductSaleDTO> getSaleData(Pageable pageable, String newProcess, String searchOption, String keyword) {
         // 페이지네이션을 내림차순으로 정렬
@@ -51,6 +57,7 @@ public class ManagerSaleService {
         } else {
             purchases = pr.findAll(sortedPageable);  // 기본적으로 모든 주문 가져오기
         }
+
         // 각 주문에 대해 상품 카테고리 및 기타 정보를 추가하여 DTO로 변환
         return purchases.map(purchase -> {
             // 주문 상태 변경 로직
@@ -72,6 +79,10 @@ public class ManagerSaleService {
                             .map(User::getName)
                             .orElse("Unknown User");
 
+            // 첫 번째 상품 이미지 URL 가져오기
+            List<String> firstImageUrls = pir.findFirstImageByProductId((long) purchase.getProductNumber());  
+            String firstImageUrl = firstImageUrls.isEmpty() ? "defaultImageUrl" : firstImageUrls.get(0); // 첫 번째 이미지 URL 사용
+
             // 주문 일시 형식 변환
             String formattedOrderDate = formatDate(purchase.getOrderDate());
 
@@ -85,10 +96,14 @@ public class ManagerSaleService {
                 purchase.getTotalPrice(),
                 purchase.getUsername(),
                 name,
-                purchase.getProcess()
+                purchase.getProcess(),
+                firstImageUrl  // 첫 번째 이미지 URL 추가
             );
         });
     }
+
+
+
 
 
     // 월별 판매 금액 데이터를 반환
