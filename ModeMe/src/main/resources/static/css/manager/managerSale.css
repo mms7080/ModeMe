@@ -59,6 +59,13 @@ header {
     margin-bottom: 8px;
 }
 
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px; /* 원하는 너비 설정 */
+}
+
 .infoBox p {
     font-size: 20px;
     font-weight: bold;
@@ -75,6 +82,14 @@ header {
     background-color: #fff;
     color: #333;
 }
+
+.ellipsis {
+  white-space: nowrap;  /* 텍스트가 한 줄로 표시되도록 */
+  overflow: hidden;     /* 넘치는 텍스트는 숨기기 */
+  text-overflow: ellipsis; /* 넘치는 부분은 '...'으로 표시 */
+  max-width: 200px;      /* 원하는 너비 설정 */
+}
+
 
 .notice-table select:hover {
     background-color: #f5f5f5;
