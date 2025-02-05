@@ -30,30 +30,27 @@
 				<tr th:each="product, iterStat : ${products}">
 					<td th:text="${product.id}"></td>
 					<td>
-						<!-- 첫 번째 이미지 출력 --> 
-						<img
-							th:if="${#lists.size(firstImageUrls) > iterStat.index}" 
-							th:src="@{${firstImageUrls[iterStat.index]}}" 
-							alt="첫 번째 이미지"
-							width="50" height="50" />
-						<!-- 이미지가 없을 경우 기본 이미지 표시 -->
-						<img th:if="${#lists.size(firstImageUrls) <= iterStat.index}" 
-							 src="/images/default-image.jpg" alt="기본 이미지"
-							 width="50" height="50" />
+						<!-- 첫 번째 이미지 출력 --> <img
+						th:if="${#lists.size(firstImageUrls) > iterStat.index}"
+						th:src="@{${firstImageUrls[iterStat.index]}}" alt="첫 번째 이미지"
+						width="50" height="50" /> <!-- 이미지가 없을 경우 기본 이미지 표시 --> <img
+						th:if="${#lists.size(firstImageUrls) <= iterStat.index}"
+						src="/images/default-image.jpg" alt="기본 이미지" width="50"
+						height="50" />
 					</td>
 					<td>
-						<!-- 상품명 클릭 시 상세 페이지로 이동 --> 
-						<a
-							th:href="@{'/productDetail/productDetail/' + ${product.id}}"
-							th:text="${product.name}"></a>
+						<!-- 상품명 클릭 시 상세 페이지로 이동 --> <a
+						th:href="@{'/productDetail/productDetail/' + ${product.id}}"
+						th:text="${product.name}"></a>
 					</td>
 					<td th:text="${product.category}"></td>
 					<td th:text="${product.price}"></td>
 					<td th:text="${product.colorNames}"></td>
 					<td th:text="${product.stock}"></td>
 					<td>
-						<button id="modifyButton" class="admin-edit-button"
-							th:data-product-id="${product.id}">♻️</button>
+						<!-- 수정 버튼을 상품 ID와 함께 표시 -->
+						<button class="modifyButton" th:data-product-id="${product.id}">♻️</button>
+
 						<button class="deleteButton" th:data-id="${product.id}">❌</button>
 					</td>
 				</tr>
@@ -76,12 +73,11 @@
 		</div>
 		<div class="search-section">
 			<form th:action="@{/manager/managerProduct}" method="get">
-				<label for="search-option">검색 옵션:</label> 
-				<select id="search-option" name="option">
+				<label for="search-option">검색 옵션:</label> <select id="search-option"
+					name="option">
 					<option value="category" th:selected="${option == 'category'}">카테고리</option>
 					<option value="name" th:selected="${option == 'name'}">상품명</option>
-				</select> 
-				<input type="text" id="search-input" name="keyword"
+				</select> <input type="text" id="search-input" name="keyword"
 					placeholder="검색어를 입력하세요" th:value="${keyword}">
 				<button type="submit">검색</button>
 			</form>

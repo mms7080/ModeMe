@@ -37,18 +37,20 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    const modifyButton = document.getElementById("modifyButton");
+    // 수정 버튼들의 클래스 선택
+    const modifyButtons = document.querySelectorAll(".modifyButton"); 
 
-    if (modifyButton) {
+    modifyButtons.forEach(modifyButton => {
         modifyButton.addEventListener("click", function() {
-            const productId = this.getAttribute("data-product-id"); // 버튼에 id 속성 추가 필요
+            const productId = this.getAttribute("data-product-id"); // 버튼의 data-product-id 속성 값 가져오기
             if (productId) {
+                // 상품 ID를 포함한 URL로 리디렉션
                 window.location.href = `/productDetail/productEdit/${productId}`;
             } else {
                 alert("상품 ID를 찾을 수 없습니다.");
             }
         });
-    }
+    });
 });
 
  
