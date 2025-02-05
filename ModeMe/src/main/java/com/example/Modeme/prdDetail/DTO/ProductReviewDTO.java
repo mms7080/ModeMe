@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProductReviewDTO {
     private Long id;
-    private String title;
     private String content;
     private String commentedTime; // "yyyy-MM-dd HH:mm" 형식의 문자열
     private String username;      // 리뷰 작성자
@@ -29,49 +28,7 @@ public class ProductReviewDTO {
     public void setLikeCount(long likeCount) {
         this.likeCount = likeCount;
     }
-
-    // 단순 변환 (좋아요 정보 없이)
-//    public static ProductReviewDTO fromEntity(ProductReview review) {
-//        String formattedTime = "";
-//        if (review.getCommentedTime() != null) {
-//            formattedTime = review.getCommentedTime()
-//                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-//        }
-//        return new ProductReviewDTO(
-//            review.getId(),
-//            review.getTitle(),
-//            review.getContent(),
-//            formattedTime,
-//            review.getUsers().getUsername(),
-//            0,          // 기본 좋아요 개수 0
-//            false       // 기본값 false
-//        );
-//    }
     
-    // 좋아요 정보까지 포함하는 변환
-//    public static ProductReviewDTO fromEntity(ProductReview review, ReviewLikeRepository likeRepo, User currentUser) {
-//        String formattedTime = "";
-//        if (review.getCommentedTime() != null) {
-//            formattedTime = review.getCommentedTime()
-//                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-//        }
-//
-//        long count = likeRepo.countByReview(review);  // 좋아요 개수 가져오기
-//        boolean liked = false;
-//        if (currentUser != null) {
-//            liked = likeRepo.findByUserAndReview(currentUser, review).isPresent();
-//        }
-//
-//        return new ProductReviewDTO(
-//            review.getId(),
-//            review.getTitle(),
-//            review.getContent(),
-//            formattedTime,
-//            review.getUsers().getUsername(),
-//            count, // 좋아요 개수 추가
-//            liked
-//        );
-//    }
     // 좋아요 정보 포함 변환
     public static ProductReviewDTO fromEntity(ProductReview review, ReviewLikeRepository likeRepo, User currentUser) {
         String formattedTime = "";
@@ -85,7 +42,6 @@ public class ProductReviewDTO {
 
         return new ProductReviewDTO(
             review.getId(),
-            review.getTitle(),
             review.getContent(),
             formattedTime,
             review.getUsers().getUsername(),

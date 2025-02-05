@@ -53,7 +53,7 @@ public class ProductDetailService {
     }
     
     // 리뷰 작성
-    public ProductReview saveReview(Long id,  String username, String title, String content) {
+    public ProductReview saveReview(Long id,  String username, String content) {
         AddItem product = addItemRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다. ID: " + id));
 
@@ -65,7 +65,6 @@ public class ProductDetailService {
         review.setAddItem(product);
         review.setUsers(user);
         review.setContent(content);
-        review.setTitle(title);
         review.setCommentedTime(LocalDateTime.now()); // 현재 시간 설정
 
         return reviewRepository.save(review); // 리뷰 저장
@@ -93,7 +92,7 @@ public class ProductDetailService {
     }
     
     // 리뷰 수정
-    public void editReview(Long reviewId, String username, String Title, String content) throws AccessDeniedException {
+    public void editReview(Long reviewId, String username, String content) throws AccessDeniedException {
     	ProductReview review = reviewRepository.findById(reviewId).orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다"));
     	
     	// 권한 확인 : 작성자만 수정 가능
@@ -102,7 +101,6 @@ public class ProductDetailService {
         }
     	
     	// 리뷰 수정
-    	review.setTitle(Title);
     	review.setContent(content);
     	reviewRepository.save(review);
     }

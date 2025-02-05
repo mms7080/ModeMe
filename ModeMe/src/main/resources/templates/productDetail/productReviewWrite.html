@@ -32,9 +32,6 @@
 
         <!-- Review Form -->		    
 		<form th:action="@{/productDetail/{id}/review(id=${product.id ?: 0})}" method="post">
-		    <!-- 제목 -->
-		    <label for="title">제목</label>
-		    <input type="text" class="title" id="title" name="title" placeholder="제목을 입력하세요" required>
 		
 		    <!-- 내용 -->
 		    <label for="content">내용</label>

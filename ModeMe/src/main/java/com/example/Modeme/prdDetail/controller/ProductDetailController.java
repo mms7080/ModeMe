@@ -182,12 +182,12 @@ public class ProductDetailController {
 
 	// 리뷰 작성
 	@PostMapping("/{id}/review")
-	public String saveReview(@PathVariable Long id, @RequestParam String title, @RequestParam String content, Principal principal) {
+	public String saveReview(@PathVariable Long id, @RequestParam String content, Principal principal) {
 		if (principal == null) {
 			throw new IllegalArgumentException("로그인이 필요합니다.");
 		}
 		String username = principal.getName();
-		detailService.saveReview(id, username, title, content);
+		detailService.saveReview(id, username, content);
 		
 		// 정확한 상세 페이지로 리다이렉트
 		return "redirect:/productDetail/productDetail/" + id;
@@ -250,7 +250,6 @@ public class ProductDetailController {
 	@PostMapping("/review/{reviewId}/edit")
 	public String editReview(
 	        @PathVariable Long reviewId,
-	        @RequestParam String title,
 	        @RequestParam String content,
 	        Principal principal) throws AccessDeniedException {
 		
@@ -260,7 +259,7 @@ public class ProductDetailController {
 	    ProductReview review = reviewRepository.findById(reviewId).orElseThrow(() ->
 	    	new IllegalArgumentException("리뷰를 찾을 수 없습니다. ID: " + reviewId));
 	    String username = principal.getName();
-	    detailService.editReview(reviewId, username, title, content);
+	    detailService.editReview(reviewId, username, content);
 	    // 수정 후 리다이렉트
 	    return "redirect:/productDetail/productDetail/" + review.getAddItem().getId();
 	}

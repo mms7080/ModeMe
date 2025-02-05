@@ -206,7 +206,6 @@ document.addEventListener("DOMContentLoaded", function() {
 					const reviewItem = document.createElement("div");
 					reviewItem.classList.add("review-item");
 					reviewItem.innerHTML = `
-                   <h4>${review.title}</h4>
                    <p>${review.content}</p>
                    <small>${review.commentedTime}</small>
 

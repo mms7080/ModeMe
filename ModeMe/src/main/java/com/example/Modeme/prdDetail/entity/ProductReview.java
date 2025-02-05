@@ -46,9 +46,6 @@ public class ProductReview {
 	@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
 	private User users;
 
-	@Column(nullable = false, length = 50)
-	private String title;
-
 	@Column(nullable = false, length = 500)
 	private String content;
 	

@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.prdDetail.entity.ProductReview;
 
 @Repository
@@ -15,18 +14,10 @@ public interface ProductReviewRepository extends JpaRepository<ProductReview, Lo
     List<ProductReview> findByAddItemId(Long addItemId);
     // 리뷰 삭제
     void deleteById(Long reviewId);
-    //  특정 상품의 모든 리뷰 삭제 
-    void deleteByAddItemId(Long addItemId);
     // 상품 리뷰 갯수
     int countByAddItemId(Long addItemId);
     // 페이지네이션
     Page<ProductReview> findByAddItemId(Long addItemId, Pageable pageable);
-    
-	Long countByUsers(User user);
-	
-	Page<ProductReview> findByAddItemNameContaining(String keyword, Pageable pageable);
-	
-	Page<ProductReview> findByUsersUsernameContaining(String keyword, Pageable pageable);
 
 
 }
