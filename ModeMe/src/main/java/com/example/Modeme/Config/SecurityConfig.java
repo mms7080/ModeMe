@@ -57,7 +57,8 @@ public class SecurityConfig {
                     "/productDetail/productEdit/**",
                     "/productDetail/**",
                     "/purchase",
-                    "/cart/**"
+                    "/cart/**",
+                    "/api/drive/**"
 
                 )
             )

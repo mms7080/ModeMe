@@ -1,6 +1,8 @@
 package com.example.Modeme.Manager;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +31,7 @@ import com.example.Modeme.Manager.ManagerDTO.AddItemDTO;
 import com.example.Modeme.Manager.ManagerDTO.ProductSaleDTO;
 import com.example.Modeme.Manager.ManagerDTO.UserDataDTO;
 import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
+import com.example.Modeme.Manager.ManagerRepository.ProductImageRepository;
 import com.example.Modeme.Manager.ManagerService.AddItemService;
 import com.example.Modeme.Manager.ManagerService.ManagerReviewService;
 import com.example.Modeme.Manager.ManagerService.ManagerSaleService;
@@ -65,7 +68,7 @@ public class ManagerContorller {
 
     @Autowired
     private QnaRepository qnaRepository;
-
+    
     @Autowired
     private AddItemService as;
 
@@ -119,13 +122,19 @@ public class ManagerContorller {
 
     // 상품 등록
     @PostMapping("/manager/new")
-    public String addItem(@ModelAttribute AddItemDTO addItemDTO, Principal principal) {
+    public String addItem(@ModelAttribute AddItemDTO addItemDTO, Principal principal,
+    		@RequestParam(value = "imageUrls", required = false) List<String> imageUrls) {
     	
     	if(principal != null) {
     		String username = principal.getName();
     		System.out.println("상품 삭제한 사용자:" + username);
-    	}
+    	}	
+    	 if (imageUrls == null || imageUrls.isEmpty()) {
+    	        System.out.println("🚨 imageUrls 값이 없습니다! 빈 리스트로 처리합니다.");
+    	        imageUrls = new ArrayList<>(); // 빈 리스트로 초기화
+    	    }
         // 상품 등록 및 저장
+    	addItemDTO.setImageUrls(imageUrls);
         AddItem savedItem = as.addItemWithImages(addItemDTO);
 
         // 상품 등록 후 상세 페이지로 리다이렉트
