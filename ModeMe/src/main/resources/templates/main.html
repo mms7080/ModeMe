@@ -172,7 +172,7 @@
 					</svg>
 				</div>
 				<p>[[${p.name}]]</p>
-				<p>[[${p.price}]]</p>
+				<p>KRW [[${#numbers.formatInteger(p.price, 0, 'COMMA').replace(',', '.')}]]원</p>
 				<div class="color-dots">
 					<span th:each="colors : ${p.colors}" class="color-dot" th:style="'background-color:' + ${colors}"></span>
 				</div>
