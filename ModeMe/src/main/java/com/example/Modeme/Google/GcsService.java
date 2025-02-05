@@ -31,7 +31,9 @@ package com.example.Modeme.Google;
 //}
 
 
+import com.google.auth.oauth2.AccessToken;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
@@ -43,6 +45,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.UUID;
 
 @Service
@@ -52,8 +55,10 @@ public class GcsService {
 	    private final String bucketName = "modeme_image_111";
 
 	    public GcsService() throws IOException {
+
 	        this.storage = StorageOptions.newBuilder()
-	                .setCredentials(GoogleCredentials.fromStream(new FileInputStream("src/main/resources/credentials.json")))
+	                .setCredentials(ServiceAccountCredentials.fromStream(new FileInputStream("src/main/resources/credentials.json"))
+	    	    		    .createScoped(Collections.singleton("https://www.googleapis.com/auth/cloud-platform")))
 	                .build()
 	                .getService();
 	    }
