@@ -14,11 +14,11 @@
 	<div th:replace="~{header::header}"></div>
 	
     <div class="container">
-        <h1>장바구니</h1>
+        <h1>🛒 장바구니</h1>
 
         <div class="summary">
             <div>총 상품 금액: <strong>KRW </strong></div>
-            <div>배송비: <strong>KRW 0</strong></div>
+            <div>배송비: <strong>0원</strong></div>
             <div>합계: <strong>KRW </strong></div>
         </div>
 
@@ -57,8 +57,8 @@
 		                    <td th:text="${#numbers.formatInteger(s.quantity * i.price, 3, 'COMMA')} + '원'"></td>
 		                    <td class="button-group-vertical">
 								<button>주문하기</button>
-								<button>관심상품등록</button>
-								<button class="delete-btn">삭제</button>
+								<button>♥️관심상품등록</button>
+								<button class="delete-btn">❌</button>
 		                    </td>
 	                    </th:block>
                    	</th:block>

@@ -12,26 +12,26 @@
 	<!-- 헤더 -->
 	<div th:replace="~{header :: header}"></div>
 
-	<h1>ADMIN</h1>
+	<h1>👩‍💼 ADMIN</h1>
 	<main>
 		<!-- 관리자 대시보드 헤더 -->
 		<div class="dashboardHeader">
 			<div class="infoBox">
-				<h3>총 회원</h3>
+				<h3>🙍‍♂️ 총 회원</h3>
 				<a href="/manager/users" class="totalUsersLink">
 					<p th:text="${totalUsers} + '명'">0명</p>
 				</a>
 			</div>
 			<div class="infoBox">
-				<h3>등록된 상품</h3>
+				<h3>📦 등록된 상품</h3>
 				<p th:text="${totalItems} + '개'">0개</p>
 			</div>
 			<div class="infoBox">
-				<h3>QnA 글</h3>
+				<h3>⁉️ QnA 글</h3>
 				<p th:text="${totalQnAs} + '개'">0개</p>
 			</div>
 			<div class="infoBox">
-				<h3>리뷰</h3>
+				<h3>✅ 리뷰</h3>
 				<p th:text="${totalReviews} + '개'">0개</p>
 			</div>
 		</div>

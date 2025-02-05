@@ -68,8 +68,8 @@
                      th:text="${content.productMany}"></span> <span
                      th:text="${content.totalPrice}"></span> <span
                      th:switch="${content.process}"> 
-                     <span th:case="'before'">💵 입금 전</span> 
-                     <span th:case="'ready'">🧸 배송준비 중</span>
+                     <span th:case="'before'">⏰ 입금 전</span> 
+                     <span th:case="'ready'">📦 배송준비 중</span>
                      <span th:case="'delivery'">🚛 배송 중</span> 
                      <span th:case="'done'">✅ 배송완료</span>
                      <span th:case="*">기타</span> <!-- 예상치 못한 값 처리 -->

@@ -24,7 +24,7 @@
     }
 
     .container {
-        width: 80%;
+        width: 70%;
         max-width: 1200px;
         margin: 0 auto;
         padding: 20px;
@@ -314,5 +314,6 @@
 .image-preview:hover .preview-image {
     transform: scale(1.5); /* 1.5배 확대 */
 }
+
 
     
