@@ -12,7 +12,7 @@
 	<!-- 헤더푸터-->
 	<div th:replace="~{header :: header}"></div>
 	<main>
-		<h1>상품관리</h1>
+		<h1>📜 상품관리</h1>
 		<table class="notice-table">
 			<thead>
 				<tr>
@@ -39,8 +39,8 @@
 					<td th:text="${product.stock}"></td>
 					<td>
 						<button id="modifyButton" class="admin-edit-button"
-							th:data-product-id="${product.id}">수정</button>
-						<button class="deleteButton" th:data-id="${product.id}">삭제</button>
+							th:data-product-id="${product.id}">♻️</button>
+						<button class="deleteButton" th:data-id="${product.id}">❌</button>
 					</td>
 				</tr>
 			</tbody>

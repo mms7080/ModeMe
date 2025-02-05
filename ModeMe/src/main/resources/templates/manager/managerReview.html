@@ -11,7 +11,7 @@
 	<!-- 헤더푸터-->
 	<div th:replace="~{header :: header}"></div>
 	<main>
-		<h1>리뷰관리</h1>
+		<h1>📝 리뷰관리</h1>
 		<table class="notice-table">
 			<thead>
 				<tr>
@@ -29,14 +29,14 @@
 					<td><a th:href="@{'/productDetail/productDetail/' + ${review.addItem.id} + '#prdReview'}"
 					 th:text="${review.addItem.name}"></a></td>
 					<!-- 상품명 -->
-					<td th:text="${review.users.username}"></td>
+					<td th:text="'🙍‍♂️'+${review.users.username}"></td>
 					<!-- 작성자 -->
 					<td th:text="${review.users.name}"></td>
 					<!-- 작성자 이름 -->
 					<td th:text="${review.content}" class="ellipsis"></td>
 					<td>
 						<!-- data-id로 리뷰 ID를 전달하여 JavaScript로 삭제 처리 -->
-						<button class="deleteButton" th:data-id="${review.id}">삭제</button>
+						<button class="deleteButton" th:data-id="${review.id}">❌</button>
 					</td>
 				</tr>
 			</tbody>

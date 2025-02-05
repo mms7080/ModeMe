@@ -13,26 +13,26 @@
 	<div th:replace="~{header :: header}"></div>
 
 	<main>
-		<h1>주문 관리</h1>
+		<h1>🛒 주문 관리</h1>
 
 		<div class="dashboardHeader">
 			<div class="infoBox">
-				<h3>입금 전</h3>
+				<h3>⏰ 입금 전</h3>
 				<p
 					th:text="${#strings.isEmpty(orderCountByProcess['before']) ? 0 : orderCountByProcess['before']}+'건'">0건</p>
 			</div>
 			<div class="infoBox">
-				<h3>배송준비 중</h3>
+				<h3>📦 배송준비 중</h3>
 				<p
 					th:text="${#strings.isEmpty(orderCountByProcess['ready']) ? 0 : orderCountByProcess['ready']}+'건'">0건</p>
 			</div>
 			<div class="infoBox">
-				<h3>배송 중</h3>
+				<h3>🚛 배송 중</h3>
 				<p
 					th:text="${#strings.isEmpty(orderCountByProcess['delivery']) ? 0 : orderCountByProcess['delivery']}+'건'">0건</p>
 			</div>
 			<div class="infoBox">
-				<h3>배송완료</h3>
+				<h3>✅ 배송완료</h3>
 				<p
 					th:text="${#strings.isEmpty(orderCountByProcess['done']) ? 0 : orderCountByProcess['done']}+'건'">0건</p>
 			</div>
@@ -75,7 +75,7 @@
 					<td th:text="${sale.itemname}"></td>
 					<td th:text="${sale.productMany}"></td>
 					<td th:text="${sale.totalPrice}"></td>
-					<td th:text="${sale.username}"></td>
+					<td th:text="'🙍‍♂️'+${sale.username}"></td>
 					<td th:text="${sale.name}"></td>
 					<td>
 						<!-- process 상태를 변경하는 select box --> <select
@@ -92,10 +92,10 @@
 					<td>
 						<!-- 수정 버튼 -->
 						<button class="update-process-btn"
-							th:attr="data-sale-id=${sale.id}">수정</button> 
+							th:attr="data-sale-id=${sale.id}">♻️</button> 
 						<!-- 삭제 버튼 -->
 						<button class="delete-process-btn"
-							th:attr="data-sale-id=${sale.id}">삭제</button>
+							th:attr="data-sale-id=${sale.id}">❌</button>
 					</td>
 				</tr>
 			</tbody>
