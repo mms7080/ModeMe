@@ -20,6 +20,13 @@ public interface ProductReviewRepository extends JpaRepository<ProductReview, Lo
     // 페이지네이션
     Page<ProductReview> findByAddItemId(Long addItemId, Pageable pageable);
 	Long countByUsers(User user);
+	
+	void deleteByAddItemId(Long addItemId);
+    // ✅ AddItem의 name을 기준으로 리뷰 검색
+    Page<ProductReview> findByAddItem_NameContaining(String keyword, Pageable pageable);
+
+    // ✅ Users의 username을 기준으로 리뷰 검색
+    Page<ProductReview> findByUsers_UsernameContaining(String keyword, Pageable pageable);
 
 
 }

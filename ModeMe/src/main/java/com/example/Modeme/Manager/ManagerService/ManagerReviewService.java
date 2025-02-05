@@ -26,14 +26,15 @@ public class ManagerReviewService {
         return prs.findAll(pageable);
 	}
 	
-	 public Page<ProductReview> searchReviews(String option, String keyword, Pageable pageable) {
-	        if ("productName".equals(option)) {
-	            return prs.findByAddItemNameContaining(keyword, pageable);
-	        } else if ("user".equals(option)) {
-	            return prs.findByUsersUsernameContaining(keyword, pageable);
-	        } else {
-	            return Page.empty(pageable);  // 잘못된 검색 옵션 처리
-	        }
+	public Page<ProductReview> searchReviews(String option, String keyword, Pageable pageable) {
+	    if ("productName".equals(option)) {
+	        return prs.findByAddItem_NameContaining(keyword, pageable);
+	    } else if ("user".equals(option)) {
+	        return prs.findByUsers_UsernameContaining(keyword, pageable);
+	    } else {
+	        return Page.empty(pageable);  // 잘못된 검색 옵션 처리
 	    }
+	}
+
 	
 }
