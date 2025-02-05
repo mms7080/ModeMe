@@ -25,6 +25,7 @@ public class SearchController {
         List<AddItem> searchResults = addItemService.searchItems(keyword);
         model.addAttribute("aList", searchResults);
         model.addAttribute("searchKeyword", keyword); // 검색어 추가
+        model.addAttribute("resultCount", searchResults.size()); // 검색 결과 개수 추가
         
      // 로그인 상태 확인 (Spring Security 사용)
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

@@ -16,10 +16,13 @@
 
 	<!-- thymeleaf 적용된 리스트목록칸 -->
 <section>
-    <h2 class="section-title">🔎 검색 결과 : <span style="color: #666666;">"[[${searchKeyword}]]"</span></h2>
-    
+    <h2 class="section-title">
+        🔎 "<span style="color: #666666;">[[${searchKeyword}]]</span>" 에 대한 검색 결과 <br>
+        <p style="font-size: 14px; color: black;">총 [[${resultCount}]] 개의 상품이 검색되었습니다</p>
+    </h2>
+
     <div class="product-grid">
-        <div th:if="${aList.size() > 0}" th:each="p : ${aList}" class="product-card">
+        <div th:if="${resultCount > 0}" th:each="p : ${aList}" class="product-card">
             <input type="hidden" th:value="${p.id}">
             <img src="image/026.jpg" alt="">
             <div class="hover-icons">
@@ -38,11 +41,12 @@
         </div>
 
         <!-- 검색 결과가 없을 때 -->
-        <div th:if="${aList.size() == 0}" class="no-results">
+        <div th:if="${resultCount == 0}" class="no-results">
             <p>❌ "<span style="color: red;">[[${searchKeyword}]]</span>"에 대한 검색 결과가 없습니다.</p>
         </div>
     </div>
 </section>
+
 	<div style="height:100px;"></div>
 	
 	<div th:replace="~{footer::footer}"></div>
