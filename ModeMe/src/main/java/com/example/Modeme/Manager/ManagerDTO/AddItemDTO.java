@@ -17,9 +17,15 @@ public class AddItemDTO {
     private String subcategory; // 서브 카테고리
     private List<String> productSizes; // 상품 사이즈 리스트 (변경됨)
     private String productDescription; // 상품 상세정보
-    // private List<ProductImage> images; // 이미지 관련 (주석 처리된 상태 유지)
+    private List<String> imageUrls; // 🔹 이미지 URL을 저장할 필드 추가
 
-    // Getter and Setter methods
+    public List<String> getImageUrls() {
+		return imageUrls;
+	}
+	public void setImageUrls(List<String> imageUrls) {
+		this.imageUrls = imageUrls;
+	}
+	// Getter and Setter methods
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

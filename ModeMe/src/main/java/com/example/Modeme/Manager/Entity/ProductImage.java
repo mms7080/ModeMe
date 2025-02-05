@@ -1,28 +1,43 @@
-//package com.example.Modeme.Manager.Entity;
-//
-//import jakarta.persistence.Column;
-//import jakarta.persistence.Entity;
-//import jakarta.persistence.GeneratedValue;
-//import jakarta.persistence.GenerationType;
-//import jakarta.persistence.Id;
-//import jakarta.persistence.JoinColumn;
-//import jakarta.persistence.ManyToOne;
-//import jakarta.persistence.Table;
-//import lombok.Data;
-//
-//@Data
-//@Entity
-//@Table(name = "ProductImages")
-//public class ProductImage {
-//
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
-//
-//    @Column(nullable = false)
-//    private String imageUrl; // 이미지 파일 경로
-//
-//    @ManyToOne
-//    @JoinColumn(name = "AddItem", nullable = false) // 외래키
-//    private AddItem addItem; // 해당 이미지를 포함한 상품
-//}
+package com.example.Modeme.Manager.Entity;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "ProductImage")
+public class ProductImage {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String imageUrl; // GCS에 저장된 이미지 URL
+
+    @ManyToOne
+    @JoinColumn(name = "add_item_id")
+    private AddItem addItem; // 상품과 연결
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public AddItem getAddItem() {
+        return addItem;
+    }
+
+    public void setAddItem(AddItem addItem) {
+        this.addItem = addItem;
+    }
+}

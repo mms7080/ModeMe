@@ -31,38 +31,35 @@
 			<li><a><b>상품구매</b></a></li>
 			<li><a href="#prdDetail">상품상세정보</a></li>
 			<li><a href="#prdInfo">상품구매안내</a></li>
-			<li class="selected">
-    			<a href="#prdReview">
-			        상품후기 <span class="reviewcount" th:text="${reviewCount}">0</span>
-			    </a>
-			</li>
+			<li class="selected"><a href="#prdReview"> 상품후기 <span
+					class="reviewcount" th:text="${reviewCount}">0</span>
+			</a></li>
 		</ul>
 
 		<!-- Product Section -->
 		<div class="product-section">
 			<!-- Product Images -->
+			<!-- 상품 이미지 표시 -->
+
+			<!-- 메인 이미지 표시 -->
 			<div class="product-images">
 				<div class="image-preview">
-					<!-- 메인 이미지 미리보기 -->
-					<img src="/image/prdDetailSample/4.jpg" alt="Main Preview"
-						class="preview-image" id="main-preview" />
+					<img th:if="${not #lists.isEmpty(product.imageUrls)}"
+						th:src="${#lists.isEmpty(product.imageUrls) ? '/image/default.jpg' : product.imageUrls[0]}"
+						alt="Main Preview" class="preview-image" id="main-preview" />
 				</div>
+
+				<!-- 썸네일 리스트 -->
 				<div class="thumbnail-list">
-					<!-- 썸네일 이미지 -->
-					<div class="thumbnail">
-						<img src="/image/prdDetailSample/6.jpg" alt="Thumbnail 1"
-							class="thumbnail-image" />
-					</div>
-					<div class="thumbnail">
-						<img src="/image/prdDetailSample/2.jpg" alt="Thumbnail 2"
-							class="thumbnail-image" />
-					</div>
-					<div class="thumbnail">
-						<img src="/image/prdDetailSample/5.jpg" alt="Thumbnail 3"
-							class="thumbnail-image" />
+					<div class="thumbnail"
+						th:each="imageUrl, iterStat : ${product.imageUrls}"
+						th:if="${iterStat.index > 0}">
+						<img th:src="${imageUrl}" alt="Thumbnail" class="thumbnail-image" />
 					</div>
 				</div>
 			</div>
+
+
 
 			<div class="product-void"></div>
 
@@ -120,11 +117,9 @@
 			<li><a href="#prdBuy">상품구매</a></li>
 			<li><a><b>상품상세정보</b></a></li>
 			<li><a href="#prdInfo">상품구매안내</a></li>
-			<li class="selected">
-    			<a href="#prdReview">
-			        상품후기 <span class="reviewcount" th:text="${reviewCount}">0</span>
-			    </a>
-			</li>
+			<li class="selected"><a href="#prdReview"> 상품후기 <span
+					class="reviewcount" th:text="${reviewCount}">0</span>
+			</a></li>
 		</ul>
 
 		<div class="product-description">
@@ -146,11 +141,9 @@
 			<li><a href="#prdBuy">상품구매</a></li>
 			<li><a href="#prdDetail">상품상세정보</a></li>
 			<li><a><b>상품구매안내</b></a></li>
-			<li class="selected">
-    			<a href="#prdReview">
-			        상품후기 <span class="reviewcount" th:text="${reviewCount}">0</span>
-			    </a>
-			</li>
+			<li class="selected"><a href="#prdReview"> 상품후기 <span
+					class="reviewcount" th:text="${reviewCount}">0</span>
+			</a></li>
 		</ul>
 
 		<h3>상품결제정보</h3>
@@ -205,48 +198,52 @@
 			<li><a href="#prdBuy">상품구매</a></li>
 			<li><a href="#prdDetail">상품상세정보</a></li>
 			<li><a href="#prdInfo">상품구매안내</a></li>
-			<li class="selected">
-    			<a href="#prdReview">
-			        상품후기 <span class="reviewcount" th:text="${reviewCount}">0</span>
-			    </a>
-			</li>
+			<li class="selected"><a href="#prdReview"> 상품후기 <span
+					class="reviewcount" th:text="${reviewCount}">0</span>
+			</a></li>
 		</ul>
 
 		<div class="section-header">상품후기</div>
 
 		<!-- 리뷰 목록 -->
-		<div class="review-list" id="review-list" th:if="${not #lists.isEmpty(reviews)}">
-		    <div class="review-item" th:each="review : ${reviews}">
-		        <h4 th:text="${review.title}">리뷰 제목</h4>
-		        <p th:text="${review.content}">리뷰 내용</p>
-		        <small th:text="${#temporals.format(review.commentedTime, 'yyyy-MM-dd HH:mm')}"></small>
-		        
-		        <!-- 좋아요 버튼 -->
-                <div class="like-section">
-                    <button type="button" class="like-button ${review.liked ? 'liked' : ''}" th:attr="data-review-id=${review.id}">
-					    <span class="like-text">좋아요</span>
+		<div class="review-list" id="review-list"
+			th:if="${not #lists.isEmpty(reviews)}">
+			<div class="review-item" th:each="review : ${reviews}">
+				<h4 th:text="${review.title}">리뷰 제목</h4>
+				<p th:text="${review.content}">리뷰 내용</p>
+				<small
+					th:text="${#temporals.format(review.commentedTime, 'yyyy-MM-dd HH:mm')}"></small>
+
+				<!-- 좋아요 버튼 -->
+				<div class="like-section">
+					<button type="button"
+						class="like-button ${review.liked ? 'liked' : ''}"
+						th:attr="data-review-id=${review.id}">
+						<span class="like-text">좋아요</span>
 					</button>
-					<span class="like-count" id="like-count-[[${review.id}]]" th:text="${review.likeCount}">0</span>
-                </div>
-		        
-		        <!-- 현재 로그인한 사용자와 작성자가 동일한 경우에만 수정/삭제 버튼 표시 -->
-		        <div th:if="${review.users.username == #authentication.name}">
-		            <a th:href="@{/productDetail/review/{id}/edit(id=${review.id})}">
-		                <button type="button">수정</button>
-		            </a>
-		            <form th:action="@{/productDetail/review/{id}/delete(id=${review.id})}" method="post">
-		                <button type="submit">삭제</button>
-		            </form>
-		        </div>
-		    </div>
+					<span class="like-count" id="like-count-[[${review.id}]]"
+						th:text="${review.likeCount}">0</span>
+				</div>
+
+				<!-- 현재 로그인한 사용자와 작성자가 동일한 경우에만 수정/삭제 버튼 표시 -->
+				<div th:if="${review.users.username == #authentication.name}">
+					<a th:href="@{/productDetail/review/{id}/edit(id=${review.id})}">
+						<button type="button">수정</button>
+					</a>
+					<form
+						th:action="@{/productDetail/review/{id}/delete(id=${review.id})}"
+						method="post">
+						<button type="submit">삭제</button>
+					</form>
+				</div>
+			</div>
 		</div>
-		
+
 		<!-- 페이지네이션 -->
-		<div class="pagination"
-		     th:if="${reviewPage.totalPages > 1}"
-		     th:attr="data-total-pages=${reviewPage.totalPages}, data-current-page=${reviewPage.number}, data-product-id=${product.id}">
+		<div class="pagination" th:if="${reviewPage.totalPages > 1}"
+			th:attr="data-total-pages=${reviewPage.totalPages}, data-current-page=${reviewPage.number}, data-product-id=${product.id}">
 		</div>
-		
+
 		<div class="section-action">
 			<a th:href="@{/productDetail/{id}/review(id=${product.id})}">
 				<button type="button">리뷰 작성</button>

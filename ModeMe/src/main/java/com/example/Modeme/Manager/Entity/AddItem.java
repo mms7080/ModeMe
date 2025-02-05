@@ -3,16 +3,8 @@ package com.example.Modeme.Manager.Entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "AddItem")
@@ -38,7 +30,6 @@ public class AddItem {
     @OneToMany(mappedBy = "addItem", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<ItemColorName> colorNames; // 색상 이름
 
-
     @Column(nullable = false)
     private String category; // 메인 카테고리
 
@@ -50,6 +41,12 @@ public class AddItem {
     @Lob
     @Column(nullable = false)
     private String productDescription; // 상품 상세정보
+
+    @ElementCollection // ✅ 여러 개의 이미지 URL 저장 가능
+    @CollectionTable(name = "product_images", joinColumns = @JoinColumn(name = "add_item_id"))
+    @Column(name = "image_url")
+    private List<String> imageUrls = new ArrayList<>();
+
 
     // Getter and Setter methods
     public Long getId() {
@@ -131,8 +128,7 @@ public class AddItem {
     public void setProductDescription(String productDescription) {
         this.productDescription = productDescription;
     }
-
-    // AddItem 엔티티의 추가 메서드
+    // 추가 메서드
     public void addColor(ItemColor itemColor) {
         if (this.colors == null) {
             this.colors = new ArrayList<>();
@@ -153,4 +149,13 @@ public class AddItem {
         }
         this.productSizes.add(itemSize);
     }
+
+
+	public List<String> getImageUrls() {
+		return imageUrls;
+	}
+
+	public void setImageUrls(List<String> imageUrls) {
+		this.imageUrls = imageUrls;
+	}
 }

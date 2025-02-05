@@ -17,6 +17,7 @@
         <h1>상품 등록</h1>
         <form action="/manager/new" method="post" onsubmit="return validateForm();" >
         <div class="product-name">
+         
            <label for="name">상품 이름</label>
            <input type="text" id="name" name="name" placeholder="이름 입력">
         </div>    
@@ -94,22 +95,47 @@
     <ul id="selected-sizes-list"></ul>
 </div>
 
-
+		<input type="hidden" name="imageUrls" id="imageUrls">
         <!-- Main Images -->
         <div class="main-img-input-container">
 	        <label class="img-input-label">메인 이미지</label>
 	        <div class="image-inputs">
 	        	<div>
-		            <input type="file" id="image1" name="images" multiple>
+		            <input type="file" id="imageUpload1" name="images" multiple onchange="uploadImage('imageUpload1','previewImage1')">   
+
 	        	</div>
 	        	<div>
-		            <input type="file" id="image2" name="images" multiple>
+		            <input type="file" id="imageUpload2" name="images" multiple onchange="uploadImage('imageUpload2','previewImage2')">   
+		            
+		            
 	        	</div>
 	        	<div>
-		            <input type="file" id="image3" name="images" multiple>
+		            <input type="file" id="imageUpload3" name="images" multiple>
+		            
 	        	</div>
 	        	<div>
-		            <input type="file" id="image4" name="images" multiple>
+		            <input type="file" id="imageUpload4" name="images" multiple>
+		            
+		           
+	        	</div>
+	        </div>
+        </div>
+        
+        
+         <div class="main-img-input-container">
+	        <label class="img-input-label">미리보기 이미지</label>
+	        <div>
+	        	<div>
+					<img id="previewImage1" style="display:none;">
+	        	</div>
+	        	<div>
+					<img id="previewImage2" style="display:none;">
+	        	</div>
+	        	<div>
+					<img id="previewImage3" style="display:none;">
+	        	</div>
+	        	<div>
+					<img id="previewImage4" style="display:none;">
 	        	</div>
 	        </div>
         </div>
@@ -129,6 +155,62 @@
  
     	<!-- 푸터 -->
 	<div th:replace="~{footer :: footer}"></div>
-    
+	
+	<script>
+	function uploadImage(imageUploadName, previewImageName) {
+	    const fileInput = document.getElementById(imageUploadName);
+	    if (!fileInput.files || fileInput.files.length === 0) {
+	        console.log("🚨 파일이 선택되지 않았습니다.");
+	        return;
+	    }
+
+	    const uuid = crypto.randomUUID();
+	    let file = fileInput.files[0];
+	    let formData = new FormData();
+
+	    let newFileName = file.name + "_" + uuid; // 파일명 변경
+	    let renamedFile = new File([file], newFileName, { type: file.type });
+
+	    formData.append("file", renamedFile);
+
+	    fetch("/api/gcs/upload", { method: "POST", body: formData })
+	    .then(response => response.text()) // 이미지 URL 반환
+	    .then(imageUrl => {
+	        if (imageUrl && imageUrl.trim() !== "") {
+	            console.log("✅ 업로드된 이미지 URL:", imageUrl);
+
+	            // 기존 값 유지하면서 새로운 값 추가
+	            let imageUrlsInput = document.getElementById("imageUrls");
+	            let existingUrls = imageUrlsInput.value ? imageUrlsInput.value.split(",") : [];
+	            existingUrls.push(imageUrl);
+	            imageUrlsInput.value = existingUrls.join(",");
+
+	            // 미리보기 이미지 업데이트
+	            let previewImage = document.getElementById(previewImageName);
+	            previewImage.src = imageUrl;
+	            previewImage.style.display = "block";
+	            previewImage.width = 300; // 이미지 크기 조절
+	        } else {
+	            console.log("🚨 업로드된 URL이 비어 있습니다.");
+	        }
+	    }).catch(error => {
+	        console.error("🚨 이미지 업로드 실패:", error);
+	    });
+	}
+	
+	function validateForm() {
+	    let imageUrlsInput = document.getElementById("imageUrls");
+
+	    if (!imageUrlsInput.value.trim()) {
+	        console.log("🚨 이미지 URL이 없습니다. 기본값을 설정합니다.");
+	        imageUrlsInput.value = ""; // 기본적으로 빈 문자열로 설정
+	    }
+
+	    return true; // 폼 제출 허용
+	}
+
+
+	</script>
+	    
 </body>
 </html>

@@ -1,6 +1,7 @@
 package com.example.Modeme.Manager.ManagerService;
 
 import java.beans.Transient;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +15,14 @@ import com.example.Modeme.Manager.Entity.AddItem;
 import com.example.Modeme.Manager.Entity.ItemColor;
 import com.example.Modeme.Manager.Entity.ItemColorName;
 import com.example.Modeme.Manager.Entity.ItemSize;
+import com.example.Modeme.Manager.Entity.ProductImage;
 //import com.example.Modeme.Manager.Entity.ProductImage;
 import com.example.Modeme.Manager.ManagerDTO.AddItemDTO;
 import com.example.Modeme.Manager.ManagerDTO.ItemColorDTO;
 import com.example.Modeme.Manager.ManagerDTO.ItemColorNameDTO;
 import com.example.Modeme.Manager.ManagerDTO.ItemSizeDTO;
 import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
+import com.example.Modeme.Manager.ManagerRepository.ProductImageRepository;
 import com.example.Modeme.Manager.ManagerRepository.itemColorNameRepository;
 import com.example.Modeme.Manager.ManagerRepository.itemColorRepository;
 import com.example.Modeme.Manager.ManagerRepository.itemSizeRepository;
@@ -46,6 +49,9 @@ public class AddItemService {
 	
 	@Autowired
 	private itemSizeRepository isr;
+	
+	@Autowired
+    private ProductImageRepository productImageRepository; 
 	
 //	@Autowired
 //	private ProductImageRepository pir;
@@ -92,6 +98,32 @@ public class AddItemService {
 	            isr.save(itemSize);
 	        }
 	    }
+	    // 이미지 URL 저장
+	    if (addItemDTO.getImageUrls() != null) {
+	        for (String imageUrl : addItemDTO.getImageUrls()) {
+	            ProductImage productImage = new ProductImage();
+	            productImage.setImageUrl(imageUrl);
+	            productImage.setAddItem(savedItem);
+	            productImageRepository.save(productImage);
+	        }
+	    }
+	    
+	    if (addItemDTO.getImageUrls() != null) {
+	        for (String imageUrl : addItemDTO.getImageUrls()) {
+	            if (imageUrl != null && !imageUrl.trim().isEmpty()) { // ✅ NULL 및 빈 문자열 방지
+	                ProductImage productImage = new ProductImage();
+	                productImage.setImageUrl(imageUrl);
+	                productImage.setAddItem(savedItem);
+	                productImageRepository.save(productImage);
+	            }
+	        }
+	    }
+	    
+	    if (addItemDTO.getImageUrls() != null && !addItemDTO.getImageUrls().isEmpty()) {
+	        savedItem.setImageUrls(addItemDTO.getImageUrls());
+	    } else {
+	        savedItem.setImageUrls(new ArrayList<>()); // 기본값
+	    }
 
 	    return savedItem; // Return the saved AddItem instance
 	}
@@ -132,11 +164,4 @@ public class AddItemService {
     }
 }
 		
-//		for (ProductImage image : addItemDTO.getImages()) {
-//            image.setAddItem(saveItem);  // Associate the image with the product
-//            pir.save(image);  // Save each image
-//        }
-//		return saveItem;
-//				
-//	}
 
