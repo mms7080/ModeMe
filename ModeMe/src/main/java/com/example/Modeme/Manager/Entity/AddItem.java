@@ -42,10 +42,11 @@ public class AddItem {
     @Column(nullable = false)
     private String productDescription; // 상품 상세정보
 
-    @ElementCollection // ✅ 여러 개의 이미지 URL 저장 가능
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "product_images", joinColumns = @JoinColumn(name = "add_item_id"))
     @Column(name = "image_url")
     private List<String> imageUrls = new ArrayList<>();
+
 
 
     // Getter and Setter methods
