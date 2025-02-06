@@ -68,7 +68,7 @@ public class SecurityConfig {
                 .requestMatchers("/qna/write", "/qna/edit/**", "/qna/delete/**").authenticated() // QnA 쓰기/수정/삭제는 인증 필요
                 
                 // 공지 관련 권한 설정
-                .requestMatchers("/notices","/notices/**").permitAll() // 공지 목록 누구나 접근 가능
+                .requestMatchers("/notices","/notices/**","/search**").permitAll() // 공지 목록 누구나 접근 가능
                 .requestMatchers("/notices/new", "/notices/edit/**", "/notices/delete/**","/manager/**").hasRole("ADMIN") // 관리자만 허용
 
                 // 상품 관련 권한 설정
