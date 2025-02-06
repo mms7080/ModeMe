@@ -13,12 +13,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 let productName = row.querySelector("td:nth-child(3)").innerText;
                 let price = parseInt(row.querySelector("td:nth-child(4)").innerText.replace("KRW ", "").replace(",", ""));
                 let quantity = parseInt(row.querySelector("td:nth-child(5) input").value);
+				let imageSrc = row.querySelector("td:nth-child(2) img").getAttribute("src"); // 이미지 경로 가져오기
 
                 selectedItems.push({
                     productId: productId,
                     productName: productName,
                     price: price,
-                    quantity: quantity
+                    quantity: quantity,
+					imageSrc: imageSrc
                 });
             }
         });
@@ -33,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	        form.appendChild(createHiddenInput("productName", item.productName));
 	        form.appendChild(createHiddenInput("price", item.price));
 	        form.appendChild(createHiddenInput("quantity", item.quantity));
+			form.appendChild(createHiddenInput("imageSrc", item.imageSrc));
 	    });
 
 	    // 폼을 body에 추가하고, 폼을 제출하여 서버로 전송
@@ -129,46 +132,48 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
-	//장바구니 중복 체크
-	document.addEventListener("DOMContentLoaded", function () {
-	    const addToCartButtons = document.querySelectorAll(".add-to-cart-btn"); // 장바구니 추가 버튼들
-	    const cart = new Map(); // 중복 검사용 Map
-	
-	    // ✅ 기존 장바구니 데이터 불러오기
-	    const storedCart = localStorage.getItem("shoppingCart");
-	    if (storedCart) {
-	        JSON.parse(storedCart).forEach(item => {
-	            cart.set(item.productId, item);
-	        });
-	    }
-	
-	    // ✅ 장바구니에 추가할 때 중복 검사
-	    addToCartButtons.forEach(button => {
-	        button.addEventListener("click", function () {
-	            const productRow = button.closest("tr");
-	            const productId = productRow.getAttribute("data-product-id");
-	            const productName = productRow.querySelector("td:nth-child(3)").innerText;
-	            const price = parseInt(productRow.querySelector("td:nth-child(4)").innerText.replace("KRW ", "").replace(",", ""));
-	            const quantity = parseInt(productRow.querySelector("td:nth-child(5) input").value);
-	
-	            // 🔴 중복 검사: 이미 있는 상품이면 추가하지 않음
-	            if (cart.has(productId)) {
-	                alert("🚨 이미 장바구니에 있는 상품입니다!");
-	                return;
-	            }
-	
-	            // ✅ 새로운 상품 추가
-	            const newItem = { productId, productName, price, quantity };
-	            cart.set(productId, newItem);
-	
-	            // ✅ 로컬 스토리지에 저장
-	            localStorage.setItem("shoppingCart", JSON.stringify(Array.from(cart.values())));
-	
-	            alert("✅ 장바구니에 추가되었습니다!");
-	            location.reload(); // 새로고침하여 반영
-	        });
-	    });
-	});
+
+
+//장바구니 중복 체크
+document.addEventListener("DOMContentLoaded", function () {
+    const addToCartButtons = document.querySelectorAll(".add-to-cart-btn"); // 장바구니 추가 버튼들
+    const cart = new Map(); // 중복 검사용 Map
+
+    // ✅ 기존 장바구니 데이터 불러오기
+    const storedCart = localStorage.getItem("shoppingCart");
+    if (storedCart) {
+        JSON.parse(storedCart).forEach(item => {
+            cart.set(item.productId, item);
+        });
+    }
+
+    // ✅ 장바구니에 추가할 때 중복 검사
+    addToCartButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            const productRow = button.closest("tr");
+            const productId = productRow.getAttribute("data-product-id");
+            const productName = productRow.querySelector("td:nth-child(3)").innerText;
+            const price = parseInt(productRow.querySelector("td:nth-child(4)").innerText.replace("KRW ", "").replace(",", ""));
+            const quantity = parseInt(productRow.querySelector("td:nth-child(5) input").value);
+
+            // 🔴 중복 검사: 이미 있는 상품이면 추가하지 않음
+            if (cart.has(productId)) {
+                alert("🚨 이미 장바구니에 있는 상품입니다!");
+                return;
+            }
+
+            // ✅ 새로운 상품 추가
+            const newItem = { productId, productName, price, quantity };
+            cart.set(productId, newItem);
+
+            // ✅ 로컬 스토리지에 저장
+            localStorage.setItem("shoppingCart", JSON.stringify(Array.from(cart.values())));
+
+            alert("✅ 장바구니에 추가되었습니다!");
+            location.reload(); // 새로고침하여 반영
+        });
+    });
+});
 
 
 // 상품 삭제 이벤트

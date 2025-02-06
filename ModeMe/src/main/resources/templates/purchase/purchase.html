@@ -68,10 +68,11 @@
 			<div class="section">
 				<div class="section-title">주문상품</div>
 				<div th:each="i:${items}" class="product-item">
-					<img src="image/026.jpg" alt="상품 이미지">
+					<img th:src="${i.imageUrl}" 
+					       alt="/image/026.jpg" class="thumbnail-image" />
 					<div class="product-details">
-						<p class="product-names">[[${i.productName}]]</p>
-						<p class="product-quantity">[[${i.quantity == 0 ? 1 : i.quantity}]]개</p>
+						<p class="product-names">[[${i.productName}]]</p>|
+						<p class="product-quantity">[[${i.quantity == 0 ? 1 : i.quantity}]]개</p>|
 						<p class="product-total">
 							₩[[${#numbers.formatInteger((i.quantity == 0 ? 1 : i.quantity) * i.price, 3, 'COMMA')}]]
 						</p>

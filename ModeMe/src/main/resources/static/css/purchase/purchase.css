@@ -92,7 +92,7 @@ body {
     display: flex;
     flex-direction: row; /* ✅ 한 줄 정렬 */
     align-items: center;  /* ✅ 세로 중앙 정렬 */
-    justify-content: space-between; /* ✅ 요소 간 최대 간격 */
+    justify-content: flex-end;
     gap: 15px; /* ✅ 간격 추가 */
 }
 

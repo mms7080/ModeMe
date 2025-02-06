@@ -105,6 +105,7 @@ public class PurchaseController {
 		pi.setPrice(a.getPrice());
 		pi.setProductName(a.getName());
 		pi.setQuantity(1);
+		pi.setImageUrl(a.getImageUrls().get(0));
 		List<PurchaseItem> piList = new ArrayList<>(); // 리스트형태로 model
 		piList.add(pi);
 		model.addAttribute("items", piList);
@@ -119,6 +120,7 @@ public class PurchaseController {
 	    @RequestParam List<String> productName, // 폼으로 전송된 productName 리스트 받기
 	    @RequestParam List<Integer> price, // 폼으로 전송된 price 리스트 받기
 	    @RequestParam List<Integer> quantity, // 폼으로 전송된 quantity 리스트 받기
+	    @RequestParam List<String> imageSrc, // 폼으로 전송된 imageSrc 리스트 받기
 	    Principal prin,
 	    Model model) {
 		User u = ur.findByUsername(prin.getName()).get();
@@ -130,6 +132,8 @@ public class PurchaseController {
 	        item.setProductName(productName.get(i));
 	        item.setPrice(price.get(i));
 	        item.setQuantity(quantity.get(i));
+	        item.setImageUrl(imageSrc.get(i));
+	        System.out.println(imageSrc.get(i));
 	        items.add(item);
 	    }
 	    // 모델에 유저 정보와 상품 목록을 추가
@@ -177,43 +181,47 @@ public class PurchaseController {
 	                             @RequestParam("userId") int uId,
 	                             @RequestParam("address") String address, 
 	                             @RequestParam("addressDetail") String addrDetail,
-	                             @RequestParam("totalPrice") int price, 
+	                             @RequestParam("prices") String price, 
 	                             @RequestParam("impUid") String impUid,
 	                             @RequestParam("merchantUid") String merchantUid, 
 	                             @RequestParam("itemname") String itemnames,
+	                             @RequestParam("quantities") String quantities, // ✅ 수량 추가
 	                             Principal prin) {
 	    User u = ur.findByUsername(prin.getName()).get();
-	    String userid = u.getName();
+	    String userid = u.getUsername();
 
 	    String[] itemNamesArray = itemnames.split(",");
 	    String[] aIdArray = aIds.split(",");
+	    String[] quantityArray = quantities.split(",");
+	    String[] priceArray = price.split(",");
 
 	    System.out.println("받은 aIds: " + Arrays.toString(aIdArray));
 	    System.out.println("받은 itemnames: " + Arrays.toString(itemNamesArray));
-	    System.out.println("총 가격: " + price);
+	    System.out.println("받은 quantities: " + Arrays.toString(quantityArray));
+	    System.out.println("총 가격: " + Arrays.toString(priceArray));
 
 	    // ✅ 상품 정보 검증
-	    if (aIdArray.length == 0 || itemNamesArray.length == 0) {
+	    if (aIdArray.length == 0 || itemNamesArray.length == 0 || quantityArray.length == 0) {
 	        return "error: 상품 정보 없음";
 	    }
 
-	    // ✅ 가격 검증
-	    if (price <= 0) {
-	        return "error: 총 가격이 0원 이하";
-	    }
 
 	    // ✅ 개별 상품 저장
 	    for (int i = 0; i < itemNamesArray.length; i++) {
 	        try {
+	            int productId = Integer.parseInt(aIdArray[i].trim());
+	            int quantity = Integer.parseInt(quantityArray[i].trim()); // ✅ 수량 변환
+	            int itemPrice = Integer.parseInt(priceArray[i]); // ✅ 개별 상품 가격 계산
+
 	            Purchase p = new Purchase();
-	            p.setUserId(uId);
-	            p.setProductNumber(Integer.parseInt(aIdArray[i].trim())); // ✅ trim 추가
-	            p.setProductMany(1);
+	            p.setUserId(uId); // user pk
+	            p.setProductNumber(productId);
+	            p.setProductMany(quantity); // ✅ 실제 개별 수량 반영
 	            p.setAddress(address);
 	            p.setAddressDetail(addrDetail);
-	            p.setItemname(itemNamesArray[i].trim()); // ✅ trim 추가
-	            p.setUsername(userid);
-	            p.setTotalPrice(price / itemNamesArray.length); // ✅ 0 방지
+	            p.setItemname(itemNamesArray[i].trim());
+	            p.setUsername(userid); // user id (=유저 로그인용 아이디)
+	            p.setTotalPrice(itemPrice * quantity); // ✅ 수량 반영한 가격 저장
 
 	            pr.save(p);
 	            System.out.println("저장된 데이터: " + p);
@@ -223,8 +231,10 @@ public class PurchaseController {
 	        }
 	    }
 
+
 	    return "success";
 	}
+
 
 
 }
