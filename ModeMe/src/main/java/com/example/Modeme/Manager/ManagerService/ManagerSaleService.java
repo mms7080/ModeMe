@@ -150,10 +150,14 @@ public class ManagerSaleService {
     public Map<String, Long> getOrderCountByProcess() {
         List<Purchase> purchases = pr.findAll();
 
-        // process별로 그룹화하여 개수 카운팅
+        // process별로 그룹화하여 개수 카운팅 (null 값은 "UNKNOWN"으로 처리)
         return purchases.stream()
-            .collect(Collectors.groupingBy(Purchase::getProcess, Collectors.counting()));
+            .collect(Collectors.groupingBy(
+                purchase -> Optional.ofNullable(purchase.getProcess()).orElse("UNKNOWN"),
+                Collectors.counting()
+            ));
     }
+
     
     @Transactional
     public String updateSaleProcess(Long id, String newProcess) {
