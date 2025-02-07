@@ -146,8 +146,11 @@ public class PurchaseController {
 
 	// 무통장입금을 선택했을 경우
 	@GetMapping("/bankTransfer")
-	public String bankTransfer(Principal prin) {
-		// 결제정보를 저장하되 결제 전 ? 으로 남겨야 할 거 같음
+	public String bankTransfer(Principal prin, Model model) {
+		User u = ur.findByUsername(prin.getName()).get();
+//		List<Purchase> pList = pr.findByUserIdAndProcess(u.getId(), "입금전"); // Process 입금전, 입금완료, 배송중? 배송완료? 머 아무튼
+//		근데 방금 주문한거만 보여주고싶은데 어떻게 하지
+//		model.addAttribute("items", pList);
 		return "/purchase/guideBankAccount";
 	}
 	
@@ -190,15 +193,13 @@ public class PurchaseController {
 	    User u = ur.findByUsername(prin.getName()).get();
 	    String userid = u.getUsername();
 
+	    // impUid == null 이면 무통장 입금 임. 이때 표시될 항목? 결제 전? 뭐 그렇게 뜨게 해야 할거같음
+	    
 	    String[] itemNamesArray = itemnames.split(",");
 	    String[] aIdArray = aIds.split(",");
 	    String[] quantityArray = quantities.split(",");
 	    String[] priceArray = price.split(",");
 
-	    System.out.println("받은 aIds: " + Arrays.toString(aIdArray));
-	    System.out.println("받은 itemnames: " + Arrays.toString(itemNamesArray));
-	    System.out.println("받은 quantities: " + Arrays.toString(quantityArray));
-	    System.out.println("총 가격: " + Arrays.toString(priceArray));
 
 	    // ✅ 상품 정보 검증
 	    if (aIdArray.length == 0 || itemNamesArray.length == 0 || quantityArray.length == 0) {
@@ -224,9 +225,9 @@ public class PurchaseController {
 	            p.setTotalPrice(itemPrice * quantity); // ✅ 수량 반영한 가격 저장
 
 	            pr.save(p);
-	            System.out.println("저장된 데이터: " + p);
+	            
+	            scr.deleteByUserIdAndProductId(Long.valueOf(uId), Long.valueOf(productId));
 	        } catch (Exception e) {
-	            System.err.println("데이터 저장 오류: " + e.getMessage());
 	            return "error: 저장 실패";
 	        }
 	    }

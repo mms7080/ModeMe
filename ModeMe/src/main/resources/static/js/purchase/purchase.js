@@ -102,73 +102,93 @@ function handleDomainChange() {
 // iamport 결제 호출(nice)
 document.getElementById("payButton").addEventListener("click", function () {
     const paymentMethod = document.getElementById("paymentMethod").value; // 선택된 결제수단
-	if (paymentMethod === "bank-transfer") {
-        // ✅ 무통장입금 선택 시 특정 페이지로 이동
-        location.href = "/bankTransfer";
+    const address = document.getElementById("sample6_address").value;
+    const addressDetail = document.getElementById("sample6_detailAddress").value;
+    const finalPriceText = document.getElementById("finalAmount").innerText;
+    const finalPrice = parseInt(finalPriceText.replace(/₩|,/g, ""), 10);
+
+    const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let merchantUid = 'TD';
+    for (let i = 0; i < 8; i++) {
+        const random = Math.floor(Math.random() * char.length);
+        merchantUid += char[random];
+    }
+
+    let aIdList = items.map(i => i.productId).join(",");
+    let itemNameList = items.map(i => i.productName.trim()).join(",");
+
+    if (paymentMethod === "bank-transfer") {
+        // ✅ 무통장입금 처리 (결제 요청 없이 바로 AJAX 실행)
+        $.ajax({
+            type: "get",
+            url: "insertPurchase",
+            data: {
+                aId: aIdList,
+                userId: user.id,
+                prices: items.map(i => i.price).join(","),
+                address: address,
+                addressDetail: addressDetail,
+                impUid: null, // 무통장입금이므로 impUid 없음
+                merchantUid: merchantUid,
+                itemname: itemNameList,
+                quantities: items.map(i => i.quantity).join(",")
+            },
+            success: (rsp) => {
+                if (rsp === 'success') {
+                    alert('주문이 접수되었습니다.');
+                    location.href = "/bankTransfer"; // ✅ 무통장입금 성공 시 이동 경로 변경
+                }
+            },
+            error: (rsp) => {
+                console.log("AJAX 오류:", rsp);
+            }
+        });
         return;
     }
-    
-	const address = document.getElementById("sample6_address").value;
-	    const addressDetail = document.getElementById("sample6_detailAddress").value;
-	    const finalPriceText = document.getElementById("finalAmount").innerText;
-	    const finalPrice = parseInt(finalPriceText.replace(/₩|,/g, ""), 10);
-	    const productElements = document.querySelectorAll(".product-names");
-	    
 
-		const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-		let merchantUid = 'TD';
-		for (let i = 0; i < 8; i++) {
-			const random = Math.floor(Math.random() * char.length);
-			merchantUid += char[random]
-		}
-		
-	    IMP.init('imp00488067');
+    // ✅ 신용카드 등 결제 프로세스 실행
+    IMP.init('imp00488067');
+    IMP.request_pay({
+        pg: 'nice',
+        merchant_uid: merchantUid,
+        name: '결제',
+        amount: finalPrice,
+        buyer_email: user.email,
+        buyer_name: user.name,
+        buyer_tel: user.phone,
+    }, function (rsp) {
+        if (rsp.success) {
+            alert("결제 성공");
+            $.ajax({
+                type: "get",
+                url: "insertPurchase",
+                data: {
+                    aId: aIdList,
+                    userId: user.id,
+                    prices: items.map(i => i.price).join(","),
+                    address: address,
+                    addressDetail: addressDetail,
+                    impUid: rsp.imp_uid,
+                    merchantUid: rsp.merchant_uid,
+                    itemname: itemNameList,
+                    quantities: items.map(i => i.quantity).join(",")
+                },
+                success: (rsp) => {
+                    if (rsp === 'success') {
+                        alert('결제가 완료되었습니다');
+                        location.href = "/order";
+                    }
+                },
+                error: (rsp) => {
+                    console.log("AJAX 오류:", rsp);
+                }
+            });
+        } else {
+            alert("결제 실패: " + rsp.error_msg);
+        }
+    });
+});
 
-	    IMP.request_pay({
-	        pg: 'nice',
-	        merchant_uid: merchantUid,
-	        name: '결제',
-	        amount: finalPrice,
-	        buyer_email: user.email,
-	        buyer_name: user.name,
-	        buyer_tel: user.phone,
-	    }, function (rsp) {
-	        if (rsp.success) {
-	            alert("결제 성공");
-
-	            let aIdList = items.map(i => i.productId).join(","); // ✅ 공백 제거
-	            let itemNameList = items.map(i => i.productName.trim()).join(","); // ✅ trim 추가
-
-				
-	            $.ajax({
-	                type: "get",
-	                url: "insertPurchase",
-	                data: {
-	                    aId: aIdList,
-	                    userId: user.id,
-	                    prices: items.map(i => i.price).join(","),
-	                    address: address,
-	                    addressDetail: addressDetail,
-	                    impUid: rsp.imp_uid,
-	                    merchantUid: rsp.merchant_uid,
-	                    itemname: itemNameList,
-						quantities: items.map(i => i.quantity).join(",")
-	                },
-	                success: (rsp) => {
-	                    if (rsp === 'success') {
-	                        alert('결제가 완료되었습니다');
-	                        location.href = "/order";
-	                    }
-	                },
-	                error: (rsp) => {
-	                    console.log("AJAX 오류:", rsp);
-	                }
-	            });
-	        } else {
-	            alert("결제 실패: " + rsp.error_msg);
-	        }
-	    });
-	});
 
 
 // 카카오페이

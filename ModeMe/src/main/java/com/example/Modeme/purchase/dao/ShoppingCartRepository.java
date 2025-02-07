@@ -12,4 +12,5 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long> {
     List<ShoppingCart> findByUserId(Long userId);
     Optional<ShoppingCart> findByUserIdAndProductId(Long userId, Long productId);
+    void deleteByUserIdAndProductId(Long userId, Long productId);
 }

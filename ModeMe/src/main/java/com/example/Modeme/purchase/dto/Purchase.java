@@ -56,10 +56,5 @@ public class Purchase {
 	
 	@Column
 	private String username; //유저 아이디
-	
-//	@Column(nullable = false)
-//	private String impUid;
-//	
-//	@Column(nullable = false)
-//	private String merchantUid;
+
 }
