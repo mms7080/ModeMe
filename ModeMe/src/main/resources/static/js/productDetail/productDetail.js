@@ -463,7 +463,76 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+// 정민 : 테스트중, 상품 상세조회에서 사이즈, 색상 선택 후 구매 버튼 클릭 시 구매화면으로 이동
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector(".buyNowBtn").addEventListener("click", function () {
+        let form = document.createElement("form");
+        form.method = "POST";
+        form.action = "/purchase";
 
+        let selectedItems = [];
+        let isValid = true;
+
+        document.querySelectorAll(".selection-item").forEach(item => {
+            let colorName = item.querySelector(".color").textContent;
+            let sizeName = item.querySelector(".size").textContent;
+            let price = parseInt(item.querySelector(".price").getAttribute("data-price"), 10);
+            let quantity = parseInt(item.querySelector(".quantity-input").value, 10);
+            let productId = document.querySelector(".product-details").getAttribute("data-product-id"); 
+            let productName = document.querySelector(".product-details h2").textContent;
+            let imageSrc = document.querySelector(".product-image img")?.getAttribute("src") || "";
+
+            if (!colorName || !sizeName) {
+                alert("색상과 사이즈를 모두 선택해주세요.");
+                isValid = false;
+                return;
+            }
+
+            selectedItems.push({
+                productId: productId,
+                productName: productName,
+                price: price,
+                quantity: quantity,
+                imageSrc: imageSrc,
+                colorId: colorName, // 실제 ID 값이 필요하면 수정
+                colorName: colorName,
+                sizeId: sizeName, // 실제 ID 값이 필요하면 수정
+                sizeName: sizeName
+            });
+        });
+
+        if (selectedItems.length === 0) {
+            alert("결제할 상품을 선택해주세요.");
+            return;
+        }
+        if (!isValid) {
+            return;
+        }
+
+        selectedItems.forEach(item => {
+            form.appendChild(createHiddenInput("productId[]", item.productId));
+            form.appendChild(createHiddenInput("productName[]", item.productName));
+            form.appendChild(createHiddenInput("price[]", item.price));
+            form.appendChild(createHiddenInput("quantity[]", item.quantity));
+            form.appendChild(createHiddenInput("imageSrc[]", item.imageSrc));
+            form.appendChild(createHiddenInput("colorId[]", item.colorId));
+            form.appendChild(createHiddenInput("colorName[]", item.colorName));
+            form.appendChild(createHiddenInput("sizeId[]", item.sizeId));
+            form.appendChild(createHiddenInput("sizeName[]", item.sizeName));
+        });
+
+        document.body.appendChild(form);
+        form.submit();
+    });
+
+    function createHiddenInput(name, value) {
+        let input = document.createElement("input");
+        input.type = "hidden";
+        input.name = name;
+        input.value = value;
+        return input;
+    }
+});
 
 
 
