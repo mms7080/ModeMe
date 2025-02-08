@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,23 +69,36 @@ public class ViewController {
 	// 장바구니
 	@GetMapping("/shoppingcart")
 	public String shoppingcart(Principal prin, Model model) {
-		User u = ur.findByUsername(prin.getName()).get();
-		List<ShoppingCart> sList = scr.findByUserId(u.getId()); // 유저에게 있는 상품 목록들 찾아올꺼임
-		
-		Set<Long> productIdSet = new HashSet<>();
-		List<AddItem> itemList = new ArrayList<>();
-		
-		for(ShoppingCart sc : sList) {
-			Long productId = sc.getProductId();
-			if(!productIdSet.contains(productId)) {
-				productIdSet.add(productId);
-				air.findById(productId).ifPresent(itemList::add);
-			}
-		}
-		model.addAttribute("sList", sList);
-		model.addAttribute("itemList", itemList);
-		return "/purchase/shoppingCart";
+	    User u = ur.findByUsername(prin.getName()).get();
+	    List<ShoppingCart> sList = scr.findByUserId(u.getId()); // 유저가 담은 상품 목록 가져오기
+
+	    Set<Long> productIdSet = new HashSet<>();
+	    List<AddItem> itemList = new ArrayList<>();
+
+	    for (ShoppingCart sc : sList) {
+	        Long productId = sc.getProductId();
+	        if (!productIdSet.contains(productId)) {
+	            productIdSet.add(productId);
+
+	            // Step 1: `colors` 먼저 가져오기
+	            Optional<AddItem> itemWithColors = air.findWithColorsById(productId);
+	            if (itemWithColors.isPresent()) {
+	                AddItem addItem = itemWithColors.get();
+
+	                // Step 2: `colorNames`도 가져오기 (기존 객체 업데이트)
+	                Optional<AddItem> itemWithColorNames = air.findWithColorNamesById(productId);
+	                itemWithColorNames.ifPresent(item -> addItem.setColorNames(item.getColorNames()));
+
+	                itemList.add(addItem);
+	            }
+	        }
+	    }
+
+	    model.addAttribute("sList", sList);
+	    model.addAttribute("itemList", itemList);
+	    return "/purchase/shoppingCart";
 	}
+
 
 	// 제품 상세
 	@GetMapping("/productDetail")

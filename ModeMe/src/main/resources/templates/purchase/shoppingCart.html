@@ -9,6 +9,29 @@
     <script src="http://code.jquery.com/jquery-latest.min.js"
 	type="text/javascript"></script>
 </head>
+<style>
+.color-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+/* <option> 내부의 스타일링을 위한 custom dropdown */
+.custom-select {
+    appearance: none; /* 기본 UI 제거 */
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 5px;
+    font-size: 14px;
+}
+
+</style>
+
 <body>
 	
 	<div th:replace="~{header::header}"></div>
@@ -29,41 +52,62 @@
                     <th>이미지</th>
                     <th>상품명</th>
                     <th>판매가</th>
+                    <th>색상</th>
+                    <th>사이즈</th>
                     <th>수량</th>
-                    <th>적립금</th>
                     <th>배송비</th>
                     <th>합계</th>
                     <th>관리</th>
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="i : ${itemList}" th:attr="data-product-id=${i.id}">
-                	<td class="select-cell">
-                		<input class="item-checkbox" type="checkbox">
-                	</td>
+        <tr th:each="i : ${itemList}" th:attr="data-product-id=${i.id}">
+            <td class="select-cell">
+                <input class="item-checkbox" type="checkbox">
+            </td>
+            <td>
+                <img th:src="${(i.imageUrls != null and not #lists.isEmpty(i.imageUrls)) ? i.imageUrls[0] : '/image/default.jpg'}" 
+                     alt="상품 이미지" class="thumbnail-image" />
+            </td>
+            <td>[[${i.name}]]</td>
+            <td><span th:text="${#numbers.formatInteger(i.price, 3, 'COMMA')} + '원'"></span></td>
+
+            <!-- ✅ 색상 + 색상명 표시 -->
+            <td>
+                <select name="color">
+                    <option value="">색상 선택</option>
+                    <option th:each="color, iterStat : ${i.colors}" 
+                            th:value="${color.id}">
+                        [[${i.colorNames[iterStat.index].colorName}]]
+                    </option>
+                </select>
+            </td>
+
+            <!-- ✅ 사이즈 선택 -->
+            <td>
+                <select name="size">
+                    <option value="">사이즈 선택</option>
+                    <option th:each="size : ${i.productSizes}" th:value="${size.id}" th:text="${size.itemSize}"></option>
+                </select>
+            </td>
+
+            <!-- ✅ 수량 입력 -->
+            <th:block th:each="s : ${sList}">
+                <th:block th:if="${i.id == s.productId}">
                     <td>
-					  <img th:src="${(i.imageUrls != null and not #lists.isEmpty(i.imageUrls)) ? i.imageUrls[0] : '/image/default.jpg'}" 
-					       alt="상품 이미지" class="thumbnail-image" />
-					</td>
-                    <td>[[${i.name}]]</td>
-                    <td><span th:text="${#numbers.formatInteger(i.price, 3, 'COMMA')} + '원'"></span></td>
-                   	<th:block th:each="s : ${sList}">
-                   		<th:block th:if="${i.id == s.productId}">
-		                    <td>
-	                    		<input type="number" th:value="${s.quantity}" style="width:30px;" min="1">
-		                    </td>
-		                    <td th:text="${#numbers.formatInteger(i.price * 0.01, 0, 'COMMA')} + '원'"></td>
-		                    <td>무료</td>
-		                    <td th:text="${#numbers.formatInteger(s.quantity * i.price, 3, 'COMMA')} + '원'"></td>
-		                    <td class="button-group-vertical">
-								<button>주문하기</button>
-								<button>♥️관심상품등록</button>
-								<button class="delete-btn">❌</button>
-		                    </td>
-	                    </th:block>
-                   	</th:block>
-                </tr>
-            </tbody>
+                        <input type="number" th:value="${s.quantity}" style="width:50px;" min="1">
+                    </td>
+                    <td>무료</td>
+                    <td th:text="${#numbers.formatInteger(s.quantity * i.price, 3, 'COMMA')} + '원'"></td>
+                    <td class="button-group-vertical">
+                        <button>주문하기</button>
+                        <button>♥️ 관심상품 등록</button>
+                        <button class="delete-btn">❌</button>
+                    </td>
+                </th:block>
+            </th:block>
+        </tr>
+    </tbody>
         </table>
 
         <div class="total">

@@ -13,4 +13,8 @@ public class PurchaseItem {
     private int price;
     private int quantity;
     private String imageUrl;
+    private String colorId;
+    private String colorName;
+    private String sizeId;
+    private String sizeName;
 }

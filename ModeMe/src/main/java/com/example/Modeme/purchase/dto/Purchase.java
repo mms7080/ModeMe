@@ -26,15 +26,8 @@ public class Purchase {
 	@Column(nullable = false)
 	private int productNumber; // 상품PK
 	
-//	@Column(nullable = false)
-//	private int productPrice; // 상품가격 - 상품정보에서 가져오기?
-	
 	@Column(nullable = false)
 	private int productMany; // 상품갯수
-	
-//	private int deliveryFee; // 배송비
-	
-//	private String isHearted; // 관심상품유무 - 상품정보에서 가져오기?
 	
 	@Column(nullable = false)
 	private String address; // 기본주소 
@@ -56,5 +49,14 @@ public class Purchase {
 	
 	@Column
 	private String username; //유저 아이디
+	
+	@Column
+	private String colorId; // 구매한 상품의 색상
+	
+	@Column
+	private String sizeId; // 구매한 상품의 사이즈
+	
+	@Column
+	private String merchantUid; // 동시에 주문했을 경우를 위한 구분자?
 
 }

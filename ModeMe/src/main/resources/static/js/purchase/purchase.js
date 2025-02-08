@@ -136,7 +136,7 @@ document.getElementById("payButton").addEventListener("click", function () {
             success: (rsp) => {
                 if (rsp === 'success') {
                     alert('주문이 접수되었습니다.');
-                    location.href = "/bankTransfer"; // ✅ 무통장입금 성공 시 이동 경로 변경
+                    location.href = "/bankTransfer?merchantUid=" + rsp; // ✅ 무통장입금 성공 시 이동 경로 변경
                 }
             },
             error: (rsp) => {

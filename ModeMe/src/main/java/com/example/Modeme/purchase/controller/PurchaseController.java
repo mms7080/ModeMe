@@ -121,6 +121,10 @@ public class PurchaseController {
 	    @RequestParam List<Integer> price, // 폼으로 전송된 price 리스트 받기
 	    @RequestParam List<Integer> quantity, // 폼으로 전송된 quantity 리스트 받기
 	    @RequestParam List<String> imageSrc, // 폼으로 전송된 imageSrc 리스트 받기
+	    @RequestParam List<String> colorId,
+	    @RequestParam List<String> colorName,
+	    @RequestParam List<String> sizeId,
+	    @RequestParam List<String> sizeName,
 	    Principal prin,
 	    Model model) {
 		User u = ur.findByUsername(prin.getName()).get();
@@ -133,26 +137,34 @@ public class PurchaseController {
 	        item.setPrice(price.get(i));
 	        item.setQuantity(quantity.get(i));
 	        item.setImageUrl(imageSrc.get(i));
-	        System.out.println(imageSrc.get(i));
+	        item.setColorId(colorId.get(i));   // ✅ 색상 ID 추가
+	        item.setColorName(colorName.get(i)); // ✅ 색상명 추가
+	        item.setSizeId(sizeId.get(i));    // ✅ 사이즈 ID 추가
+	        item.setSizeName(sizeName.get(i));
 	        items.add(item);
 	    }
 	    // 모델에 유저 정보와 상품 목록을 추가
 	    model.addAttribute("user", u);
 	    model.addAttribute("items", items);  // 받은 items 리스트를 모델에 추가
 
-	    // 결제 페이지로 리디렉션
 	    return "/purchase/purchase";
 	}
 
 	// 무통장입금을 선택했을 경우
 	@GetMapping("/bankTransfer")
-	public String bankTransfer(Principal prin, Model model) {
-		User u = ur.findByUsername(prin.getName()).get();
-//		List<Purchase> pList = pr.findByUserIdAndProcess(u.getId(), "입금전"); // Process 입금전, 입금완료, 배송중? 배송완료? 머 아무튼
-//		근데 방금 주문한거만 보여주고싶은데 어떻게 하지
-//		model.addAttribute("items", pList);
-		return "/purchase/guideBankAccount";
+	public String bankTransfer(@RequestParam("merchantUid") String merchantUid, Principal prin, Model model) {
+	    User u = ur.findByUsername(prin.getName()).get();
+
+	    // ✅ 같은 merchantUid를 가진 모든 주문 조회
+	    List<Purchase> pList = pr.findByMerchantUid(merchantUid);
+
+	    model.addAttribute("user", u);
+	    model.addAttribute("items", pList);
+	    model.addAttribute("bankAccount", "신한은행 110-445-079289 예금주 : 모드미");
+
+	    return "/purchase/guideBankAccount";
 	}
+
 	
 	// ProductController 로 옮기면 좋음
 	@GetMapping("/proList")
@@ -189,18 +201,21 @@ public class PurchaseController {
 	                             @RequestParam("merchantUid") String merchantUid, 
 	                             @RequestParam("itemname") String itemnames,
 	                             @RequestParam("quantities") String quantities, // ✅ 수량 추가
+	                             @RequestParam("colorIds") String colorIds,
+	                             @RequestParam("sizeIds") String sizeIds,
 	                             Principal prin) {
 	    User u = ur.findByUsername(prin.getName()).get();
 	    String userid = u.getUsername();
 
-	    // impUid == null 이면 무통장 입금 임. 이때 표시될 항목? 결제 전? 뭐 그렇게 뜨게 해야 할거같음
+	    String paymentStatus = (impUid == null || impUid.isEmpty()) ? "입금 전" : "결제 완료";
 	    
 	    String[] itemNamesArray = itemnames.split(",");
 	    String[] aIdArray = aIds.split(",");
 	    String[] quantityArray = quantities.split(",");
 	    String[] priceArray = price.split(",");
-
-
+	    String[] colorIdArray = colorIds.split(",");
+	    String[] sizeIdArray = sizeIds.split(",");
+	    
 	    // ✅ 상품 정보 검증
 	    if (aIdArray.length == 0 || itemNamesArray.length == 0 || quantityArray.length == 0) {
 	        return "error: 상품 정보 없음";
@@ -213,6 +228,8 @@ public class PurchaseController {
 	            int productId = Integer.parseInt(aIdArray[i].trim());
 	            int quantity = Integer.parseInt(quantityArray[i].trim()); // ✅ 수량 변환
 	            int itemPrice = Integer.parseInt(priceArray[i]); // ✅ 개별 상품 가격 계산
+	            String colorId = colorIdArray[i].trim();
+	            String sizeId = sizeIdArray[i].trim();
 
 	            Purchase p = new Purchase();
 	            p.setUserId(uId); // user pk
@@ -223,6 +240,10 @@ public class PurchaseController {
 	            p.setItemname(itemNamesArray[i].trim());
 	            p.setUsername(userid); // user id (=유저 로그인용 아이디)
 	            p.setTotalPrice(itemPrice * quantity); // ✅ 수량 반영한 가격 저장
+	            p.setProcess(paymentStatus); // ✅ 주문 상태 추가
+	            p.setColorId(colorId); // ✅ 색상 ID 저장
+	            p.setSizeId(sizeId);
+	            p.setMerchantUid(merchantUid);
 
 	            pr.save(p);
 	            

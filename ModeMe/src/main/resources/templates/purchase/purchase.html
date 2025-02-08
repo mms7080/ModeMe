@@ -72,6 +72,10 @@
 					       alt="/image/026.jpg" class="thumbnail-image" />
 					<div class="product-details">
 						<p class="product-names">[[${i.productName}]]</p>|
+						<p class="product-color">
+			                색상: <span class="color-dot" th:style="'background-color:' + ${i.colorName} + ';'"></span>
+			                [[${i.colorName}]]
+			            </p>|
 						<p class="product-quantity">[[${i.quantity == 0 ? 1 : i.quantity}]]개</p>|
 						<p class="product-total">
 							₩[[${#numbers.formatInteger((i.quantity == 0 ? 1 : i.quantity) * i.price, 3, 'COMMA')}]]
@@ -124,8 +128,8 @@
 				<div class="section-title">결제수단</div>
 				<div class="form-row">
 					<label>결제수단</label> <select>
-						<option value="bank-transfer">무통장입금</option>
 						<option value="credit-card">신용카드</option>
+						<option value="bank-transfer">무통장입금</option>
 <!-- 						<option>가상계좌</option> -->
 <!-- 						<option>계좌이체</option> -->
 					</select>
