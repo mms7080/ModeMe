@@ -5,16 +5,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Notice</title>
-<link rel="stylesheet" href="/css/Notice/NoticeHome.css">
+<link rel="stylesheet" href="/css/purchase/guideBank.css">
 </head>
+<style>
+	td img{width:100px; height:auto;}
+	#bank{font-size:20px;}
+</style>
 <body>
 	<!-- 헤더 -->
 	<div th:replace="~{header :: header}"></div>
 
 	<main>
 		<h1>주문이 완료되었습니다.</h1>
-
-
 
 		<table class="notice-table">
 		    <thead>
@@ -23,25 +25,44 @@
 		            <th>상품 명</th>
 		            <th>상품 색상</th>
 		            <th>상품 사이즈</th>
-		            <th>상품 갯수</th>
+		            <th>상품 개수</th>
 		            <th>가격</th>
 		        </tr>
 		    </thead>
 		    <tbody>
-		        <tr>
-		            <td></td>
-		            <td></td>
-		            <td></td>
-		            <td></td>
-		        </tr>
+		        <tr th:each="i, iterStat : ${items}">
+				    <!-- ✅ 상품 사진 -->
+				    <td>
+				        <img th:src="${productImages[iterStat.index]}" alt="상품 이미지" class="thumbnail-image">
+				    </td>
+				    
+				    <!-- ✅ 상품 명 -->
+				    <td>[[${i.itemname}]]</td>
+				
+				    <!-- ✅ 상품 색상명 -->
+				    <td>[[${productColors[iterStat.index]}]]</td>
+				
+				    <!-- ✅ 상품 사이즈명 -->
+				    <td>[[${productSizes[iterStat.index]}]]</td>
+				
+				    <!-- ✅ 상품 개수 -->
+				    <td>[[${i.productMany}]]개</td>
+				
+				    <!-- ✅ 가격 -->
+				    <td>₩[[${#numbers.formatInteger(i.totalPrice, 3, 'COMMA')}]]</td>
+				</tr>
+				<tr>
+					<td colspan="4">
+						<strong id="bank">[[${bankAccount}]]</strong>
+					</td>
+					<td colspan="2">
+						<strong>총 금액 : </strong>[[${#numbers.formatInteger(totalAmount, 3, 'COMMA')}]]
+					</td>
+				</tr>
+
 		    </tbody>
 		</table>
-
-
-
-
 	</main>
-
 
 	<!-- 푸터 -->
 	<div th:replace="~{footer :: footer}"></div>

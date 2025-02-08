@@ -66,23 +66,35 @@
 
 			<!-- 주문상품 섹션 -->
 			<div class="section">
-				<div class="section-title">주문상품</div>
-				<div th:each="i:${items}" class="product-item">
-					<img th:src="${i.imageUrl}" 
-					       alt="/image/026.jpg" class="thumbnail-image" />
-					<div class="product-details">
-						<p class="product-names">[[${i.productName}]]</p>|
-						<p class="product-color">
-			                색상: <span class="color-dot" th:style="'background-color:' + ${i.colorName} + ';'"></span>
+			    <div class="section-title">주문상품</div>
+			    <div th:each="i:${items}" class="product-item">
+			        <img th:src="${i.imageUrl}" alt="/image/026.jpg" class="thumbnail-image" />
+			        <div class="product-details">
+			            <!-- ✅ 상품명 -->
+			            <p class="product-names">[[${i.productName}]]</p> |
+			
+			            <!-- ✅ 색상 (색상명 포함) -->
+			            <p class="product-color">
+			                색상: <span class="color-dot" th:style="'background-color:' + ${i.colorId} + ';'"></span>
 			                [[${i.colorName}]]
-			            </p>|
-						<p class="product-quantity">[[${i.quantity == 0 ? 1 : i.quantity}]]개</p>|
-						<p class="product-total">
-							₩[[${#numbers.formatInteger((i.quantity == 0 ? 1 : i.quantity) * i.price, 3, 'COMMA')}]]
-						</p>
-					</div>
-				</div>
+			            </p> |
+			
+			            <!-- ✅ 사이즈 -->
+			            <p class="product-size">사이즈: [[${i.sizeName}]]</p> |
+			
+			            <!-- ✅ 수량 -->
+			            <p class="product-quantity">
+			                [[${i.quantity == 0 ? 1 : i.quantity}]]개
+			            </p> |
+			
+			            <!-- ✅ 총 가격 -->
+			            <p class="product-total">
+			                ₩[[${#numbers.formatInteger((i.quantity == 0 ? 1 : i.quantity) * i.price, 3, 'COMMA')}]]
+			            </p>
+			        </div>
+			    </div>
 			</div>
+
 
 			<!-- 할인/쿠폰 섹션 -->
 			<div class="section">
@@ -105,7 +117,6 @@
 			</div>
 
 			<!-- 결제정보 섹션 -->
-			<!-- 결제정보 섹션 -->
 			<div class="section">
 			    <div class="section-title">결제정보</div>
 			    <div class="summary-row">
@@ -127,11 +138,10 @@
 			<div class="section">
 				<div class="section-title">결제수단</div>
 				<div class="form-row">
-					<label>결제수단</label> <select>
+					<label>결제수단</label>
+					<select id="paymentMethod">
 						<option value="credit-card">신용카드</option>
 						<option value="bank-transfer">무통장입금</option>
-<!-- 						<option>가상계좌</option> -->
-<!-- 						<option>계좌이체</option> -->
 					</select>
 				</div>
 			</div>

@@ -118,33 +118,43 @@ document.getElementById("payButton").addEventListener("click", function () {
     let itemNameList = items.map(i => i.productName.trim()).join(",");
 
     if (paymentMethod === "bank-transfer") {
-        // ✅ 무통장입금 처리 (결제 요청 없이 바로 AJAX 실행)
-        $.ajax({
-            type: "get",
-            url: "insertPurchase",
-            data: {
-                aId: aIdList,
-                userId: user.id,
-                prices: items.map(i => i.price).join(","),
-                address: address,
-                addressDetail: addressDetail,
-                impUid: null, // 무통장입금이므로 impUid 없음
-                merchantUid: merchantUid,
-                itemname: itemNameList,
-                quantities: items.map(i => i.quantity).join(",")
-            },
-            success: (rsp) => {
-                if (rsp === 'success') {
-                    alert('주문이 접수되었습니다.');
-                    location.href = "/bankTransfer?merchantUid=" + rsp; // ✅ 무통장입금 성공 시 이동 경로 변경
-                }
-            },
-            error: (rsp) => {
-                console.log("AJAX 오류:", rsp);
-            }
-        });
-        return;
-    }
+
+	    let aIdList = items.map(i => i.productId).join(",");
+	    let itemNameList = items.map(i => i.productName.trim()).join(",");
+	    let colorIdList = items.map(i => i.colorId).join(",");   // ✅ 색상 ID 추가
+	    let colorNameList = items.map(i => i.colorName).join(","); // ✅ 색상명 추가
+	    let sizeIdList = items.map(i => i.sizeId).join(",");   // ✅ 사이즈 ID 추가
+	    let sizeNameList = items.map(i => i.sizeName).join(","); // ✅ 사이즈명 추가
+
+	    $.ajax({
+	        type: "get",
+	        url: "insertPurchase",
+	        data: {
+	            aId: aIdList,
+	            userId: user.id,
+	            prices: items.map(i => i.price).join(","),
+	            address: address,
+	            addressDetail: addressDetail,
+	            impUid: null,
+	            merchantUid: merchantUid,
+	            itemname: itemNameList,
+	            quantities: items.map(i => i.quantity).join(","),
+	            colorIds: colorIdList,   // ✅ 추가
+	            colorNames: colorNameList, // ✅ 추가
+	            sizeIds: sizeIdList,   // ✅ 추가
+	            sizeNames: sizeNameList  // ✅ 추가
+	        },
+	        success: function (response) {
+	            if (response === 'success') {
+	                alert('결제가 완료되었습니다');
+	                location.href = "/bankTransfer?merchantUid=" + merchantUid;
+	            }
+	        },
+	        error: (rsp) => {
+	            console.log("AJAX 오류:", rsp);
+	        }
+	    });
+	}
 
     // ✅ 신용카드 등 결제 프로세스 실행
     IMP.init('imp00488067');
@@ -197,16 +207,14 @@ document.getElementById("kakaopay").addEventListener("click", function () {
     const addressDetail = document.getElementById("sample6_detailAddress").value;
     const finalPriceText = document.getElementById("finalAmount").innerText;
     const finalPrice = parseInt(finalPriceText.replace(/₩|,/g, ""), 10);
-    const productElements = document.querySelectorAll(".product-names");
-    
 
-	const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-	let merchantUid = 'TD';
-	for (let i = 0; i < 8; i++) {
-		const random = Math.floor(Math.random() * char.length);
-		merchantUid += char[random]
-	}
-	
+    const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let merchantUid = 'TD';
+    for (let i = 0; i < 8; i++) {
+        const random = Math.floor(Math.random() * char.length);
+        merchantUid += char[random];
+    }
+
     IMP.init('imp00488067');
 
     IMP.request_pay({
@@ -221,10 +229,13 @@ document.getElementById("kakaopay").addEventListener("click", function () {
         if (rsp.success) {
             alert("결제 성공");
 
-            let aIdList = items.map(i => i.productId).join(","); // ✅ 공백 제거
-            let itemNameList = items.map(i => i.productName.trim()).join(","); // ✅ trim 추가
+            let aIdList = items.map(i => i.productId).join(",");
+            let itemNameList = items.map(i => i.productName.trim()).join(",");
+            let colorIdList = items.map(i => i.colorId).join(",");   // ✅ 색상 ID 추가
+            let colorNameList = items.map(i => i.colorName).join(","); // ✅ 색상명 추가
+            let sizeIdList = items.map(i => i.sizeId).join(",");   // ✅ 사이즈 ID 추가
+            let sizeNameList = items.map(i => i.sizeName).join(","); // ✅ 사이즈명 추가
 
-			
             $.ajax({
                 type: "get",
                 url: "insertPurchase",
@@ -237,7 +248,11 @@ document.getElementById("kakaopay").addEventListener("click", function () {
                     impUid: rsp.imp_uid,
                     merchantUid: rsp.merchant_uid,
                     itemname: itemNameList,
-					quantities: items.map(i => i.quantity).join(",")
+                    quantities: items.map(i => i.quantity).join(","),
+                    colorIds: colorIdList,   // ✅ 추가
+                    colorNames: colorNameList, // ✅ 추가
+                    sizeIds: sizeIdList,   // ✅ 추가
+                    sizeNames: sizeNameList  // ✅ 추가
                 },
                 success: (rsp) => {
                     if (rsp === 'success') {
@@ -254,6 +269,7 @@ document.getElementById("kakaopay").addEventListener("click", function () {
         }
     });
 });
+
 
 
 

@@ -2,8 +2,9 @@ package com.example.Modeme.purchase.controller;
 
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.Modeme.Config.CustomUserDetails;
 import com.example.Modeme.Manager.Entity.AddItem;
+import com.example.Modeme.Manager.Entity.ItemColorName;
+import com.example.Modeme.Manager.Entity.ItemSize;
 import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
+import com.example.Modeme.Manager.ManagerRepository.itemColorNameRepository;
+import com.example.Modeme.Manager.ManagerRepository.itemSizeRepository;
 import com.example.Modeme.User.UserDTO.Headerlogin;
 import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.User.UserRepository.UserRepository;
@@ -50,6 +55,12 @@ public class PurchaseController {
 	
 	@Autowired
 	private ShoppingCartRepository scr;
+	
+	@Autowired
+	private itemColorNameRepository colorNameRepo;
+	
+	@Autowired
+	private itemSizeRepository sizeRepo;
 	
 	@ModelAttribute //모든 매핑에 추가할 코드
     public void addAttributes(Model model, Principal principal) {
@@ -158,12 +169,44 @@ public class PurchaseController {
 	    // ✅ 같은 merchantUid를 가진 모든 주문 조회
 	    List<Purchase> pList = pr.findByMerchantUid(merchantUid);
 
+	    // ✅ 상품 이미지, 색상명, 사이즈명을 리스트로 저장
+	    List<String> productImages = new ArrayList<>();
+	    List<String> productColors = new ArrayList<>();
+	    List<String> productSizes = new ArrayList<>();
+
+	    int totalAmount = 0;
+	    for (Purchase p : pList) {
+	    	totalAmount += p.getTotalPrice();
+	        // ✅ 상품 이미지 (imageUrls[0])
+	        Optional<AddItem> item = air.findById((long) p.getProductNumber());
+	        if (item.isPresent() && item.get().getImageUrls() != null && !item.get().getImageUrls().isEmpty()) {
+	            productImages.add(item.get().getImageUrls().get(0)); // 첫 번째 이미지 추가
+	        } else {
+	            productImages.add("/image/default.jpg"); // 기본 이미지 추가
+	        }
+
+	        // ✅ 색상명 조회
+	        Optional<ItemColorName> colorName = colorNameRepo.findById(Long.valueOf(p.getColorId()));
+	        productColors.add(colorName.isPresent() ? colorName.get().getColorName() : "색상 없음");
+
+	        // ✅ 사이즈명 조회
+	        Optional<ItemSize> sizeName = sizeRepo.findById(Long.valueOf(p.getSizeId()));
+	        productSizes.add(sizeName.isPresent() ? sizeName.get().getItemSize() : "사이즈 없음");
+	    }
+
 	    model.addAttribute("user", u);
 	    model.addAttribute("items", pList);
+	    model.addAttribute("productImages", productImages); // ✅ 리스트로 변경하여 추가
+	    model.addAttribute("productColors", productColors); // ✅ 리스트로 변경하여 추가
+	    model.addAttribute("productSizes", productSizes); // ✅ 리스트로 변경하여 추가
+	    model.addAttribute("totalAmount", totalAmount);
 	    model.addAttribute("bankAccount", "신한은행 110-445-079289 예금주 : 모드미");
 
 	    return "/purchase/guideBankAccount";
 	}
+
+
+
 
 	
 	// ProductController 로 옮기면 좋음
