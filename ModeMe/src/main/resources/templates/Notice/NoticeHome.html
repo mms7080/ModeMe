@@ -40,7 +40,7 @@
 		            <!-- 관리자만 보이는 삭제 버튼 -->
 		            <td th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
 		                <form th:action="@{/notices/delete/{id}(id=${notice.id})}" method="post" onsubmit="return confirmDelete();">
-		                    <button type="submit">❌</button>
+		                    <button type="submit">삭제</button>
 		                </form>
 		            </td>
 		        </tr>
