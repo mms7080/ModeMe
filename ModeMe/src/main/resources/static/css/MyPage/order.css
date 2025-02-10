@@ -27,7 +27,7 @@ main {
 	height: 100%;
 	width: 60%;
 	margin: 0 auto; /* 수평으로 가운데 정렬 */
-		margin-bottom: 30px;
+	margin-bottom: 30px;
 }
 
 h1 {
@@ -141,6 +141,7 @@ h1 {
 .ordermain {
 	margin-top: 30px;
 	height: 80%;
+	margin-bottom:100px;
 }
 
 .ordermaintitle {
