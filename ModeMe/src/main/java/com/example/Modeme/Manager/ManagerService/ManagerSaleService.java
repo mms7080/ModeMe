@@ -47,10 +47,12 @@ public class ManagerSaleService {
 
         // 조건에 맞는 주문 목록을 페이징 처리하여 가져옴
         Page<Purchase> purchases;
-        
+
         // 검색 옵션에 따라 처리
         if ("process".equals(searchOption) && keyword != null) {
-            purchases = pr.findByProcess(keyword, sortedPageable);  // 주문 상태로 검색
+            // 한국어 상태를 내부 프로세스 상태로 매핑
+            String internalProcessStatus = mapKoreanToProcess(keyword);
+            purchases = pr.findByProcess(internalProcessStatus, sortedPageable);  // 주문 상태로 검색
         } else if ("orderInfo".equals(searchOption) && keyword != null) {
             // 주문정보 (itemname만 기준으로 검색)
             purchases = pr.findByItemnameContaining(keyword, sortedPageable);  // itemname만을 포함하는 검색
@@ -100,6 +102,37 @@ public class ManagerSaleService {
                 firstImageUrl  // 첫 번째 이미지 URL 추가
             );
         });
+    }
+
+    // 한국어 상태를 내부 프로세스 상태로 매핑하는 메서드
+    private String mapKoreanToProcess(String koreanStatus) {
+        switch (koreanStatus) {
+            case "입금전":
+                return "before";  // 입금전 -> before
+            case "배송준비중":
+                return "ready";   // 배송준비중 -> ready
+            case "배송중":
+                return "delivery"; // 배송중 -> delivery
+            case "배송완료":
+                return "done";    // 배송완료 -> done
+            default:
+                return "UNKNOWN"; // 예외 처리: Unknown 상태
+        }
+    }
+    
+    private String mapProcessToKorean(String process) {
+        switch (process) {
+            case "before":
+                return "입금전";
+            case "ready":
+                return "배송준비중";
+            case "delivery":
+                return "배송중";
+            case "done":
+                return "배송완료";
+            default:
+                return "미확인"; // Default unknown process
+        }
     }
 
 
@@ -170,9 +203,13 @@ public class ManagerSaleService {
                 if (!newProcess.equals(purchase.getProcess())) { // 상태가 다를 경우에만 변경
                     purchase.setProcess(newProcess);
                     pr.save(purchase);
-                    return "주문 상태가 '" + newProcess + "'(으)로 변경되었습니다.";
+                    
+                    String koreanProcess = mapProcessToKorean(newProcess);
+                    return "주문 상태가 '" + koreanProcess + "'(으)로 변경되었습니다.";
                 }
-                return "이미 '" + newProcess + "' 상태입니다.";
+                
+                String koreanProcess = mapProcessToKorean(newProcess);
+                return "이미 '" + koreanProcess + "' 상태입니다.";
             })
             .orElseThrow(() -> new IllegalArgumentException("해당 주문을 찾을 수 없습니다."));
     }

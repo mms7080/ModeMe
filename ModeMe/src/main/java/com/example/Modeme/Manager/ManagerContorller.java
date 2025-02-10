@@ -316,7 +316,7 @@ public class ManagerContorller {
         // 페이지 네이션 처리: 페이지와 사이즈 값을 Pageable 객체로 생성
         Pageable pageable = PageRequest.of(page, size);
 
-        // 판매 데이터를 가져오기
+        // 판매 데이터를 가져오기 (검색 옵션과 검색어를 필터링에 적용)
         Page<ProductSaleDTO> saleData = mss.getSaleData(pageable, newProcess, searchOption, keyword);
 
         // 월별 판매 금액 데이터를 가져오기
@@ -338,9 +338,12 @@ public class ManagerContorller {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", saleData.getTotalPages());
         model.addAttribute("pageSize", size);
+        model.addAttribute("searchOption", searchOption); // 검색 옵션 추가
+        model.addAttribute("keyword", keyword); // 검색어 추가
 
         return "manager/managerSale"; // 뷰 이름 반환
     }
+
 
     
    

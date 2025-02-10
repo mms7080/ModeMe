@@ -103,38 +103,39 @@
 			</tbody>
 		</table>
 
-		<div class="pagination">
-			<!-- 이전 버튼 -->
-			<button th:if="${currentPage > 0}"
-				th:onclick="|window.location.href='/manager/ManagerSale?page=${currentPage - 1}&size=${pageSize}'|">&lt;</button>
+<div class="pagination">
+    <!-- 이전 버튼 -->
+    <button th:if="${currentPage > 0}"
+            th:data-href="@{/manager/ManagerSale(page=${currentPage - 1}, size=${pageSize}, searchOption=${searchOption}, keyword=${keyword})}" 
+            onclick="window.location.href=this.dataset.href;">&lt;</button>
 
-			<!-- 페이지 번호 -->
-			<span th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-				th:classappend="${i == currentPage} ? 'active' : ''"
-				th:onclick="|window.location.href='/manager/ManagerSale?page=${i}&size=${pageSize}'|"
-				th:text="${i + 1}"> </span>
+    <!-- 페이지 번호 -->
+    <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+          th:classappend="${i == currentPage} ? 'active' : ''"
+          th:data-href="@{/manager/ManagerSale(page=${i}, size=${pageSize}, searchOption=${searchOption}, keyword=${keyword})}" 
+          onclick="window.location.href=this.dataset.href;" 
+          th:text="${i + 1}"></span>
 
-			<!-- 다음 버튼 -->
-			<button th:if="${currentPage < totalPages - 1}"
-				th:onclick="|window.location.href='/manager/ManagerSale?page=${currentPage + 1}&size=${pageSize}'|">&gt;</button>
-		</div>
+    <!-- 다음 버튼 -->
+    <button th:if="${currentPage < totalPages - 1}"
+            th:data-href="@{/manager/ManagerSale(page=${currentPage + 1}, size=${pageSize}, searchOption=${searchOption}, keyword=${keyword})}" 
+            onclick="window.location.href=this.dataset.href;">&gt;</button>
+</div>
 
-		<!-- 검색 섹션 -->
-		<div class="search-section">
-			<form method="get" action="/manager/ManagerSale">
-				<label for="search-option">검색 옵션:</label> <select id="search-option"
-					name="searchOption">
-					<option value="process" th:selected="${searchOption == 'process'}">주문상태</option>
-					<option value="orderInfo"
-						th:selected="${searchOption == 'orderInfo'}">주문정보</option>
-					<!-- 주문정보 검색 옵션 추가 -->
-				</select> <input type="text" id="search-input" name="keyword"
-					placeholder="검색어를 입력하세요"
-					th:value="${keyword != null ? keyword : ''}">
+<!-- 검색 섹션 -->
+<div class="search-section">
+    <form method="get" action="/manager/ManagerSale">
+        <label for="search-option">검색 옵션:</label>
+        <select id="search-option" name="searchOption">
+            <option value="process" th:selected="${searchOption == 'process'}">주문상태</option>
+            <option value="orderInfo" th:selected="${searchOption == 'orderInfo'}">주문정보</option>
+        </select>
+        <input type="text" id="search-input" name="keyword" placeholder="검색어를 입력하세요"
+               th:value="${keyword != null ? keyword : ''}">
+        <button type="submit">검색</button>
+    </form>
+</div>
 
-				<button type="submit">검색</button>
-			</form>
-		</div>
 
 	</main>
 
