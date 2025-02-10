@@ -18,18 +18,22 @@
 		<div class="MypageHeader">
 		<div class="firstbox rightline" >
 				<div class="firstboxcol">
-					<span>총적립금</span> <span th:text="${total_mileage+'원'}"></span>
+				<span>총적립금</span> 
+					 <span th:text="${#numbers.formatInteger(total_mileage, 0, 'COMMA').replace(',', '.') + '원'}"></span>
 				</div>
 				<div class="firstboxcol">
-					<span>총주문</span> <span th:text="${'KRW '+totalprice+' ('+count+'회)'}"></span>
+				    <span>총주문</span> 
+				    <span th:text="${'KRW ' + #numbers.formatInteger(totalprice, 0, 'COMMA').replace(',', '.') + ' (' + count + '회)'}"></span>
 				</div>
 			</div>
 			<div class="firstbox">
 				<div class="firstboxcol">
-					<span>사용가능 적립금</span> <span th:text="${availableMileage+'원'}"></span>
+				<span>사용가능 적립금</span> 
+					 <span th:text="${#numbers.formatInteger(availableMileage, 0, 'COMMA').replace(',', '.') + '원'}"></span>
 				</div>
 				<div class="firstboxcol">
-					<span>사용 적립금</span> <span th:text="${usedMileage+'원'}">0원</span>
+				<span>사용 적립금</span> 
+					<span th:text="${#numbers.formatInteger(usedMileage, 0, 'COMMA').replace(',', '.') + '원'}">0원</span>
 				</div>
 			</div>
 			

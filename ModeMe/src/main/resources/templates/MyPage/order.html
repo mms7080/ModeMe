@@ -64,10 +64,10 @@
 
                      <span th:text="${content.id}"></span>
                   </div>
-                  <span>이미지</span> <span th:text="${content.itemname}"></span> <span
-                     th:text="${content.productMany}"></span> <span
-                     th:text="${content.totalPrice}"></span> <span
-                     th:switch="${content.process}"> 
+                  <span>이미지</span> <span th:text="${content.itemname}"></span> 
+                  <span th:text="${content.productMany}"></span> 
+                  <span th:text="${#numbers.formatInteger(content.totalPrice, 0, 'COMMA').replace(',', '.')}"></span> 
+                  <span th:switch="${content.process}"> 
                      <span th:case="'before'">⏰ 입금 전</span> 
                      <span th:case="'ready'">📦 배송준비 중</span>
                      <span th:case="'delivery'">🚛 배송 중</span> 

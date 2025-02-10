@@ -77,7 +77,7 @@
 					<td th:text="${sale.category}"></td>
 					<td th:text="${sale.itemname}"></td>
 					<td th:text="${sale.productMany}"></td>
-					<td th:text="${sale.totalPrice}"></td>
+					<td th:text="${#numbers.formatInteger(sale.totalPrice, 0, 'COMMA').replace(',', '.')}"></td>
 					<td th:text="'🙍‍♂️'+${sale.username}"></td>
 					<td>
 						<!-- process 상태를 변경하는 select box --> <select
