@@ -128,10 +128,10 @@ public class ProductDetailController {
 	// 상품 상세 정보 조회
 	@GetMapping("/productDetail/{id}")
 	public String getProductDetail(
-			@PathVariable Long id,
-			@RequestParam(defaultValue = "0") int page,
-			Model model,
-			 Principal principal
+	        @PathVariable Long id,
+	        @RequestParam(defaultValue = "0") int page,
+	        Model model,
+	        Principal principal
 	) {
 	    // 상품 정보 조회
 	    AddItem product = addItemRepository.findById(id)
@@ -147,22 +147,22 @@ public class ProductDetailController {
 	    User currentUser = (principal != null) 
 	            ? userRepository.findByUsername(principal.getName()).orElse(null) 
 	            : null;
-	    
-//	    List<ProductReviewDTO> reviewDTOs = reviewPage.getContent().stream()
-//	            .map(review -> ProductReviewDTO.fromEntity(review, reviewLikeRepository, currentUser))
-//	            .collect(Collectors.toList());
+
+	    // 엔티티 리스트를 DTO 리스트로 변환 (좋아요 정보 포함)
+	    List<ProductReviewDTO> reviewDTOs = reviewPage.getContent().stream()
+	        .map(review -> ProductReviewDTO.fromEntity(review, reviewLikeRepository, currentUser))
+	        .collect(Collectors.toList());
 
 	    // 모델에 데이터 추가
 	    model.addAttribute("product", product);
 	    model.addAttribute("reviewCount", reviewCount);
 	    model.addAttribute("reviewPage", reviewPage);
-	    model.addAttribute("reviews", reviewPage.getContent());
+	    model.addAttribute("reviews", reviewDTOs); // 엔티티 대신 DTO 리스트 전달
 	    model.addAttribute("currentPage", reviewPage.getNumber());
 	    model.addAttribute("totalPages", reviewPage.getTotalPages());
 	    model.addAttribute("productDescription", product.getProductDescription());
-	    
-//	    System.out.println("🔥 리뷰 데이터 확인:");
-//	    reviewDTOs.forEach(dto -> System.out.println("Review ID: " + dto.getId() + ", Likes: " + dto.getLikeCount()));
+	    // DTO에 좋아요 정보가 포함되어 있으므로 별도의 likedReviews 맵은 필요없습니다.
+	    // model.addAttribute("likedReviews", likedReviews);
 
 	    return "/productDetail/productDetail";
 	}
@@ -195,34 +195,34 @@ public class ProductDetailController {
 	
 	
 	// 리뷰 데이터 가져오기
-	@GetMapping("/{id}/reviews")
-	@ResponseBody // JSON 응답 강제 적용
-	public ResponseEntity<Map<String, Object>> getReviews(@PathVariable Long id,
-	                                                      @RequestParam(defaultValue = "0") int page,
-	                                                      Principal principal) {
-	    // 페이지네이션: 한 페이지에 8개씩, commentedTime 내림차순
-	    Pageable pageable = PageRequest.of(page, 8, Sort.by(Sort.Direction.DESC, "commentedTime"));
-	    Page<ProductReview> reviewPage = reviewRepository.findByAddItemId(id, pageable);
+		@GetMapping("/{id}/reviews")
+		@ResponseBody // JSON 응답 강제 적용
+		public ResponseEntity<Map<String, Object>> getReviews(@PathVariable Long id,
+		                                                      @RequestParam(defaultValue = "0") int page,
+		                                                      Principal principal) {
+		    // 페이지네이션: 한 페이지에 8개씩, commentedTime 내림차순
+		    Pageable pageable = PageRequest.of(page, 8, Sort.by(Sort.Direction.DESC, "commentedTime"));
+		    Page<ProductReview> reviewPage = reviewRepository.findByAddItemId(id, pageable);
 
-	    final User currentUser;
-	    if (principal != null) {
-	        currentUser = userRepository.findByUsername(principal.getName()).orElse(null);
-	    } else {
-	        currentUser = null;
-	    }
-	    
-	    // 엔티티 리스트를 DTO 리스트로 변환 (좋아요 정보 포함)
-	    List<ProductReviewDTO> reviewDTOs = reviewPage.getContent().stream()
-	        .map(review -> ProductReviewDTO.fromEntity(review, reviewLikeRepository, currentUser))
-	        .collect(Collectors.toList());
+		    final User currentUser;
+		    if (principal != null) {
+		        currentUser = userRepository.findByUsername(principal.getName()).orElse(null);
+		    } else {
+		        currentUser = null;
+		    }
+		    
+		    // 엔티티 리스트를 DTO 리스트로 변환 (좋아요 정보 포함)
+		    List<ProductReviewDTO> reviewDTOs = reviewPage.getContent().stream()
+		        .map(review -> ProductReviewDTO.fromEntity(review, reviewLikeRepository, currentUser))
+		        .collect(Collectors.toList());
 
-	    Map<String, Object> response = new HashMap<>();
-	    response.put("reviews", reviewDTOs);             // 현재 페이지의 DTO 리스트
-	    response.put("totalPages", reviewPage.getTotalPages());
-	    response.put("currentPage", reviewPage.getNumber());
+		    Map<String, Object> response = new HashMap<>();
+		    response.put("reviews", reviewDTOs);             // 현재 페이지의 DTO 리스트
+		    response.put("totalPages", reviewPage.getTotalPages());
+		    response.put("currentPage", reviewPage.getNumber());
 
-	    return ResponseEntity.ok(response);
-	}
+		    return ResponseEntity.ok(response);
+		}
 
 	
 	// 리뷰 삭제

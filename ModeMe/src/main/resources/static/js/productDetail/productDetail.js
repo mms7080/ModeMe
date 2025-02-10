@@ -206,38 +206,20 @@ document.addEventListener("DOMContentLoaded", function() {
 					const reviewItem = document.createElement("div");
 					reviewItem.classList.add("review-item");
 					reviewItem.innerHTML = `
-				                    <div class="review-header">
-				                        <span class="review-writer">${review.users.username}</span>
-				                        <small class="review-date">${review.commentedTime}</small>
-				                    </div>
-				                    <p>${review.content}</p>
-				                    <div class="review-footer">
-										<div class="like-section">
-										    <button type="button" class="like-button ${likedReviews[review.id]} ? 'liked' : ''" data-review-id="${review.id}">
-										        <span class="like-icon">${likedReviews[review.id]} ? '❤️' : '🤍'</span>
-										    </button>
-										    <span class="like-count" id="'like-count-' + ${review.id}">${review.likeCount}"</span>
-										</div>
-				                    </div>
-									
-									
-									
-									<div class="review-header">
-									        <span class="review-writer">${review.users.username}</span>
-									        <small class="review-date">${review.commentedTime}</small>
-									    </div>
-									    <p>${review.content}</p>
-									    <div class="review-footer">
-									        <div class="like-section">
-									            <button type="button" class="like-button ${likedReviews[review.id] ? 'liked' : ''}" data-review-id="${review.id}">
-									                <span class="like-icon">${likedReviews[review.id] ? '❤️' : '🤍'}</span>
-									            </button>
-									            <span class="like-count" id="like-count-${review.id}">${review.likeCount}</span>
-									        </div>
-									    </div>
-									
-									
-				                `;
+										    <div class="review-header">
+										        <span class="review-writer">${review.username}</span>
+										        <small class="review-date">${review.commentedTime}</small>
+										    </div>
+										    <p>${review.content}</p>
+										    <div class="review-footer">
+										        <div class="like-section">
+													<button type="button" class="like-button ${ review.liked ? 'liked' : '' }" data-review-id="${review.id}">
+										                <span class="like-icon">${ review.liked ? '❤️' : '🤍' }</span>
+										            </button>
+										            <span class="like-count" id="like-count-${review.id}">${review.likeCount}</span>
+										        </div>
+										    </div>
+										`;
 					reviewListContainer.appendChild(reviewItem);
 				});
 
