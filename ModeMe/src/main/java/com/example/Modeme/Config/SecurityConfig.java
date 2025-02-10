@@ -58,7 +58,8 @@ public class SecurityConfig {
                     "/productDetail/**",
                     "/purchase",
                     "/cart/**",
-                    "/api/drive/**"
+                    "/api/drive/**",
+                    "/wishlist/**"
 
                 )
             )
@@ -93,7 +94,9 @@ public class SecurityConfig {
                     "/main",
                     "check-username",
                     "check-email",
-                    "/api/**"
+                    "/api/**",
+                    "/product/**",
+                    "/proList"
                 ).permitAll()
 
                 // ✅ 회원정보 수정 페이지는 로그인한 사용자만 접근 가능

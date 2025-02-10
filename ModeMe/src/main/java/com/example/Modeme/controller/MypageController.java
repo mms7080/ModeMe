@@ -6,15 +6,18 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.Modeme.Config.CustomUserDetails;
+import com.example.Modeme.Mypage.MypageDTO.WishlistRequest;
 import com.example.Modeme.Mypage.MypageEntity.Address;
 import com.example.Modeme.Mypage.MypageEntity.Defaultaddress;
 import com.example.Modeme.Mypage.MypageEntity.Mileage;
@@ -347,5 +350,21 @@ import com.example.Modeme.purchase.dto.Purchase;
 		    	defaultser.deleteDefault(userid, addressId);
 		    	
 		    	return "redirect:/address";
+		    }
+		    
+		    @PostMapping("/wishlist/add")
+		    public ResponseEntity<String> addToWishlist(
+		            @RequestBody WishlistRequest request, 
+		            @AuthenticationPrincipal CustomUserDetails userDetails) {
+		        
+		        String userId = userDetails.getUser().getUsername(); // 로그인한 사용자 ID 가져오기
+
+		        boolean isAdded = wishser.addToWishlist(userId, request.getItemNumber());
+
+		        if (isAdded) {
+		            return ResponseEntity.ok("success");
+		        } else {
+		            return ResponseEntity.ok("exists");
+		        }
 		    }
 		}

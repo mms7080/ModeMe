@@ -39,7 +39,7 @@ public class Wishlist {
 	@Column
 	private int price;
 	@Column
-	private String mileage;
+	private Long itemNumber;
 
 	
 }

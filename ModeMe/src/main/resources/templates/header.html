@@ -6,7 +6,20 @@
     <title>Header with Search</title>
     <link rel="stylesheet" href="/css/header.css">
     <style>
-        /*추가된 css는 아래 작성*/
+        .menu a {
+		    text-decoration: none;
+		    color: black;
+		    padding: 10px 15px;
+		    font-weight: bold;
+		    transition: color 0.3s ease-in-out;
+		}
+		
+		.menu a.selected-category {
+		    color: white;
+		    background-color: black;
+		    border-radius: 5px;
+		}
+        
     </style>
 </head>
 <body>
@@ -36,14 +49,19 @@
         </a>
 
         <nav class="menu">
-            <a href="#">NEW 5%</a>
-            <a href="#">BEST 30</a>
-            <a href="/outer">OUTER</a>
-            <a href="#">TOP</a>
-            <a href="#">BOTTOM</a>
-            <a href="#">OPS</a>
-            <a href="#">ACC</a>
-        </nav>
+			<a th:href="@{/proList(category='all')}" 
+		       th:classappend="${selectedCategory == 'all' ? 'selected-category' : ''}">ALL</a>
+			<a th:href="@{/proList(category='outer')}" 
+		       th:classappend="${selectedCategory == 'outer' ? 'selected-category' : ''}">OUTER</a>
+			<a th:href="@{/proList(category='top')}" 
+		       th:classappend="${selectedCategory == 'top' ? 'selected-category' : ''}">TOP</a>
+			<a th:href="@{/proList(category='bottom')}" 
+		       th:classappend="${selectedCategory == 'bottom' ? 'selected-category' : ''}">BOTTOM</a>
+			<a th:href="@{/proList(category='acc')}" 
+		       th:classappend="${selectedCategory == 'acc' ? 'selected-category' : ''}">ACC</a>
+		</nav>
+
+
     </header>
 
     <!-- 오른쪽 네비게이션 -->

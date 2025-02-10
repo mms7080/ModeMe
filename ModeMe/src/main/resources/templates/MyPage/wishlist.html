@@ -24,15 +24,15 @@
 	<main>
 		<div class="wishlist">
 			<div class="wishlistcontent">
-				<span>이미지</span> <span>제품명</span> <span>가격</span> <span>적립금</span> <span>선택</span>
+				<span>이미지</span> <span>제품명</span> <span>가격</span> <span>선택</span>
 			</div>
 
 			<div class="wishlist_time"
 				th:if="${wishlist != null && !wishlist.isEmpty()}"
 				th:each="content : ${wishlist}">
-				<span>이미지</span> <span th:text="${content.itemname}"></span> <span
-					th:text="${content.price}"></span> <span
-					th:text="${content.mileage}"></span>
+				<span>이미지</span> 
+				<span th:text="${content.itemname}"></span> 
+				<span th:text="${content.price}"></span>
 				<form action="/wishlist_delete" method="post" class="wishlist_form">
 					<input type="hidden" name="wishid" th:value="${content.wishid}" />
 					<button name="action" value="cart" class="wishlist_cart">장바구니 담기</button>

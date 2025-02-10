@@ -8,13 +8,17 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.example.Modeme.Config.CustomUserDetails;
 import com.example.Modeme.Manager.Entity.AddItem;
 import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
+import com.example.Modeme.Mypage.MypageEntity.Wishlist;
+import com.example.Modeme.Mypage.MypageRepository.WishlistRepository;
 import com.example.Modeme.User.UserDTO.Headerlogin;
 import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.User.UserRepository.UserRepository;
@@ -42,6 +46,9 @@ public class ViewController {
 	
 	@Autowired
 	private ShoppingCartRepository scr;
+	
+	@Autowired
+	private WishlistRepository wishr;
 	
     @ModelAttribute //모든 매핑에 추가할 코드
     public void addAttributes(Model model, Principal principal) {
@@ -134,11 +141,22 @@ public class ViewController {
 	}
 
 	@GetMapping("/main")
-	public String mainView2(Model model) {
-		List<AddItem> aList = air.findAll();
-		model.addAttribute("aList", aList);
-		return "/main";
+	public String mainView(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
+	    List<AddItem> aList = air.findAll();
+	    model.addAttribute("aList", aList);
+
+	    // 로그인한 사용자가 있을 경우, 관심 상품 목록 가져오기
+	    if (userDetails != null) {
+	        String userId = userDetails.getUser().getUsername();
+	        List<Wishlist> wList = wishr.findByUserid(userId);
+	        model.addAttribute("wList", wList);
+	    } else {
+	        model.addAttribute("wList", null); // 비로그인 시 빈 리스트
+	    }
+
+	    return "/main";
 	}
+
 	
 	// OUTER 예시 링크
 	@GetMapping("/outer")

@@ -29,4 +29,6 @@ public interface AddItemRepository extends JpaRepository<AddItem, Long>{
     @Query("SELECT a FROM AddItem a LEFT JOIN FETCH a.colorNames WHERE a.id = :id")
     Optional<AddItem> findWithColorNamesById(@Param("id") Long id);
 
+	List<AddItem> findByCategory(String category);
+
 }

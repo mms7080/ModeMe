@@ -29,6 +29,22 @@ for(const p of products){
 		}
 	})
 }
+document.addEventListener('DOMContentLoaded', () => {
+    function addClickEventToProducts(selector) {
+        const products = document.querySelectorAll(selector);
+        products.forEach(p => {
+            p.addEventListener('click', (e) => {
+                if (e.target.tagName === 'IMG' || e.target.tagName === 'P') {
+                    let pNum = e.target.parentElement.children[0].value;
+                    location.href = "/productDetail/productDetail/" + pNum;
+                }
+            });
+        });
+    }
+    
+    addClickEventToProducts('.swiper-slide');
+    addClickEventToProducts('.product-card');
+});
 
 // 장바구니에 추가
 document.addEventListener("DOMContentLoaded", function () {
@@ -62,3 +78,34 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".heart-icon").forEach(icon => {
+        icon.addEventListener("click", function () {
+            const productCard = this.closest(".product-card"); // 상품 카드 요소 찾기
+            const itemNumber = productCard.querySelector("input[type='hidden']").value; // 상품 ID
+            const itemName = productCard.querySelector("p:first-of-type").innerText; // 상품 이름
+            const itemImage = productCard.querySelector(".product-image").src; // 상품 이미지
+console.log(itemNumber)
+            $.ajax({
+                type: "POST",
+                url: "/wishlist/add",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    itemNumber: itemNumber,
+                    itemName: itemName,
+                    itemImage: itemImage
+                }),
+                success: function (response) {
+                    if (response === "success") {
+                        alert("위시리스트에 추가되었습니다!");
+                    } else if (response === "exists") {
+                        alert("이미 위시리스트에 있는 상품입니다!");
+                    }
+                },
+                error: function (error) {
+                    console.error("위시리스트 추가 오류:", error);
+                }
+            });
+        });
+    });
+});

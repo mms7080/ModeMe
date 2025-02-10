@@ -212,22 +212,18 @@ public class PurchaseController {
 	// ProductController 로 옮기면 좋음
 	@GetMapping("/proList")
 	public String productList(
-			@RequestParam(defaultValue="1") int page,
-			@RequestParam(defaultValue="all") String category
+			@RequestParam(defaultValue="all") String category, Model model
 			) {
-		/*
-		if(category.equals("all"){
-			List<Product> pList = pr.findAll();
-		} else if(category.equals("outer"){
-			List<Product> pList = pr.findByCategory(category);
+		List<AddItem> items;
+		
+		if("all".equals(category)) {
+			items = air.findAll();
+		} else {
+			items = air.findByCategory(category);
 		}
-		// 등등 category 별로 찾아서 리스트 불러오기
-		// 그 다음에 페이징처리도 섞기
 		
-		model.addAttribute("pList", pList);
-		
-		*/
-		
+		model.addAttribute("aList", items);
+		model.addAttribute("selectedCategory", category);
 		return "/product/productList";
 	}
 	
