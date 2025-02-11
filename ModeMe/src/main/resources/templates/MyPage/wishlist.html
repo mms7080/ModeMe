@@ -36,6 +36,8 @@
 				<span th:text="${#numbers.formatInteger(content.price * 0.01, 0)}"></span>
 				<form action="/wishlist_delete" method="post" class="wishlist_form">
 					<input type="hidden" name="wishid" th:value="${content.wishid}" />
+					<input type="hidden" name="name" th:value="${content.itemname}"/>
+					<input type="hidden" name="number" th:value="${content.itemNumber}"/>
 					<button name="action" value="cart" class="wishlist_cart">장바구니
 						담기</button>
 					<button name="action" value="delete" class="wishlist_delete"

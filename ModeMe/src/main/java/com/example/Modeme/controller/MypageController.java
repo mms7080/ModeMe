@@ -34,7 +34,9 @@ import com.example.Modeme.User.UserDTO.Headerlogin;
 import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.User.UserRepository.UserRepository;
 import com.example.Modeme.purchase.dao.PurchaseRepository;
+import com.example.Modeme.purchase.dao.ShoppingCartRepository;
 import com.example.Modeme.purchase.dto.Purchase;
+import com.example.Modeme.purchase.dto.ShoppingCart;
 	
 	@Controller
 	public class MypageController {
@@ -69,6 +71,9 @@ import com.example.Modeme.purchase.dto.Purchase;
 		   MileageService mileser;
 		   @Autowired
 		   MileageRepository milerep;
+		   
+		   @Autowired
+		   ShoppingCartRepository cartrep;
 		   
 		    @ModelAttribute //모든 매핑에 추가할 코드
 		    public void addAttributes(Model model, Principal principal) {
@@ -215,6 +220,8 @@ import com.example.Modeme.purchase.dto.Purchase;
 			public String DeleteWish(
 					@AuthenticationPrincipal CustomUserDetails userDetails,
 					@RequestParam(value="wishid") Long wishid,
+					@RequestParam(value="name") String name,
+					@RequestParam(value="number") Long itemnumber,
 					@RequestParam(value="action") String action
 			) {
 				String userid = userDetails.getUsername();
@@ -224,7 +231,10 @@ import com.example.Modeme.purchase.dto.Purchase;
 				wishser.deleteWishlist(userid, wishid);
 				}
 				else {
-					return "/wishlist"; //장바구니 완료되면 insert랑 테이블 연결 시키기
+					//쇼핑카트 저장안됨 수정해야함
+					ShoppingCart cart = new ShoppingCart(null,null,itemnumber,name,1);
+					cartrep.save(cart);
+					
 				}
 				
 				return "redirect:/wishlist";
