@@ -64,20 +64,20 @@
 					<th>상품금액</th>
 					<th>주문아이디</th>
 					<th>주문상태</th>
-					<th> </th>
+					<th></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="sale : ${saleData}">
 					<td th:text="${sale.id}"></td>
-					<td>
-						<img th:src="@{${sale.imageUrl}}" alt="상품 이미지" style="width: 50px; height: 50px;"/>
-					</td>
+					<td><img th:src="@{${sale.imageUrl}}" alt="상품 이미지"
+						style="width: 50px; height: 50px;" /></td>
 					<td th:text="${sale.orderDate}"></td>
 					<td th:text="${sale.category}"></td>
 					<td th:text="${sale.itemname}"></td>
 					<td th:text="${sale.productMany}"></td>
-					<td th:text="${#numbers.formatInteger(sale.totalPrice, 0, 'COMMA').replace(',', '.')}"></td>
+					<td
+						th:text="${#numbers.formatInteger(sale.totalPrice, 0, 'COMMA').replace(',', '.')}"></td>
 					<td th:text="'🙍‍♂️'+${sale.username}"></td>
 					<td>
 						<!-- process 상태를 변경하는 select box --> <select
@@ -94,8 +94,7 @@
 					<td>
 						<!-- 수정 버튼 -->
 						<button class="update-process-btn"
-							th:attr="data-sale-id=${sale.id}">수정</button> 
-						<!-- 삭제 버튼 -->
+							th:attr="data-sale-id=${sale.id}">수정</button> <!-- 삭제 버튼 -->
 						<button class="delete-process-btn"
 							th:attr="data-sale-id=${sale.id}">삭제</button>
 					</td>
@@ -103,42 +102,41 @@
 			</tbody>
 		</table>
 
-<div class="pagination">
-    <!-- 이전 버튼 -->
-    <button th:if="${currentPage > 0}"
-            th:data-href="@{/manager/ManagerSale(page=${currentPage - 1}, size=${pageSize}, searchOption=${searchOption}, keyword=${keyword})}" 
-            onclick="window.location.href=this.dataset.href;">&lt;</button>
+		<div class="pagination">
+			<!-- 이전 버튼 -->
+			<button th:if="${currentPage > 0}"
+				th:data-href="@{/manager/ManagerSale(page=${currentPage - 1}, size=${pageSize}, searchOption=${searchOption}, keyword=${keyword})}"
+				onclick="window.location.href=this.dataset.href;">&lt;</button>
 
-    <!-- 페이지 번호 -->
-    <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-          th:classappend="${i == currentPage} ? 'active' : ''"
-          th:data-href="@{/manager/ManagerSale(page=${i}, size=${pageSize}, searchOption=${searchOption}, keyword=${keyword})}" 
-          onclick="window.location.href=this.dataset.href;" 
-          th:text="${i + 1}"></span>
+			<!-- 페이지 번호 -->
+			<span th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+				th:classappend="${i == currentPage} ? 'active' : ''"
+				th:data-href="@{/manager/ManagerSale(page=${i}, size=${pageSize}, searchOption=${searchOption}, keyword=${keyword})}"
+				onclick="window.location.href=this.dataset.href;" th:text="${i + 1}"></span>
 
-    <!-- 다음 버튼 -->
-    <button th:if="${currentPage < totalPages - 1}"
-            th:data-href="@{/manager/ManagerSale(page=${currentPage + 1}, size=${pageSize}, searchOption=${searchOption}, keyword=${keyword})}" 
-            onclick="window.location.href=this.dataset.href;">&gt;</button>
-</div>
+			<!-- 다음 버튼 -->
+			<button th:if="${currentPage < totalPages - 1}"
+				th:data-href="@{/manager/ManagerSale(page=${currentPage + 1}, size=${pageSize}, searchOption=${searchOption}, keyword=${keyword})}"
+				onclick="window.location.href=this.dataset.href;">&gt;</button>
+		</div>
 
-<!-- 검색 섹션 -->
-<div class="search-section">
-    <form method="get" action="/manager/ManagerSale">
-        <label for="search-option">검색 옵션:</label>
-        <select id="search-option" name="searchOption">
-            <option value="process" th:selected="${searchOption == 'process'}">주문상태</option>
-            <option value="orderInfo" th:selected="${searchOption == 'orderInfo'}">주문정보</option>
-        </select>
-        <input type="text" id="search-input" name="keyword" placeholder="검색어를 입력하세요"
-               th:value="${keyword != null ? keyword : ''}">
-        <button type="submit">검색</button>
-    </form>
-</div>
-
-
+		<!-- 검색 섹션 -->
+		<div class="search-section">
+			<form method="get" action="/manager/ManagerSale">
+				<label for="search-option">검색 옵션:</label> <select id="search-option"
+					name="searchOption">
+					<option value="process" th:selected="${searchOption == 'process'}">주문상태</option>
+					<option value="orderInfo"
+						th:selected="${searchOption == 'orderInfo'}">주문정보</option>
+					<option value="orderId" th:selected="${searchOption == 'orderId'}">주문아이디</option>
+					<!-- 수정 -->
+				</select> <input type="text" id="search-input" name="keyword"
+					placeholder="검색어를 입력하세요"
+					th:value="${keyword != null ? keyword : ''}">
+				<button type="submit">검색</button>
+			</form>
+		</div>
 	</main>
-
 	<!-- 푸터 -->
 	<div th:replace="~{footer :: footer}"></div>
 

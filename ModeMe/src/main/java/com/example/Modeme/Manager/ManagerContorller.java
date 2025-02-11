@@ -153,35 +153,40 @@ public class ManagerContorller {
             String username = principal.getName();
             model.addAttribute("username", username);
         }
+        
+        // keyword가 null인 경우 빈 문자열로 설정
+        if (keyword == null) {
+            keyword = "";
+        }
 
-        // 페이지네이션과 검색 조건을 고려한 상품 목록 조회
+        // 페이지네이션을 고려한 상품 목록 조회
         Page<AddItem> productPage;
 
+        // 검색 조건이 있을 경우 검색된 상품을 가져오고, 없으면 기본 목록을 가져옴
         if (option != null && keyword != null && !keyword.isBlank()) {
-            // 검색 호출
             productPage = as.searchProducts(option, keyword, PageRequest.of(page, size));
         } else {
-            // 기본 목록 호출
             productPage = as.getProducts(PageRequest.of(page, size));
         }
 
         List<AddItem> products = productPage.getContent();
         int totalPages = productPage.getTotalPages();
 
-        // 첫 번째 이미지 URL 가져오기
+        // 각 상품의 첫 번째 이미지 URL을 가져오기
         List<String> firstImageUrls = new ArrayList<>();
         for (AddItem product : products) {
             String firstImageUrl = as.getFirstImageUrl(product.getId());
             firstImageUrls.add(firstImageUrl);
         }
 
+        // 모델에 데이터를 추가
         model.addAttribute("products", products);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("pageSize", size);
         model.addAttribute("option", option);
         model.addAttribute("keyword", keyword);
-        model.addAttribute("firstImageUrls", firstImageUrls);  // 첫 번째 이미지 URL 리스트 전달
+        model.addAttribute("firstImageUrls", firstImageUrls);
 
         return "manager/managerProduct";  // 상품 관리 페이지 반환
     }

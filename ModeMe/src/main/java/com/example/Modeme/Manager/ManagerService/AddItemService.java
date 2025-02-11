@@ -18,9 +18,7 @@ import com.example.Modeme.Manager.Entity.ItemSize;
 import com.example.Modeme.Manager.Entity.ProductImage;
 //import com.example.Modeme.Manager.Entity.ProductImage;
 import com.example.Modeme.Manager.ManagerDTO.AddItemDTO;
-import com.example.Modeme.Manager.ManagerDTO.ItemColorDTO;
-import com.example.Modeme.Manager.ManagerDTO.ItemColorNameDTO;
-import com.example.Modeme.Manager.ManagerDTO.ItemSizeDTO;
+
 import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
 import com.example.Modeme.Manager.ManagerRepository.ProductImageRepository;
 import com.example.Modeme.Manager.ManagerRepository.itemColorNameRepository;
@@ -137,12 +135,13 @@ public class AddItemService {
 
     // 검색된 상품 목록 조회
     public Page<AddItem> searchProducts(String option, String keyword, Pageable pageable) {
-        if ("category".equals(option)) {
-            return ar.findByCategoryContaining(keyword, pageable);
-        } else if ("name".equals(option)) {
+    	pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Order.desc("id")));
+        if ("category".equals(option) && keyword != null) {
+            return ar.findByCategoryContaining(keyword,pageable);
+        } else if ("name".equals(option) && keyword != null) {
             return ar.findByNameContaining(keyword, pageable);
         } else {
-            return Page.empty(pageable);  // 잘못된 검색 옵션 처리
+            return ar.findAll(pageable);
         }
     }
     

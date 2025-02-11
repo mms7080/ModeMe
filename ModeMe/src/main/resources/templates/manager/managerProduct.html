@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<!-- 안녕하세요 -->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,13 +43,13 @@
 						th:text="${product.name}"></a>
 					</td>
 					<td th:text="${product.category}"></td>
-					<td th:text="${#numbers.formatInteger(product.price, 0, 'COMMA').replace(',', '.')}"></td>
+					<td
+						th:text="${#numbers.formatInteger(product.price, 0, 'COMMA').replace(',', '.')}"></td>
 					<td th:text="${product.colorNames}"></td>
 					<td th:text="${product.stock}"></td>
 					<td>
 						<!-- 수정 버튼을 상품 ID와 함께 표시 -->
 						<button class="modifyButton" th:data-product-id="${product.id}">수정</button>
-
 						<button class="deleteButton" th:data-id="${product.id}">삭제</button>
 					</td>
 				</tr>
@@ -59,18 +58,20 @@
 		<div class="pagination">
 			<!-- 이전 페이지 버튼 -->
 			<button th:if="${currentPage > 0}"
-				th:onclick="'location.href=\'?page=' + (${currentPage} - 1) + '&size=' + ${pageSize} + '\';'">&lt;</button>
+				th:attr="onclick='location.href=\'/manager/managerProduct?page=' + (${currentPage} - 1) + '&size=' + ${pageSize} + '&option=' + ${option} + '&keyword=' + ${keyword} + '\';'">&lt;</button>
 
 			<!-- 페이지 번호 -->
 			<span th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
 				th:classappend="${i == currentPage} ? 'active' : ''"
-				th:onclick="'location.href=\'?page=' + ${i} + '&size=' + ${pageSize} + '\';'"
-				th:text="${i + 1}"> </span>
+				th:attr="onclick='location.href=\'/manager/managerProduct?page=' + ${i} + '&size=' + ${pageSize} + '&option=' + ${option} + '&keyword=' + ${keyword} + '\';'"
+				th:text="${i + 1}"></span>
 
 			<!-- 다음 페이지 버튼 -->
 			<button th:if="${currentPage < totalPages - 1}"
-				th:onclick="'location.href=\'?page=' + (${currentPage} + 1) + '&size=' + ${pageSize} + '\';'">&gt;</button>
+				th:attr="onclick='location.href=\'/manager/managerProduct?page=' + (${currentPage} + 1) + '&size=' + ${pageSize} + '&option=' + ${option} + '&keyword=' + ${keyword} + '\';'">&gt;</button>
 		</div>
+
+
 		<div class="search-section">
 			<form th:action="@{/manager/managerProduct}" method="get">
 				<label for="search-option">검색 옵션:</label> <select id="search-option"

@@ -56,10 +56,11 @@ public class ManagerSaleService {
         } else if ("orderInfo".equals(searchOption) && keyword != null) {
             // 주문정보 (itemname만 기준으로 검색)
             purchases = pr.findByItemnameContaining(keyword, sortedPageable);  // itemname만을 포함하는 검색
-        } else {
-            purchases = pr.findAll(sortedPageable);  // 기본적으로 모든 주문 가져오기
-        }
-
+        } else if("orderId".equals(searchOption) && keyword != null){
+        	purchases = pr.findByUsernameContaining(keyword, sortedPageable);
+        }else {
+		 purchases = pr.findAll(sortedPageable);  // 기본적으로 모든 주문 가져오기
+		 }
         // 각 주문에 대해 상품 카테고리 및 기타 정보를 추가하여 DTO로 변환
         return purchases.map(purchase -> {
             // 주문 상태 변경 로직
@@ -134,10 +135,6 @@ public class ManagerSaleService {
                 return "미확인"; // Default unknown process
         }
     }
-
-
-
-
 
     // 월별 판매 금액 데이터를 반환
     public Map<String, Integer> getSalesByMonth() {

@@ -20,7 +20,9 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long>{
 	
     Page<Purchase> findByProcess(String process, Pageable pageable);  // 주문 상태로 검색
     Page<Purchase> findByItemnameContaining(String itemname, Pageable pageable);  // 상품명만으로 검색
-
+    
+    Page<Purchase> findByUsernameContaining(String username, Pageable pageable);
+    
 	List<Purchase> findByMerchantUid(String merchantUid);
 
 }
