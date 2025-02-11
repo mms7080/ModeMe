@@ -31,15 +31,15 @@ public class Wishlist {
 	private Long wishid;
 	
 	@Column
-	private String userid;
+	private String userid; //사용자 아이디
 	@Column
-	private String image;
+	private String image; //이미지
 	@Column
-	private String itemname;
+	private String itemname; //상품명
 	@Column
-	private int price;
+	private int price; //가격
 	@Column
-	private Long itemNumber;
+	private Long itemNumber; //상품번호
 
 	
 }

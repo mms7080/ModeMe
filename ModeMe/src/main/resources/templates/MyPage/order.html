@@ -64,7 +64,10 @@
 
                      <span th:text="${content.id}"></span>
                   </div>
-                  <span>이미지</span> <span th:text="${content.itemname}"></span> 
+                  <span>이미지</span> 
+                  <a th:href="@{/productDetail/productDetail/{id}(id=${content.productNumber})}">
+                  		<span th:text="${content.itemname}"></span> 
+                  </a>
                   <span th:text="${content.productMany}"></span> 
                   <span th:text="${#numbers.formatInteger(content.totalPrice, 0, 'COMMA').replace(',', '.')}"></span> 
                   <span th:switch="${content.process}"> 
