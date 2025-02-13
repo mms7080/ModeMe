@@ -450,7 +450,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // 정민 : 테스트중, 상품 상세조회에서 사이즈, 색상 선택 후 구매 버튼 클릭 시 구매화면으로 이동
 document.addEventListener("DOMContentLoaded", function () {
-    document.querySelector(".buyNowBtn").addEventListener("click", function () {
+    document.querySelector("#buyNowBtn").addEventListener("click", function () {
         let form = document.createElement("form");
         form.method = "POST";
         form.action = "/purchase";
