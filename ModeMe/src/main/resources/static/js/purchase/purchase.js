@@ -125,10 +125,10 @@ document.getElementById("payButton").addEventListener("click", function () {
 	    let colorNameList = items.map(i => i.colorName).join(","); // ✅ 색상명 추가
 	    let sizeIdList = items.map(i => i.sizeId).join(",");   // ✅ 사이즈 ID 추가
 	    let sizeNameList = items.map(i => i.sizeName).join(","); // ✅ 사이즈명 추가
-
+		
 	    $.ajax({
 	        type: "get",
-	        url: "insertPurchase",
+	        url: "/insertPurchase",
 	        data: {
 	            aId: aIdList,
 	            userId: user.id,
@@ -142,7 +142,8 @@ document.getElementById("payButton").addEventListener("click", function () {
 	            colorIds: colorIdList,   // ✅ 추가
 	            colorNames: colorNameList, // ✅ 추가
 	            sizeIds: sizeIdList,   // ✅ 추가
-	            sizeNames: sizeNameList  // ✅ 추가
+	            sizeNames: sizeNameList,  // ✅ 추가
+				imageUrls: items.map(i => i.imageUrl).join(",")
 	        },
 	        success: function (response) {
 	            if (response === 'success') {
@@ -173,15 +174,20 @@ document.getElementById("payButton").addEventListener("click", function () {
                 type: "get",
                 url: "insertPurchase",
                 data: {
-                    aId: aIdList,
-                    userId: user.id,
-                    prices: items.map(i => i.price).join(","),
-                    address: address,
-                    addressDetail: addressDetail,
-                    impUid: rsp.imp_uid,
-                    merchantUid: rsp.merchant_uid,
-                    itemname: itemNameList,
-                    quantities: items.map(i => i.quantity).join(",")
+					aId: aIdList,
+		            userId: user.id,
+		            prices: items.map(i => i.price).join(","),
+		            address: address,
+		            addressDetail: addressDetail,
+		            impUid: null,
+		            merchantUid: merchantUid,
+		            itemname: itemNameList,
+		            quantities: items.map(i => i.quantity).join(","),
+		            colorIds: colorIdList,   // ✅ 추가
+		            colorNames: colorNameList, // ✅ 추가
+		            sizeIds: sizeIdList,   // ✅ 추가
+		            sizeNames: sizeNameList,  // ✅ 추가
+					imageUrls: items.map(i => i.imageUrl).join(",")
                 },
                 success: (rsp) => {
                     if (rsp === 'success') {
@@ -238,7 +244,7 @@ document.getElementById("kakaopay").addEventListener("click", function () {
 
             $.ajax({
                 type: "get",
-                url: "insertPurchase",
+                url: "/insertPurchase",
                 data: {
                     aId: aIdList,
                     userId: user.id,
@@ -252,7 +258,8 @@ document.getElementById("kakaopay").addEventListener("click", function () {
                     colorIds: colorIdList,   // ✅ 추가
                     colorNames: colorNameList, // ✅ 추가
                     sizeIds: sizeIdList,   // ✅ 추가
-                    sizeNames: sizeNameList  // ✅ 추가
+                    sizeNames: sizeNameList,  // ✅ 추가
+					imageUrls: items.map(i => i.imageUrl).join(",")
                 },
                 success: (rsp) => {
                     if (rsp === 'success') {
@@ -309,7 +316,7 @@ document.getElementById("tosspay").addEventListener("click", function() {
 	                type: "get",
 	                url: "insertPurchase",
 	                data: {
-	                    aId: aIdList,
+						aId: aIdList,
 	                    userId: user.id,
 	                    prices: items.map(i => i.price).join(","),
 	                    address: address,
@@ -317,7 +324,12 @@ document.getElementById("tosspay").addEventListener("click", function() {
 	                    impUid: rsp.imp_uid,
 	                    merchantUid: rsp.merchant_uid,
 	                    itemname: itemNameList,
-						quantities: items.map(i => i.quantity).join(",")
+	                    quantities: items.map(i => i.quantity).join(","),
+	                    colorIds: colorIdList,   // ✅ 추가
+	                    colorNames: colorNameList, // ✅ 추가
+	                    sizeIds: sizeIdList,   // ✅ 추가
+	                    sizeNames: sizeNameList,  // ✅ 추가
+						imageUrls: items.map(i => i.imageUrl).join(",")
 	                },
 	                success: (rsp) => {
 	                    if (rsp === 'success') {

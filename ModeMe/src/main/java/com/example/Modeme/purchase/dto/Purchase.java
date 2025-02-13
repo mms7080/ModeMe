@@ -58,5 +58,8 @@ public class Purchase {
 	
 	@Column
 	private String merchantUid; // 동시에 주문했을 경우를 위한 구분자?
+	
+	@Column
+	private String imageUrl;
 
 }

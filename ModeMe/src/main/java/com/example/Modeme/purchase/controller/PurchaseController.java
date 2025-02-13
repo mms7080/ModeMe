@@ -242,11 +242,12 @@ public class PurchaseController {
 	                             @RequestParam("quantities") String quantities, // ✅ 수량 추가
 	                             @RequestParam("colorIds") String colorIds,
 	                             @RequestParam("sizeIds") String sizeIds,
+	                             @RequestParam("imageUrls") String imageUrls,
 	                             Principal prin) {
 	    User u = ur.findByUsername(prin.getName()).get();
 	    String userid = u.getUsername();
 
-	    String paymentStatus = (impUid == null || impUid.isEmpty()) ? "입금 전" : "결제 완료";
+	    String paymentStatus = (impUid == null || impUid.isEmpty()) ? "before" : "ready";
 	    
 	    String[] itemNamesArray = itemnames.split(",");
 	    String[] aIdArray = aIds.split(",");
@@ -254,6 +255,7 @@ public class PurchaseController {
 	    String[] priceArray = price.split(",");
 	    String[] colorIdArray = colorIds.split(",");
 	    String[] sizeIdArray = sizeIds.split(",");
+	    String[] imageUrlArray = imageUrls.split(",");
 	    
 	    // ✅ 상품 정보 검증
 	    if (aIdArray.length == 0 || itemNamesArray.length == 0 || quantityArray.length == 0) {
@@ -269,6 +271,7 @@ public class PurchaseController {
 	            int itemPrice = Integer.parseInt(priceArray[i]); // ✅ 개별 상품 가격 계산
 	            String colorId = colorIdArray[i].trim();
 	            String sizeId = sizeIdArray[i].trim();
+	            String imageUrl = imageUrlArray[i].trim();
 
 	            Purchase p = new Purchase();
 	            p.setUserId(uId); // user pk
@@ -283,7 +286,9 @@ public class PurchaseController {
 	            p.setColorId(colorId); // ✅ 색상 ID 저장
 	            p.setSizeId(sizeId);
 	            p.setMerchantUid(merchantUid);
-
+	            p.setImageUrl(imageUrl);
+	            System.out.println(imageUrl);
+	            
 	            pr.save(p);
 	            
 	            scr.deleteByUserIdAndProductId(Long.valueOf(uId), Long.valueOf(productId));
@@ -291,6 +296,7 @@ public class PurchaseController {
 	            return "error: 저장 실패";
 	        }
 	    }
+	    
 
 
 	    return "success";

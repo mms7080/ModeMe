@@ -64,7 +64,7 @@
 
                      <span th:text="${content.id}"></span>
                   </div>
-                  <img th:src="${firstImageUrl}" alt="상품 이미지" class="purchase-image" />
+                  <img th:src="${content.imageUrl}" alt="상품 이미지" class="purchase-image" />
                   <a th:href="@{/productDetail/productDetail/{id}(id=${content.productNumber})}">
                   		<span th:text="${content.itemname}"></span> 
                   </a>

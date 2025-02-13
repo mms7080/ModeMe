@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll(".product-table tbody tr").forEach(row => {
             const quantityInput = row.querySelector("input[type='number']");
             const priceText = row.querySelector("td:nth-child(4)").innerText.replace("KRW ", "").replace(",", "");
-            const totalCell = row.querySelector("td:nth-child(8)");
+            const totalCell = row.querySelector("td:nth-child(9)");
 
             const quantity = parseInt(quantityInput.value, 10);
             const price = parseInt(priceText, 10);
