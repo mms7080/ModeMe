@@ -69,6 +69,7 @@
 			    <div class="section-title">주문상품</div>
 			    <div th:each="i:${items}" class="product-item">
 			        <img th:src="${i.imageUrl}" alt="/image/026.jpg" class="thumbnail-image" />
+			        <input type="hidden" name="imageUrl" th:value="${i.imageUrl}" />
 			        <div class="product-details">
 			            <!-- ✅ 상품명 -->
 			            <p class="product-names">[[${i.productName}]]</p> |

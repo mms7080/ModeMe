@@ -145,6 +145,7 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 			@GetMapping("/order")
 			public String Order(
 					 @AuthenticationPrincipal CustomUserDetails userDetails,
+					 @RequestParam(value="imageUrl", required = false) String imageUrl,
 				        Model model	
 			) {
 				String userid = userDetails.getUsername();
@@ -152,6 +153,7 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 				List<Purchase> user = purrep.findByUsername(userid);
 				
 				model.addAttribute("purchase_list",user);
+				 model.addAttribute("firstImageUrl", imageUrl);
 				
 				return "/MyPage/order";
 			}

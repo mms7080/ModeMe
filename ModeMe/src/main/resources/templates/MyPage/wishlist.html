@@ -30,7 +30,7 @@
 			<div class="wishlist_time"
 				th:if="${wishlist != null && !wishlist.isEmpty()}"
 				th:each="content : ${wishlist}">
-				<span>이미지</span> 
+				<img th:src="${content.image}" alt="상품 이미지" class="wishlist-image"/>
 				    <span th:text="${content.itemname}"></span>
 				<span th:text="${content.price}"></span> 
 				<span th:text="${#numbers.formatInteger(content.price * 0.01, 0)}"></span>

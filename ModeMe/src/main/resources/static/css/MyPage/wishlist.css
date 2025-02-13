@@ -72,6 +72,14 @@ h1 {
     justify-items: center;
 }
 
+.wishlist-image {
+    width: 100%;      
+    max-width: 80px;  
+    height: auto;
+    object-fit: cover;
+
+}
+
 .wishlist_form {
 	display: flex;
 	flex-direction: column;
