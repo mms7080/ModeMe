@@ -108,9 +108,6 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 		        int totalprice = purchaseList.stream().mapToInt(Purchase::getTotalPrice).sum();
 		        model.addAttribute("totalprice", totalprice);
 
-		        for (Purchase p : purchaseList) {
-		            System.out.println("주문번호: " + p.getId() + ", 상태: '" + p.getProcess() + "'");
-		        }
 
 		        // 주문 상태별 개수 계산 (before -> 입금전, ready -> 배송준비중, delivery -> 배송중, done -> 배송완료)
 		        long countBeforePayment = purchaseList.stream()
@@ -127,11 +124,6 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 		            .count();
 		        
 		        // 🔍 상태별 개수 확인
-		        System.out.println("입금전: " + countBeforePayment);
-		        System.out.println("배송준비중: " + countPreparing);
-		        System.out.println("배송중: " + countShipping);
-		        System.out.println("배송완료: " + countDelivered);
-		        System.out.println("조회된 주문 개수: " + purchaseList.size());
 
 		        model.addAttribute("countBeforePayment", countBeforePayment);
 		        model.addAttribute("countPreparing", countPreparing);
@@ -166,6 +158,7 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 			        Model model
 			) {
 			    String userid = userDetails.getUsername();
+			    System.out.println(userid);
 			   
 			    mileser.saveMileage(userid, usedMileage);
 			    

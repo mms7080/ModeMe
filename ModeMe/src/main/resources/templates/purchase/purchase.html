@@ -14,7 +14,6 @@
 <body>
 
 	<div th:replace="~{header::header}"></div>
-	<form action="/purchaseSuccess" method="post">
 		<div class="container">
 			<div class="middle">모드미 - 주문/결제</div>
 
@@ -101,7 +100,7 @@
 			<div class="section">
 				<div class="section-title">할인/쿠폰</div>
 				<div class="coupon-row">
-					<label>현재 적립금</label> <span id="current-points">0원</span>
+					<label>현재 적립금</label> <span id="current-points" th:text="${#numbers.formatInteger(availableMileage, 3, 'COMMA') + '원'}"></span>
 					<!-- 적립금 표시 -->
 				</div>
 				<div class="coupon-row">
@@ -159,10 +158,10 @@
 
 		<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 		<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-	</form>
 	<script th:inline="javascript" defer>
 		const user = /*[[${user}]]*/'null';
 		const items = /*[[${items}]]*/'null'; // items 는 list 형태
+		const availableMileage = /*[[${availableMileage}]]*/'0';
 		
 		let aId;
 // 		if(items.length >= 2){

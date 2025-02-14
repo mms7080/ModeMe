@@ -1,6 +1,7 @@
 package com.example.Modeme.purchase.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
@@ -8,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.Modeme.Mypage.MypageEntity.Address;
 import com.example.Modeme.purchase.dto.Purchase;
 
 @Repository
@@ -25,4 +25,5 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long>{
     
 	List<Purchase> findByMerchantUid(String merchantUid);
 
+	Optional<Purchase> findTopByUserIdOrderByIdDesc(Long userId); // 유저번호로 가장 최신 결제항목 가져오기
 }

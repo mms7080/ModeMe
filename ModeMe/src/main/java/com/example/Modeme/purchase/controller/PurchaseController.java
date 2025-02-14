@@ -25,6 +25,9 @@ import com.example.Modeme.Manager.Entity.ItemSize;
 import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
 import com.example.Modeme.Manager.ManagerRepository.itemColorNameRepository;
 import com.example.Modeme.Manager.ManagerRepository.itemSizeRepository;
+import com.example.Modeme.Mypage.MypageEntity.Mileage;
+import com.example.Modeme.Mypage.MypageRepository.MileageRepository;
+import com.example.Modeme.Mypage.MypageService.MileageService;
 import com.example.Modeme.User.UserDTO.Headerlogin;
 import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.User.UserRepository.UserRepository;
@@ -58,6 +61,11 @@ public class PurchaseController {
 	
 	@Autowired
 	private itemSizeRepository sizeRepo;
+	
+	@Autowired
+	private MileageService mileser;
+	@Autowired
+	private MileageRepository milerep;
 	
 	@ModelAttribute //모든 매핑에 추가할 코드
     public void addAttributes(Model model, Principal principal) {
@@ -126,15 +134,6 @@ public class PurchaseController {
 	    @RequestParam List<String> sizeName,
 	    Principal prin,
 	    Model model) {
-		System.out.println(productId);
-		System.out.println(productName);
-		System.out.println(price);
-		System.out.println(quantity);
-		System.out.println(imageSrc);
-		System.out.println(colorId);
-		System.out.println(colorName);
-		System.out.println(sizeId);
-		System.out.println(sizeName);
 		User u = ur.findByUsername(prin.getName()).get();
 	    List<PurchaseItem> items = new ArrayList<>();
 	    
@@ -155,6 +154,19 @@ public class PurchaseController {
 	    model.addAttribute("user", u);
 	    model.addAttribute("items", items);  // 받은 items 리스트를 모델에 추가
 
+	    // 총 적립금
+	    int total = mileser.getTotalMileage(u.getUsername());
+	    // 사용된 마일리지 합
+	    List<Mileage> mileageList = milerep.findByUserid(u.getUsername());
+	    int totalUsedMileage = mileageList.stream()
+	    									.mapToInt(Mileage::getUsedMileage)
+	    									.sum();
+	    // 사용가능 적립금
+	    int availableMileage = total - totalUsedMileage;
+	    
+	    model.addAttribute("availableMileage", availableMileage);
+	    
+	    
 	    return "/purchase/purchase";
 	}
 
@@ -240,7 +252,9 @@ public class PurchaseController {
 	                             @RequestParam("colorIds") String colorIds,
 	                             @RequestParam("sizeIds") String sizeIds,
 	                             @RequestParam("imageUrls") String imageUrls,
+	                             @RequestParam("discount") int discount,
 	                             Principal prin) {
+		System.out.println("결제 할인 : " + discount);
 	    User u = ur.findByUsername(prin.getName()).get();
 	    String userid = u.getUsername();
 
@@ -284,18 +298,27 @@ public class PurchaseController {
 	            p.setSizeId(sizeId);
 	            p.setMerchantUid(merchantUid);
 	            p.setImageUrl(imageUrl);
-	            System.out.println(imageUrl);
 	            
 	            pr.save(p);
 	            
 	            scr.deleteByUserIdAndProductId(Long.valueOf(uId), Long.valueOf(productId));
+	            
+	            
+	            
 	        } catch (Exception e) {
 	            return "error: 저장 실패";
 	        }
 	    }
+//	    Purchase pur = pr.findTopByUserIdOrderByIdDesc(u.getId()).get();
+//        Mileage mile = milerep.findByOrdernum(""+pur.getId()).get();
+//        mile.setUsedMileage(discount);
+//        milerep.save(mile);
+//        
+//        System.out.println(pur.getId());
+//        System.out.println(pur.getTotalPrice());
+//        System.out.println(mile.getMileageid());
+//        System.out.println(mile.getOrdernum());
 	    
-
-
 	    return "success";
 	}
 

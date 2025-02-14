@@ -50,13 +50,13 @@ function openDaumPostcode() {
 
 // 결제 금액 변경
 document.addEventListener("DOMContentLoaded", function () {
+
     function formatCurrency(amount) {
         return "₩" + new Intl.NumberFormat("ko-KR").format(amount);
     }
 
     function updatePaymentSummary() {
-        let totalAmount = 0;
-        let discount = 2000; // 기본 할인 금액 (예제)
+	    let totalAmount = 0;
 
         // 상품 가격 합산
         document.querySelectorAll(".product-item").forEach(item => {
@@ -64,22 +64,45 @@ document.addEventListener("DOMContentLoaded", function () {
             const price = parseInt(priceText, 10) || 0;
             totalAmount += price;
         });
-		
-        // 주문상품 금액 업데이트
+
+        // 사용자가 입력한 마일리지 값 반영
+        const usedMileageInput = document.getElementById("use-points");
+        let usedMileage = parseInt(usedMileageInput.value.replace(/[^0-9]/g, ""), 10) || 0;
+
+        // 주문 상품 금액 업데이트
         document.getElementById("orderAmount").innerText = formatCurrency(totalAmount);
         
-        // 할인 적용
-        document.getElementById("discountAmount").innerText = formatCurrency(-discount);
+        // 할인 적용 (마일리지 할인)
+        document.getElementById("discountAmount").innerText = formatCurrency(-usedMileage);
         
         // 최종 결제 금액 업데이트
-        let finalPrice = totalAmount - discount;
+        let finalPrice = totalAmount - usedMileage;
         document.getElementById("finalAmount").innerText = formatCurrency(finalPrice);
-		document.getElementById("payButton").innerText = formatCurrency(finalPrice) + ' 결제하기';
+        document.getElementById("payButton").innerText = formatCurrency(finalPrice) + " 결제하기";
     }
+
+    // 마일리지 입력 시 제한 체크
+    document.getElementById("use-points").addEventListener("input", function () {
+        let usedMileage = this.value.replace(/[^0-9]/g, ""); // 숫자만 입력 가능
+        if (parseInt(usedMileage, 10) > availableMileage) {
+            alert("사용 가능한 마일리지를 초과했습니다!");
+            this.value = "0"; // 초과하면 0으로 초기화
+			document.getElementById("discount-amount").innerText = "-₩0";
+        } else {
+            this.value = usedMileage; // 정상 입력 값 유지
+        }
+        document.getElementById("discountAmount").innerText = formatCurrency(-this.value);
+    });
+
+    // 마일리지 입력 후 포커스 아웃 시 최종 업데이트
+    document.getElementById("use-points").addEventListener("focusout", function () {
+        updatePaymentSummary();
+    });
 
     // 페이지 로드 시 초기 업데이트
     updatePaymentSummary();
 });
+
 
 
 
@@ -106,7 +129,8 @@ document.getElementById("payButton").addEventListener("click", function () {
     const addressDetail = document.getElementById("sample6_detailAddress").value;
     const finalPriceText = document.getElementById("finalAmount").innerText;
     const finalPrice = parseInt(finalPriceText.replace(/₩|,/g, ""), 10);
-
+	const discount = document.getElementById("use-points").value;
+	
     const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let merchantUid = 'TD';
     for (let i = 0; i < 8; i++) {
@@ -119,6 +143,7 @@ document.getElementById("payButton").addEventListener("click", function () {
 
     if (paymentMethod === "bank-transfer") {
 
+		console.log("무통장")
 	    let aIdList = items.map(i => i.productId).join(",");
 	    let itemNameList = items.map(i => i.productName.trim()).join(",");
 	    let colorIdList = items.map(i => i.colorId).join(",");   // ✅ 색상 ID 추가
@@ -144,6 +169,7 @@ document.getElementById("payButton").addEventListener("click", function () {
 	            sizeIds: sizeIdList,   // ✅ 추가
 	            sizeNames: sizeNameList,  // ✅ 추가
 				imageUrls: items.map(i => i.imageUrl).join(",")
+				, discount: discount
 	        },
 	        success: function (response) {
 	            if (response === 'success') {
@@ -187,7 +213,8 @@ document.getElementById("payButton").addEventListener("click", function () {
 		            colorNames: colorNameList, // ✅ 추가
 		            sizeIds: sizeIdList,   // ✅ 추가
 		            sizeNames: sizeNameList,  // ✅ 추가
-					imageUrls: items.map(i => i.imageUrl).join(",")
+					imageUrls: items.map(i => i.imageUrl).join(","),
+					discount: discount
                 },
                 success: (rsp) => {
                     if (rsp === 'success') {
@@ -213,6 +240,7 @@ document.getElementById("kakaopay").addEventListener("click", function () {
     const addressDetail = document.getElementById("sample6_detailAddress").value;
     const finalPriceText = document.getElementById("finalAmount").innerText;
     const finalPrice = parseInt(finalPriceText.replace(/₩|,/g, ""), 10);
+	const discount = document.getElementById("use-points").value;
 
     const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let merchantUid = 'TD';
@@ -259,7 +287,8 @@ document.getElementById("kakaopay").addEventListener("click", function () {
                     colorNames: colorNameList, // ✅ 추가
                     sizeIds: sizeIdList,   // ✅ 추가
                     sizeNames: sizeNameList,  // ✅ 추가
-					imageUrls: items.map(i => i.imageUrl).join(",")
+					imageUrls: items.map(i => i.imageUrl).join(","),
+					discount: discount
                 },
                 success: (rsp) => {
                     if (rsp === 'success') {
@@ -285,7 +314,8 @@ document.getElementById("tosspay").addEventListener("click", function() {
 	    const addressDetail = document.getElementById("sample6_detailAddress").value;
 	    const finalPriceText = document.getElementById("finalAmount").innerText;
 	    const finalPrice = parseInt(finalPriceText.replace(/₩|,/g, ""), 10);
-	    const productElements = document.querySelectorAll(".product-names");
+//	    const productElements = document.querySelectorAll(".product-names");
+		const discount = document.getElementById("use-points").value;
 	    
 		const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 		let merchantUid = 'TD';
@@ -329,7 +359,8 @@ document.getElementById("tosspay").addEventListener("click", function() {
 	                    colorNames: colorNameList, // ✅ 추가
 	                    sizeIds: sizeIdList,   // ✅ 추가
 	                    sizeNames: sizeNameList,  // ✅ 추가
-						imageUrls: items.map(i => i.imageUrl).join(",")
+						imageUrls: items.map(i => i.imageUrl).join(","),
+						discount: discount
 	                },
 	                success: (rsp) => {
 	                    if (rsp === 'success') {
@@ -349,8 +380,11 @@ document.getElementById("tosspay").addEventListener("click", function() {
 
 document.getElementById("use-points").addEventListener("input", function() {
     const usedMileage = document.getElementById("use-points").value; // 사용자가 입력한 마일리지 값
-    console.log("사용할 마일리지: " + usedMileage); // 콘솔에서 확인
+//    console.log("사용할 마일리지: " + usedMileage); // 콘솔에서 확인
 
+		const discount = document.getElementById("discount-amount");
+		discount.innerText = "-₩" + usedMileage
+		
     // 입력값이 비어있지 않으면 요청을 보냄
     if (usedMileage !== "") {
         $.ajax({
