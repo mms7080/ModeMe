@@ -61,29 +61,39 @@
 			<div class="product-void"></div>
 
 			<!-- Product Details -->
-			<div class="product-details">
+			<div class="product-details" th:attr="data-product-id=${product.id}">
 				<h2 th:text="${product.name}"></h2>
 				<p class="price" th:attr="data-price=${product.price}"
 					th:text="${product.price} +'원'"></p>
 
 				<!-- Product Options -->
 				<div class="product-options">
-					<div class="option">
-						<span class="option-label color"><b>COLOR</b></span>
-						<div class="option-buttons"
-							th:each="color : ${product.colorNames}">
-							<button th:text="${color.colorName}" class="color-button"></button>
-						</div>
-					</div>
-					<div></div>
-					<div class="option">
-						<span class="option-label size"><b>SIZE</b></span>
-						<div class="option-buttons"
-							th:each="size : ${product.productSizes}">
-							<button th:text="${size.itemSize}" class="size-button"></button>
-						</div>
-					</div>
+				    <div class="option">
+				        <span class="option-label color"><b>COLOR</b></span>
+				        <div class="option-buttons">
+				            <th:block th:each="color, iterStat : ${product.colors}">
+				                <th:block th:if="${iterStat.index < #lists.size(product.colorNames)}">
+				                    <button th:text="${product.colorNames[iterStat.index].colorName}"
+				                            th:attr="data-color-id=${color.id}, data-color-code=${color.color}"
+				                            class="color-button"></button>
+				                </th:block>
+				            </th:block>
+				        </div>
+				    </div>
+				    <div></div>
+				    <div class="option">
+				        <span class="option-label size"><b>SIZE</b></span>
+				        <div class="option-buttons">
+				            <th:block th:each="size : ${product.productSizes}">
+				                <button th:text="${size.itemSize}"
+				                        th:attr="data-size-id=${size.id}"
+				                        class="size-button"></button>
+				            </th:block>
+				        </div>
+				    </div>
 				</div>
+
+
 				<button class="add-to-selection" style="margin-bottom: 50px;">상품추가</button>
 
 				<!-- Selection Section -->

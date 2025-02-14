@@ -104,27 +104,7 @@ public class PurchaseController {
 	}
 	
 	
-	// 결제페이지
-	@GetMapping("/purchase/{id}")
-	public String purchase(Model model, @PathVariable Long id, Principal prin) {
-		User u = ur.findByUsername(prin.getName()).get();
-		Optional<AddItem> as = air.findById(id);
-		AddItem a = as.get();
-		model.addAttribute("user",u);
-		PurchaseItem pi = new PurchaseItem();
-		pi.setProductId(a.getId());
-		pi.setPrice(a.getPrice());
-		pi.setProductName(a.getName());
-		pi.setQuantity(1);
-		pi.setImageUrl(a.getImageUrls().get(0));
-		List<PurchaseItem> piList = new ArrayList<>(); // 리스트형태로 model
-		piList.add(pi);
-		model.addAttribute("items", piList);
-//		model.addAttribute("aId", a.getId());
-		return "/purchase/purchase";
-	}
 	
-	// 결제페이지(장바구니에서 넘어올때)
 	@PostMapping("/purchase")
 	public String purchaseMultipleItems(
 		@RequestParam List<Long> productId, // 폼으로 전송된 productId 리스트 받기
@@ -138,6 +118,15 @@ public class PurchaseController {
 	    @RequestParam List<String> sizeName,
 	    Principal prin,
 	    Model model) {
+		System.out.println(productId);
+		System.out.println(productName);
+		System.out.println(price);
+		System.out.println(quantity);
+		System.out.println(imageSrc);
+		System.out.println(colorId);
+		System.out.println(colorName);
+		System.out.println(sizeId);
+		System.out.println(sizeName);
 		User u = ur.findByUsername(prin.getName()).get();
 	    List<PurchaseItem> items = new ArrayList<>();
 	    

@@ -1,119 +1,111 @@
-document.addEventListener("DOMContentLoaded", () => {
-	const selectionContainer = document.querySelector(".selection");
-	const addButton = document.querySelector(".add-to-selection");
-	const totalPriceElement = document.getElementById("total-price");
+document.addEventListener("DOMContentLoaded", function () {
+    const selectionContainer = document.querySelector(".selection");
+    const addButton = document.querySelector(".add-to-selection");
+    const totalPriceElement = document.getElementById("total-price");
+    const colorButtons = document.querySelectorAll(".color-button");
+    const sizeButtons = document.querySelectorAll(".size-button");
+    
+    let selectedColor = null;
+    let selectedColorId = null;
+    let selectedSizes = [];
+    let selectedSizeIds = [];
 
-	const colorButtons = document.querySelectorAll(".color-button");
-	const sizeButtons = document.querySelectorAll(".size-button");
+    colorButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            colorButtons.forEach(btn => btn.classList.remove("selected-color"));
+            button.classList.add("selected-color");
+            selectedColor = button.textContent.trim();
+            selectedColorId = button.getAttribute("data-color-id");
+        });
+    });
 
-	const thumbnails = document.querySelectorAll(".thumbnail-image");
-	const mainPreview = document.getElementById("main-preview");
+    sizeButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            const size = button.textContent.trim();
+            const sizeId = button.getAttribute("data-size-id");
 
-	let selectedColor = null;
-	let selectedSizes = []; // 선택한 사이즈를 리스트로 관리
+            if (selectedSizes.includes(size)) {
+                selectedSizes = selectedSizes.filter(s => s !== size);
+                selectedSizeIds = selectedSizeIds.filter(id => id !== sizeId);
+                button.classList.remove("selected-size");
+            } else {
+                selectedSizes.push(size);
+                selectedSizeIds.push(sizeId);
+                button.classList.add("selected-size");
+            }
+        });
+    });
 
-	//썸네일 클릭 이벤트
-	thumbnails.forEach((thumbnail) => {
-		thumbnail.addEventListener("click", function() {
-			// 썸네일 이미지를 메인 미리보기 이미지로 설정
-			mainPreview.src = thumbnail.src;
-		});
-	});
+    const addSelectionItems = () => {
+        if (!selectedColorId || selectedSizes.length === 0) {
+            alert("색상과 사이즈를 모두 선택해주세요.");
+            return;
+        }
 
-	// Handle color selection
-	colorButtons.forEach((button) => {
-		button.addEventListener("click", () => {
-			colorButtons.forEach((btn) => btn.classList.remove("selected-color"));
-			button.classList.add("selected-color");
-			selectedColor = button.textContent.trim();
-		});
-	});
+        const priceElement = document.querySelector(".price");
+        const productPrice = parseInt(priceElement.getAttribute("data-price"), 10);
 
-	// Handle size selection
-	sizeButtons.forEach((button) => {
-		button.addEventListener("click", () => {
-			const size = button.textContent.trim();
+        selectedSizes.forEach((size, index) => {
+            const sizeId = selectedSizeIds[index];
 
-			if (selectedSizes.includes(size)) {
-				// 이미 선택된 사이즈면 제거
-				selectedSizes = selectedSizes.filter((s) => s !== size);
-				button.classList.remove("selected-size");
-			} else {
-				// 새로운 사이즈 추가
-				selectedSizes.push(size);
-				button.classList.add("selected-size");
-			}
-		});
-	});
+            const existingItem = Array.from(selectionContainer.children).find(
+                item => item.querySelector(".color").getAttribute("data-color-id") === selectedColorId &&
+                        item.querySelector(".size").getAttribute("data-size-id") === sizeId
+            );
 
-	// Add selection items
-	const addSelectionItems = () => {
-		if (!selectedColor || selectedSizes.length === 0) {
-			alert("색상과 사이즈를 모두 선택해주세요.");
-			return;
-		}
+            if (existingItem) {
+                alert(`이미 선택된 옵션입니다: ${size}`);
+                return;
+            }
 
-		// 상품 가격 가져오기
-		const priceElement = document.querySelector(".price");
-		const productPrice = parseInt(priceElement.getAttribute("data-price"), 10);
-
-		selectedSizes.forEach((size) => {
-			const existingItem = Array.from(selectionContainer.children).find(
-				(item) =>
-					item.querySelector(".color").textContent === selectedColor &&
-					item.querySelector(".size").textContent === size
-			);
-
-			if (existingItem) {
-				alert(`이미 선택된 옵션입니다: ${size}`);
-				return;
-			}
-
-			const itemElement = document.createElement("div");
-			itemElement.className = "selection-item";
-			itemElement.innerHTML = `
+            const itemElement = document.createElement("div");
+            itemElement.className = "selection-item";
+            itemElement.innerHTML = `
                 <b>선택한 상품</b>
-                <p class="color">${selectedColor}</p>
-                <span class="size">${size}</span>
+                <p class="color" data-color-id="${selectedColorId}">${selectedColor}</p>
+                <span class="size" data-size-id="${sizeId}">${size}</span>
                 <input type="number" class="quantity-input" value="1" min="1">
                 <span class="price" data-price="${productPrice}">${productPrice.toLocaleString()}원</span>
                 <button class="delete-item" aria-label="삭제">&times;</button>
             `;
 
-			itemElement.querySelector(".quantity-input").addEventListener("input", updateTotalPrice);
-			itemElement.querySelector(".delete-item").addEventListener("click", () => {
-				itemElement.remove();
-				updateTotalPrice();
-			});
+            itemElement.querySelector(".quantity-input").addEventListener("input", updateTotalPrice);
+            itemElement.querySelector(".delete-item").addEventListener("click", () => {
+                itemElement.remove();
+                updateTotalPrice();
+            });
 
-			selectionContainer.appendChild(itemElement);
-		});
+            selectionContainer.appendChild(itemElement);
+        });
 
-		resetSelections();
-		updateTotalPrice();
-	};
+        resetSelections();
+        updateTotalPrice();
+    };
 
-	const resetSelections = () => {
-		colorButtons.forEach((button) => button.classList.remove("selected-color"));
-		sizeButtons.forEach((button) => button.classList.remove("selected-size"));
-		selectedColor = null;
-		selectedSizes = [];
-	};
+    const resetSelections = () => {
+        colorButtons.forEach(button => button.classList.remove("selected-color"));
+        sizeButtons.forEach(button => button.classList.remove("selected-size"));
+        selectedColor = null;
+        selectedColorId = null;
+        selectedSizes = [];
+        selectedSizeIds = [];
+    };
 
-	const updateTotalPrice = () => {
-		const totalPrice = Array.from(selectionContainer.children).reduce((acc, item) => {
-			const quantity = parseInt(item.querySelector(".quantity-input").value, 10);
-			const price = parseInt(item.querySelector(".price").getAttribute("data-price"), 10);
-			return acc + quantity * price;
-		}, 0);
+    const updateTotalPrice = () => {
+        const totalPrice = Array.from(selectionContainer.children).reduce((acc, item) => {
+            const quantity = parseInt(item.querySelector(".quantity-input").value, 10);
+            const price = parseInt(item.querySelector(".price").getAttribute("data-price"), 10);
+            return acc + quantity * price;
+        }, 0);
 
-		totalPriceElement.textContent = `${totalPrice.toLocaleString()} 원`;
-	};
+        totalPriceElement.textContent = `${totalPrice.toLocaleString()} 원`;
+    };
 
-	if (addButton) {
-		addButton.addEventListener("click", addSelectionItems);
-	}
+    if (addButton) {
+        addButton.addEventListener("click", addSelectionItems);
+    }
 });
+
 
 document.addEventListener('DOMContentLoaded', () => {
 	const optionButtons = document.querySelectorAll('.option-buttons button');
@@ -459,19 +451,22 @@ document.addEventListener("DOMContentLoaded", function () {
         let isValid = true;
 
         document.querySelectorAll(".selection-item").forEach(item => {
-            let colorName = item.querySelector(".color").textContent;
-            let sizeName = item.querySelector(".size").textContent;
-            let price = parseInt(item.querySelector(".price").getAttribute("data-price"), 10);
-            let quantity = parseInt(item.querySelector(".quantity-input").value, 10);
-            let productId = document.querySelector(".product-details").getAttribute("data-product-id"); 
-            let productName = document.querySelector(".product-details h2").textContent;
-            let imageSrc = document.querySelector(".product-image img")?.getAttribute("src") || "";
+            let colorElement = item.querySelector(".color");
+            let sizeElement = item.querySelector(".size");
+            let colorId = colorElement ? colorElement.getAttribute("data-color-id") : null;
+            let colorName = colorElement ? colorElement.textContent.trim() : "";
+            let sizeId = sizeElement ? sizeElement.getAttribute("data-size-id") : null;
+            let sizeName = sizeElement ? sizeElement.textContent.trim() : "";
+            let priceElement = item.querySelector(".price");
+            let quantityElement = item.querySelector(".quantity-input");
+            let price = priceElement ? parseInt(priceElement.getAttribute("data-price"), 10) : NaN;
+            let quantity = quantityElement ? parseInt(quantityElement.value, 10) : NaN;
+            let productDetails = document.querySelector(".product-details");
+            let productId = productDetails ? productDetails.getAttribute("data-product-id") : null;
+            let productName = productDetails ? productDetails.querySelector("h2").textContent.trim() : "";
+            let imageElement = document.querySelector(".product-images .image-preview img");
+            let imageSrc = imageElement ? imageElement.getAttribute("src") : "";
 
-            if (!colorName || !sizeName) {
-                alert("색상과 사이즈를 모두 선택해주세요.");
-                isValid = false;
-                return;
-            }
 
             selectedItems.push({
                 productId: productId,
@@ -479,18 +474,31 @@ document.addEventListener("DOMContentLoaded", function () {
                 price: price,
                 quantity: quantity,
                 imageSrc: imageSrc,
-                colorId: colorName, // 실제 ID 값이 필요하면 수정
+                colorId: colorId,
                 colorName: colorName,
-                sizeId: sizeName, // 실제 ID 값이 필요하면 수정
+                sizeId: sizeId,
                 sizeName: sizeName
             });
+//		console.log(colorId)
+//		console.log(colorName)
+//		console.log(sizeId)
+//		console.log(sizeName)
+//		console.log(price)
+//		console.log(quantity)
+		
+            if (!colorId || !colorName || !sizeId || !sizeName || isNaN(price) || isNaN(quantity) || quantity < 1) {
+                isValid = false;
+                return;
+            }
         });
+
+        if (!isValid) {
+            alert("색상, 사이즈 및 수량을 정확히 선택해주세요.");
+            return;
+        }
 
         if (selectedItems.length === 0) {
             alert("결제할 상품을 선택해주세요.");
-            return;
-        }
-        if (!isValid) {
             return;
         }
 
@@ -517,7 +525,15 @@ document.addEventListener("DOMContentLoaded", function () {
         input.value = value;
         return input;
     }
+
+    document.querySelectorAll(".color-button").forEach(button => {
+        button.addEventListener("click", () => {
+            document.querySelectorAll(".color-button").forEach(btn => btn.classList.remove("selected-color"));
+            button.classList.add("selected-color");
+        });
+    });
 });
+
 
 
 
