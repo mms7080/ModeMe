@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const itemNumber = productCard.querySelector("input[type='hidden']").value; // 상품 ID
             const itemName = productCard.querySelector("p:first-of-type").innerText; // 상품 이름
             const itemImage = productCard.querySelector(".product-image").src; // 상품 이미지
-console.log(itemNumber)
+
             $.ajax({
                 type: "POST",
                 url: "/wishlist/add",

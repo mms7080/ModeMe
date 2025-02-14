@@ -168,47 +168,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-//장바구니 중복 체크
-document.addEventListener("DOMContentLoaded", function () {
-    const addToCartButtons = document.querySelectorAll(".add-to-cart-btn"); // 장바구니 추가 버튼들
-    const cart = new Map(); // 중복 검사용 Map
-
-    // ✅ 기존 장바구니 데이터 불러오기
-    const storedCart = localStorage.getItem("shoppingCart");
-    if (storedCart) {
-        JSON.parse(storedCart).forEach(item => {
-            cart.set(item.productId, item);
-        });
-    }
-
-    // ✅ 장바구니에 추가할 때 중복 검사
-    addToCartButtons.forEach(button => {
-        button.addEventListener("click", function () {
-            const productRow = button.closest("tr");
-            const productId = productRow.getAttribute("data-product-id");
-            const productName = productRow.querySelector("td:nth-child(3)").innerText;
-            const price = parseInt(productRow.querySelector("td:nth-child(4)").innerText.replace("KRW ", "").replace(",", ""));
-            const quantity = parseInt(productRow.querySelector("td:nth-child(5) input").value);
-
-            // 🔴 중복 검사: 이미 있는 상품이면 추가하지 않음
-            if (cart.has(productId)) {
-                alert("🚨 이미 장바구니에 있는 상품입니다!");
-                return;
-            }
-
-            // ✅ 새로운 상품 추가
-            const newItem = { productId, productName, price, quantity };
-            cart.set(productId, newItem);
-
-            // ✅ 로컬 스토리지에 저장
-            localStorage.setItem("shoppingCart", JSON.stringify(Array.from(cart.values())));
-
-            alert("✅ 장바구니에 추가되었습니다!");
-            location.reload(); // 새로고침하여 반영
-        });
-    });
-});
-
 
 // 상품 삭제 이벤트
 document.addEventListener("DOMContentLoaded", function () {
@@ -244,3 +203,82 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+// 관심상품 등록
+document.addEventListener("DOMContentLoaded", function () {
+    $(".button-group-vertical .wishlist-btn").on("click", function () {
+        let row = $(this).closest("tr"); // 해당 상품이 있는 행 찾기
+
+        let productId = row.data("product-id"); // 상품 ID 가져오기
+        let productName = row.find("td:nth-child(3)").text().trim(); // 상품명 가져오기
+        let productImageSrc = row.find("td:nth-child(2) img").attr("src"); // 상품 이미지 경로 가져오기
+
+        $.ajax({
+            type: "POST",
+            url: "/wishlist/add",
+            contentType: "application/json",
+            data: JSON.stringify({
+                itemNumber: productId,
+                itemName: productName,
+                itemImage: productImageSrc
+            }),
+            success: function (response) {
+                if (response === "success") {
+                    alert("위시리스트에 추가되었습니다!");
+                } else if (response === "exists") {
+                    alert("이미 위시리스트에 있는 상품입니다!");
+                }
+            },
+            error: function (error) {
+                console.error("위시리스트 추가 오류:", error);
+            }
+        });
+    });
+});
+
+// 단일 상품 주문
+document.addEventListener("DOMContentLoaded", function(){
+	document.querySelectorAll(".productDetail-btn").forEach(button => {
+		button.addEventListener("click", function(){
+			let row = $(this).closest("tr"); // 해당 상품이 있는 행 찾기
+		        let productId = row.data("product-id"); // 상품 ID 가져오기
+
+		        if (productId) {
+		            window.location.href = "/productDetail/productDetail/" + productId;
+		        } else {
+		            alert("상품 정보를 찾을 수 없습니다.");
+		        }
+		})
+	})
+})
+
+
+// 장바구니 비우기
+document.addEventListener("DOMContentLoaded", function(){
+	document.querySelector(".clear-cart-btn").addEventListener("click", function(){
+		if(document.querySelector("tbody").innerHTML.trim() == ""){
+			alert("장바구니가 이미 비어있습니다.")
+		} else{
+			if(!confirm("정말로 장바구니를 비우시겠습니까?")){
+				return;
+			}
+			
+			$.ajax({
+				type:"POST",
+				url: "/cart/clear",
+				contentType: "application/json",
+				success: function(response){
+					if(response === "success"){
+						alert("장바구니를 비웠습니다.");
+						window.location.reload();
+					} else{
+						alert("장바구니 비우기에 실패했습니다.")
+					}
+				},
+				error: function(error){
+					console.error("장바구니 오류 :", error);
+				}
+			})
+		}
+		
+	})
+})

@@ -1,3 +1,5 @@
+let firstMainImage = document.getElementById("main-preview")
+
 document.addEventListener("DOMContentLoaded", function () {
     const selectionContainer = document.querySelector(".selection");
     const addButton = document.querySelector(".add-to-selection");
@@ -534,8 +536,63 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+// 정민 : 장바구니 추가(옵션선택 불가능)
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("cartAdd").addEventListener("click", function () {
+        const productId = document.querySelector(".product-details").getAttribute("data-product-id");
+        const productName = document.querySelector(".product-details").children[0].innerHTML;
 
+        $.ajax({
+            type: "POST",
+            url: "/cart/add",
+            contentType: "application/json",
+            data: JSON.stringify({
+                productId: productId,
+                productName: productName,
+                quantity: 1
+            }),
+            success: function (response) {
+                if (response === "success") {
+                    alert("장바구니에 추가되었습니다!");
+                } else if (response === "exists") {
+                    alert("이미 장바구니에 있는 상품입니다!");
+                }
+            },
+            error: function (error) {
+                console.error("장바구니 추가 오류:", error);
+            }
+        });
+    });
+});
 
+// 정민 : 관심상품 등록
+document.addEventListener("DOMContentLoaded", function(){
+	document.getElementById("wishAdd").addEventListener("click", function(){
+		const productId = document.querySelector(".product-details").getAttribute("data-product-id");
+        const productName = document.querySelector(".product-details").children[0].innerHTML;
+		
+		$.ajax({
+            type: "POST",
+            url: "/wishlist/add",
+            contentType: "application/json",
+            data: JSON.stringify({
+                itemNumber: productId,
+                itemName: productName,
+                itemImage: firstMainImage.src
+            }),
+            success: function (response) {
+                if (response === "success") {
+                    alert("위시리스트에 추가되었습니다!");
+                } else if (response === "exists") {
+                    alert("이미 위시리스트에 있는 상품입니다!");
+                }
+            },
+            error: function (error) {
+                console.error("위시리스트 추가 오류:", error);
+            }
+        });
+	})
+})
 
 
 
