@@ -133,14 +133,14 @@ public class ViewController {
 
 
 	// 메인페이지
-	@GetMapping("/")
-	public String mainView(Model model) {
-		List<AddItem> aList = air.findAll();
-		model.addAttribute("aList", aList);
-		return "/main";
-	}
+//	@GetMapping("/")
+//	public String mainView(Model model) {
+//		List<AddItem> aList = air.findAll();
+//		model.addAttribute("aList", aList);
+//		return "/main";
+//	}
 
-	@GetMapping("/main")
+	@GetMapping({"/","/main"})
 	public String mainView(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
 	    List<AddItem> aList = air.findAll();
 	    model.addAttribute("aList", aList);
@@ -150,6 +150,7 @@ public class ViewController {
 	        String userId = userDetails.getUser().getUsername();
 	        List<Wishlist> wList = wishr.findByUserid(userId);
 	        model.addAttribute("wList", wList);
+	        System.out.println(wList);
 	    } else {
 	        model.addAttribute("wList", null); // 비로그인 시 빈 리스트
 	    }

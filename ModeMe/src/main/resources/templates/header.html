@@ -49,8 +49,7 @@
         </a>
 
         <nav class="menu">
-			<a th:href="@{/proList(category='all')}" 
-		       th:classappend="${selectedCategory == 'all' ? 'selected-category' : ''}">ALL</a>
+			<a href="/proList?category=all">ALL</a>
 			<a th:href="@{/proList(category='outer')}" 
 		       th:classappend="${selectedCategory == 'outer' ? 'selected-category' : ''}">OUTER</a>
 			<a th:href="@{/proList(category='top')}" 
