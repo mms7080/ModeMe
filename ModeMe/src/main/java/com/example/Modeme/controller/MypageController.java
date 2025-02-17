@@ -1,11 +1,9 @@
 	package com.example.Modeme.controller;
 	
 	import java.security.Principal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -136,11 +134,12 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 
 		        return "/MyPage/MyPage";
 		    }
-	
+		    
+		    // 주문내역
 		    @GetMapping("/order")
 		    public String Order(
 		        @AuthenticationPrincipal CustomUserDetails userDetails,
-		        @RequestParam(value="imageUrl", required = false) String imageUrl,
+		        @RequestParam(value = "merchantUid", required = false) String merchantUid,
 		        @RequestParam(value = "searchselect", required = false) String searchselect,
 		        @RequestParam(value = "searchinput", required = false) String searchinput,
 		        @RequestParam(value = "page", defaultValue = "1") int page,
@@ -152,6 +151,10 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 		        int paginationSize = 10; // 페이지 번호 최대 표시 개수
 
 		        List<Purchase> user = purrep.findByUsername(userid);
+		        
+		        List<Purchase> etc = purrep.findByMerchantUid(merchantUid);
+		        int count = etc.size()-1;
+
 
 		        // 검색 조건 적용 (DB에서 필터링)
 		        if (searchselect != null && !searchselect.isEmpty()) {
@@ -188,12 +191,14 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 		        int currentRangeStart = ((page - 1) / paginationSize) * paginationSize + 1;
 		        int currentRangeEnd = Math.min(currentRangeStart + paginationSize - 1, totalpages);
 
+		     // merchantUidCount를 모델에 담아서 뷰로 전달
+		        model.addAttribute("merchantUidCount", count);
 		        model.addAttribute("boards", paginationcontent);  // 수정된 부분
-		        model.addAttribute("firstImageUrl", imageUrl);
 		        model.addAttribute("currentPage", page);
 		        model.addAttribute("totalPages", totalpages);
 		        model.addAttribute("startPage", currentRangeStart);
 		        model.addAttribute("endPage", currentRangeEnd);
+		        
 
 		        return "/MyPage/order";
 		    }

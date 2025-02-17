@@ -66,10 +66,10 @@
 
                      <span th:text="${content.id}"></span>
                   </div>
-                  <img th:src="${content.imageUrl}" alt="상품 이미지" class="order-image" />
-                  <a th:href="@{/productDetail/productDetail/{id}(id=${content.productNumber})}">
-                  		<span th:text="${content.itemname}"></span> 
-                  </a>
+                  <img th:src="@{${content.imageUrl}}" alt="상품 이미지" class="order-image" />
+                 <a th:href="@{/productDetail/productDetail/{id}(id=${content.productNumber})}">
+    <span th:text="${content.itemname} + ( ${merchantUidCount} != 0 ? ' 외 ' + ${merchantUidCount	} + '개' : '')"></span>
+</a>
                   <span th:text="${content.productMany}"></span> 
                   <span th:text="${#numbers.formatInteger(content.totalPrice, 0, 'COMMA').replace(',', '.')}"></span> 
                   <span th:switch="${content.process}"> 

@@ -175,6 +175,8 @@ document.getElementById("payButton").addEventListener("click", function () {
 	            if (response === 'success') {
 	                alert('결제가 완료되었습니다');
 	                location.href = "/bankTransfer?merchantUid=" + merchantUid;
+	                // 결제 성공 시 /order 페이지로 merchantUid를 전달
+   						 location.href = "/order?merchantUid=" + merchantUid;
 	            }
 	        },
 	        error: (rsp) => {
@@ -220,6 +222,8 @@ document.getElementById("payButton").addEventListener("click", function () {
                     if (rsp === 'success') {
                         alert('결제가 완료되었습니다');
                         location.href = "/order";
+                        // 결제 성공 시 /order 페이지로 merchantUid를 전달
+   						 location.href = "/order?merchantUid=" + merchantUid;
                     }
                 },
                 error: (rsp) => {
@@ -294,6 +298,8 @@ document.getElementById("kakaopay").addEventListener("click", function () {
                     if (rsp === 'success') {
                         alert('결제가 완료되었습니다');
                         location.href = "/order";
+                         // 결제 성공 시 /order 페이지로 merchantUid를 전달
+   						 location.href = "/order?merchantUid=" + merchantUid;
                     }
                 },
                 error: (rsp) => {
@@ -366,6 +372,8 @@ document.getElementById("tosspay").addEventListener("click", function() {
 	                    if (rsp === 'success') {
 	                        alert('결제가 완료되었습니다');
 	                        location.href = "/order";
+	                         // 결제 성공 시 /order 페이지로 merchantUid를 전달
+    						location.href = "/order?merchantUid=" + merchantUid;
 	                    }
 	                },
 	                error: (rsp) => {
