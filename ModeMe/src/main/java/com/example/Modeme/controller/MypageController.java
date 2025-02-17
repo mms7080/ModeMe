@@ -2,10 +2,11 @@
 	
 	import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -135,7 +136,7 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 		        return "/MyPage/MyPage";
 		    }
 		    
-		    // 주문내역
+		 // 주문내역
 		    @GetMapping("/order")
 		    public String Order(
 		        @AuthenticationPrincipal CustomUserDetails userDetails,
@@ -151,10 +152,20 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 		        int paginationSize = 10; // 페이지 번호 최대 표시 개수
 
 		        List<Purchase> user = purrep.findByUsername(userid);
-		        
-		        List<Purchase> etc = purrep.findByMerchantUid(merchantUid);
-		        int count = etc.size()-1;
 
+		        // 각 주문에 대해 merchantUid별로 카운트를 계산하고 그 값을 주문에 추가
+		        List<Map<String, Object>> ordersWithCounts = new ArrayList<>();
+		        for (Purchase order : user) {
+		            List<Purchase> etc = purrep.findByMerchantUid(order.getMerchantUid());
+		            int count = etc.size() - 1;  // 해당 merchantUid에 대한 주문 수 (자기 자신 제외)
+		            
+		            // 각 주문과 그에 대한 카운트를 하나의 Map으로 묶어서 저장
+		            Map<String, Object> orderWithCount = new HashMap<>();
+		            orderWithCount.put("order", order);
+		            orderWithCount.put("merchantUidCount", count);
+		            
+		            ordersWithCounts.add(orderWithCount);
+		        }
 
 		        // 검색 조건 적용 (DB에서 필터링)
 		        if (searchselect != null && !searchselect.isEmpty()) {
@@ -182,7 +193,7 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 		        int totalcontent = user.size();
 		        int totalpages = (int) Math.ceil((double) totalcontent / pageSize);
 
-		     // 페이지 범위 계산
+		        // 페이지 범위 계산
 		        int startIndex = (page - 1) * pageSize;
 		        int endIndex = Math.min(startIndex + pageSize, totalcontent);
 		        List<Purchase> paginationcontent = user.subList(startIndex, endIndex);
@@ -191,17 +202,17 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 		        int currentRangeStart = ((page - 1) / paginationSize) * paginationSize + 1;
 		        int currentRangeEnd = Math.min(currentRangeStart + paginationSize - 1, totalpages);
 
-		     // merchantUidCount를 모델에 담아서 뷰로 전달
-		        model.addAttribute("merchantUidCount", count);
-		        model.addAttribute("boards", paginationcontent);  // 수정된 부분
+		        // `ordersWithCounts`를 모델에 전달
+		        model.addAttribute("orders", ordersWithCounts);  // 수정된 부분
+		        model.addAttribute("paginationcontent",paginationcontent);
 		        model.addAttribute("currentPage", page);
 		        model.addAttribute("totalPages", totalpages);
 		        model.addAttribute("startPage", currentRangeStart);
 		        model.addAttribute("endPage", currentRangeEnd);
-		        
 
 		        return "/MyPage/order";
 		    }
+
 
 			
 			// 적립금

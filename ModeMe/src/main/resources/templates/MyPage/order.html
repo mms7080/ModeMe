@@ -56,38 +56,37 @@
                <span>주문처리상태</span>
             </div>
 
-            <!-- 주문 내역이 있을 경우 (orderList model명)-->
-            <div th:if="${boards != null && !boards.isEmpty()}">
-               <div class="ordercontent online"
-                  th:each="content : ${boards}">
-                  <div class="center">
-                     <span
-                        th:text="${#temporals.format(content.orderDate, 'yyyy-MM-dd')}"></span></br>
+           <!-- 주문 내역이 있을 경우 -->
+<div th:if="${orders != null && !orders.isEmpty()}">
+    <div class="ordercontent online" th:each="content : ${orders}">
+        <div class="center">
+            <span th:text="${#temporals.format(content['order'].orderDate, 'yyyy-MM-dd')}"></span></br>
+            <span th:text="${content['order'].id}"></span>
+        </div>
+        <img th:src="@{${content['order'].imageUrl}}" alt="상품 이미지" class="order-image" />
+        <a th:href="@{/productDetail/productDetail/{id}(id=${content['order'].productNumber})}">
+            <span th:text="${content['order'].itemname} + 
+                (${content['merchantUidCount'] != null and content['merchantUidCount'] != 0} 
+                    ? ' 외 ' + ${content['merchantUidCount']} + '개' 
+                    : '')">
+            </span>
+        </a>
+        <span th:text="${content['order'].productMany}"></span> 
+        <span th:text="${#numbers.formatInteger(content['order'].totalPrice, 0, 'COMMA').replace(',', '.')}"></span> 
+        <span th:switch="${content['order'].process}"> 
+            <span th:case="'before'">⏰ 입금 전</span> 
+            <span th:case="'ready'">📦 배송준비 중</span>
+            <span th:case="'delivery'">🚛 배송 중</span> 
+            <span th:case="'done'">✅ 배송완료</span>
+            <span th:case="*">기타</span> <!-- 예상치 못한 값 처리 -->
+        </span>
+    </div>
+</div>
 
-                     <span th:text="${content.id}"></span>
-                  </div>
-                  <img th:src="@{${content.imageUrl}}" alt="상품 이미지" class="order-image" />
-                 <a th:href="@{/productDetail/productDetail/{id}(id=${content.productNumber})}">
-    <span th:text="${content.itemname} + ( ${merchantUidCount} != 0 ? ' 외 ' + ${merchantUidCount	} + '개' : '')"></span>
-</a>
-                  <span th:text="${content.productMany}"></span> 
-                  <span th:text="${#numbers.formatInteger(content.totalPrice, 0, 'COMMA').replace(',', '.')}"></span> 
-                  <span th:switch="${content.process}"> 
-                     <span th:case="'before'">⏰ 입금 전</span> 
-                     <span th:case="'ready'">📦 배송준비 중</span>
-                     <span th:case="'delivery'">🚛 배송 중</span> 
-                     <span th:case="'done'">✅ 배송완료</span>
-                     <span th:case="*">기타</span> <!-- 예상치 못한 값 처리 -->
-                  </span>
-
-               </div>
-            </div>
-
-            <div
-               th:unless="${boards != null && !boards.isEmpty()}"
-               class="orderlist">
-               <div class="order_null">주문 내역이 없습니다.</div>
-            </div>
+<!-- 주문 내역이 없을 경우 -->
+<div th:unless="${orders != null && !orders.isEmpty()}" class="orderlist">
+    <div class="order_null">주문 내역이 없습니다.</div>
+</div>
 
          </div>
 <div class="pagination">
