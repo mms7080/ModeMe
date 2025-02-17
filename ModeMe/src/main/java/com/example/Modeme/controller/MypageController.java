@@ -1,9 +1,13 @@
 	package com.example.Modeme.controller;
 	
 	import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -133,22 +137,67 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 		        return "/MyPage/MyPage";
 		    }
 	
-			// 주문내역 조회
-			@GetMapping("/order")
-			public String Order(
-					 @AuthenticationPrincipal CustomUserDetails userDetails,
-					 @RequestParam(value="imageUrl", required = false) String imageUrl,
-				        Model model	
-			) {
-				String userid = userDetails.getUsername();
-				
-				List<Purchase> user = purrep.findByUsername(userid);
-				
-				model.addAttribute("purchase_list",user);
-				 model.addAttribute("firstImageUrl", imageUrl);
-				
-				return "/MyPage/order";
-			}
+		    @GetMapping("/order")
+		    public String Order(
+		        @AuthenticationPrincipal CustomUserDetails userDetails,
+		        @RequestParam(value="imageUrl", required = false) String imageUrl,
+		        @RequestParam(value = "searchselect", required = false) String searchselect,
+		        @RequestParam(value = "searchinput", required = false) String searchinput,
+		        @RequestParam(value = "page", defaultValue = "1") int page,
+		        Model model
+		    ) {
+		        String userid = userDetails.getUsername();
+
+		        int pageSize = 5; // 한 페이지에 표시할 게시글 개수
+		        int paginationSize = 10; // 페이지 번호 최대 표시 개수
+
+		        List<Purchase> user = purrep.findByUsername(userid);
+
+		        // 검색 조건 적용 (DB에서 필터링)
+		        if (searchselect != null && !searchselect.isEmpty()) {
+		            switch (searchselect) {
+		                case "입금전":
+		                    user = purrep.findByUsernameAndProcess(userid, "before");
+		                    break;
+		                case "배송준비중":
+		                    user = purrep.findByUsernameAndProcess(userid, "ready");
+		                    break;
+		                case "배송중":
+		                    user = purrep.findByUsernameAndProcess(userid, "delivery");
+		                    break;
+		                case "배송완료":
+		                    user = purrep.findByUsernameAndProcess(userid, "done");
+		                    break;
+		                default:
+		                    user = purrep.findByUsername(userid); // 잘못된 값이면 전체 조회
+		                    break;
+		            }
+		        } else {
+		            user = purrep.findByUsername(userid); // 검색 조건 없으면 전체 조회
+		        }
+
+		        int totalcontent = user.size();
+		        int totalpages = (int) Math.ceil((double) totalcontent / pageSize);
+
+		     // 페이지 범위 계산
+		        int startIndex = (page - 1) * pageSize;
+		        int endIndex = Math.min(startIndex + pageSize, totalcontent);
+		        List<Purchase> paginationcontent = user.subList(startIndex, endIndex);
+
+		        // 페이지 번호 범위 계산 (5개씩 페이지를 표시)
+		        int currentRangeStart = ((page - 1) / paginationSize) * paginationSize + 1;
+		        int currentRangeEnd = Math.min(currentRangeStart + paginationSize - 1, totalpages);
+
+		        model.addAttribute("boards", paginationcontent);  // 수정된 부분
+		        model.addAttribute("firstImageUrl", imageUrl);
+		        model.addAttribute("currentPage", page);
+		        model.addAttribute("totalPages", totalpages);
+		        model.addAttribute("startPage", currentRangeStart);
+		        model.addAttribute("endPage", currentRangeEnd);
+
+		        return "/MyPage/order";
+		    }
+
 			
 			// 적립금
 			@GetMapping("/mileage")
