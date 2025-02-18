@@ -328,29 +328,30 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-	const thumbnails = document.querySelectorAll(".thumbnail-image");
-	const mainPreview = document.getElementById("main-preview");
+    const thumbnails = document.querySelectorAll(".thumbnail-image");
+    const mainPreview = document.getElementById("main-preview");
 
-	// 최초 메인 이미지 저장
-	const initialMainImageSrc = mainPreview.src;
-	let currentMainImageSrc = initialMainImageSrc; // 현재 메인 이미지 추적
+    let uniqueImageSet = new Set();
 
-	thumbnails.forEach((thumbnail) => {
-		thumbnail.addEventListener("click", function() {
-			let clickedThumbnailSrc = this.src;
+    thumbnails.forEach(thumbnail => {
+        let imageSrc = thumbnail.getAttribute("src");
 
-			// 클릭한 썸네일이 현재 메인 이미지인 경우, 초기 이미지로 되돌림
-			if (clickedThumbnailSrc === currentMainImageSrc) {
-				mainPreview.src = initialMainImageSrc;
-				currentMainImageSrc = initialMainImageSrc;
-			} else {
-				// 메인 이미지와 썸네일 이미지를 교체
-				mainPreview.src = clickedThumbnailSrc;
-				this.src = currentMainImageSrc;
-				currentMainImageSrc = clickedThumbnailSrc;
-			}
-		});
-	});
+        // 중복된 썸네일 제거
+        if (!uniqueImageSet.has(imageSrc)) {
+            uniqueImageSet.add(imageSrc);
+
+            thumbnail.addEventListener("click", function() {
+                let tempSrc = mainPreview.src; // 현재 메인 이미지 저장
+                mainPreview.src = this.src; // 클릭한 썸네일을 메인 이미지로 변경
+                this.src = tempSrc; // 기존 메인 이미지를 썸네일로 변경
+            });
+        } else {
+            thumbnail.parentElement.remove(); // 중복된 썸네일 제거
+        }
+    });
+});
+
+
 
 	// 메인 이미지 확대 기능 (돋보기 효과)
 	mainPreview.addEventListener("mousemove", function(e) {
@@ -365,7 +366,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	mainPreview.addEventListener("mouseleave", function() {
 		mainPreview.style.transform = "scale(1)"; // 원래 크기로 복구
 	});
-});
+
 
 // 정민 : 테스트중, 상품 상세조회에서 사이즈, 색상 선택 후 구매 버튼 클릭 시 구매화면으로 이동
 document.addEventListener("DOMContentLoaded", function() {
