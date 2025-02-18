@@ -518,6 +518,28 @@ document.addEventListener("DOMContentLoaded", function() {
 		});
 	})
 })
+document.addEventListener("DOMContentLoaded", () => {
+    const thumbnails = document.querySelectorAll(".thumbnail-image");
+    const mainPreview = document.getElementById("main-preview");
+
+    let uniqueImageSet = new Set();
+
+    thumbnails.forEach(thumbnail => {
+        let imageSrc = thumbnail.getAttribute("src");
+
+        // 중복된 이미지가 있으면 추가하지 않음
+        if (!uniqueImageSet.has(imageSrc)) {
+            uniqueImageSet.add(imageSrc);
+
+            thumbnail.addEventListener("click", function() {
+                mainPreview.src = imageSrc;
+            });
+        } else {
+            thumbnail.parentElement.remove(); // 중복된 썸네일 제거
+        }
+    });
+});
+
 
 
 

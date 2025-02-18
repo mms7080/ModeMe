@@ -175,6 +175,7 @@ public class ProductDetailController {
        List<String> imageUrls = productImageRepository.findByAddItemId(product.getId())
                                    .stream()
                                    .map(ProductImage::getImageUrl)
+                                   .distinct() // 중복 제거 추가
                                    .collect(Collectors.toList());
        model.addAttribute("imageUrls", imageUrls);
 
