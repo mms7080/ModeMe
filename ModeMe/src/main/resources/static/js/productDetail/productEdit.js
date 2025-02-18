@@ -1,35 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const mainCategoryLabels = document.querySelectorAll('label[for]');
-	const colorInputs = document.querySelectorAll(".color");
-	    
-    // HEX → RGB 변환 함수
-    const hexToRgb = (hex) => {
-        const bigint = parseInt(hex.slice(1), 16);
-        const r = (bigint >> 16) & 255;
-        const g = (bigint >> 8) & 255;
-        const b = bigint & 255;
-        return { r, g, b };
-    };
-
-    // 색상 변경 시 RGB 업데이트
-    colorInputs.forEach((colorInput) => {
-        const colorOutput = colorInput.closest(".color-section").querySelector(".color-output");
-
-        // 초기값으로 RGB 표시
-        const initialHex = colorInput.value;
-        const initialRgb = hexToRgb(initialHex);
-        colorOutput.textContent = `R: ${initialRgb.r}, G: ${initialRgb.g}, B: ${initialRgb.b}`;
-
-        // 색상 변경 이벤트
-        colorInput.addEventListener("input", () => {
-            const hexValue = colorInput.value;
-            const rgb = hexToRgb(hexValue);
-            colorOutput.textContent = `R: ${rgb.r}, G: ${rgb.g}, B: ${rgb.b}`;
-        });
-    });
-});
-
-document.addEventListener("DOMContentLoaded", () => {
     const mainCategoryInputs = document.querySelectorAll('input[name="category"]');
     const subcategoryContainer = document.getElementById("subcategory");
 
@@ -42,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 저장된 서브카테고리 값 가져오기
     const currentSubcategory = subcategoryContainer.getAttribute("data-selected-subcategory");
-	console.log("현재 선택된 서브카테고리:", currentSubcategory);
+   console.log("현재 선택된 서브카테고리:", currentSubcategory);
 
     // 초기 서브카테고리 설정
     const currentCategory = document.querySelector('input[name="category"]:checked')?.value;
@@ -57,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 서브카테고리 업데이트 함수
     function updateSubcategories(category, selectedSubcategory = null) {
-		
+      
         const subItems = subcategories[category] || [];
         subcategoryContainer.innerHTML = ""; // 기존 서브카테고리 초기화
 
@@ -83,21 +52,113 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+// 미리보기 영역에 있는 이미지들의 src를 hidden input에 업데이트하는 함수 (미리보기 컨테이너를 명확히 지정)
+function updateImageUrlsHiddenInput() {
+    const previewContainer = document.getElementById("previewImagesContainer");
+    if (!previewContainer) {
+        console.error("🚨 Preview images container not found.");
+        return;
+    }
+    const previewImages = previewContainer.querySelectorAll("img.preview-image");
+    const imageUrls = [];
+    previewImages.forEach(img => {
+        // placeholder 이미지가 아닌 경우에만 URL 수집
+        if (img && img.src && !img.src.includes("placeholder.png")) {
+            imageUrls.push(img.src);
+        }
+    });
+    const hiddenInput = document.getElementById("imageUrls");
+    if (hiddenInput) {
+        hiddenInput.value = imageUrls.join(",");
+        console.log("updateImageUrlsHiddenInput - Updated hidden input value:", hiddenInput.value);
+    } else {
+        console.error("Hidden input with id 'imageUrls' not found.");
+    }
+}
+
+// 수정된 이미지 업로드 함수 (Promise 반환 없이 바로 실행)
+function uploadImage(imageUploadName, previewImageName) {
+    const fileInput = document.getElementById(imageUploadName);
+    if (!fileInput.files || fileInput.files.length === 0) {
+        console.log("🚨 파일이 선택되지 않았습니다.");
+        return;
+    }
+
+    const uuid = crypto.randomUUID();
+    let file = fileInput.files[0];
+    console.log(`Selected file: ${file.name}, size: ${file.size}, type: ${file.type}`);
+    let formData = new FormData();
+    let newFileName = file.name + "_" + uuid; // 파일명 변경
+    let renamedFile = new File([file], newFileName, { type: file.type });
+    console.log(`Renamed file: ${renamedFile.name}`);
+    formData.append("file", renamedFile);
+
+    fetch("/api/gcs/upload", { method: "POST", body: formData })
+        .then(response => {
+            console.log(`Upload response status: ${response.status}`);
+            return response.text(); // 이미지 URL 반환
+        })
+        .then(imageUrl => {
+            console.log("Received image URL from server:", imageUrl);
+            if (imageUrl && imageUrl.trim() !== "") {
+                // hidden input 업데이트
+                let imageUrlsInput = document.getElementById("imageUrls");
+                if (!imageUrlsInput) {
+                    console.error("🚨 Hidden input with id 'imageUrls' not found.");
+                    return;
+                }
+                // 기존 값 가져오기 (hidden input은 수정페이지에서 등록 페이지와 달리 초기값이 있을 수 있음)
+                let existingUrls = imageUrlsInput.value ? imageUrlsInput.value.split(",") : [];
+                console.log("Existing hidden input imageUrls:", existingUrls);
+                existingUrls.push(imageUrl);
+                imageUrlsInput.value = existingUrls.join(",");
+                console.log("Updated hidden input imageUrls:", imageUrlsInput.value);
+
+                // 미리보기 이미지 업데이트
+                let previewImage = document.getElementById(previewImageName);
+                if (previewImage) {
+                    previewImage.src = imageUrl;
+                    previewImage.style.display = "block";
+                    previewImage.width = 300; // 이미지 크기 조절
+                    console.log(`Preview image (${previewImageName}) updated to: ${previewImage.src}`);
+                } else {
+                    console.error(`🚨 Preview image not found for id: ${previewImageName}`);
+                }
+                // 업데이트 후 hidden input 재갱신 (전체 미리보기 이미지 기준)
+                updateImageUrlsHiddenInput();
+            } else {
+                console.log("🚨 업로드된 URL이 비어 있습니다.");
+            }
+        }).catch(error => {
+            console.error("🚨 이미지 업로드 실패:", error);
+        });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     const imageInputs = document.querySelectorAll(".image-inputs div");
+    console.log("Found imageInputs count:", imageInputs.length);
 
-    imageInputs.forEach((box, index) => {
+    imageInputs.forEach((box) => {
         const fileInput = box.querySelector("input[type='file']");
+        const fileNameSpan = box.querySelector(".file-name");
 
-        // 박스를 클릭하면 연결된 파일 입력 필드 활성화
-        box.addEventListener("click", () => {
+        // 박스를 클릭하면 파일 입력 필드 활성화
+        box.addEventListener("click", (e) => {
+            // 클릭 대상이 input, button, span이 아닌 경우에만 파일 입력 클릭
+            const tagName = e.target.tagName.toLowerCase();
+            if (tagName === "input" || tagName === "button" || tagName === "span") return;
+            console.log(`Box clicked. File input id: ${fileInput.id}`);
             fileInput.click();
         });
 
-        // 파일 선택 후 파일 이름 표시 (선택적으로 추가)
+        // 파일 선택 후, 파일 이름 표시와 업로드 함수 호출
         fileInput.addEventListener("change", () => {
+            console.log(`Change event fired on ${fileInput.id}. Files length: ${fileInput.files.length}`);
             if (fileInput.files.length > 0) {
-                box.innerHTML = `<span>${fileInput.files[0].name}</span>`;
+                fileNameSpan.textContent = fileInput.files[0].name;
+                const previewId = fileInput.getAttribute("data-preview-id");
+                console.log(`Calling uploadImage with file input id: ${fileInput.id}, preview id: ${previewId}`);
+                uploadImage(fileInput.id, previewId);
             }
         });
     });
@@ -187,7 +248,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
     const buttons = document.querySelectorAll(".buttons button");
-
     buttons.forEach((button) => {
         button.addEventListener("click", () => {
             const url = button.getAttribute("data-url"); // 버튼의 data-url 속성 값 가져오기
@@ -199,3 +259,41 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const fileInputs = document.querySelectorAll(".image-input");
+    const previewImages = document.querySelectorAll(".preview-image");
+    const imageUrlsInput = document.getElementById("imageUrls");
+
+    let currentImageUrls = imageUrlsInput.value ? imageUrlsInput.value.split(",") : [];
+
+    // 기존 이미지 유지 (기존 이미지 URL이 hidden input에 저장됨)
+    previewImages.forEach((previewImage, index) => {
+        if (currentImageUrls[index]) {
+            previewImage.src = currentImageUrls[index];
+        }
+    });
+
+    // 파일 입력이 변경될 때 이벤트 리스너 추가
+    fileInputs.forEach((fileInput, index) => {
+        fileInput.addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    previewImages[index].src = e.target.result;
+                    currentImageUrls[index] = e.target.result; // 새로운 이미지 URL 업데이트
+                    updateHiddenInput();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+
+    // Hidden input 업데이트 함수
+    function updateHiddenInput() {
+        imageUrlsInput.value = currentImageUrls.join(",");
+    }
+});
+
+

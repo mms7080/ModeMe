@@ -81,15 +81,37 @@
             </select>
         </div>
 
-        <div class="main-img-input-container">
-            <label class="img-input-label">메인 이미지</label>
-            <div class="image-inputs">
-                <div><input type="file" id="image1" name="image1"></div>
-                <div><input type="file" id="image2" name="image2"></div>
-                <div><input type="file" id="image3" name="image3"></div>
-                <div><input type="file" id="image4" name="image4"></div>
-            </div>
-        </div>
+        <input type="file" id="image[[${i}]]" name="image[[${i}]]" data-preview-id="previewImage[[${i}]]">
+		<input type="hidden" name="imageUrls" id="imageUrls" th:value="${#strings.arrayJoin(imageUrls, ',')}">
+
+			<!-- Main Images: 파일 선택 영역 -->
+			<div class="main-img-input-container">
+				<label class="img-input-label">메인 이미지</label>
+				<div class="image-inputs">
+					<!-- 0부터 3까지 4개의 슬롯 생성 -->
+					<div class="image-slot" th:each="i : ${#numbers.sequence(0,3)}">
+						<input type="file" th:id="|image${i}|" th:name="|image${i}|"
+							th:attr="data-preview-id=|previewImage${i}|"> <span
+							class="file-name"></span>
+					</div>
+				</div>
+			</div>
+
+			<!-- Preview Images: 업로드된 이미지 미리보기 영역 -->
+			<div class="main-img-input-container" id="previewImagesContainer">
+				<label class="img-input-label">미리보기 이미지</label>
+				<div>
+					<div class="image-slot" th:each="i : ${#numbers.sequence(0,3)}">
+						<img
+							th:if="${product.imageUrls != null and product.imageUrls.size() > i}"
+							th:src="${product.imageUrls[i]}" alt="상품 이미지"
+							th:id="|previewImage${i}|" class="preview-image"> <img
+							th:if="${product.imageUrls == null or product.imageUrls.size() <= i}"
+							src="/images/placeholder.png" alt="상품 이미지"
+							th:id="|previewImage${i}|" class="preview-image">
+					</div>
+				</div>
+			</div>
 
         <div class="RTE-container">
             <label for="rich-text-editor">상품 상세정보</label>
