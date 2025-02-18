@@ -30,10 +30,10 @@
 
 		<!-- Navigation quickBar -->
 		<ul class="quickBar">
-			<li><a><b>상품구매</b></a></li>
+			<li><a>상품구매</a></li>
 			<li><a href="#prdDetail">상품상세정보</a></li>
 			<li><a href="#prdInfo">상품구매안내</a></li>
-			<li class="selected"><a href="#prdReview"> 상품후기 <span
+			<li class="selected"><a href="#prdReview"> 리뷰 <span
 					class="reviewcount" th:text="${reviewCount}">0</span>
 			</a></li>
 		</ul>
@@ -125,9 +125,9 @@
 		<!-- Navigation quickBar -->
 		<ul class="quickBar">
 			<li><a href="#prdBuy">상품구매</a></li>
-			<li><a><b>상품상세정보</b></a></li>
+			<li><a>상품상세정보</a></li>
 			<li><a href="#prdInfo">상품구매안내</a></li>
-			<li class="selected"><a href="#prdReview"> 상품후기 <span
+			<li class="selected"><a href="#prdReview"> 리뷰 <span
 					class="reviewcount" th:text="${reviewCount}">0</span>
 			</a></li>
 		</ul>
@@ -150,8 +150,8 @@
 		<ul class="quickBar">
 			<li><a href="#prdBuy">상품구매</a></li>
 			<li><a href="#prdDetail">상품상세정보</a></li>
-			<li><a><b>상품구매안내</b></a></li>
-			<li class="selected"><a href="#prdReview"> 상품후기 <span
+			<li><a>상품구매안내</a></li>
+			<li class="selected"><a href="#prdReview"> 리뷰 <span
 					class="reviewcount" th:text="${reviewCount}">0</span>
 			</a></li>
 		</ul>
@@ -199,21 +199,22 @@
 		<p>※ 고객님의 마음이 바뀌어 교환, 반품을 하실 경우 상품반송 비용은 고객님께서 부담하셔야 합니다. (색상 교환,
 			사이즈 교환 등 포함)</p>
 	</div>
-
-	<!-- Reviews Section -->
-	<div class="reviews container" id="prdReview">
-
-		<!-- Navigation quickBar -->
+	<br><br><br><br><br><br>
+	
+			<!-- Navigation quickBar -->
 		<ul class="quickBar">
 			<li><a href="#prdBuy">상품구매</a></li>
 			<li><a href="#prdDetail">상품상세정보</a></li>
 			<li><a href="#prdInfo">상품구매안내</a></li>
-			<li class="selected"><a href="#prdReview"> 상품후기 <span
+			<li class="selected"><a href="#prdReview"> 리뷰 <span
 					class="reviewcount" th:text="${reviewCount}">0</span>
 			</a></li>
 		</ul>
 
-		<div class="section-header">상품후기</div>
+	<!-- Reviews Section -->
+	<div class="reviews container" id="prdReview">
+
+		<div class="section-header">리뷰</div>
 
 		<!-- 리뷰 목록 -->
 		<div class="review-list" id="review-list"

@@ -66,19 +66,25 @@ body {
 	justify-content: center;
 	list-style: none;
 	margin: 20px 0;
-	gap: 80px;
+	gap: 90px;
 }
 
 .quickBar a {
 	text-decoration: none;
-	color: #666;
+	color: black;
+	font-size: 16px;
+}
+.quickBar a:hover {
+	text-decoration: none;
+	color: #333;
 	font-size: 16px;
 }
 
-.quickBar .selected a {
-	font-weight: bold;
-	color: #000;
-}
+/* .quickBar .selected a { */
+/* 	font-weight: bold; */
+/* 	color: #000; */
+/* } */
+
 
 .product-section {
 	display: flex;
@@ -212,7 +218,7 @@ body {
 }
 
 .selection-summary {
-	margin-top: 24px; /* 살짝 더 넓은 간격 */
+	margin-top: px; /* 살짝 더 넓은 간격 */
 	font-size: 16px; /* 폰트 크기를 조금 줄여 세련된 느낌 */
 	font-weight: 600; /* 너무 굵지 않은 반굵은 스타일 */
 	text-align: right; /* 오른쪽 정렬 유지 */
@@ -420,6 +426,7 @@ body {
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.3s;
+    color:black;
 }
 
 .pagination button:hover {
@@ -517,5 +524,19 @@ body {
     margin-bottom: 10px; /* 리스트 항목 간 여백 */
     line-height: 1.6; /* 줄 간격 증가 */
 }
+/* 돋보기 효과 적용할 컨테이너 */
+.image-container {
+    position: relative;
+    overflow: hidden; /* 넘치는 부분 숨김 */
+    width: fit-content;
+    display: inline-block;
+}
+
+/* 확대될 이미지 */
+#main-preview {
+    transition: transform 0.1s ease-out;
+    position: relative; /* 확대로 인해 흐트러지는 문제 방지 */
+}
+
 
 
