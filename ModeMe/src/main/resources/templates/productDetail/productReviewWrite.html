@@ -13,22 +13,26 @@
         <h1>REVIEW</h1>
         <p class="description">상품 사용후기를 작성해주세요.</p>
 
-        <!-- Product Summary -->
-	    <div class="product-summary">
-	        <!-- 상품 이미지: 나중에 동적으로 구현 가능 -->
-	        <div class="product-image" style="background-color: #e0e0e0;">
-	            <img th:src="${addItem?.image ?: '/images/default-product.png'}" alt="상품 이미지">
-	        </div>
-			
-	        <!-- 상품 정보 -->
-	        <div class="product-info">
-	            <h2 th:text="${product?.name ?: '상품 이름 없음'}">상품 이름</h2>
-	            <p th:text="'₩' + ${product?.price ?: 0}">상품 가격</p>
-	            <a th:href="@{/productDetail/{id}(id=${product?.id})}">
-	                <button type="button">상품 상세보기</button>
-	            </a>
-	        </div>
-	    </div>
+     <!-- Product Summary -->
+<div class="product-summary">
+    <!-- 상품 이미지 -->
+    <div class="product-image">
+        <img th:src="${not #lists.isEmpty(imageUrls) ? imageUrls[0] : '/images/default-product.png'}" 
+     alt="상품 이미지"
+     style="max-width: 110px; border-radius: 8px;">
+
+    </div>
+
+    <!-- 상품 정보 -->
+    <div class="product-info">
+        <h2 th:text="${product?.name ?: '상품 이름 없음'}">상품 이름</h2>
+        <p th:text="'₩' + ${product?.price ?: 0}">상품 가격</p>
+        <a th:href="@{/productDetail/{id}(id=${product?.id})}">
+            <button type="button">상품 상세보기</button>
+        </a>
+    </div>
+</div>
+
 
         <!-- Review Form -->		    
 		<form th:action="@{/productDetail/{id}/review(id=${product.id ?: 0})}" method="post">

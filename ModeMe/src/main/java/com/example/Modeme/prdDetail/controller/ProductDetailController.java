@@ -200,6 +200,13 @@ public class ProductDetailController {
       System.out.println("리뷰 작성 페이지 요청: ID = " + id);
       AddItem product = addItemRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다. ID: " + id));
+      
+      // 최신 이미지 리스트 가져오기
+      List<String> imageUrls = productImageRepository.findByAddItemId(product.getId())
+                                     .stream()
+                                     .map(ProductImage::getImageUrl)
+                                     .collect(Collectors.toList());
+      model.addAttribute("imageUrls", imageUrls); // 최신 이미지 리스트 추가
       model.addAttribute("product", product);
       return "/productDetail/productReviewWrite"; // 리뷰 작성 페이지
    }
