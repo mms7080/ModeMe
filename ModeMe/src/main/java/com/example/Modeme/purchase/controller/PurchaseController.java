@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,9 @@ import com.example.Modeme.Config.CustomUserDetails;
 import com.example.Modeme.Manager.Entity.AddItem;
 import com.example.Modeme.Manager.Entity.ItemColorName;
 import com.example.Modeme.Manager.Entity.ItemSize;
+import com.example.Modeme.Manager.Entity.ProductImage;
 import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
+import com.example.Modeme.Manager.ManagerRepository.ProductImageRepository;
 import com.example.Modeme.Manager.ManagerRepository.itemColorNameRepository;
 import com.example.Modeme.Manager.ManagerRepository.itemSizeRepository;
 import com.example.Modeme.Mypage.MypageEntity.Mileage;
@@ -66,6 +69,9 @@ public class PurchaseController {
 	private MileageService mileser;
 	@Autowired
 	private MileageRepository milerep;
+	
+	@Autowired
+	private ProductImageRepository productImageRepository;
 	
 	@ModelAttribute //모든 매핑에 추가할 코드
     public void addAttributes(Model model, Principal principal) {
@@ -219,22 +225,35 @@ public class PurchaseController {
 
 	
 	// ProductController 로 옮기면 좋음
+	// ProductController 로 옮기면 좋음
 	@GetMapping("/proList")
 	public String productList(
-			@RequestParam(defaultValue="all") String category, Model model
-			) {
-		List<AddItem> items;
-		
-		if("all".equals(category)) {
-			items = air.findAll();
-		} else {
-			items = air.findByCategory(category);
-		}
-		
-		model.addAttribute("aList", items);
-		model.addAttribute("selectedCategory", category);
-		return "/product/productList";
+	        @RequestParam(defaultValue="all") String category, Model model
+	) {
+	    List<AddItem> items;
+
+	    if ("all".equals(category)) {
+	        items = air.findAll();
+	    } else {
+	        items = air.findByCategory(category);
+	    }
+
+	    // ✅ 상품 이미지 최신 데이터 반영
+	    for (AddItem item : items) {
+	        List<String> latestImages = productImageRepository.findByAddItemId(item.getId())
+	                .stream()
+	                .map(ProductImage::getImageUrl)
+	                .collect(Collectors.toList());
+	        item.setImageUrls(latestImages);  // 최신 이미지 적용
+	    }
+
+	    model.addAttribute("aList", items);
+	    model.addAttribute("selectedCategory", category);
+	    
+	    return "/product/productList";
 	}
+
+		
 	
 	
 	@GetMapping("/insertPurchase")
