@@ -1,6 +1,7 @@
 @font-face {
-	font-family: 'omyu_pretty';
-
+	font-family: 'omyu_pretty'/* ,"Lato", helvetica,
+	"Apple SD Gothic Neo", Nanum Gothic, Malgun Gothic,
+	맑은 고딕, sans-serif */;
 	src:
 		url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/omyu_pretty.woff2')
 		format('woff2');
@@ -22,46 +23,16 @@ body {
 }
 
 .product-edit-container {
-    width: 60%;
+    width: 80%;
     margin: 0 auto;
-    margin-bottom: 50px;
     padding: 20px;
     background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
 }
 
 h1 {
     text-align: center;
     margin-bottom: 20px;
-}
-
-/* product-name 스타일 */
-.product-name {
-    display: flex;
-    flex-direction: column; /* 내부 요소를 세로 정렬 */
-    align-items: flex-start; /* 내부 요소를 왼쪽 정렬 */
-    width: calc(50% - 20px); /* 2열로 나열 (간격 포함) */
-    box-sizing: border-box; /* padding 포함하여 크기 계산 */
-    margin-bottom: 20px; /* 아래 요소와의 간격 */
-    margin-top: 20px; /* 아래 요소와의 간격 */
-}
-
-/* product-name 내 input 스타일 */
-.product-name input {
-    width: 80%; /* 입력 창 너비 */
-    padding: 10px; /* 내부 여백 */
-    border: 1px solid #ddd; /* 테두리 */
-    border-radius: 4px; /* 둥근 모서리 */
-    font-size: 12px; /* 글꼴 크기 */
-    margin-top: 5px; /* Label과 간격 */
-}
-
-/* product-name 내 label 스타일 */
-.product-name label {
-    display: block; /* Label을 블록 요소로 설정 */
-    width: 35%; /* Label 너비 */
-    font-weight: bold; /* 굵은 텍스트 */
-    margin-bottom: 5px; /* Input과의 간격 */
 }
 
 /* product-informations를 Flexbox로 설정 */
@@ -324,7 +295,6 @@ input[type="radio"]:not(:checked) + .category-label {
     color: #fff;
 }
 
-
 /* button {
     background-color: #333;
     color: #fff;
@@ -335,4 +305,51 @@ input[type="radio"]:not(:checked) + .category-label {
 button:hover {
     background-color: #555;
 } */
+/* product-name 스타일 */
+.product-name {
+    display: flex;
+    flex-direction: column; /* 내부 요소를 세로 정렬 */
+    align-items: flex-start; /* 내부 요소를 왼쪽 정렬 */
+    width: calc(50% - 20px); /* 2열로 나열 (간격 포함) */
+    box-sizing: border-box; /* padding 포함하여 크기 계산 */
+    margin-bottom: 20px; /* 아래 요소와의 간격 */
+    margin-top: 20px; /* 아래 요소와의 간격 */
+}
 
+/* product-name 내 input 스타일 */
+.product-name input {
+    width: 80%; /* 입력 창 너비 */
+    padding: 10px; /* 내부 여백 */
+    border: 1px solid #ddd; /* 테두리 */
+    border-radius: 4px; /* 둥근 모서리 */
+    font-size: 12px; /* 글꼴 크기 */
+    margin-top: 5px; /* Label과 간격 */
+}
+
+/* product-name 내 label 스타일 */
+.product-name label {
+    display: block; /* Label을 블록 요소로 설정 */
+    width: 35%; /* Label 너비 */
+    font-weight: bold; /* 굵은 텍스트 */
+    margin-bottom: 5px; /* Input과의 간격 */
+}
+
+
+/* 미리보기 이미지 크기 통일 + 왼쪽 정렬 */
+.preview-image {
+    width: 150px;  /* 가로 크기 */
+    height: 150px; /* 세로 크기 */
+    object-fit: cover; /* 비율 유지하면서 크기 맞추기 */
+    border-radius: 10px; /* 둥근 모서리 */
+    display: block;
+    margin: 10px 0; /* 위아래 여백 추가 */
+    border: 1px solid #ddd; /* 경계선 추가 */
+}
+
+/* 미리보기 이미지를 포함하는 부모 요소 왼쪽 정렬 */
+.image-slot {
+    text-align: left; /* 내부 요소를 왼쪽 정렬 */
+    display: flex;
+    align-items: center; /* 세로 중앙 정렬 */
+    gap: 10px; /* 이미지 간격 조정 */
+}

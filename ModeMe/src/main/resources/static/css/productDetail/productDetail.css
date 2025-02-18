@@ -66,7 +66,7 @@ body {
 	justify-content: center;
 	list-style: none;
 	margin: 20px 0;
-	gap: 20px;
+	gap: 80px;
 }
 
 .quickBar a {
@@ -246,10 +246,12 @@ body {
    
 /* 🔹 리뷰 섹션 전체 스타일 */
 .reviews {
-    width: 100%;
+    width: 70%;
     margin-top: 50px;
-    padding: 20px;
-    background-color: #fff;
+    padding: 30px;
+    background-color: #f9f9f9; /* 부드러운 배경색 */
+    border-radius: 10px;
+    margin-bottom: 50px;
 }
 
 /* 🔹 리뷰 섹션 헤더 */
@@ -257,8 +259,10 @@ body {
     font-size: 22px;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     color: #333;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ddd;
 }
 
 /* 🔹 리뷰 목록 */
@@ -268,10 +272,39 @@ body {
     gap: 15px;
 }
 
-/* 🔹 개별 리뷰 항목 */
+/* 🔹 개별 리뷰 아이템 */
 .review-item {
-    background-color: #f9f9f9;
-    padding: 15px;
+    background-color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.review-item:hover {
+    transform: scale(1.02); /* 마우스 올릴 때 확대 효과 */
+}
+
+/* 🔹 리뷰 헤더 (작성자 & 날짜) */
+.review-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+/* 🔹 작성자 아이디 스타일 */
+.review-writer {
+    font-weight: bold;
+    color: #333;
+}
+
+/* 🔹 날짜 스타일 */
+.review-date {
+    font-size: 12px;
+    color: #888;
 }
 
 /* 🔹 리뷰 내용 */
@@ -279,37 +312,10 @@ body {
     font-size: 16px;
     line-height: 1.5;
     color: #333;
-    margin: 5px 0;
+    margin: 10px 0;
 }
 
-/* 🔹 작성 날짜 */
-.review-item small {
-    font-size: 12px;
-    color: #777;
-}
-
-/* 🔹 리뷰 헤더: 작성자 & 작성 날짜 같은 줄 배치 */
-.review-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    color: #555;
-    margin-bottom: 5px;
-}
-
-/* 🔹 작성자 아이디 스타일 (Bold 제거) */
-.review-writer {
-    font-weight: normal;
-}
-
-/* 🔹 작성 날짜 스타일 */
-.review-date {
-    font-size: 12px;
-    color: #777;
-}
-
-/* 🔹 리뷰 하단 섹션: 좋아요 & 수정/삭제 버튼 같은 줄 배치 */
+/* 🔹 리뷰 하단 (좋아요, 수정, 삭제 버튼 정렬) */
 .review-footer {
     display: flex;
     justify-content: space-between;
@@ -317,23 +323,68 @@ body {
     margin-top: 10px;
 }
 
-/* 🔹 수정/삭제 버튼을 오른쪽 끝으로 정렬 */
+/* 🔹 좋아요 버튼 섹션 */
+.like-section {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* 🔹 좋아요 버튼 */
+.like-button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 🔹 하트 아이콘 */
+.like-icon {
+    font-size: 22px;
+    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.like-button:active .like-icon {
+    transform: scale(1.2);
+}
+
+/* 🔹 좋아요 상태 변경 */
+.like-button.liked .like-icon {
+    color: #e74c3c;
+}
+
+.like-button:not(.liked) .like-icon {
+    color: #bbb;
+}
+
+/* 🔹 좋아요 개수 */
+.like-count {
+    font-size: 16px;
+    color: #333;
+}
+
+/* 🔹 수정/삭제 버튼 컨테이너 */
 .review-actions {
     display: flex;
     gap: 10px;
 }
 
-/* 🔹 수정/삭제 버튼 디자인 (무채색 적용) */
+/* 🔹 수정 & 삭제 버튼 */
 .review-actions button {
     padding: 8px 12px;
-    border: none;
     font-size: 14px;
+    border-radius: 5px;
+    border: none;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
 }
 
-/* 🔹 수정 버튼 (짙은 회색) */
+/* 🔹 수정 버튼 */
 .review-actions button[type="button"] {
     background-color: #666;
     color: white;
@@ -343,7 +394,7 @@ body {
     background-color: #444;
 }
 
-/* 🔹 삭제 버튼 (어두운 회색) */
+/* 🔹 삭제 버튼 */
 .review-actions button[type="submit"] {
     background-color: #888;
     color: white;
@@ -352,54 +403,6 @@ body {
 .review-actions button[type="submit"]:hover {
     background-color: #666;
 }
-
-/* 🔹 좋아요 버튼을 가로 정렬 */
-.like-section {
-    display: flex;
-    align-items: center; /* 같은 줄에 정렬 */
-    gap: 5px; /* 하트와 숫자 사이 간격 */
-}
-
-/* 🔹 좋아요 버튼 스타일 */
-.like-button {
-    background: none; /* 배경 제거 */
-    border: none; /* 테두리 제거 */
-    font-size: 20px; /* 하트 크기 조정 */
-    cursor: pointer;
-    padding: 0; /* 내부 여백 제거 */
-    display: flex;
-    align-items: center; /* 하트와 숫자 정렬 */
-    justify-content: center;
-}
-
-/* 🔹 하트 아이콘 */
-.like-icon {
-    font-size: 24px;
-    color: #e74c3c; /* 좋아요 상태 기본 빨강 */
-    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
-}
-
-/* 🔹 좋아요 클릭 애니메이션 */
-.like-button:active .like-icon {
-    transform: scale(1.2);
-}
-
-/* 🔹 좋아요 상태에 따른 색상 변경 */
-.like-button.liked .like-icon {
-    color: #e74c3c; /* 채워진 하트 */
-}
-
-.like-button:not(.liked) .like-icon {
-    color: #bbb; /* 비어있는 하트 */
-}
-
-/* 🔹 좋아요 개수 스타일 */
-.like-count {
-    font-size: 16px;
-    color: #333; /* 숫자는 기본 검정색 */
-}
-
-
 
 /* 🔹 페이지네이션 스타일 */
 .pagination {
@@ -426,24 +429,26 @@ body {
 /* 🔹 리뷰 작성 버튼 */
 .section-action {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     margin-top: 20px;
 }
 
 .section-action button {
     padding: 12px 20px;
     font-size: 16px;
-    background-color: #666;
+    background-color: #333;
     color: white;
     border: none;
     font-weight: bold;
+    border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
 .section-action button:hover {
-    background-color: #333;
+    background-color: #555;
 }
+
 
 
 .rich-text-content {
@@ -471,3 +476,46 @@ body {
 .image-preview:hover .preview-image {
 	transform: scale(1.5); /* 1.5배 확대 */
 }
+
+/* 상품 상세 설명 내부 이미지 크기 통일 */
+.product-description img {
+    width: 100%; /* 부모 요소에 맞게 조절 */
+    max-width: 550px; /* 최대 너비 제한 */
+    height: 500px; /* 고정된 높이 */
+    object-fit: cover; /* 비율 유지하면서 크기 맞추기 */
+    display: block; /* 중앙 정렬 유지 */
+    margin: 20px auto; /* 위아래 여백 + 가운데 정렬 */
+    border-radius: 10px; /* 둥근 모서리 적용 */
+}
+/* 상품 정보 섹션 스타일 */
+.bottom.container {
+    padding: 30px 20px; /* 전체 섹션 여백 조정 */
+}
+
+/* 제목(h3) 간격 조정 */
+.bottom.container h3 {
+    margin-top: 30px;  /* 제목 위쪽 여백 추가 */
+    margin-bottom: 15px; /* 제목과 내용 사이 간격 */
+    font-size: 20px; /* 제목 크기 조정 */
+}
+
+/* 문단(p) 간격 조정 */
+.bottom.container p {
+    line-height: 1.8; /* 줄 간격 증가 */
+    margin-bottom: 15px; /* 문단 사이 여백 */
+    font-size: 16px; /* 가독성을 위한 글씨 크기 조정 */
+}
+
+/* 리스트 간격 조정 */
+.bottom.container ul {
+    padding-left: 20px; /* 리스트 들여쓰기 */
+    margin-bottom: 20px; /* 리스트 아래 여백 */
+}
+
+/* 리스트 항목 간격 조정 */
+.bottom.container ul li {
+    margin-bottom: 10px; /* 리스트 항목 간 여백 */
+    line-height: 1.6; /* 줄 간격 증가 */
+}
+
+

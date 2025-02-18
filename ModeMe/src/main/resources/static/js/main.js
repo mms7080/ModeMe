@@ -1,6 +1,24 @@
 // Define slide step size
 const slideStep = 220; // Image width + gap
 
+
+// 하트 클릭시 색 변경
+document.addEventListener("DOMContentLoaded", () => {
+    // 하트 클릭 이벤트
+    document.querySelectorAll(".heart-icon").forEach((heart) => {
+        heart.addEventListener("click", () => {
+            if (heart.classList.contains("filled")) {
+                heart.classList.remove("filled");
+                heart.classList.add("unfilled");
+            } else {
+                heart.classList.remove("unfilled");
+                heart.classList.add("filled");
+            }
+        });
+    });
+});
+// 하트 클릭시 색 변경
+
 // 상품 클릭시 상세로 이동
 const products = document.getElementsByClassName('product-grid')
 for(const p of products){
@@ -60,8 +78,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-
-// 위시리스트 추가
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".heart-icon").forEach(icon => {
         icon.addEventListener("click", function () {
@@ -69,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const itemNumber = productCard.querySelector("input[type='hidden']").value; // 상품 ID
             const itemName = productCard.querySelector("p:first-of-type").innerText; // 상품 이름
             const itemImage = productCard.querySelector(".product-image").src; // 상품 이미지
-
+console.log(itemNumber)
             $.ajax({
                 type: "POST",
                 url: "/wishlist/add",
@@ -82,11 +98,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 success: function (response) {
                     if (response === "success") {
                         alert("위시리스트에 추가되었습니다!");
-						icon.classList.remove("unfilled");
-						icon.classList.add("filled");
                     } else if (response === "exists") {
                         alert("이미 위시리스트에 있는 상품입니다!");
-						
                     }
                 },
                 error: function (error) {
@@ -96,3 +109,14 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    let images = document.querySelectorAll(".product-image");
+    images.forEach(img => {
+        let src = img.getAttribute("src");
+        if (src) {
+            img.setAttribute("src", src + (src.includes("?") ? "&" : "?") + "t=" + new Date().getTime());
+        }
+    });
+});
+

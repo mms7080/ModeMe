@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.example.Modeme.Config.CustomUserDetails;
 import com.example.Modeme.Manager.Entity.AddItem;
+import com.example.Modeme.Manager.Entity.ProductImage;
 import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
+import com.example.Modeme.Manager.ManagerRepository.ProductImageRepository;
 import com.example.Modeme.Mypage.MypageEntity.Wishlist;
 import com.example.Modeme.Mypage.MypageRepository.WishlistRepository;
 import com.example.Modeme.User.UserDTO.Headerlogin;
@@ -49,6 +52,9 @@ public class ViewController {
 	
 	@Autowired
 	private WishlistRepository wishr;
+	
+	 @Autowired
+	private ProductImageRepository productImageRepository;
 	
     @ModelAttribute //모든 매핑에 추가할 코드
     public void addAttributes(Model model, Principal principal) {
@@ -132,31 +138,35 @@ public class ViewController {
 	}
 
 
-	// 메인페이지
-//	@GetMapping("/")
-//	public String mainView(Model model) {
-//		List<AddItem> aList = air.findAll();
-//		model.addAttribute("aList", aList);
-//		return "/main";
-//	}
-
-	@GetMapping({"/","/main"})
+	@GetMapping({"/", "/main"})
 	public String mainView(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
-	    List<AddItem> aList = air.findAll();
+	    List<AddItem> aList = air.findAll();  // 상품 리스트 불러오기
+
+	    // 상품 이미지 최신 데이터 반영
+	    for (AddItem item : aList) {
+	        List<String> latestImages = productImageRepository.findByAddItemId(item.getId())
+	                                         .stream()
+	                                         .map(ProductImage::getImageUrl)
+	                                         .collect(Collectors.toList());
+	        item.setImageUrls(latestImages);  // 최신 이미지 적용
+	    }
+
 	    model.addAttribute("aList", aList);
 
-	    // 로그인한 사용자가 있을 경우, 관심 상품 목록 가져오기
+	    // 로그인한 사용자의 위시리스트 정보 추가
 	    if (userDetails != null) {
 	        String userId = userDetails.getUser().getUsername();
 	        List<Wishlist> wList = wishr.findByUserid(userId);
 	        model.addAttribute("wList", wList);
-	        System.out.println(wList);
 	    } else {
-	        model.addAttribute("wList", null); // 비로그인 시 빈 리스트
+	        model.addAttribute("wList", null);
 	    }
 
-	    return "/main";
+	    return "/main";  // main.html 반환
 	}
+
+
+
 
 	
 	// OUTER 예시 링크

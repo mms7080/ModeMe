@@ -55,7 +55,10 @@
 			<div class="swiper-wrapper">
 				<div th:each="p, iterStat : ${aList}" th:if="${iterStat.index < 6}" class="swiper-slide">
 					<input type="hidden" th:value="${p.id}">
-					<img th:src="${not #lists.isEmpty(p.imageUrls) ? p.imageUrls[0] : '/image/default.jpg'}" alt="상품 이미지" class="product-image">
+					<img th:src="${not #lists.isEmpty(p.imageUrls) ? p.imageUrls[0] + '?v=' + #dates.createNow().getTime() : '/image/default.jpg'}" 
+     alt="상품 이미지" class="product-image">
+
+
 				</div>
 			</div>
 			<div class="swiper-button-next" style="color:black;"></div>
@@ -74,15 +77,18 @@
 		<div class="product-grid">
 			<div th:each="p : ${aList}" class="product-card">
 				<input type="hidden" th:value="${p.id}">
-				<img th:src="${not #lists.isEmpty(p.imageUrls) ? p.imageUrls[0] : '/image/default.jpg'}" alt="상품 이미지" class="product-image">
+				<img th:if="${not #lists.isEmpty(p.imageUrls)}"
+     th:attr="src=${p.imageUrls[0]},data-timestamp=${#dates.createNow().getTime()}"
+     alt="상품 이미지" class="product-image">
+
+
+
 				<div class="hover-icons">
-					<th:block th:with="matched=${wList != null and #lists.contains(wList.![itemNumber], p.id)}">
-					    <svg class="heart-icon"
-					         th:classappend="${matched ? 'filled' : 'unfilled'}"
-					         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-					        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-					    </svg>
-					</th:block>
+					<svg class="heart-icon"
+					th:classappend="${wList != null and #lists.contains(wList.![itemNumber], p.id) ? 'filled' : ''}"
+					 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+						<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+					</svg>
 					<svg class="plus-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 						<path d="M12 5v14m-7-7h14"/>
 					</svg>
@@ -119,6 +125,8 @@
 	        prevEl: ".swiper-button-prev",
 	      },
 	    });
+		
+		
 	</script>
 </body>
 </html>

@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -30,5 +31,10 @@ public interface AddItemRepository extends JpaRepository<AddItem, Long>{
     Optional<AddItem> findWithColorNamesById(@Param("id") Long id);
 
 	List<AddItem> findByCategory(String category);
+	
+    @Query("SELECT DISTINCT a FROM AddItem a LEFT JOIN FETCH a.imageUrls")
+    List<AddItem> findAllWithImages();
+
+
 
 }
