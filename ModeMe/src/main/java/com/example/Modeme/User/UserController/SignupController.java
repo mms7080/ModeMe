@@ -43,39 +43,24 @@ public class SignupController {
         return ResponseEntity.ok(userService.isUsernameTaken(username));
     }
 
-    // 이메일 중복 확인 API
-    @GetMapping("/api/check-email")
-    @ResponseBody
-    public ResponseEntity<Boolean> checkEmail(@RequestParam String email) {
-        return ResponseEntity.ok(userService.isEmailTaken(email));
-    }
-
     // 회원가입 처리
     @PostMapping("/signup")
-    public String signupProcess(@Valid @ModelAttribute("userDTO") UserDTO userDTO, 
-                                BindingResult bindingResult, Model model) {
+    public ResponseEntity<?> signupProcess(@Valid @ModelAttribute("userDTO") UserDTO userDTO, 
+                                          BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "/Sign/signup"; // 유효성 검사 실패 시 다시 회원가입 폼으로 이동
+            return ResponseEntity.badRequest().body("유효성 검사 실패: " + bindingResult.getAllErrors());
         }
 
-        // 아이디 중복 확인
         if (userService.isUsernameTaken(userDTO.getUsername())) {
-            model.addAttribute("usernameError", "이미 사용 중인 아이디입니다.");
-            return "/Sign/signup";
-        }
-
-        // 이메일 중복 확인
-        if (userService.isEmailTaken(userDTO.getEmail())) {
-            model.addAttribute("emailError", "이미 사용 중인 이메일입니다.");
-            return "/Sign/signup";
+            return ResponseEntity.badRequest().body("이미 사용 중인 아이디입니다.");
         }
 
         try {
             userService.registerUser(userDTO);
-            return "redirect:/signup?success=true"; // 🔥 회원가입 성공 시 로그인 페이지로 이동
+            return ResponseEntity.ok().body("{\"success\": true}");
         } catch (Exception e) {
-            model.addAttribute("errorMessage", "회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
-            return "/Sign/signup";
+            e.printStackTrace(); // 콘솔에 상세한 오류 로그 출력
+            return ResponseEntity.internalServerError().body("회원가입 중 오류 발생: " + e.getMessage());
         }
     }
 }
