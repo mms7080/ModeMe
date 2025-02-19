@@ -22,16 +22,12 @@ public class UserDTO {
 
     @NotBlank(message = "비밀번호는 필수 입력 항목입니다.", groups = Create.class)
     @Size(min = 10, message = "비밀번호는 최소 10자 이상이어야 합니다.", groups = Create.class)
-    private String password; // ✅ 회원가입 시 필수, 수정 시 선택
+    private String password; // ✅ 회원가입 시 필수, 수정 시 선택 가능
 
     private String confirmPassword;
 
-    @NotBlank(message = "전화번호가 작성되지 않았습니다.", groups = Create.class)
-    private String phone;
-
-    @NotBlank(message = "이메일이 작성되지 않았습니다.", groups = Create.class)
-    @Email(message = "유효한 이메일 형식이어야 합니다.")
-    private String email;
+    @Pattern(regexp = "\\d{10,11}", message = "전화번호는 숫자로만 이루어진 10~11자리여야 합니다.", groups = Create.class)
+    private String phone; // ✅ 숫자로만 구성된 10~11자리 전화번호 입력 검증
 
     @NotBlank(message = "이름이 작성되지 않았습니다.", groups = Create.class)
     private String name;
@@ -40,5 +36,9 @@ public class UserDTO {
     private String postcode;
     private String address;
     private String addressDetail;
+
+    @Email(message = "올바른 이메일 형식이 아닙니다.")
+    private String email; // ✅ 입력된 경우에만 이메일 형식 검증
+
     private LocalDate birthdate;
 }
