@@ -120,29 +120,11 @@ textarea {
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
-    width: 200px; /* 기존보다 살짝 넓게 */
-    text-align: center;
-    height: 48px;
-}
-
-.btn-black1 {
-    padding: 15px;
-    font-size: 14px;
-    color: #fff;
-    background-color: #000;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
     width: 120px; /* 기존보다 살짝 넓게 */
     text-align: center;
 }
 
 .btn-black:hover {
-    background-color: #444;
-}
-
-.btn-black1:hover {
     background-color: #444;
 }
 
@@ -184,24 +166,6 @@ textarea {
     cursor: pointer;
     text-align: left;
     line-height: 1.5;
-}
-
-.btn-reset {
-    padding: 15px;
-    font-size: 14px;
-    color: #fff;
-    background-color: #000;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    width: 200px; /* 기존보다 살짝 넓게 */
-    height: 48px;
-    text-align: center;
-}
-
-.btn-reset:hover {
-    background-color: #444;
 }
 
 

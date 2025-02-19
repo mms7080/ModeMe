@@ -24,15 +24,14 @@ public class UserService {
      * 회원가입 처리
      */
     public void registerUser(UserDTO userDTO) {
-    	// 📌 (변경됨) 중복 확인을 한 번의 쿼리로 처리
-        Optional<User> existingUser = userRepository.findByUsername(userDTO.getUsername());
-
-        if (existingUser.isPresent()) { // ✅ 중복 검사 최적화
+        // 아이디 중복 체크
+        if (isUsernameTaken(userDTO.getUsername())) {
             throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
         }
-        
-        if (!userDTO.getPhone().matches("\\d{10,11}")) { // ✅ 숫자만 허용 (10~11자리)
-            throw new IllegalArgumentException("유효한 전화번호 형식이 아닙니다.");
+
+        // 이메일 중복 체크
+        if (isEmailTaken(userDTO.getEmail())) {
+            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
         }
 
         // 비밀번호 암호화
@@ -43,8 +42,7 @@ public class UserService {
         user.setUsername(userDTO.getUsername());
         user.setPassword(encodedPassword);
         user.setName(userDTO.getName());
-        // 이메일이 입력되지 않았다면 null 저장
-        user.setEmail(userDTO.getEmail() != null && !userDTO.getEmail().isEmpty() ? userDTO.getEmail() : null);
+        user.setEmail(userDTO.getEmail());
         user.setPhone(userDTO.getPhone());
         user.setBirthdate(userDTO.getBirthdate());
         user.setGender(userDTO.getGender());
@@ -63,6 +61,15 @@ public class UserService {
      */
     public boolean isUsernameTaken(String username) {
         return userRepository.findByUsername(username).isPresent();
+    }
+
+    /**
+     * 이메일 중복 여부 확인
+     * @param email 사용자 이메일
+     * @return 중복 여부 (true: 중복, false: 사용 가능)
+     */
+    public boolean isEmailTaken(String email) {
+        return userRepository.findByEmail(email).isPresent();
     }
 
     /**
@@ -95,19 +102,17 @@ public class UserService {
 
             System.out.println("🔹 기존 사용자 정보: " + user.toString()); // 기존 정보 확인
             System.out.println("🔹 요청된 수정 정보: " + userDTO.toString()); // 수정할 정보 확인
-            
-            // 📌 (변경됨) 전화번호 검증 추가
-            if (!userDTO.getPhone().matches("\\d{10,11}")) {
-                throw new IllegalArgumentException("유효한 전화번호 형식이 아닙니다.");
+
+            // ✅ 이메일 중복 검사 (현재 사용자 제외)
+            if (!user.getEmail().equals(userDTO.getEmail()) && isEmailTaken(userDTO.getEmail())) {
+                System.out.println("❌ 이메일 중복 오류: " + userDTO.getEmail());
+                throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
             }
 
-            // 📌 (변경됨) 비밀번호 변경 시만 암호화 적용
+            // ✅ 비밀번호 변경 처리 (입력값이 있는 경우만)
             if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
-                user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-            }
-            
-            if (userDTO.getEmail() != null) {
-                user.setEmail(userDTO.getEmail());
+                String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
+                user.setPassword(encodedPassword);
             }
 
             // ✅ 수정할 정보 업데이트
