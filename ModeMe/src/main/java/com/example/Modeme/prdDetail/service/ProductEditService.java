@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.example.Modeme.Manager.Entity.AddItem;
 import com.example.Modeme.Manager.Entity.ItemColor;
 import com.example.Modeme.Manager.Entity.ItemColorName;
+import com.example.Modeme.Manager.Entity.ItemSize;
 import com.example.Modeme.Manager.Entity.ProductImage;
 import com.example.Modeme.Manager.ManagerDTO.AddItemDTO;
 import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
@@ -75,6 +76,18 @@ public class ProductEditService {
 		existingItem.getColorNames().clear();
 		existingItem.getColorNames().addAll(updatedColorNames);
 		System.out.println("색상 이름 업데이트 완료: " + updatedColorNames);
+
+		// 사이즈 업데이트 추가
+		List<ItemSize> updatedSizes = updatedItem.getProductSizes().stream().map(size -> {
+			ItemSize itemSize = new ItemSize();
+			itemSize.setItemSize(size);
+			itemSize.setAddItem(existingItem);
+			return itemSize;
+		}).toList();
+		existingItem.getProductSizes().clear();
+		existingItem.getProductSizes().addAll(updatedSizes);
+		System.out.println("사이즈 업데이트 완료: " + updatedSizes);
+
 
 		// 기존 이미지 URL 유지 (새로운 이미지가 없으면 기존 이미지 유지)
 		if (updatedItem.getImageUrls() != null && !updatedItem.getImageUrls().isEmpty()) {
