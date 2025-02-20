@@ -1,4 +1,52 @@
 document.addEventListener("DOMContentLoaded", () => {
+	const mainCategoryLabels = document.querySelectorAll('label[for]');
+	const colorInputs = document.querySelectorAll(".color");
+	
+	// HEX -> RGB 변환 함수
+	const hexToRgb = (hex) => {
+		const bigint = parseInt(hex.slice(1), 16);
+		const r = (bigint >> 16) & 255;
+		const g = (bigint >> 8) & 255;
+		const b = bigint & 255;
+		return { r, g, b };
+	}
+	
+	// 색상 변경 시 RGB 업데이트
+	colorInputs.forEach((colorInput) => {
+		const colorOutput = colorInput.closest(".color-section").querySelector(".color-output");
+		
+		// 초기값으로 RGB 표시
+		const initialHex = colorInput.value;
+		const initialRgb = hexToRgb(initialHex);
+		colorOutput.textContent = `R: ${initialRgb.r}, G: ${initialRgb.g}, B: ${initialRgb.b}`;
+		
+		// 색상 변경 이벤트
+		colorInput.addEventListener("input", () =>{
+			const hexValue = colorInput.value;
+			const rgb = hexToRgb(hexValue);
+			colorOutput.textContent = `R: ${rgb.r}, G: ${rgb.g}, B:${rgb.b}`;
+		});
+	});
+});
+
+// 색상 삭제 로직
+document.addEventListener("DOMContentLoaded", () => {
+    const colorContainer = document.getElementById("color-container");
+    if (colorContainer) {
+        colorContainer.addEventListener("click", (event) => {
+            if (event.target.classList.contains("remove-color")) {
+                const colorSection = event.target.closest(".color-section");
+                if (colorSection) {
+                    colorSection.remove();
+                    console.log("색상 섹션이 삭제되었습니다.");
+                }
+            }
+        });
+    }
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
     const mainCategoryInputs = document.querySelectorAll('input[name="category"]');
     const subcategoryContainer = document.getElementById("subcategory");
 

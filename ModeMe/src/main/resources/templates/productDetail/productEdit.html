@@ -36,21 +36,21 @@
             </span>
         </div>
 
-        <div class="product-color-information">
-			<div id="color-container">
-				<div class="color-section" th:each="colorName, iterStat : ${product?.colorNames ?: {}}">
-					<span class="color-info">
-						<label th:for="'color-' + ${iterStat.index}">상품 색상</label>
-						<input class="color" type="color" id="color-[[${iterStat.index}]]" name="colors" th:value="${product?.colors[iterStat.index] != null ? product.colors[iterStat.index].color : '#000000'}">
-					</span>
-					<div class="color-output" th:class="'color-output color-output-' + ${iterStat.index}">R: 0, G: 0, B: 0</div>
-					<input class="color-name" type="text" name="colorNames" th:placeholder="'색상 이름 입력'" th:value="${colorName.colorName}">
-					<!-- 삭제 버튼 추가 -->
-					<button type="button" class="remove-color">삭제</button>
-				</div>
-				<!-- 추가 버튼 (폼 내부에 있으므로 동적 섹션들도 함께 제출됩니다.) -->
-				<button class="add-color" type="button">+</button>
-			</div>
+		<div class="product-color-information">
+		    <div id="color-container">
+		        <div class="color-section" th:each="colorName, iterStat : ${product?.colorNames ?: {}}">
+		            <span class="color-info">
+		                <label th:for="'color-' + ${iterStat.index}">상품 색상</label>
+		                <input class="color" type="color" id="color-[[${iterStat.index}]]" name="colors" 
+		                       th:value="${product?.colors[iterStat.index] != null ? product.colors[iterStat.index].color : '#000000'}">
+		            </span>
+		            <div class="color-output" th:class="'color-output color-output-' + ${iterStat.index}">R: 0, G: 0, B: 0</div>
+		            <input class="color-name" type="text" name="colorNames" th:placeholder="'색상 이름 입력'" 
+		                   th:value="${colorName.colorName}">
+		            <button type="button" class="remove-color">삭제</button>
+		        </div>
+		        <button class="add-color" type="button">+</button>
+		    </div>
 		</div>
 
         <div class="category-container">
@@ -82,11 +82,26 @@
 			<div class="size-container">
 			    <label class="size-label">상품 사이즈</label>
 			    <div>
-			        <label><input type="checkbox" name="productSizes" value="S" th:checked="${product?.productSizes?.contains('S')}"> S</label>
-			        <label><input type="checkbox" name="productSizes" value="M" th:checked="${product?.productSizes?.contains('M')}"> M</label>
-			        <label><input type="checkbox" name="productSizes" value="L" th:checked="${product?.productSizes?.contains('L')}"> L</label>
-			        <label><input type="checkbox" name="productSizes" value="XL" th:checked="${product?.productSizes?.contains('XL')}"> XL</label>
-			        <label><input type="checkbox" name="productSizes" value="FREESIZE" th:checked="${product?.productSizes?.contains('FREESIZE')}"> FREESIZE</label>
+			        <label>
+			            <input type="checkbox" name="productSizes" value="S"
+						       th:checked="${#lists.contains(product.productSizes.![itemSize], 'S')}"> S
+			        </label>
+			        <label>
+					  <input type="checkbox" name="productSizes" value="M"
+					         th:checked="${#lists.contains(product.productSizes.![itemSize], 'M')}"> M
+					</label>
+					<label>
+					  <input type="checkbox" name="productSizes" value="L"
+					         th:checked="${#lists.contains(product.productSizes.![itemSize], 'L')}"> L
+					</label>
+					<label>
+					  <input type="checkbox" name="productSizes" value="XL"
+					         th:checked="${#lists.contains(product.productSizes.![itemSize], 'XL')}"> XL
+					</label>
+					<label>
+					  <input type="checkbox" name="productSizes" value="FREESIZE"
+					         th:checked="${#lists.contains(product.productSizes.![itemSize], 'FREESIZE')}"> FREESIZE
+					</label>
 			    </div>
 			</div>
 			

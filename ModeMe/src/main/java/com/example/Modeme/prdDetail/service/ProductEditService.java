@@ -55,6 +55,9 @@ public class ProductEditService {
 		existingItem.setProductDescription(updatedItem.getProductDescription());
 		System.out.println("기본 데이터 업데이트 완료");
 
+		existingItem.getColors().clear();
+		existingItem.getColorNames().clear();
+
 		// 색상 업데이트
 		List<ItemColor> updatedColors = updatedItem.getColors().stream().map(color -> {
 			ItemColor itemColor = new ItemColor();
@@ -62,7 +65,6 @@ public class ProductEditService {
 			itemColor.setAddItem(existingItem);
 			return itemColor;
 		}).toList();
-		existingItem.getColors().clear();
 		existingItem.getColors().addAll(updatedColors);
 		System.out.println("색상 업데이트 완료: " + updatedColors);
 
@@ -73,7 +75,6 @@ public class ProductEditService {
 			itemColorName.setAddItem(existingItem);
 			return itemColorName;
 		}).toList();
-		existingItem.getColorNames().clear();
 		existingItem.getColorNames().addAll(updatedColorNames);
 		System.out.println("색상 이름 업데이트 완료: " + updatedColorNames);
 
