@@ -248,6 +248,15 @@ document.addEventListener("DOMContentLoaded", () => {
 				console.error("🚨 좋아요 처리 중 오류:", error);
 			});
 	}
+	
+	function updateReviewDates() {
+	    document.querySelectorAll('.review-date').forEach(el => {
+	        var ts = el.getAttribute('data-timestamp');
+	        if (ts) {
+	            el.textContent = getRelativeTimeIntl(ts);
+	        }
+	    });
+	}
 
 	// 리뷰 fetch 및 리뷰 목록, 페이지네이션 업데이트
 	function fetchReviews(page) {
@@ -277,10 +286,10 @@ document.addEventListener("DOMContentLoaded", () => {
 	                const reviewItem = document.createElement("div");
 	                reviewItem.classList.add("review-item");
 	                reviewItem.innerHTML = `
-	                    <div class="review-header">
-	                        <span class="review-writer">${review.username}</span>
-	                        <small class="review-date">${review.commentedTime}</small>
-	                    </div>
+						<div class="review-header">
+			                <span class="review-writer">${review.username}</span>
+			                <small class="review-date" data-timestamp="${review.commentedTime}">${review.commentedTime}</small>
+			            </div>
 	                    <p>${review.content}</p>
 	                    <div class="review-footer">
 	                        <div class="like-section">
@@ -297,45 +306,10 @@ document.addEventListener("DOMContentLoaded", () => {
 	            totalPages = data.totalPages || 1;
 	            updatePagination(data.currentPage, totalPages);
 	            setupLikeButtons();
+				updateReviewDates(); // 리뷰 날짜 업데이트 호출
 	        })
 	        .catch(error => console.error("🚨 리뷰 데이터 로드 실패:", error));
 	}
-
-	/*function fetchReviews(page) {
-		fetch(`/productDetail/${productId}/reviews?page=${page}`)
-			.then(response => {
-				if (!response.ok) throw new Error(`서버 응답 오류: ${response.status}`);
-				return response.json();
-			})
-			.then(data => {
-				reviewListContainer.innerHTML = "";
-				data.reviews.forEach(review => {
-					const reviewItem = document.createElement("div");
-					reviewItem.classList.add("review-item");
-					reviewItem.innerHTML = `
-                        <div class="review-header">
-                            <span class="review-writer">${review.username}</span>
-                            <small class="review-date">${review.commentedTime}</small>
-                        </div>
-                        <p>${review.content}</p>
-                        <div class="review-footer">
-                            <div class="like-section">
-                                <button type="button" class="like-button ${review.liked ? 'liked' : ''}" data-review-id="${review.id}">
-                                    <span class="like-icon">${review.liked ? '❤️' : '🤍'}</span>
-                                </button>
-                                <span class="like-count" id="like-count-${review.id}">${review.likeCount}</span>
-                            </div>
-                        </div>
-                    `;
-					reviewListContainer.appendChild(reviewItem);
-				});
-				// 업데이트된 totalPages 값도 함께 전달되었다고 가정 (없으면 기존 totalPages 사용)
-				totalPages = data.totalPages || 1;
-				updatePagination(data.currentPage, totalPages);
-				setupLikeButtons();
-			})
-			.catch(error => console.error("🚨 리뷰 데이터 로드 실패:", error));
-	}*/
 
 	function updatePagination(page, totalPages) {
 		paginationContainer.innerHTML = "";
@@ -377,6 +351,42 @@ document.addEventListener("DOMContentLoaded", () => {
 	// 초기 리뷰 로드
 	fetchReviews(currentPage);
 });
+
+
+const rtf = new Intl.RelativeTimeFormat('ko', { numeric: 'auto' });
+function getRelativeTimeIntl(timestamp) {
+  const now = new Date();
+  const reviewDate = new Date(timestamp);
+  const diffInSeconds = Math.floor((reviewDate - now) / 1000);
+
+  if (Math.abs(diffInSeconds) < 60) {
+    return rtf.format(diffInSeconds, 'second');
+  }
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  if (Math.abs(diffInMinutes) < 60) {
+    return rtf.format(diffInMinutes, 'minute');
+  }
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  if (Math.abs(diffInHours) < 24) {
+    return rtf.format(diffInHours, 'hour');
+  }
+  const diffInDays = Math.floor(diffInHours / 24);
+  if (Math.abs(diffInDays) < 7) {
+    return rtf.format(diffInDays, 'day');
+  }
+  const diffInWeeks = Math.floor(diffInDays / 7);
+  if (Math.abs(diffInWeeks) < 4) {
+    return rtf.format(diffInWeeks, 'week');
+  }
+  const diffInMonths = Math.floor(diffInDays / 30);
+  if (Math.abs(diffInMonths) < 12) {
+    return rtf.format(diffInMonths, 'month');
+  }
+  const diffInYears = Math.floor(diffInDays / 365);
+  return rtf.format(diffInYears, 'year');
+}
+
+
 
 document.addEventListener("DOMContentLoaded", () => {
 	const thumbnails = document.querySelectorAll(".thumbnail-image");

@@ -230,8 +230,8 @@
 
 				<!-- 🔹 작성자 및 작성 시간 같은 줄에 배치 -->
 				<div class="review-header">
-					<span class="review-writer" th:text="${review.username}">작성자
-						아이디</span> <small class="review-date" th:text="${review.commentedTime}"></small>
+				    <span class="review-writer" th:text="${review.username}">작성자 아이디</span> 
+				    <small class="review-date" th:attr="data-timestamp=${review.commentedTime}" th:text="${review.commentedTime}"></small>
 				</div>
 
 				<p th:text="${review.content}">리뷰 내용</p>
