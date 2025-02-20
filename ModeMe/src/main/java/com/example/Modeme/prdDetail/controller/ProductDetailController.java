@@ -226,32 +226,47 @@ public class ProductDetailController {
    
    
    // 리뷰 데이터 가져오기
+   
+   
    @GetMapping("/{id}/reviews")
-   @ResponseBody // JSON 응답 강제 적용
-   public ResponseEntity<Map<String, Object>> getReviews(@PathVariable Long id,
-                                                         @RequestParam(defaultValue = "0") int page,
-                                                         Principal principal) {
-       // 페이지네이션: 한 페이지에 8개씩, commentedTime 내림차순
-       Pageable pageable = PageRequest.of(page, 8, Sort.by(Sort.Direction.DESC, "commentedTime"));
-       Page<ProductReview> reviewPage = reviewRepository.findByAddItemId(id, pageable);
+   @ResponseBody
+   public ResponseEntity<Map<String, Object>> getReviews(
+           @PathVariable Long id,
+           @RequestParam(defaultValue = "newest") String sortType,
+           @RequestParam(defaultValue = "0") int page,
+           Principal principal) {
 
-       final User currentUser;
-       if (principal != null) {
-           currentUser = userRepository.findByUsername(principal.getName()).orElse(null);
+       int pageSize = 8;
+       Page<ProductReview> reviewPage;
+       
+       if ("mostLiked".equals(sortType)) {
+           // 커스텀 쿼리 메서드를 사용하여 좋아요 수 내림차순, 좋아요 수가 같은 경우 최신순 정렬
+           reviewPage = reviewRepository.findByAddItemIdOrderByLikes(id, PageRequest.of(page, pageSize));
        } else {
-           currentUser = null;
+           Sort sort;
+           if ("oldest".equals(sortType)) {
+               sort = Sort.by(Sort.Direction.ASC, "commentedTime");
+           } else {
+               // newest (기본값)
+               sort = Sort.by(Sort.Direction.DESC, "commentedTime");
+           }
+           Pageable pageable = PageRequest.of(page, pageSize, sort);
+           reviewPage = reviewRepository.findByAddItemId(id, pageable);
        }
        
-       // 엔티티 리스트를 DTO 리스트로 변환 (좋아요 정보 포함)
+       final User currentUser = (principal != null) 
+               ? userRepository.findByUsername(principal.getName()).orElse(null) 
+               : null;
+       
        List<ProductReviewDTO> reviewDTOs = reviewPage.getContent().stream()
-           .map(review -> ProductReviewDTO.fromEntity(review, reviewLikeRepository, currentUser))
-           .collect(Collectors.toList());
-
+               .map(review -> ProductReviewDTO.fromEntity(review, reviewLikeRepository, currentUser))
+               .collect(Collectors.toList());
+       
        Map<String, Object> response = new HashMap<>();
-       response.put("reviews", reviewDTOs);             // 현재 페이지의 DTO 리스트
+       response.put("reviews", reviewDTOs);
        response.put("totalPages", reviewPage.getTotalPages());
        response.put("currentPage", reviewPage.getNumber());
-
+       
        return ResponseEntity.ok(response);
    }
 

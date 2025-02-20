@@ -257,10 +257,15 @@ document.addEventListener("DOMContentLoaded", () => {
 	        }
 	    });
 	}
+	
+	document.getElementById('reviewSort').addEventListener('change', function() {
+	    fetchReviews(0);
+	});
 
 	// 리뷰 fetch 및 리뷰 목록, 페이지네이션 업데이트
 	function fetchReviews(page) {
-	    fetch(`/productDetail/${productId}/reviews?page=${page}`)
+		const sortType = document.getElementById('reviewSort').value;
+	    fetch(`/productDetail/${productId}/reviews?page=${page}&sortType=${sortType}`)
 	        .then(response => {
 	            if (!response.ok) throw new Error(`서버 응답 오류: ${response.status}`);
 	            return response.json();
