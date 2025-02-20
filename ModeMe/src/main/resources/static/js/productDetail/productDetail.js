@@ -251,6 +251,57 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	// 리뷰 fetch 및 리뷰 목록, 페이지네이션 업데이트
 	function fetchReviews(page) {
+	    fetch(`/productDetail/${productId}/reviews?page=${page}`)
+	        .then(response => {
+	            if (!response.ok) throw new Error(`서버 응답 오류: ${response.status}`);
+	            return response.json();
+	        })
+	        .then(data => {
+	            reviewListContainer.innerHTML = "";
+	            data.reviews.forEach(review => {
+	                // 현재 사용자가 리뷰 작성자인 경우 수정/삭제 버튼 생성
+					console.log("currentUser:", currentUser, "review.username:", review.username);
+				    let reviewActions = "";
+				    if (currentUser && review.username === currentUser) {
+				        reviewActions = `
+				            <div class="review-actions">
+				                <a href="/productDetail/review/${review.id}/edit">
+				                    <button type="button">수정</button>
+				                </a>
+				                <form action="/productDetail/review/${review.id}/delete" method="post">
+				                    <button type="submit">삭제</button>
+				                </form>
+				            </div>
+				        `;
+				    }
+	                const reviewItem = document.createElement("div");
+	                reviewItem.classList.add("review-item");
+	                reviewItem.innerHTML = `
+	                    <div class="review-header">
+	                        <span class="review-writer">${review.username}</span>
+	                        <small class="review-date">${review.commentedTime}</small>
+	                    </div>
+	                    <p>${review.content}</p>
+	                    <div class="review-footer">
+	                        <div class="like-section">
+	                            <button type="button" class="like-button ${review.liked ? 'liked' : ''}" data-review-id="${review.id}">
+	                                <span class="like-icon">${review.liked ? '❤️' : '🤍'}</span>
+	                            </button>
+	                            <span class="like-count" id="like-count-${review.id}">${review.likeCount}</span>
+	                        </div>
+	                        ${reviewActions}
+	                    </div>
+	                `;
+	                reviewListContainer.appendChild(reviewItem);
+	            });
+	            totalPages = data.totalPages || 1;
+	            updatePagination(data.currentPage, totalPages);
+	            setupLikeButtons();
+	        })
+	        .catch(error => console.error("🚨 리뷰 데이터 로드 실패:", error));
+	}
+
+	/*function fetchReviews(page) {
 		fetch(`/productDetail/${productId}/reviews?page=${page}`)
 			.then(response => {
 				if (!response.ok) throw new Error(`서버 응답 오류: ${response.status}`);
@@ -284,7 +335,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				setupLikeButtons();
 			})
 			.catch(error => console.error("🚨 리뷰 데이터 로드 실패:", error));
-	}
+	}*/
 
 	function updatePagination(page, totalPages) {
 		paginationContainer.innerHTML = "";
@@ -406,12 +457,6 @@ document.addEventListener("DOMContentLoaded", function() {
 				sizeId: sizeId,
 				sizeName: sizeName
 			});
-			//		console.log(colorId)
-			//		console.log(colorName)
-			//		console.log(sizeId)
-			//		console.log(sizeName)
-			//		console.log(price)
-			//		console.log(quantity)
 
 			if (!colorId || !colorName || !sizeId || !sizeName || isNaN(price) || isNaN(quantity) || quantity < 1) {
 				isValid = false;
@@ -518,10 +563,3 @@ document.addEventListener("DOMContentLoaded", function() {
 		});
 	})
 })
-
-
-
-
-
-
-
