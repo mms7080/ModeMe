@@ -56,6 +56,8 @@ public class WishlistService {
         wishlist.setItemname(addItem.getName());
         wishlist.setImage(!addItem.getImageUrls().isEmpty() ? addItem.getImageUrls().get(0) : "/image/default.jpg");
         wishlist.setPrice(addItem.getPrice());
+        wishlist.setQuantity(1);
+        
 
         wishlistRepository.save(wishlist);
         return true;

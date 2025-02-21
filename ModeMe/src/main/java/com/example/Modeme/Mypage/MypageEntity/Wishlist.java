@@ -40,6 +40,9 @@ public class Wishlist {
 	private int price; //가격
 	@Column
 	private Long itemNumber; //상품번호
+	@Column
+	private int quantity;
+
 
 	
 }

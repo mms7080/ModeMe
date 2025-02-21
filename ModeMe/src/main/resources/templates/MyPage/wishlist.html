@@ -4,14 +4,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MyPage</title><!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MyPage</title>
 <link rel="stylesheet" href="/css/MyPage/wishlist.css">
+<script defer src="/js/MyPage/wishlist.js"></script>
 
 </head>
 <body>
@@ -38,10 +33,10 @@
 					<input type="hidden" name="wishid" th:value="${content.wishid}" />
 					<input type="hidden" name="name" th:value="${content.itemname}"/>
 					<input type="hidden" name="number" th:value="${content.itemNumber}"/>
-					<button name="action" value="cart" class="wishlist_cart">장바구니
-						담기</button>
-					<button name="action" value="delete" class="wishlist_delete"
-						type="submit">삭제</button>
+					    <input type="hidden" name="action" id="action" />
+					<input type="number" name="quantity" th:value="${content.quantity}" class="wishlist_quantity">
+					<button type="button" class="wishlist_cart" onclick="setAction('cart')">장바구니 담기</button>
+    <button type="button" class="wishlist_delete" onclick="setAction('delete')">삭제</button>
 				</form>
 			</div>
 

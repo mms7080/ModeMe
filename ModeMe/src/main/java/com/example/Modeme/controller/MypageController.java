@@ -282,19 +282,23 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 					@RequestParam(value="wishid") Long wishid,
 					@RequestParam(value="name") String name,
 					@RequestParam(value="number") Long itemnumber,
-					@RequestParam(value="action") String action
+					@RequestParam(value="action") String action,
+					@RequestParam(value="quantity") int quantity
 			) {
 				String userid = userDetails.getUsername();
+				Long user = userDetails.getUser().getId();
 				
+				if(action.equals("cart")) {
+					//쇼핑카트 저장안됨 수정해야함
+					ShoppingCart cart = new ShoppingCart(null,user,itemnumber,name,quantity);
+					cartrep.save(cart);
+					
+					wishser.deleteWishlist(userid, wishid);
+				
+				}
 				if(action.equals("delete")) {
 				
 				wishser.deleteWishlist(userid, wishid);
-				}
-				else {
-					//쇼핑카트 저장안됨 수정해야함
-					ShoppingCart cart = new ShoppingCart(null,null,itemnumber,name,1);
-					cartrep.save(cart);
-					
 				}
 				
 				return "redirect:/wishlist";
