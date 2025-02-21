@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="/css/productDetail/productDetail.css">
 <script defer src="/js/productDetail/prdDetailNav.js"></script>
 <script defer src="/js/productDetail/productDetail.js"></script>
+<script defer src="/js/productDetail/productReview.js"></script>
 <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 
 <!-- username 동적으로 불러오는 스크립트 -->
@@ -228,12 +229,10 @@
 		    <option value="oldest">오래된 순</option>
 		    <option value="mostLiked">좋아요 순</option>
 		</select>
-				
-
+		
 		<!-- 리뷰 목록 -->
-		<div class="review-list" id="review-list"
-			th:if="${not #lists.isEmpty(reviews)}">
-			<div class="review-item" th:each="review : ${reviews}">
+		<div class="review-list" id="review-list" th:if="${not #lists.isEmpty(reviews)}">
+			<div class="review-item" th:each="review : ${reviews}" th:attr="data-review-id=${review.id}">
 
 				<!-- 🔹 작성자 및 작성 시간 같은 줄에 배치 -->
 				<div class="review-header">
@@ -267,6 +266,20 @@
 					</div>	
 				</div>
 			</div>
+		</div>
+		
+		<!-- 리뷰 상세 팝업 모달 -->
+		<div id="reviewModal" class="modal" style="display: none;">
+		    <div class="modal-content">
+		        <span id="modalClose" class="close">&times;</span>
+		        <div id="modalReviewImages" class="modal-images"></div>
+		        <div class="modal-review-info">
+		            <p><strong>작성자:</strong> <span id="modalUsername"></span></p>
+		            <p><strong>작성일:</strong> <span id="modalCommentedTime"></span></p>
+		            <p><strong>내용:</strong></p>
+		            <p id="modalContent"></p>
+		        </div>
+		    </div>
 		</div>
 
 		<!-- 페이지네이션 -->

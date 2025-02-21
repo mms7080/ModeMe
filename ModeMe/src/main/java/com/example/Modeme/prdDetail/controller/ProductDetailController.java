@@ -2,6 +2,7 @@ package com.example.Modeme.prdDetail.controller;
 
 import java.nio.file.AccessDeniedException;
 import java.security.Principal;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,8 +40,10 @@ import com.example.Modeme.User.UserRepository.UserRepository;
 import com.example.Modeme.User.UserService.UserService;
 import com.example.Modeme.prdDetail.DTO.ProductReviewDTO;
 import com.example.Modeme.prdDetail.entity.ProductReview;
+import com.example.Modeme.prdDetail.entity.ReviewImage;
 import com.example.Modeme.prdDetail.entity.ReviewLike;
 import com.example.Modeme.prdDetail.repository.ProductReviewRepository;
+import com.example.Modeme.prdDetail.repository.ReviewImageRepository;
 import com.example.Modeme.prdDetail.repository.ReviewLikeRepository;
 import com.example.Modeme.prdDetail.service.ProductDetailService;
 import com.example.Modeme.prdDetail.service.ProductEditService;
@@ -63,6 +66,9 @@ public class ProductDetailController {
    @Autowired
    private ProductImageRepository productImageRepository;
 
+   @Autowired
+   private ReviewImageRepository reviewImageRepository;
+   
 
    @Autowired
    private final UserService userService;
@@ -210,24 +216,24 @@ public class ProductDetailController {
       model.addAttribute("product", product);
       return "/productDetail/productReviewWrite"; // 리뷰 작성 페이지
    }
-
-   // 리뷰 작성
+   
    @PostMapping("/{id}/review")
-   public String saveReview(@PathVariable Long id, @RequestParam String content, Principal principal) {
-      if (principal == null) {
-         throw new IllegalArgumentException("로그인이 필요합니다.");
-      }
-      String username = principal.getName();
-      detailService.saveReview(id, username, content);
-      
-      // 정확한 상세 페이지로 리다이렉트
-      return "redirect:/productDetail/productDetail/" + id;
+   public String saveReview(
+           @PathVariable Long id,
+           @RequestParam String content,
+           @RequestParam(value = "imageUrls", required = false) List<String> imageUrls,
+           Principal principal) {
+       if (principal == null) {
+           throw new IllegalArgumentException("로그인이 필요합니다.");
+       }
+       String username = principal.getName();
+       detailService.saveReview(id, username, content, imageUrls);
+       
+       // 리뷰 작성 후 상품 상세 페이지로 리다이렉트
+       return "redirect:/productDetail/productDetail/" + id;
    }
-   
-   
+
    // 리뷰 데이터 가져오기
-   
-   
    @GetMapping("/{id}/reviews")
    @ResponseBody
    public ResponseEntity<Map<String, Object>> getReviews(
@@ -269,6 +275,31 @@ public class ProductDetailController {
        
        return ResponseEntity.ok(response);
    }
+   
+   // 리뷰 상세 페이지(팝업창)
+   @GetMapping("/reviewDetails/{reviewId}")
+   @ResponseBody
+   public ResponseEntity<Map<String, Object>> getReviewDetails(@PathVariable Long reviewId) {
+       // 리뷰 조회 (없으면 예외 발생)
+       ProductReview review = reviewRepository.findById(reviewId)
+               .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다. ID: " + reviewId));
+       
+       // 리뷰 이미지 조회 (ReviewImageRepository가 주입되어 있어야 합니다)
+       List<ReviewImage> reviewImages = reviewImageRepository.findByReviewId(reviewId);
+       List<String> imageUrls = reviewImages.stream()
+               .map(ReviewImage::getImageUrl)
+               .collect(Collectors.toList());
+       
+       Map<String, Object> data = new HashMap<>();
+       data.put("content", review.getContent());
+       data.put("username", review.getUsers().getUsername());
+       data.put("commentedTime", review.getCommentedTime() != null ?
+               review.getCommentedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : "");
+       data.put("imageUrls", imageUrls);
+       
+       return ResponseEntity.ok(data);
+   }
+
 
    
    // 리뷰 삭제

@@ -2,6 +2,7 @@ package com.example.Modeme.prdDetail.service;
 
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,10 @@ import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.User.UserRepository.UserRepository;
 import com.example.Modeme.User.UserService.UserService;
 import com.example.Modeme.prdDetail.entity.ProductReview;
+import com.example.Modeme.prdDetail.entity.ReviewImage;
 import com.example.Modeme.prdDetail.entity.ReviewLike;
 import com.example.Modeme.prdDetail.repository.ProductReviewRepository;
+import com.example.Modeme.prdDetail.repository.ReviewImageRepository;
 import com.example.Modeme.prdDetail.repository.ReviewLikeRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -39,6 +42,9 @@ public class ProductDetailService {
 	private final ReviewLikeRepository reviewLikeRepository;
 	
 	@Autowired
+	private final ReviewImageRepository reviewImageRepository;
+	
+	@Autowired
     private final UserService userService;
 	
 	@Autowired
@@ -52,22 +58,39 @@ public class ProductDetailService {
                 });
     }
     
-    // 리뷰 작성
-    public ProductReview saveReview(Long id,  String username, String content) {
-        AddItem product = addItemRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다. ID: " + id));
-
+    @Transactional
+    public ProductReview saveReview(Long addItemId, String username, String content, List<String> imageUrls) {
+        // 상품 조회
+        AddItem product = addItemRepository.findById(addItemId)
+                .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다. ID: " + addItemId));
+        
+        // 사용자 조회
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-
-        // 리뷰 데이터 설정
+        
+        // 리뷰 엔티티 생성 및 필드 설정
         ProductReview review = new ProductReview();
         review.setAddItem(product);
         review.setUsers(user);
         review.setContent(content);
-        review.setCommentedTime(LocalDateTime.now()); // 현재 시간 설정
-
-        return reviewRepository.save(review); // 리뷰 저장
+        review.setCommentedTime(LocalDateTime.now());
+        
+        // 리뷰 저장
+        ProductReview savedReview = reviewRepository.save(review);
+        
+        // 이미지 URL이 전달되었다면 ReviewImage 엔티티 생성하여 저장
+        if (imageUrls != null) {
+            for (String url : imageUrls) {
+                if (url != null && !url.trim().isEmpty()) {
+                    ReviewImage reviewImage = new ReviewImage();
+                    reviewImage.setImageUrl(url);
+                    reviewImage.setReview(savedReview);
+                    reviewImageRepository.save(reviewImage);
+                }
+            }
+        }
+        
+        return savedReview;
     }
     
     public Page<ProductReview> getReviewsByProductId(Long addItemId, int page) {
@@ -132,6 +155,4 @@ public class ProductDetailService {
         return reviewLikeRepository.countByReview(review);
     }
 
-
-	
 }
