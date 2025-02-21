@@ -203,7 +203,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// 관심상품 등록
 document.addEventListener("DOMContentLoaded", function () {
     $(".button-group-vertical .wishlist-btn").on("click", function () {
         let row = $(this).closest("tr"); // 해당 상품이 있는 행 찾기
@@ -211,6 +210,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let productId = row.data("product-id"); // 상품 ID 가져오기
         let productName = row.find("td:nth-child(3)").text().trim(); // 상품명 가져오기
         let productImageSrc = row.find("td:nth-child(2) img").attr("src"); // 상품 이미지 경로 가져오기
+        let quantity = row.find(".quantity-input").val(); // 수량 입력 값 가져오기
 
         $.ajax({
             type: "POST",
@@ -219,7 +219,8 @@ document.addEventListener("DOMContentLoaded", function () {
             data: JSON.stringify({
                 itemNumber: productId,
                 itemName: productName,
-                itemImage: productImageSrc
+                itemImage: productImageSrc,
+                quantity: quantity // 수량을 함께 전송
             }),
             success: function (response) {
                 if (response === "success") {
@@ -234,6 +235,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
 
 // 단일 상품 주문
 document.addEventListener("DOMContentLoaded", function(){

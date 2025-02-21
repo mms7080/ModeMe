@@ -432,8 +432,14 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 		            @AuthenticationPrincipal CustomUserDetails userDetails) {
 		        
 		        String userId = userDetails.getUser().getUsername(); // 로그인한 사용자 ID 가져오기
+		        
+		        int quantity = request.getQuantity();
+		        //하트를 눌러서 저장하는 경우 0이 생성
+		        if (quantity == 0) {
+		        	quantity = 1;
+		        }
 
-		        boolean isAdded = wishser.addToWishlist(userId, request.getItemNumber());
+		        boolean isAdded = wishser.addToWishlist(userId, request.getItemNumber(), quantity);
 
 		        if (isAdded) {
 		            return ResponseEntity.ok("success");

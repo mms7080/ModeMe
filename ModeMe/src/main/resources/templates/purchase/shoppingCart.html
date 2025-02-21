@@ -94,7 +94,7 @@
 		            <th:block th:each="s : ${sList}">
 		                <th:block th:if="${i.id == s.productId}">
 		                    <td>
-		                        <input type="number" th:value="${s.quantity}" style="width:50px;" min="1">
+		                        <input type="number" th:value="${s.quantity}" style="width:50px;" min="1" class="quantity-input"/>
 		                    </td>
 		                    <td>무료</td>
 		                    <td th:text="${#numbers.formatInteger(s.quantity * i.price, 3, 'COMMA')} + '원'"></td>

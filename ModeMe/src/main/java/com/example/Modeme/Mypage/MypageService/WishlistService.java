@@ -35,7 +35,7 @@ public class WishlistService {
     	wishrep.delete(wish.get());
     }
     
-    public boolean addToWishlist(String userId, Long itemNumber) {
+    public boolean addToWishlist(String userId, Long itemNumber,int quantity) {
         // 이미 위시리스트에 존재하는지 확인
         if (wishlistRepository.existsByUseridAndItemNumber(userId, itemNumber)) {
             return false; // 중복된 상품이면 추가하지 않음
@@ -56,7 +56,7 @@ public class WishlistService {
         wishlist.setItemname(addItem.getName());
         wishlist.setImage(!addItem.getImageUrls().isEmpty() ? addItem.getImageUrls().get(0) : "/image/default.jpg");
         wishlist.setPrice(addItem.getPrice());
-        wishlist.setQuantity(1);
+        wishlist.setQuantity(quantity);
         
 
         wishlistRepository.save(wishlist);
