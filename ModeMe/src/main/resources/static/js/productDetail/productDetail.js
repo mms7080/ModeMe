@@ -332,7 +332,13 @@ document.addEventListener("DOMContentLoaded", function() {
 	document.getElementById("wishAdd").addEventListener("click", function() {
 		const productId = document.querySelector(".product-details").getAttribute("data-product-id");
 		const productName = document.querySelector(".product-details").children[0].innerHTML;
-
+		let firstQuantity = document.querySelector(".quantity-input");
+		console.log(firstQuantity)
+		if(firstQuantity == null){
+			firstQuantity = 1
+		} else{
+			firstQuantity = firstQuantity.value
+		}
 		$.ajax({
 			type: "POST",
 			url: "/wishlist/add",
@@ -340,7 +346,8 @@ document.addEventListener("DOMContentLoaded", function() {
 			data: JSON.stringify({
 				itemNumber: productId,
 				itemName: productName,
-				itemImage: firstMainImage.src
+				itemImage: firstMainImage.src,
+				quantity: firstQuantity
 			}),
 			success: function(response) {
 				if (response === "success") {

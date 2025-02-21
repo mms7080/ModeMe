@@ -409,7 +409,6 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 		    public ResponseEntity<String> addToWishlist(
 		            @RequestBody WishlistRequest request, 
 		            @AuthenticationPrincipal CustomUserDetails userDetails) {
-		        
 		        String userId = userDetails.getUser().getUsername(); // 로그인한 사용자 ID 가져오기
 		        
 		        int quantity = request.getQuantity();
