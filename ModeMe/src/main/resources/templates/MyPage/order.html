@@ -65,12 +65,11 @@
         </div>
         <img th:src="@{${content['order'].imageUrl}}" alt="상품 이미지" class="order-image" />
         <a th:href="@{/productDetail/productDetail/{id}(id=${content['order'].productNumber})}">
-            <span th:text="${content['order'].itemname} + 
-                (${content['merchantUidCount'] != null and content['merchantUidCount'] != 0} 
-                    ? ' 외 ' + ${content['merchantUidCount']} + '개' 
-                    : '')">
-            </span>
-        </a>
+    <span th:text="${content['order'].itemname}"></span>
+        <span th:if="${content['merchantUidCount'] != null and content['merchantUidCount'] > 0}" 
+      th:text="' 외 ' + ${content['merchantUidCount']} + '개'">
+</span>
+</a>
         <span th:text="${content['order'].productMany}"></span> 
         <span th:text="${#numbers.formatInteger(content['order'].totalPrice, 0, 'COMMA').replace(',', '.')}"></span> 
         <span th:switch="${content['order'].process}"> 
@@ -92,18 +91,22 @@
 <div class="pagination">
     <!-- 이전 버튼 -->
     <button th:if="${currentPage > 1}"
-            th:onclick="'location.href=\'?page=' + (${currentPage} - 1) + '&size=' + ${pageSize} + '\';'">&lt;</button>
+            th:onclick="'location.href=\'?page=' + (${currentPage} - 1) + '&size=' + ${pageSize} + '\';'"
+            th:classappend="${currentPage == 1} ? 'disabled' : ''">&lt;</button>
 
     <!-- 페이지 번호 -->
-    <span th:each="i : ${#numbers.sequence(startPage - 1, endPage - 1)}"
+    <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
           th:classappend="${i + 1 == currentPage} ? 'active' : ''"
           th:onclick="'location.href=\'?page=' + (${i + 1}) + '&size=' + ${pageSize} + '\';'"
           th:text="${i + 1}"></span>
 
     <!-- 다음 버튼 -->
     <button th:if="${currentPage < totalPages}"
-            th:onclick="'location.href=\'?page=' + (${currentPage} + 1) + '&size=' + ${pageSize} + '\';'">&gt;</button>
+            th:onclick="'location.href=\'?page=' + (${currentPage} + 1) + '&size=' + ${pageSize} + '\';'"
+            th:classappend="${currentPage == totalPages} ? 'disabled' : ''">&gt;</button>
 </div>
+
+
 
 
    </main>

@@ -28,4 +28,7 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long>{
 	List<Purchase> findByUserIdOrderByIdDesc(Long userId); // 유저번호로 가장 최신 결제항목 가져오기
 	
 	List<Purchase> findByUsernameAndProcess(String username, String process);
+	
+	    Page<Purchase> findByUsername(String username, Pageable pageable);
+
 }

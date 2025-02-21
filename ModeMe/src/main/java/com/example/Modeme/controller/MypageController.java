@@ -9,6 +9,10 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.Modeme.Config.CustomUserDetails;
+import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
 import com.example.Modeme.Mypage.MypageDTO.WishlistRequest;
 import com.example.Modeme.Mypage.MypageEntity.Address;
 import com.example.Modeme.Mypage.MypageEntity.Defaultaddress;
@@ -77,6 +82,9 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 		   
 		   @Autowired
 		   ShoppingCartRepository cartrep;
+		   
+		   @Autowired
+		   AddItemRepository addrep;
 		   
 		    @ModelAttribute //모든 매핑에 추가할 코드
 		    public void addAttributes(Model model, Principal principal) {
@@ -136,7 +144,6 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 		        return "/MyPage/MyPage";
 		    }
 		    
-		 // 주문내역
 		    @GetMapping("/order")
 		    public String Order(
 		        @AuthenticationPrincipal CustomUserDetails userDetails,
@@ -148,70 +155,42 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 		    ) {
 		        String userid = userDetails.getUsername();
 
-		        int pageSize = 5; // 한 페이지에 표시할 게시글 개수
-		        int paginationSize = 10; // 페이지 번호 최대 표시 개수
+		        // 페이지 크기 설정 (한 페이지에 5개 데이터)
+		        Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("orderDate").descending());  // 기본적으로 최신 주문부터 정렬
 
-		        List<Purchase> user = purrep.findByUsername(userid);
-
-		        // 각 주문에 대해 merchantUid별로 카운트를 계산하고 그 값을 주문에 추가
+		        // 주문 내역을 페이지로 조회
+		        Page<Purchase> purchasePage = purrep.findByUsername(userid, pageable);
+		        
 		        List<Map<String, Object>> ordersWithCounts = new ArrayList<>();
-		        for (Purchase order : user) {
-		            List<Purchase> etc = purrep.findByMerchantUid(order.getMerchantUid());
-		            int count = etc.size() - 1;  // 해당 merchantUid에 대한 주문 수 (자기 자신 제외)
-		            
-		            // 각 주문과 그에 대한 카운트를 하나의 Map으로 묶어서 저장
+
+		        // 주문 내역에 대한 merchantUidCount 계산
+		        for (Purchase order : purchasePage.getContent()) {
+		            long count = purchasePage.getContent().stream()
+		                                     .filter(o -> o.getMerchantUid() != null && o.getMerchantUid().equals(order.getMerchantUid()))  // null 체크 추가
+		                                     .count() - 1;  // 자기 자신 제외
+
 		            Map<String, Object> orderWithCount = new HashMap<>();
 		            orderWithCount.put("order", order);
-		            orderWithCount.put("merchantUidCount", count);
-		            
+
+		            // merchantUidCount가 0일 경우 처리
+		            if (count == 0) {
+		                orderWithCount.put("merchantUidCount", null);  // count가 0이면 null을 넣음
+		            } else {
+		                orderWithCount.put("merchantUidCount", count);
+		            }
+
 		            ordersWithCounts.add(orderWithCount);
 		        }
 
-		        // 검색 조건 적용 (DB에서 필터링)
-		        if (searchselect != null && !searchselect.isEmpty()) {
-		            switch (searchselect) {
-		                case "입금전":
-		                    user = purrep.findByUsernameAndProcess(userid, "before");
-		                    break;
-		                case "배송준비중":
-		                    user = purrep.findByUsernameAndProcess(userid, "ready");
-		                    break;
-		                case "배송중":
-		                    user = purrep.findByUsernameAndProcess(userid, "delivery");
-		                    break;
-		                case "배송완료":
-		                    user = purrep.findByUsernameAndProcess(userid, "done");
-		                    break;
-		                default:
-		                    user = purrep.findByUsername(userid); // 잘못된 값이면 전체 조회
-		                    break;
-		            }
-		        } else {
-		            user = purrep.findByUsername(userid); // 검색 조건 없으면 전체 조회
-		        }
-
-		        int totalcontent = user.size();
-		        int totalpages = (int) Math.ceil((double) totalcontent / pageSize);
-
-		        // 페이지 범위 계산
-		        int startIndex = (page - 1) * pageSize;
-		        int endIndex = Math.min(startIndex + pageSize, totalcontent);
-		        List<Purchase> paginationcontent = user.subList(startIndex, endIndex);
-
-		        // 페이지 번호 범위 계산 (5개씩 페이지를 표시)
-		        int currentRangeStart = ((page - 1) / paginationSize) * paginationSize + 1;
-		        int currentRangeEnd = Math.min(currentRangeStart + paginationSize - 1, totalpages);
-
-		        // `ordersWithCounts`를 모델에 전달
-		        model.addAttribute("orders", ordersWithCounts);  // 수정된 부분
-		        model.addAttribute("paginationcontent",paginationcontent);
+		        // 페이지네이션 관련 데이터 모델에 추가
+		        model.addAttribute("orders", ordersWithCounts);
 		        model.addAttribute("currentPage", page);
-		        model.addAttribute("totalPages", totalpages);
-		        model.addAttribute("startPage", currentRangeStart);
-		        model.addAttribute("endPage", currentRangeEnd);
+		        model.addAttribute("totalPages", purchasePage.getTotalPages());
+		        model.addAttribute("totalItems", purchasePage.getTotalElements());
 
 		        return "/MyPage/order";
 		    }
+
 
 
 			

@@ -15,3 +15,4 @@ function setAction(actionValue) {
         // 폼을 제출
         document.querySelector(".wishlist_form").submit();
     }
+	
