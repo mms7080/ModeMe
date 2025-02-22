@@ -15,9 +15,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.example.Modeme.Manager.Entity.ItemColor;
+import com.example.Modeme.Manager.Entity.ItemColorName;
+import com.example.Modeme.Manager.Entity.ItemSize;
 import com.example.Modeme.Manager.ManagerDTO.ProductSaleDTO;
 import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
 import com.example.Modeme.Manager.ManagerRepository.ProductImageRepository;
+import com.example.Modeme.Manager.ManagerRepository.itemColorNameRepository;
+import com.example.Modeme.Manager.ManagerRepository.itemColorRepository;
+import com.example.Modeme.Manager.ManagerRepository.itemSizeRepository;
 import com.example.Modeme.User.UserEntity.User;
 import com.example.Modeme.User.UserRepository.UserRepository;
 import com.example.Modeme.purchase.dao.PurchaseRepository;
@@ -40,6 +46,12 @@ public class ManagerSaleService {
     @Autowired
     private ProductImageRepository pir;
 
+    @Autowired
+    private itemColorNameRepository icr;
+    
+    @Autowired
+    private itemSizeRepository isr;
+    
 
     public Page<ProductSaleDTO> getSaleData(Pageable pageable, String newProcess, String searchOption, String keyword) {
         // 페이지네이션을 내림차순으로 정렬
@@ -88,6 +100,19 @@ public class ManagerSaleService {
 
             // 주문 일시 형식 변환
             String formattedOrderDate = formatDate(purchase.getOrderDate());
+            
+            // 🟢 색상명 조회 추가
+            String colorName = purchase.getColorId() != null
+                ? icr.findById(Long.parseLong(purchase.getColorId()))
+                      .map(ItemColorName::getColorName)
+                      .orElse("Unknown Color")
+                : "Unknown Color";
+
+            String sizeName = purchase.getSizeId() != null
+            	    ? isr.findById(Long.parseLong(purchase.getSizeId()))
+            	          .map(ItemSize::getItemSize)
+            	          .orElse("Unknown Size")
+            	    : "Unknown Size";
 
             // ProductSaleDTO 생성
             return new ProductSaleDTO(
@@ -100,7 +125,9 @@ public class ManagerSaleService {
                 purchase.getUsername(),
                 name,
                 purchase.getProcess(),
-                firstImageUrl  // 첫 번째 이미지 URL 추가
+                firstImageUrl,  // 첫 번째 이미지 URL 추가
+                colorName,  // 🟢 색상명 추가
+                sizeName    // 🟢 사이즈명 추가
             );
         });
     }

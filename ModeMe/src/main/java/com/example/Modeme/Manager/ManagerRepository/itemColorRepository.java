@@ -7,5 +7,5 @@ import com.example.Modeme.Manager.Entity.ItemColor;
 
 @Repository
 public interface itemColorRepository extends JpaRepository<ItemColor, Long>{
-
+	
 }

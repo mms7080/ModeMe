@@ -1,7 +1,6 @@
 package com.example.Modeme.Manager.ManagerDTO;
 
 import java.sql.Date;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,12 +15,15 @@ public class ProductSaleDTO {
     private int totalPrice;     // 총 금액
     private String username;    // 주문 아이디
     private String name;        // 주문자 이름
-    private String process;      // 주문 상태 (예: 입금 전, 배송 준비 중 등)
-    private String imageUrl;  // 첫 번째 상품 이미지 URL
-    
+    private String process;     // 주문 상태 (예: 입금 전, 배송 준비 중 등)
+    private String imageUrl;    // 첫 번째 상품 이미지 URL
+    private String color;       // 색상 추가
+    private String size;        // 사이즈 추가
+
     // 생성자
     public ProductSaleDTO(Long id, Date orderDate, String category, String itemname,
-                          int productMany, int totalPrice, String username, String name, String process, String imageUrl) {
+                          int productMany, int totalPrice, String username, String name,
+                          String process, String imageUrl, String color, String size) {
         this.id = id;
         this.orderDate = orderDate;
         this.category = category;
@@ -31,6 +33,8 @@ public class ProductSaleDTO {
         this.totalPrice = totalPrice;
         this.username = username;
         this.process = process;
-        this.imageUrl = imageUrl;  // 첫 번째 이미지 URL 초기화
+        this.imageUrl = imageUrl;
+        this.color = color;
+        this.size = size;
     }
 }
