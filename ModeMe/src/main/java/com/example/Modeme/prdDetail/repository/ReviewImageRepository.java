@@ -8,5 +8,7 @@ import com.example.Modeme.prdDetail.entity.ReviewImage;
 
 public interface ReviewImageRepository extends JpaRepository<ReviewImage, Long> {
     List<ReviewImage> findByReviewId(Long reviewId);
+
+	void deleteByReviewId(Long reviewId);
     
 }

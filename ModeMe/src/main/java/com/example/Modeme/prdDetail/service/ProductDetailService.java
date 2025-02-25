@@ -115,17 +115,34 @@ public class ProductDetailService {
     }
     
     // 리뷰 수정
-    public void editReview(Long reviewId, String username, String content) throws AccessDeniedException {
-    	ProductReview review = reviewRepository.findById(reviewId).orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다"));
-    	
-    	// 권한 확인 : 작성자만 수정 가능
-    	if (!review.getUsers().getUsername().equals(username)) {
+    @Transactional
+    public void editReview(Long reviewId, String username, String content, List<String> imageUrls) throws AccessDeniedException {
+        ProductReview review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다."));
+        
+        if (!review.getUsers().getUsername().equals(username)) {
             throw new AccessDeniedException("수정 권한이 없습니다");
         }
-    	
-    	// 리뷰 수정
-    	review.setContent(content);
-    	reviewRepository.save(review);
+        
+        // 내용 수정
+        review.setContent(content);
+        reviewRepository.save(review);
+        
+        // 이미지 업데이트 처리
+        // 기존 리뷰 이미지 삭제
+        reviewImageRepository.deleteByReviewId(reviewId);
+        
+        // 새로운 이미지 URL 리스트가 있다면 ReviewImage 엔티티로 저장
+        if (imageUrls != null) {
+            for (String url : imageUrls) {
+                if (url != null && !url.trim().isEmpty()) {
+                    ReviewImage reviewImage = new ReviewImage();
+                    reviewImage.setImageUrl(url);
+                    reviewImage.setReview(review);
+                    reviewImageRepository.save(reviewImage);
+                }
+            }
+        }
     }
     
     @Transactional

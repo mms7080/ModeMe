@@ -315,11 +315,14 @@ public class ProductDetailController {
    // 리뷰 수정 페이지
    @GetMapping("/review/{reviewId}/edit")
    public String editReviewPage(@PathVariable Long reviewId, Model model, Principal principal) {
-       System.out.println("리뷰 수정 페이지 요청: reviewId = " + reviewId);
-      String username = principal.getName();
-       ProductReview review = reviewRepository.findById(reviewId)
-               .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다. ID: " + reviewId));
+	   String username = principal.getName();
+       ProductReview review = reviewRepository.findById(reviewId).orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다. ID: " + reviewId));
+ 
+       List<ReviewImage> reviewImages = reviewImageRepository.findByReviewId(reviewId);
+       
        model.addAttribute("review", review);
+       model.addAttribute("reviewImages", reviewImages);
+       
        return "/productDetail/productReviewEdit"; // 리뷰 수정 페이지
    }
 
@@ -328,18 +331,17 @@ public class ProductDetailController {
    public String editReview(
            @PathVariable Long reviewId,
            @RequestParam String content,
+           @RequestParam(value = "imageUrls", required = false) List<String> imageUrls,
            Principal principal) throws AccessDeniedException {
       
        if (principal == null) {
            throw new IllegalArgumentException("로그인이 필요합니다.");
        }
-       ProductReview review = reviewRepository.findById(reviewId).orElseThrow(() ->
-          new IllegalArgumentException("리뷰를 찾을 수 없습니다. ID: " + reviewId));
        String username = principal.getName();
-       detailService.editReview(reviewId, username, content);
-       // 수정 후 리다이렉트
-       return "redirect:/productDetail/productDetail/" + review.getAddItem().getId();
-   }
+       detailService.editReview(reviewId, username, content, imageUrls);
+       return "redirect:/productDetail/productDetail/" + reviewRepository.findById(reviewId)
+               .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다.")).getAddItem().getId();
+   }  
    
    
    @PostMapping("/review/{reviewId}/like")
