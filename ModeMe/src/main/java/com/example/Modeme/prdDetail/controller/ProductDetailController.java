@@ -245,27 +245,28 @@ public class ProductDetailController {
        Page<ProductReview> reviewPage;
        
        if ("mostLiked".equals(sortType)) {
-           // 커스텀 쿼리 메서드를 사용하여 좋아요 수 내림차순, 좋아요 수가 같은 경우 최신순 정렬
            reviewPage = reviewRepository.findByAddItemIdOrderByLikes(id, PageRequest.of(page, pageSize));
        } else {
-           Sort sort;
-           if ("oldest".equals(sortType)) {
-               sort = Sort.by(Sort.Direction.ASC, "commentedTime");
-           } else {
-               // newest (기본값)
-               sort = Sort.by(Sort.Direction.DESC, "commentedTime");
-           }
+           Sort sort = "oldest".equals(sortType)
+                       ? Sort.by(Sort.Direction.ASC, "commentedTime")
+                       : Sort.by(Sort.Direction.DESC, "commentedTime");
            Pageable pageable = PageRequest.of(page, pageSize, sort);
            reviewPage = reviewRepository.findByAddItemId(id, pageable);
        }
        
        final User currentUser = (principal != null) 
-               ? userRepository.findByUsername(principal.getName()).orElse(null) 
+               ? userRepository.findByUsername(principal.getName()).orElse(null)
                : null;
        
        List<ProductReviewDTO> reviewDTOs = reviewPage.getContent().stream()
-               .map(review -> ProductReviewDTO.fromEntity(review, reviewLikeRepository, currentUser))
-               .collect(Collectors.toList());
+           .map(review -> {
+               ProductReviewDTO dto = ProductReviewDTO.fromEntity(review, reviewLikeRepository, currentUser);
+               // 이미지가 있으면 hasImages=true. (ReviewImageRepository의 메서드 사용)
+               int imageCount = reviewImageRepository.findByReviewId(review.getId()).size();
+               dto.setHasImages(imageCount > 0);
+               return dto;
+           })
+           .collect(Collectors.toList());
        
        Map<String, Object> response = new HashMap<>();
        response.put("reviews", reviewDTOs);
@@ -274,6 +275,7 @@ public class ProductDetailController {
        
        return ResponseEntity.ok(response);
    }
+
    
    // 리뷰 상세 페이지(팝업창)
    @GetMapping("/reviewDetails/{reviewId}")

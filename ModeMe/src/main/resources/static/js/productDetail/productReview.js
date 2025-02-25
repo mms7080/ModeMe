@@ -120,6 +120,15 @@ document.addEventListener("DOMContentLoaded", () => {
             .then(data => {
                 reviewListContainer.innerHTML = "";
                 data.reviews.forEach(review => {
+					// 리뷰 항목 생성 시
+					let imagesIndicatorHtml = "";
+					if (review.hasImages) {
+					    imagesIndicatorHtml = `
+					        <div class="review-images-indicator">
+					            <a href="#" class="view-images-link" data-review-id="${review.id}">사진 보기</a>
+					        </div>
+					    `;
+					}
                     let reviewActions = "";
                     if (currentUser && review.username === currentUser) {
                         reviewActions = `
@@ -149,6 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 </button>
                                 <span class="like-count" id="like-count-${review.id}">${review.likeCount}</span>
                             </div>
+							${imagesIndicatorHtml}
                             ${reviewActions}
                         </div>
                     `;
@@ -200,6 +210,39 @@ document.addEventListener("DOMContentLoaded", () => {
     // 초기 리뷰 로드
     fetchReviews(currentPage);
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    // "사진 보기" 링크 클릭 시 모달 열기
+    document.querySelectorAll(".view-images-link").forEach(link => {
+        link.addEventListener("click", function(e) {
+            e.preventDefault();
+            const reviewId = this.getAttribute("data-review-id");
+            // 모달 창 로직 (예: getReviewDetails API를 호출하여 이미지 URL 목록을 가져온 후 모달에 표시)
+            fetch(`/productDetail/reviewDetails/${reviewId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const modal = document.getElementById("reviewModal");
+                    const modalImagesContainer = document.getElementById("modalReviewImages");
+                    modalImagesContainer.innerHTML = "";
+                    if (data.imageUrls && data.imageUrls.length > 0) {
+                        data.imageUrls.forEach(url => {
+                            const img = document.createElement("img");
+                            img.src = url;
+                            img.style.maxWidth = "200px";
+                            img.style.margin = "5px";
+                            modalImagesContainer.appendChild(img);
+                        });
+                    }
+                    document.getElementById("modalUsername").textContent = data.username;
+                    document.getElementById("modalCommentedTime").textContent = data.commentedTime;
+                    document.getElementById("modalContent").textContent = data.content;
+                    modal.style.display = "block";
+                })
+                .catch(error => console.error("리뷰 이미지 로드 오류:", error));
+        });
+    });
+});
+
 
 // 모달 함수: 리뷰 상세 팝업 열기/닫기
 function openReviewModal(reviewId) {

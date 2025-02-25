@@ -254,6 +254,9 @@
 						<span class="like-count" th:id="'like-count-' + ${review.id}"
 							th:text="${review.likeCount}">0</span>
 					</div>
+<div class="review-images-indicator" th:if="${review.hasImages}">
+  <a href="#" class="view-images-link" th:attr="data-review-id=${review.id}">사진 보기</a>
+</div>
 
 					<!-- 🔹 수정/삭제 버튼을 오른쪽 끝으로 정렬 -->
 					<div class="review-actions" th:if="${user != null and review.username == user.username}">

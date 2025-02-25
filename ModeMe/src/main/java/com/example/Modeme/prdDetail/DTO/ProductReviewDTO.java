@@ -20,7 +20,8 @@ public class ProductReviewDTO {
     private String username;      // 리뷰 작성자
     private long likeCount;         // 좋아요 개수
     private boolean liked; // 현재 사용자가 좋아요를 눌렀는지 여부
-    
+    private boolean hasImages;    // 리뷰에 이미지가 있는지 여부
+
     public long getLikeCount() {
         return likeCount;
     }
