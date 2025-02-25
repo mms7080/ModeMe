@@ -53,6 +53,9 @@ public class ProductReview {
 	
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewLike> likes = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReviewImage> reviewImages = new ArrayList<>();
 
     public int getLikeCount() {
         return likes.size();
