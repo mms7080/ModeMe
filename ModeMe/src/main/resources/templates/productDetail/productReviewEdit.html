@@ -5,77 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Review Edit</title>
     <link rel="stylesheet" href="/css/productDetail/reviewWrite.css">
-   	<script defer src="/js/productDetail/productReviewWrite.js"></script>
+    <script defer src="/js/productDetail/productReviewWrite.js"></script>
 </head>
 <body>	
-	<!-- 헤더 -->
-	<div th:replace="~{header :: header}"></div>
-	
-	<div class="review-container">
+    <!-- 헤더 -->
+    <div th:replace="~{header :: header}"></div>
+    
+    <div class="review-container">
         <h1>REVIEW</h1>
-        <p class="description">상품 사용후기를 작성해주세요.</p>
+        <p class="description">상품 사용후기를 수정해주세요.</p>
 
         <!-- Product Summary -->
-	    <div class="product-summary">
-		    <!-- 상품 이미지 -->
-		    <div class="product-image">
-		        <img th:src="${not #lists.isEmpty(imageUrls) ? imageUrls[0] : '/images/default-product.png'}" alt="상품 이미지" style="max-width: 110px; border-radius: 8px;">
-		    </div>
-		
-		    <!-- 상품 정보 -->
-		    <div class="product-info">
-		        <h2 th:text="${product?.name ?: '상품 이름 없음'}">상품 이름</h2>
-		        <p th:text="'₩' + ${product?.price ?: 0}">상품 가격</p>
-		        <a th:href="@{/productDetail/productDetail/{id}(id=${product?.id})}">
-		            <button type="button">상품 상세보기</button>
-		        </a>
-		    </div>
-		</div>
+        <div class="product-summary">
+            <!-- 상품 이미지 -->
+            <div class="product-image">
+                <img th:src="${not #lists.isEmpty(imageUrls) ? imageUrls[0] : '/images/default-product.png'}" 
+                     alt="상품 이미지" style="max-width: 110px; border-radius: 8px;">
+            </div>
+        
+            <!-- 상품 정보 -->
+            <div class="product-info">
+                <h2 th:text="${product?.name ?: '상품 이름 없음'}">상품 이름</h2>
+                <p th:text="'₩' + ${product?.price ?: 0}">상품 가격</p>
+                <a th:href="@{/productDetail/productDetail/{id}(id=${product?.id})}">
+                    <button type="button">상품 상세보기</button>
+                </a>
+            </div>
+        </div>
 
         <!-- Review Form -->
-		<form th:action="@{/productDetail/review/{reviewId}/edit(reviewId=${review.id ?: 0})}" method="post">
-		
-		    <!-- 내용 -->
-		    <label for="content">내용</label>
-		    <textarea id="content" class="content" name="content" rows="10" placeholder="내용을 입력하세요" th:text="${review.content}" required></textarea>
+        <form th:action="@{/productDetail/review/{reviewId}/edit(reviewId=${review.id})}" method="post">
+        
+            <!-- 내용 -->
+            <label for="content">내용</label>
+            <textarea id="content" class="content" name="content" rows="10" placeholder="내용을 입력하세요" 
+                      th:text="${review.content}" required></textarea>
 
             <!-- File Upload -->
             <div class="file-upload">
                 <label>사진등록</label>
-                <div th:if="${reviewImages != null and !#lists.isEmpty(reviewImages)}" th:each="img, iterStat : ${reviewImages}">
-		          <div class="file-input-group">
-		            <input type="file" th:id="'reviewFile' + ${iterStat.index + 1}">
-		            <img th:id="'reviewPreview' + ${iterStat.index + 1}"
-		                 th:src="${img.imageUrl}"
-		                 alt="리뷰 이미지"
-		                 th:style="${img.imageUrl != null ? 'display:block; max-width:100px;' : 'display:none; max-width:100px;'}">
-		            <input type="hidden" th:id="'reviewImageUrl' + ${iterStat.index + 1}" name="imageUrls" th:value="${img.imageUrl}">
-		          </div>
-		        </div>
-		        <!-- 빈 입력 그룹: 기존 이미지가 4개 미만인 경우 남은 슬롯을 위한 파일 입력 -->
-		        <div th:if="${reviewImages == null or #lists.size(reviewImages) < 4}" th:each="i : ${#numbers.sequence((reviewImages != null ? #lists.size(reviewImages) + 1 : 1), 4)}">
-		          <div class="file-input-group">
-		            <input type="file" th:id="'reviewFile' + ${i}">
-		            <img th:id="'reviewPreview' + ${i}" src="" alt="리뷰 이미지" style="display:none; max-width:100px;">
-		            <input type="hidden" th:id="'reviewImageUrl' + ${i}" name="imageUrls">
-		          </div>
-		        </div>
+                <!-- 기존 이미지가 있을 경우 보여주고, 없으면 빈 입력 그룹을 표시 -->
+                <div th:if="${reviewImages != null and !#lists.isEmpty(reviewImages)}" 
+                     th:each="img, iterStat : ${reviewImages}">
+                  <div class="file-input-group">
+                    <input type="file" th:id="'reviewFile' + ${iterStat.index + 1}">
+                    <img th:id="'reviewPreview' + ${iterStat.index + 1}"
+                         th:src="${img.imageUrl}"
+                         alt="리뷰 이미지"
+                         th:style="${img.imageUrl != null ? 'display:block; max-width:100px;' : 'display:none; max-width:100px;'}">
+                    <input type="hidden" th:id="'reviewImageUrl' + ${iterStat.index + 1}" name="imageUrls" th:value="${img.imageUrl}">
+                  </div>
+                </div>
+                <!-- 빈 입력 그룹: 기존 이미지가 4개 미만인 경우 -->
+                <div th:if="${reviewImages == null or #lists.size(reviewImages) < 4}" 
+                     th:each="i : ${#numbers.sequence((reviewImages != null ? #lists.size(reviewImages) + 1 : 1), 4)}">
+                  <div class="file-input-group">
+                    <input type="file" th:id="'reviewFile' + ${i}">
+                    <img th:id="'reviewPreview' + ${i}" src="" alt="리뷰 이미지" style="display:none; max-width:100px;">
+                    <input type="hidden" th:id="'reviewImageUrl' + ${i}" name="imageUrls">
+                  </div>
+                </div>
             </div>
             
-		    <!-- Buttons -->
-			<div class="form-buttons">
-				<!-- CSRF 토큰 추가 -->
-	    		<input type="hidden" name="_csrf" th:value="${_csrf.token}">
-			    <!-- 등록 버튼 -->
-			    <button type="submit" class="upload-button">수정완료</button>
-			    <!-- 취소 버튼 -->
-			    <button type="button" onclick="location.href='/productDetail/productDetail/{id}(id=${product?.id})}'">취소</button>
-			</div>
+            <!-- Buttons -->
+            <div class="form-buttons">
+                <!-- CSRF 토큰 추가 -->
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                <!-- 등록 버튼 -->
+                <button type="submit" class="upload-button">수정완료</button>
+                <!-- 취소 버튼: product 모델에 있는 상품ID를 사용 -->
+                <button type="button" th:onclick="|location.href='/productDetail/productDetail/${product.id}'|">취소</button>
+            </div>
         </form>
     </div>
     
-    	<!-- 푸터 -->
-	<div th:replace="~{footer :: footer}"></div>
-	
+    <!-- 푸터 -->
+    <div th:replace="~{footer :: footer}"></div>
+    
 </body>
 </html>

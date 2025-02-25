@@ -203,7 +203,6 @@ public class ProductDetailController {
       if (principal == null) {
          throw new IllegalArgumentException("로그인이 필요합니다.");
       }
-      System.out.println("리뷰 작성 페이지 요청: ID = " + id);
       AddItem product = addItemRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다. ID: " + id));
       
@@ -315,13 +314,24 @@ public class ProductDetailController {
    // 리뷰 수정 페이지
    @GetMapping("/review/{reviewId}/edit")
    public String editReviewPage(@PathVariable Long reviewId, Model model, Principal principal) {
-	   String username = principal.getName();
-       ProductReview review = reviewRepository.findById(reviewId).orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다. ID: " + reviewId));
- 
+       String username = principal.getName();
+       ProductReview review = reviewRepository.findById(reviewId)
+             .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다. ID: " + reviewId));
+       // 기존 리뷰 이미지 목록
        List<ReviewImage> reviewImages = reviewImageRepository.findByReviewId(reviewId);
+       // **추가**: 해당 리뷰와 연결된 상품 정보도 모델에 추가합니다.
+       AddItem product = review.getAddItem();
        
+       // 상품 이미지 리스트 가져오기
+       List<String> imageUrls = productImageRepository.findByAddItemId(product.getId())
+                                      .stream()
+                                      .map(ProductImage::getImageUrl)
+                                      .collect(Collectors.toList());
+       
+       model.addAttribute("imageUrls", imageUrls); // 최신 이미지 리스트 추가
        model.addAttribute("review", review);
        model.addAttribute("reviewImages", reviewImages);
+       model.addAttribute("product", product);
        
        return "/productDetail/productReviewEdit"; // 리뷰 수정 페이지
    }
