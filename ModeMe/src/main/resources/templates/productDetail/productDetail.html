@@ -152,7 +152,7 @@
 	</div>
 
 	<!-- Bottom Section -->
-	<div class="bottom container" id="prdInfo">
+	<div class="bottom-container" id="prdInfo">
 
 		<!-- Navigation quickBar -->
 		<ul class="quickBar">
@@ -225,9 +225,9 @@
 		<div class="section-header">리뷰</div>
 		
 		<select id="reviewSort">
-		    <option value="newest" selected>최신순</option>
-		    <option value="oldest">오래된 순</option>
-		    <option value="mostLiked">좋아요 순</option>
+			<option value="newest" selected>최신순</option>
+			<option value="oldest">오래된 순</option>
+			<option value="mostLiked">좋아요 순</option>
 		</select>
 		
 		<!-- 리뷰 목록 -->
@@ -254,9 +254,10 @@
 						<span class="like-count" th:id="'like-count-' + ${review.id}"
 							th:text="${review.likeCount}">0</span>
 					</div>
-<div class="review-images-indicator" th:if="${review.hasImages}">
-  <a href="#" class="view-images-link" th:attr="data-review-id=${review.id}">사진 보기</a>
-</div>
+					
+					<div class="review-images-indicator" th:if="${review.hasImages}">
+						<a href="#" class="view-images-link" th:attr="data-review-id=${review.id}">사진 보기</a>
+					</div>
 
 					<!-- 🔹 수정/삭제 버튼을 오른쪽 끝으로 정렬 -->
 					<div class="review-actions" th:if="${user != null and review.username == user.username}">
