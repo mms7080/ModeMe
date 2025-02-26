@@ -271,20 +271,6 @@
 				</div>
 			</div>
 		</div>
-		
-		<!-- 리뷰 상세 팝업 모달 -->
-		<div id="reviewModal" class="modal" style="display: none;">
-		    <div class="modal-content">
-		        <span id="modalClose" class="close">&times;</span>
-		        <div id="modalReviewImages" class="modal-images"></div>
-		        <div class="modal-review-info">
-		            <p><strong>작성자:</strong> <span id="modalUsername"></span></p>
-		            <p><strong>작성일:</strong> <span id="modalCommentedTime"></span></p>
-		            <p><strong>내용:</strong></p>
-		            <p id="modalContent"></p>
-		        </div>
-		    </div>
-		</div>
 
 		<!-- 페이지네이션 -->
 		<div class="pagination"
@@ -300,5 +286,19 @@
 
 	<!-- 푸터 -->
 	<div th:replace="~{footer :: footer}"></div>
+
+	<!-- 리뷰 상세 팝업 모달 -->
+	<div id="reviewModal" class="modal" style="display: none;">
+	    <div class="modal-content">
+	        <span id="modalClose" class="close">&times;</span>
+	        <div id="modalReviewImages" class="modal-images"></div>
+	        <div class="modal-review-info">
+	            <p><strong>작성자:</strong> <span id="modalUsername"></span></p>
+	            <p><strong>작성일:</strong> <span id="modalCommentedTime"></span></p>
+	            <p><strong>내용:</strong></p>
+	            <p id="modalContent"></p>
+	        </div>
+	    </div>
+	</div>
 </body>
 </html>
