@@ -17,24 +17,24 @@ public class ProductSaleDTO {
     private String name;        // 주문자 이름
     private String process;     // 주문 상태 (예: 입금 전, 배송 준비 중 등)
     private String imageUrl;    // 첫 번째 상품 이미지 URL
-    private String color;       // 색상 추가
-    private String size;        // 사이즈 추가
+    private String colorName;   // 색상명
+    private String sizeName;    // 사이즈명
 
     // 생성자
     public ProductSaleDTO(Long id, Date orderDate, String category, String itemname,
                           int productMany, int totalPrice, String username, String name,
-                          String process, String imageUrl, String color, String size) {
+                          String process, String imageUrl, String colorName, String sizeName) {
         this.id = id;
         this.orderDate = orderDate;
         this.category = category;
         this.itemname = itemname;
-        this.name = name;
         this.productMany = productMany;
         this.totalPrice = totalPrice;
         this.username = username;
+        this.name = name;
         this.process = process;
         this.imageUrl = imageUrl;
-        this.color = color;
-        this.size = size;
+        this.colorName = colorName;
+        this.sizeName = sizeName;
     }
 }

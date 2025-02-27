@@ -26,8 +26,9 @@
 			<tbody>
 				<tr th:each="review : ${productReviews}">
 					<td th:text="${review.id}"></td>
-					<td><a th:href="@{'/productDetail/productDetail/' + ${review.addItem.id} + '#prdReview'}"
-					 th:text="${review.addItem.name}"></a></td>
+					<td><a
+						th:href="@{'/productDetail/productDetail/' + ${review.addItem.id} + '#prdReview'}"
+						th:text="${review.addItem.name}"></a></td>
 					<!-- 상품명 -->
 					<td th:text="'🙍‍♂️'+${review.users.username}"></td>
 					<!-- 작성자 -->
@@ -45,18 +46,24 @@
 		<div class="pagination">
 			<!-- 이전 페이지 버튼 -->
 			<button th:if="${currentPage > 0}"
-				th:attr="onclick='location.href=\'/manager/managerReview?page=' + (${currentPage} - 1) + '&size=' + ${pageSize} + '&option=' + ${option} + '&keyword=' + ${keyword} + '\';'">&lt;</button>
+				th:attr="onclick='location.href=\'/manager/managerReview?page=' + (${currentPage} - 1) + '&size=' + ${pageSize} + '&option=' + ${option} + '&keyword=' + ${keyword} + '\';'">
+				&lt;</button>
 
-			<!-- 페이지 번호 -->
-			<span th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-				th:classappend="${i == currentPage} ? 'active' : ''"
-				th:attr="onclick='location.href=\'/manager/managerReview?page=' + ${i} + '&size=' + ${pageSize} + '&option=' + ${option} + '&keyword=' + ${keyword} + '\';'"
-				th:text="${i + 1}"></span>
+			<!-- 페이지 번호 (10개씩 그룹화) -->
+			<th:block
+				th:with="startPage=${(currentPage / 10) * 10}, endPage=${(startPage + 9 > totalPages - 1 ? totalPages - 1 : startPage + 9)}">
+				<span th:each="i : ${#numbers.sequence(startPage, endPage)}"
+					th:classappend="${i == currentPage} ? 'active' : ''"
+					th:attr="onclick='location.href=\'/manager/managerReview?page=' + ${i} + '&size=' + ${pageSize} + '&option=' + ${option} + '&keyword=' + ${keyword} + '\';'"
+					th:text="${i + 1}"></span>
+			</th:block>
 
 			<!-- 다음 페이지 버튼 -->
 			<button th:if="${currentPage < totalPages - 1}"
-				th:attr="onclick='location.href=\'/manager/managerReview?page=' + (${currentPage} + 1) + '&size=' + ${pageSize} + '&option=' + ${option} + '&keyword=' + ${keyword} + '\';'">&gt;</button>
+				th:attr="onclick='location.href=\'/manager/managerReview?page=' + (${currentPage} + 1) + '&size=' + ${pageSize} + '&option=' + ${option} + '&keyword=' + ${keyword} + '\';'">
+				&gt;</button>
 		</div>
+
 
 		<div class="search-section">
 			<form method="get" action="/manager/managerReview">

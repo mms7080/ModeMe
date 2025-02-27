@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.example.Modeme.Manager.Entity.AddItem;
 import com.example.Modeme.Manager.Entity.ItemColor;
 import com.example.Modeme.Manager.Entity.ItemColorName;
 import com.example.Modeme.Manager.Entity.ItemSize;
@@ -54,28 +55,21 @@ public class ManagerSaleService {
     
 
     public Page<ProductSaleDTO> getSaleData(Pageable pageable, String newProcess, String searchOption, String keyword) {
-        // 페이지네이션을 내림차순으로 정렬
-        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Order.desc("orderDate"))); // orderDate로 내림차순 정렬
-
-        // 조건에 맞는 주문 목록을 페이징 처리하여 가져옴
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Order.desc("orderDate")));
         Page<Purchase> purchases;
 
-        // 검색 옵션에 따라 처리
         if ("process".equals(searchOption) && keyword != null) {
-            // 한국어 상태를 내부 프로세스 상태로 매핑
             String internalProcessStatus = mapKoreanToProcess(keyword);
-            purchases = pr.findByProcess(internalProcessStatus, sortedPageable);  // 주문 상태로 검색
+            purchases = pr.findByProcess(internalProcessStatus, sortedPageable);
         } else if ("orderInfo".equals(searchOption) && keyword != null) {
-            // 주문정보 (itemname만 기준으로 검색)
-            purchases = pr.findByItemnameContaining(keyword, sortedPageable);  // itemname만을 포함하는 검색
-        } else if("orderId".equals(searchOption) && keyword != null){
-        	purchases = pr.findByUsernameContaining(keyword, sortedPageable);
-        }else {
-		 purchases = pr.findAll(sortedPageable);  // 기본적으로 모든 주문 가져오기
-		 }
-        // 각 주문에 대해 상품 카테고리 및 기타 정보를 추가하여 DTO로 변환
+            purchases = pr.findByItemnameContaining(keyword, sortedPageable);
+        } else if ("orderId".equals(searchOption) && keyword != null) {
+            purchases = pr.findByUsernameContaining(keyword, sortedPageable);
+        } else {
+            purchases = pr.findAll(sortedPageable);
+        }
+
         return purchases.map(purchase -> {
-            // 주문 상태 변경 로직
             if (purchase.getProcess() == null || purchase.getProcess().isEmpty()) {
                 purchase.setProcess("before");
                 pr.save(purchase);
@@ -84,40 +78,32 @@ public class ManagerSaleService {
                 pr.save(purchase);
             }
 
-            // 상품 카테고리 정보 가져오기
+            // ✅ 상품 카테고리 조회
             String category = ar.findById((long) purchase.getProductNumber())
-                                .map(item -> item.getCategory())
+                                .map(AddItem::getCategory)
                                 .orElse("상품없음");
 
-            // 유저 이름 가져오기
+            // ✅ 유저 이름 조회
             String name = ur.findById((long) purchase.getUserId())
                             .map(User::getName)
                             .orElse("Unknown User");
 
-            // 첫 번째 상품 이미지 URL 가져오기
-            List<String> firstImageUrls = pir.findFirstImageByProductId((long) purchase.getProductNumber());  
-            String firstImageUrl = firstImageUrls.isEmpty() ? "defaultImageUrl" : firstImageUrls.get(0); // 첫 번째 이미지 URL 사용
+            // ✅ 첫 번째 상품 이미지 URL 조회
+            String firstImageUrl = pir.findFirstImageByProductId((long) purchase.getProductNumber())
+                                      .stream().findFirst().orElse("defaultImageUrl");
 
-            // 주문 일시 형식 변환
-            String formattedOrderDate = formatDate(purchase.getOrderDate());
-            
-            // 🟢 색상명 조회 추가
-            String colorName = purchase.getColorId() != null
-                ? icr.findById(Long.parseLong(purchase.getColorId()))
-                      .map(ItemColorName::getColorName)
-                      .orElse("Unknown Color")
-                : "Unknown Color";
+            // ✅ 색상명 조회
+            String colorName = getColorNameById(purchase.getColorId());
 
-            String sizeName = purchase.getSizeId() != null
-            	    ? isr.findById(Long.parseLong(purchase.getSizeId()))
-            	          .map(ItemSize::getItemSize)
-            	          .orElse("Unknown Size")
-            	    : "Unknown Size";
+            // ✅ 사이즈명 조회
+            String sizeName = getSizeNameById(purchase.getSizeId());
 
-            // ProductSaleDTO 생성
+            // ✅ 주문 날짜 변환
+            Date formattedOrderDate = Date.valueOf(purchase.getOrderDate().toLocalDate());
+
             return new ProductSaleDTO(
                 purchase.getId(),
-                Date.valueOf(formattedOrderDate),
+                formattedOrderDate,
                 category,
                 purchase.getItemname(),
                 purchase.getProductMany(),
@@ -125,12 +111,59 @@ public class ManagerSaleService {
                 purchase.getUsername(),
                 name,
                 purchase.getProcess(),
-                firstImageUrl,  // 첫 번째 이미지 URL 추가
-                colorName,  // 🟢 색상명 추가
-                sizeName    // 🟢 사이즈명 추가
+                firstImageUrl,
+                colorName,
+                sizeName
             );
         });
     }
+    
+    private String getColorNameById(String colorId) {
+        if (colorId == null || colorId.isEmpty()) {
+            System.out.println("ColorId가 null 또는 빈 값입니다.");
+            return "미등록 색상";
+        }
+
+        try {
+            Optional<ItemColorName> colorOpt = icr.findById(Long.parseLong(colorId));
+            if (colorOpt.isPresent()) {
+                System.out.println("색상 조회 성공: " + colorOpt.get().getColorName());
+                return colorOpt.get().getColorName();
+            } else {
+                System.out.println("색상 조회 실패: " + colorId);
+                return "색상 없음";
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("ColorId 변환 실패: " + colorId);
+            return "미등록 색상";
+        }
+    }
+
+    private String getSizeNameById(String sizeId) {
+        if (sizeId == null || sizeId.isEmpty()) {
+            System.out.println("SizeId가 null 또는 빈 값입니다.");
+            return "미등록 사이즈";
+        }
+
+        try {
+            Optional<ItemSize> sizeOpt = isr.findById(Long.parseLong(sizeId));
+            if (sizeOpt.isPresent()) {
+                System.out.println("사이즈 조회 성공: " + sizeOpt.get().getItemSize());
+                return sizeOpt.get().getItemSize();
+            } else {
+                System.out.println("사이즈 조회 실패: " + sizeId);
+                return "사이즈 없음";
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("SizeId 변환 실패: " + sizeId);
+            return "미등록 사이즈";
+        }
+    }
+
+
+
+
+
 
     // 한국어 상태를 내부 프로세스 상태로 매핑하는 메서드
     private String mapKoreanToProcess(String koreanStatus) {
