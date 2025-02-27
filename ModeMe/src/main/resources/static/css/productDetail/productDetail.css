@@ -36,29 +36,45 @@ body {
 	margin-bottom: 20px;
 }
 
-.admin-buttons a, .admin-delete-button {
-	text-decoration: none;
-	padding: 10px 20px;
-	margin: 0 5px;
-	color: white;
-	font-weight: bold;
-	transition: background-color 0.3s;
+/* a 태그와 button 태그를 동일한 블록 요소로 변경 */
+.admin-buttons a, 
+.admin-buttons button {
+    display: inline-flex;  /* 버튼 안의 텍스트 정렬 */
+    align-items: center;  /* 세로 정렬 */
+    justify-content: center; /* 가로 정렬 */
+    text-decoration: none;
+    padding: 10px 20px;
+    margin: 0 5px;
+    border: 1px solid transparent;
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.3s, border-color 0.3s;
+    cursor: pointer;
+    text-align: center;
+    font-size: 14px; /* 버튼 크기 통일 */
+    height: 40px; /* 버튼의 높이를 강제 통일 */
+    min-width: 100px; /* 버튼 너비 강제 */
+    box-sizing: border-box; /* padding이 크기에 영향 안 주게 함 */
 }
 
+/* 삭제 버튼 */
 .admin-delete-button {
-	background-color: #666;
+    background-color: #666;
+    border: none;
 }
 
-.admin-delete-button:hover {
-	background-color: #333;
-}
-
+/* 수정 버튼 */
 .admin-edit-button {
-	background-color: #666;
+    background-color: #666;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
+/* Hover 효과 */
+.admin-delete-button:hover, 
 .admin-edit-button:hover {
-	background-color: #333;
+    background-color: #333;
 }
 
 .quickBar {
@@ -539,76 +555,82 @@ body {
 
 /* 모달창 스타일 */
 .modal {
-  position: fixed;
-  z-index: 2000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* 어두운 반투명 배경 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: auto;
+	position: fixed;
+	z-index: 2000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.6); /* 어두운 반투명 배경 */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: auto;
 }
 
 /* 모달 콘텐츠 - 중앙에 표시돼야 하는데 왜 안되냐 */
 .modal-content {
-  background: #fff;
-  padding: 30px;
-  border-radius: 10px;
-  width: 80%;
-  max-width: 700px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  position: relative;
-  animation: fadeIn 0.3s ease-out;
+	background: #fff;
+	padding: 30px;
+	border-radius: 10px;
+	width: 80%;
+	max-width: 700px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	position: relative;
+	animation: fadeIn 0.3s ease-out;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+@
+keyframes fadeIn {from { opacity:0;
+	transform: translateY(-10px);
+}
+
+to {
+	opacity: 1;
+	transform: translateY(0);
+}
+
 }
 
 /* 닫기 버튼 스타일 */
 .close {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 28px;
-  font-weight: bold;
-  color: #555;
-  cursor: pointer;
-  transition: color 0.3s;
+	position: absolute;
+	top: 10px;
+	right: 15px;
+	font-size: 28px;
+	font-weight: bold;
+	color: #555;
+	cursor: pointer;
+	transition: color 0.3s;
 }
 
 .close:hover {
-  color: #000;
+	color: #000;
 }
 
 /* 모달 내 이미지 영역 */
 .modal-images {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  margin-bottom: 20px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	justify-content: center;
+	margin-bottom: 20px;
 }
 
 .modal-images img {
-  max-width: 45%;
-  border-radius: 2px;
-  object-fit: cover;
+	max-width: 45%;
+	border-radius: 2px;
+	object-fit: cover;
 }
 
 /* 모달 내 리뷰 정보 영역 */
 .modal-review-info {
-  text-align: left;
+	text-align: left;
 }
 
-
 .modal-review-info p {
-  margin: 5px 0;
-  font-size: 12px;
+	margin: 5px 0;
+	font-size: 12px;
 }
 
 .modal-review-info p strong {
