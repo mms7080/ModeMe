@@ -143,7 +143,6 @@ document.getElementById("payButton").addEventListener("click", function () {
 
     if (paymentMethod === "bank-transfer") {
 
-		console.log("무통장")
 	    let aIdList = items.map(i => i.productId).join(",");
 	    let itemNameList = items.map(i => i.productName.trim()).join(",");
 	    let colorIdList = items.map(i => i.colorId).join(",");   // ✅ 색상 ID 추가
@@ -173,10 +172,10 @@ document.getElementById("payButton").addEventListener("click", function () {
 	        },
 	        success: function (response) {
 	            if (response === 'success') {
-	                alert('결제가 완료되었습니다');
+	                alert('주문이 완료되었습니다.');
 	                location.href = "/bankTransfer?merchantUid=" + merchantUid;
 	                // 결제 성공 시 /order 페이지로 merchantUid를 전달
-   						 location.href = "/order?merchantUid=" + merchantUid;
+//					location.href = "/order?merchantUid=" + merchantUid;
 	            }
 	        },
 	        error: (rsp) => {
@@ -184,7 +183,6 @@ document.getElementById("payButton").addEventListener("click", function () {
 	        }
 	    });
 	}
-
     // ✅ 신용카드 등 결제 프로세스 실행
     IMP.init('imp00488067');
     IMP.request_pay({

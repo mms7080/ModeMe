@@ -258,27 +258,38 @@ public class PurchaseController {
 	
 	@GetMapping("/insertPurchase")
 	@ResponseBody
-	@Transactional // ✅ 트랜잭션 보장
-	public String insertPurchase(@RequestParam("aId") String aIds, 
-	                             @RequestParam("userId") int uId,
-	                             @RequestParam("address") String address, 
-	                             @RequestParam("addressDetail") String addrDetail,
-	                             @RequestParam("prices") String price, 
-	                             @RequestParam("impUid") String impUid,
-	                             @RequestParam("merchantUid") String merchantUid, 
-	                             @RequestParam("itemname") String itemnames,
-	                             @RequestParam("quantities") String quantities, // ✅ 수량 추가
-	                             @RequestParam("colorIds") String colorIds,
-	                             @RequestParam("sizeIds") String sizeIds,
-	                             @RequestParam("imageUrls") String imageUrls,
-	                             @RequestParam("discount") int discount,
-	                             Principal prin) {
-		System.out.println("결제 할인 : " + discount);
-	    User u = ur.findByUsername(prin.getName()).get();
+	@Transactional
+	public String insertPurchase(
+	        @RequestParam("aId") String aIds, 
+	        @RequestParam("userId") int uId,
+	        @RequestParam("address") String address, 
+	        @RequestParam("addressDetail") String addrDetail,
+	        @RequestParam("prices") String price, 
+	        @RequestParam("impUid") String impUid,
+	        @RequestParam("merchantUid") String merchantUid, 
+	        @RequestParam("itemname") String itemnames,
+	        @RequestParam("quantities") String quantities, 
+	        @RequestParam("colorIds") String colorIds,
+	        @RequestParam("sizeIds") String sizeIds,
+	        @RequestParam("imageUrls") String imageUrls,
+	        @RequestParam(value="discount", required=false, defaultValue="0") int discount,
+	        Principal prin) {
+	    
+	    // Principal 객체 확인
+	    if (prin == null) {
+	        return "error: 인증되지 않은 사용자";
+	    }
+
+	    System.out.println("사용자 정보: " + prin.getName());
+	    System.out.println("받은 데이터 확인: " + aIds + ", " + itemnames + ", " + quantities);
+
+	    User u = ur.findByUsername(prin.getName())
+	               .orElseThrow(() -> new RuntimeException("사용자 없음"));
 	    String userid = u.getUsername();
 
 	    String paymentStatus = (impUid == null || impUid.isEmpty()) ? "before" : "ready";
-	    
+
+	    // 문자열을 배열로 변환
 	    String[] itemNamesArray = itemnames.split(",");
 	    String[] aIdArray = aIds.split(",");
 	    String[] quantityArray = quantities.split(",");
@@ -286,60 +297,48 @@ public class PurchaseController {
 	    String[] colorIdArray = colorIds.split(",");
 	    String[] sizeIdArray = sizeIds.split(",");
 	    String[] imageUrlArray = imageUrls.split(",");
-	    
-	    // ✅ 상품 정보 검증
+
+	    // 상품 정보 검증
 	    if (aIdArray.length == 0 || itemNamesArray.length == 0 || quantityArray.length == 0) {
 	        return "error: 상품 정보 없음";
 	    }
 
-
-	    // ✅ 개별 상품 저장
-	    for (int i = 0; i < itemNamesArray.length; i++) {
-	        try {
+	    try {
+	        for (int i = 0; i < itemNamesArray.length; i++) {
 	            int productId = Integer.parseInt(aIdArray[i].trim());
-	            int quantity = Integer.parseInt(quantityArray[i].trim()); // ✅ 수량 변환
-	            int itemPrice = Integer.parseInt(priceArray[i]); // ✅ 개별 상품 가격 계산
+	            int quantity = Integer.parseInt(quantityArray[i].trim());
+	            int itemPrice = Integer.parseInt(priceArray[i].trim());
 	            String colorId = colorIdArray[i].trim();
 	            String sizeId = sizeIdArray[i].trim();
 	            String imageUrl = imageUrlArray[i].trim();
 
 	            Purchase p = new Purchase();
-	            p.setUserId(uId); // user pk
+	            p.setUserId(uId);
 	            p.setProductNumber(productId);
-	            p.setProductMany(quantity); // ✅ 실제 개별 수량 반영
+	            p.setProductMany(quantity);
 	            p.setAddress(address);
 	            p.setAddressDetail(addrDetail);
 	            p.setItemname(itemNamesArray[i].trim());
-	            p.setUsername(userid); // user id (=유저 로그인용 아이디)
-	            p.setTotalPrice(itemPrice * quantity); // ✅ 수량 반영한 가격 저장
-	            p.setProcess(paymentStatus); // ✅ 주문 상태 추가
-	            p.setColorId(colorId); // ✅ 색상 ID 저장
+	            p.setUsername(userid);
+	            p.setTotalPrice(itemPrice * quantity);
+	            p.setProcess(paymentStatus);
+	            p.setColorId(colorId);
 	            p.setSizeId(sizeId);
 	            p.setMerchantUid(merchantUid);
 	            p.setImageUrl(imageUrl);
-	            
+
 	            pr.save(p);
-	            
-	            scr.deleteByUserIdAndProductId(Long.valueOf(uId), Long.valueOf(productId));
-	            
-	            
-	            
-	        } catch (Exception e) {
-	            return "error: 저장 실패";
+
+	            scr.deleteByUserIdAndProductId((long) uId, (long) productId);
 	        }
+	    } catch (Exception e) {
+	        e.printStackTrace(); // 실제 오류 로그 출력
+	        return "error: 저장 실패";
 	    }
-//	    Purchase pur = pr.findTopByUserIdOrderByIdDesc(u.getId()).get();
-//        Mileage mile = milerep.findByOrdernum(""+pur.getId()).get();
-//        mile.setUsedMileage(discount);
-//        milerep.save(mile);
-//        
-//        System.out.println(pur.getId());
-//        System.out.println(pur.getTotalPrice());
-//        System.out.println(mile.getMileageid());
-//        System.out.println(mile.getOrdernum());
-	    
+
 	    return "success";
 	}
+
 
 
 
