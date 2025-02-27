@@ -36,7 +36,7 @@ body {
 	margin-bottom: 20px;
 }
 
-.admin-buttons a {
+.admin-buttons a, .admin-delete-button {
 	text-decoration: none;
 	padding: 10px 20px;
 	margin: 0 5px;

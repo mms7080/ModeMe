@@ -30,10 +30,9 @@
 		<!-- Admin Action Buttons Section -->
 		<div class="admin-buttons"
 			th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
-			<span> <a href="/manager/deleteProduct/{id}(id=${product.id})"
-				class="admin-delete-button">삭제</a> <a
-				th:href="@{/productDetail/productEdit/{id}(id=${product.id})}"
-				class="admin-edit-button">수정</a>
+			<span>
+				<button class="admin-delete-button" th:data-id="${product.id}">삭제</button>
+				<a th:href="@{/productDetail/productEdit/{id}(id=${product.id})}" class="admin-edit-button">수정</a>
 			</span>
 		</div>
 
