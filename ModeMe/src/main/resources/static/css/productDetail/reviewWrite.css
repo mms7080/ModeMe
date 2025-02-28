@@ -81,6 +81,11 @@ h1 {
     color: #333;
 }
 
+.review-form {
+	margin-left: 10%;
+	margin-right: 10%;
+}
+
 label {
     display: block;
 	margin-bottom: 10px;

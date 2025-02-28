@@ -35,9 +35,7 @@
 		</div>
 
 		<!-- Review Form -->
-		<form
-			th:action="@{/productDetail/review/{reviewId}/edit(reviewId=${review.id})}"
-			method="post">
+		<form class="review-form" th:action="@{/productDetail/review/{reviewId}/edit(reviewId=${review.id})}" method="post">
 
 			<!-- 내용 -->
 			<label for="content">내용</label>
