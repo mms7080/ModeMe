@@ -26,7 +26,7 @@
 
 			<!-- 상품 정보 -->
 			<div class="product-info">
-				<h2 th:text="${product?.name ?: '상품 이름 없음'}">상품 이름</h2>
+				<h4 th:text="${product?.name ?: '상품 이름 없음'}">상품 이름</h4>
 				<p th:text="'₩' + ${product?.price ?: 0}">상품 가격</p>
 				<a th:href="@{/productDetail/productDetail/{id}(id=${product?.id})}">
 					<button type="button">상품 상세보기</button>

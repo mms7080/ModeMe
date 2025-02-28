@@ -1,7 +1,5 @@
 @font-face {
-	font-family: 'omyu_pretty'/* ,"Lato", helvetica,
-	"Apple SD Gothic Neo", Nanum Gothic, Malgun Gothic,
-	맑은 고딕, sans-serif */;
+	font-family: 'omyu_pretty';
 	src:
 		url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/omyu_pretty.woff2')
 		format('woff2');

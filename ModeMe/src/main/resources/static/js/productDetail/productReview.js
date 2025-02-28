@@ -242,8 +242,6 @@ document.querySelectorAll(".view-images-link").forEach(link => {
     });
 });
 
-
-
 // 모달 함수: 리뷰 상세 팝업 열기/닫기
 function openReviewModal(reviewId) {
     fetch(`/productDetail/reviewDetails/${reviewId}`)

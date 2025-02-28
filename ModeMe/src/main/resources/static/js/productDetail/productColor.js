@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 품절 버튼 클릭 시 수량을 0으로 설정하고 입력 필드 비활성화
     soldOutButton.addEventListener("click", () => {
         stockInput.value = 0;
-        stockInput.disabled = true; // 입력 필드 비활성화
+        /*stockInput.disabled = true;*/
     });
 
     const colorInfoContainer = document.querySelector(".product-color-information");
