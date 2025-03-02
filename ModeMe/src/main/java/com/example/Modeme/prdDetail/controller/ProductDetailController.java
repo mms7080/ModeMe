@@ -136,10 +136,8 @@ public class ProductDetailController {
 			editService.updateProduct(id, productDTO);
 			redirectAttributes.addFlashAttribute("successMessage", "상품이 성공적으로 수정되었습니다.");
 		} catch (IllegalArgumentException e) {
-			System.out.println("예외 발생: " + e.getMessage());
 			redirectAttributes.addFlashAttribute("errorMessage", "상품 수정 중 오류가 발생했습니다: " + e.getMessage());
 		} catch (Exception e) {
-			System.out.println("알 수 없는 오류 발생: " + e.getMessage());
 			redirectAttributes.addFlashAttribute("errorMessage", "알 수 없는 오류로 인해 상품 수정에 실패했습니다.");
 		}
 
@@ -329,7 +327,6 @@ public class ProductDetailController {
 	@PostMapping("/review/{reviewId}/like")
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> toggleLike(@PathVariable Long reviewId, Principal principal) {
-		System.out.println("🔥 좋아요 요청 - 리뷰 ID: " + reviewId);
 
 		if (principal == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "로그인이 필요합니다."));
@@ -353,8 +350,6 @@ public class ProductDetailController {
 		}
 
 		long likeCount = reviewLikeRepository.countByReview(review);
-		System.out.println("좋아요 상태: " + liked + ", 총 좋아요 수: " + likeCount);
-
 		Map<String, Object> response = new HashMap<>();
 		response.put("likeCount", likeCount);
 		response.put("liked", liked);

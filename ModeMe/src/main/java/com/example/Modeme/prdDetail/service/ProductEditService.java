@@ -53,7 +53,6 @@ public class ProductEditService {
 		existingItem.setCategory(updatedItem.getCategory());
 		existingItem.setSubcategory(updatedItem.getSubcategory());
 		existingItem.setProductDescription(updatedItem.getProductDescription());
-		System.out.println("기본 데이터 업데이트 완료");
 
 		existingItem.getColors().clear();
 		existingItem.getColorNames().clear();
@@ -66,7 +65,6 @@ public class ProductEditService {
 			return itemColor;
 		}).toList();
 		existingItem.getColors().addAll(updatedColors);
-		System.out.println("색상 업데이트 완료: " + updatedColors);
 
 		// 색상 이름 업데이트
 		List<ItemColorName> updatedColorNames = updatedItem.getColorNames().stream().map(colorName -> {
@@ -76,7 +74,6 @@ public class ProductEditService {
 			return itemColorName;
 		}).toList();
 		existingItem.getColorNames().addAll(updatedColorNames);
-		System.out.println("색상 이름 업데이트 완료: " + updatedColorNames);
 
 		// 사이즈 업데이트 추가
 		List<ItemSize> updatedSizes = updatedItem.getProductSizes().stream().map(size -> {
@@ -87,8 +84,6 @@ public class ProductEditService {
 		}).toList();
 		existingItem.getProductSizes().clear();
 		existingItem.getProductSizes().addAll(updatedSizes);
-		System.out.println("사이즈 업데이트 완료: " + updatedSizes);
-
 
 		// 기존 이미지 URL 유지 (새로운 이미지가 없으면 기존 이미지 유지)
 		if (updatedItem.getImageUrls() != null && !updatedItem.getImageUrls().isEmpty()) {
