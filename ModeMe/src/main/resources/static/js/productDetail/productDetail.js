@@ -1,44 +1,42 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // 삭제 버튼 클릭 시 이벤트 처리
-    const deleteButtons = document.querySelectorAll('.admin-delete-button');
-    
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', (event) => {
-            // 삭제할 상품의 ID를 가져옵니다.
-            const productId = event.target.getAttribute('data-id');
-            
-            // 사용자에게 삭제 여부 확인
-            const confirmDelete = confirm("정말로 이 상품을 삭제하시겠습니까?");
-            
-            if (confirmDelete) {
-                // Ajax를 사용하여 DELETE 요청을 보냅니다.
-                fetch(`/manager/deleteProduct/${productId}`, {
-                    method: 'DELETE',  // HTTP DELETE 요청
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(response => {
-                    if (response.ok) {
-                        alert("상품이 삭제되었습니다.");
-                        // 삭제 후 관리자 상품 목록 페이지로 이동
-                        window.location.href = "/";
-                    } else {
-                        return response.text().then(errorMessage => {
-                            throw new Error(errorMessage);
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('삭제 오류:', error);
-                    alert("삭제 중 오류가 발생했습니다: " + error.message);
-                });
-            }
-        });
-    });
+	// 삭제 버튼 클릭 시 이벤트 처리
+	const deleteButtons = document.querySelectorAll('.admin-delete-button');
+
+	deleteButtons.forEach(button => {
+		button.addEventListener('click', (event) => {
+			// 삭제할 상품의 ID를 가져옵니다.
+			const productId = event.target.getAttribute('data-id');
+
+			// 사용자에게 삭제 여부 확인
+			const confirmDelete = confirm("정말로 이 상품을 삭제하시겠습니까?");
+
+			if (confirmDelete) {
+				// Ajax를 사용하여 DELETE 요청을 보냅니다.
+				fetch(`/manager/deleteProduct/${productId}`, {
+					method: 'DELETE',  // HTTP DELETE 요청
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				})
+					.then(response => {
+						if (response.ok) {
+							alert("상품이 삭제되었습니다.");
+							// 삭제 후 관리자 상품 목록 페이지로 이동
+							window.location.href = "/";
+						} else {
+							return response.text().then(errorMessage => {
+								throw new Error(errorMessage);
+							});
+						}
+					})
+					.catch(error => {
+						console.error('삭제 오류:', error);
+						alert("삭제 중 오류가 발생했습니다: " + error.message);
+					});
+			}
+		});
+	});
 });
-
-
 
 let firstMainImage = document.getElementById("main-preview")
 
@@ -151,10 +149,10 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-    document.querySelectorAll(".menu a").forEach(link => {
-        link.addEventListener("click", function(event) {
-        });
-    });
+	document.querySelectorAll(".menu a").forEach(link => {
+		link.addEventListener("click", function(event) {
+		});
+	});
 });
 
 
@@ -382,9 +380,9 @@ document.addEventListener("DOMContentLoaded", function() {
 		const productId = document.querySelector(".product-details").getAttribute("data-product-id");
 		const productName = document.querySelector(".product-details").children[0].innerHTML;
 		let firstQuantity = document.querySelector(".quantity-input");
-		if(firstQuantity == null){
+		if (firstQuantity == null) {
 			firstQuantity = 1
-		} else{
+		} else {
 			firstQuantity = firstQuantity.value
 		}
 		$.ajax({
