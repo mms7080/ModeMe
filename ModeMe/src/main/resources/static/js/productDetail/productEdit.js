@@ -1,49 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
-	const mainCategoryLabels = document.querySelectorAll('label[for]');
-	const colorInputs = document.querySelectorAll(".color");
+	// 품절 버튼과 상품 수량 입력 필드
+	const stockInput = document.getElementById("stock");
+	const soldOutButton = document.getElementById("sold-out-btn");
 
-	// HEX -> RGB 변환 함수
-	const hexToRgb = (hex) => {
-		const bigint = parseInt(hex.slice(1), 16);
-		const r = (bigint >> 16) & 255;
-		const g = (bigint >> 8) & 255;
-		const b = bigint & 255;
-		return { r, g, b };
-	}
-
-	// 색상 변경 시 RGB 업데이트
-	colorInputs.forEach((colorInput) => {
-		const colorOutput = colorInput.closest(".color-section").querySelector(".color-output");
-
-		// 초기값으로 RGB 표시
-		const initialHex = colorInput.value;
-		const initialRgb = hexToRgb(initialHex);
-		colorOutput.textContent = `R: ${initialRgb.r}, G: ${initialRgb.g}, B: ${initialRgb.b}`;
-
-		// 색상 변경 이벤트
-		colorInput.addEventListener("input", () => {
-			const hexValue = colorInput.value;
-			const rgb = hexToRgb(hexValue);
-			colorOutput.textContent = `R: ${rgb.r}, G: ${rgb.g}, B:${rgb.b}`;
-		});
+	// 품절 버튼 클릭 시 수량을 0으로 설정하고 입력 필드 비활성화
+	soldOutButton.addEventListener("click", () => {
+		stockInput.value = 0;
 	});
 });
-
-// 색상 삭제 로직
-document.addEventListener("DOMContentLoaded", () => {
-	const colorContainer = document.getElementById("color-container");
-	if (colorContainer) {
-		colorContainer.addEventListener("click", (event) => {
-			if (event.target.classList.contains("remove-color")) {
-				const colorSection = event.target.closest(".color-section");
-				if (colorSection) {
-					colorSection.remove();
-				}
-			}
-		});
-	}
-});
-
 
 document.addEventListener("DOMContentLoaded", () => {
 	const mainCategoryInputs = document.querySelectorAll('input[name="category"]');
@@ -132,7 +96,6 @@ function uploadImage(imageUploadName, previewImageName) {
 	let formData = new FormData();
 	let newFileName = file.name + "_" + uuid; // 파일명 변경
 	let renamedFile = new File([file], newFileName, { type: file.type });
-	console.log(`Renamed file: ${renamedFile.name}`);
 	formData.append("file", renamedFile);
 
 	fetch("/api/gcs/upload", { method: "POST", body: formData })
@@ -162,7 +125,7 @@ function uploadImage(imageUploadName, previewImageName) {
 				}
 				// 업데이트 후 hidden input 재갱신 (전체 미리보기 이미지 기준)
 				updateImageUrlsHiddenInput();
-			} else {}
+			} else { }
 		}).catch(error => {
 			console.error("🚨 이미지 업로드 실패:", error);
 		});

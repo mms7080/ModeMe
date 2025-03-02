@@ -153,7 +153,6 @@ document.addEventListener("DOMContentLoaded", function() {
 document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll(".menu a").forEach(link => {
         link.addEventListener("click", function(event) {
-            console.log("Navigation Clicked:", this.href);
         });
     });
 });
@@ -383,7 +382,6 @@ document.addEventListener("DOMContentLoaded", function() {
 		const productId = document.querySelector(".product-details").getAttribute("data-product-id");
 		const productName = document.querySelector(".product-details").children[0].innerHTML;
 		let firstQuantity = document.querySelector(".quantity-input");
-		console.log(firstQuantity)
 		if(firstQuantity == null){
 			firstQuantity = 1
 		} else{
