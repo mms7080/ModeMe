@@ -6,9 +6,6 @@ const navLinks = document.querySelectorAll('.menu a');
 // Add click event listener to each link
 navLinks.forEach(link => {
     link.addEventListener('click', (event) => {
-        // Prevent default anchor behavior
-        event.preventDefault();
-
         // Remove the 'selected' class from all menu items
         document.querySelectorAll('.menu li').forEach(item => {
             item.classList.remove('selected');
