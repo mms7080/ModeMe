@@ -30,26 +30,21 @@ public class MileageService {
         List<Purchase> purchaseList = purrep.findByUsername(userid);
         
         for (Purchase pur : purchaseList) {
-            // 해당 주문에 대해 마일리지가 이미 존재하는지 확인
-            Optional<Mileage> existingMileage = milerep.findByOrdernum(pur.getId().toString());
-            
-           
             // 마일리지가 이미 존재하면 생성을 건너뛰고, 없다면 새로 생성
-            if (!existingMileage.isPresent()) {
-                Mileage mile = new Mileage();
-                mile.setUserid(pur.getUsername());
-                mile.setCreateAt(pur.getOrderDate());
-                mile.setMileage((int) Math.ceil(pur.getTotalPrice() * 0.01));  // 올림 후 int로 변환
-                
-                System.out.println((int) Math.ceil(pur.getTotalPrice() * 0.01)); 
-                mile.setOrdernum(pur.getId().toString());
-                mile.setContent("주문 적립금");
+        	List<Mileage> existingMileages = milerep.findByOrdernum(pur.getId().toString());
 
-                mile.setUsedMileage(usedMileage);
+        	// 마일리지가 없는 경우에만 저장
+        	if (existingMileages.isEmpty()) {
+        	    Mileage mile = new Mileage();
+        	    mile.setUserid(pur.getUsername());
+        	    mile.setCreateAt(pur.getOrderDate());
+        	    mile.setMileage((int) Math.ceil(pur.getTotalPrice() * 0.01));  
+        	    mile.setOrdernum(pur.getId().toString());
+        	    mile.setContent("주문 적립금");
+        	    mile.setUsedMileage(usedMileage);
+        	    milerep.save(mile);
+        	}
 
-                // 마일리지 저장
-                milerep.save(mile);
-                           }
         }
     }
 	

@@ -199,14 +199,21 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 			public String Mileage(
 			        @AuthenticationPrincipal CustomUserDetails userDetails,
 			        @RequestParam(name = "usedMileage", defaultValue = "0") int usedMileage,
+			        @RequestParam(value = "page", defaultValue = "1") int page,
 			        Model model
 			) {
 			    String userid = userDetails.getUsername();
 			    System.out.println(userid);
 			   
 			    mileser.saveMileage(userid, usedMileage);
-			    
+			   
+		        // 주문 내역을 페이지로 조회
+			   
 			    List<Mileage> mileageList = milerep.findByUserid(userid);
+			
+			    int start = (page - 1) * 5;
+			    int end = Math.min(start + 5, mileageList.size());
+			    List<Mileage> pageContent = mileageList.subList(start, end);
 			    
 			    // 총 적립금
 			    int total = mileser.getTotalMileage(userid) + 2000;
@@ -232,9 +239,18 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 			    model.addAttribute("mileage_list",userDate); // 생성일 전달
 
 			    // 마일리지 리스트 모델에 추가
-			    model.addAttribute("mileage_all", mileageList); // 마일리지 목록 전달
-			    
-			    
+			    model.addAttribute("mileage_all", pageContent); // 페이지별 마일리지 목록 전달
+
+			    model.addAttribute("currentPage", page);
+			    model.addAttribute("totalPages", (int) Math.ceil((double) mileageList.size() / 5)); // 전체 페이지 수 계산
+
+			    // 시작 페이지, 끝 페이지 계산
+			    int startPage = (page - 1) / 5 * 5 + 1;
+			    int endPage = Math.min(startPage + 4, (int) Math.ceil((double) mileageList.size() / 5));
+
+			    model.addAttribute("startPage", startPage);
+			    model.addAttribute("endPage", endPage);
+		        
 			    
 			    //주문내역 생성과 동시에 마일리지 적립 -> 주문내역 먼저 생성 후 마일리지 작업
 			    
@@ -245,13 +261,24 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 			@GetMapping("/wishlist")
 			public String WishList(
 					@AuthenticationPrincipal CustomUserDetails userDetails,
+					@RequestParam(value = "page", defaultValue = "1") int page,
 					Model model
 			) {
 				String userid = userDetails.getUsername();
-			    
-			    List<Wishlist> wishlist = wishrep.findByUserid(userid);
 
-			    model.addAttribute("wishlist", wishlist);
+			    // 페이지네이션을 적용한 데이터 가져오기
+			    Pageable pageable = PageRequest.of(page - 1, 5); 
+			    Page<Wishlist> wishlistPage = wishrep.findByUserid(userid, pageable); 
+
+			    // 현재 페이지와 총 페이지 수 계산
+			    int currentPage = wishlistPage.getNumber() + 1;
+			    int totalPages = wishlistPage.getTotalPages();
+
+			    // 모델에 페이지네이션 데이터 추가
+			    model.addAttribute("wishlist", wishlistPage.getContent());
+			    model.addAttribute("currentPage", currentPage);
+			    model.addAttribute("totalPages", totalPages);
+
 			    return "/MyPage/wishlist";
 			}
 			
