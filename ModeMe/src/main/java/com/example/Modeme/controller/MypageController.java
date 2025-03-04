@@ -1,6 +1,7 @@
 	package com.example.Modeme.controller;
 	
 	import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -149,18 +150,54 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 		        @AuthenticationPrincipal CustomUserDetails userDetails,
 		        @RequestParam(value = "merchantUid", required = false) String merchantUid,
 		        @RequestParam(value = "searchselect", required = false) String searchselect,
-		        @RequestParam(value = "searchinput", required = false) String searchinput,
+		        @RequestParam(value = "startdate", required = false) String startdate,
+		        @RequestParam(value = "enddate", required = false) String enddate,
 		        @RequestParam(value = "page", defaultValue = "1") int page,
 		        Model model
 		    ) {
 		        String userid = userDetails.getUsername();
+		        
+		        // 날짜 파라미터 처리
+		        LocalDateTime startDate = startdate != null ? LocalDateTime.parse(startdate + "T00:00:00") : null;
+		        LocalDateTime endDate = enddate != null ? LocalDateTime.parse(enddate + "T23:59:59") : null;
 
-		        // 페이지 크기 설정 (한 페이지에 5개 데이터)
-		        Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("orderDate").descending());  // 기본적으로 최신 주문부터 정렬
+		        // 페이지 크기 설정
+		        Pageable pageable = PageRequest.of(page - 1,5, Sort.by("orderDate").descending());  // size 값을 반영
 
 		        // 주문 내역을 페이지로 조회
 		        Page<Purchase> purchasePage = purrep.findByUsername(userid, pageable);
-		        
+
+		        if (searchselect == null || searchselect.isEmpty()) {
+		            searchselect = "전체"; // 기본값 설정
+		        }
+
+		        switch (searchselect) {
+		            case "입금전":
+		                purchasePage = purrep.findByUsernameAndProcessAndOrderDateBetween(userid, "before", startDate, endDate, pageable);
+		                break;
+		            case "배송준비중":
+		                purchasePage = purrep.findByUsernameAndProcessAndOrderDateBetween(userid, "ready", startDate, endDate, pageable);
+		                break;
+		            case "배송중":
+		                purchasePage = purrep.findByUsernameAndProcessAndOrderDateBetween(userid, "delivery", startDate, endDate, pageable);
+		                break;
+		            case "배송완료":
+		                purchasePage = purrep.findByUsernameAndProcessAndOrderDateBetween(userid, "done", startDate, endDate, pageable);
+		                break;
+		            case "전체":
+		                if (startDate != null && endDate != null) {
+		                    // 날짜 범위가 설정되었을 때만 날짜 조건으로 필터링
+		                    purchasePage = purrep.findByUsernameAndOrderDateBetween(userid, startDate, endDate, pageable);
+		                } else {
+		                    // 날짜 범위가 없으면 모든 데이터를 출력
+		                    purchasePage = purrep.findByUsername(userid, pageable);
+		                }
+		                break;
+		            default:
+		                purchasePage = purrep.findByUsername(userid, pageable);
+		                break;
+		        }
+
 		        List<Map<String, Object>> ordersWithCounts = new ArrayList<>();
 
 		        // 주문 내역에 대한 merchantUidCount 계산
@@ -190,6 +227,7 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 
 		        return "/MyPage/order";
 		    }
+
 
 
 

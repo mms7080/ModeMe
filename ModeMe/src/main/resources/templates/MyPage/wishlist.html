@@ -46,21 +46,21 @@
 			</div>
 		</div>
 		
-		<div class="pagination">
+<div class="pagination">
     <!-- 이전 버튼 -->
     <button th:if="${currentPage > 1}"
-            th:onclick="'location.href=\'?page=' + (${currentPage} - 1) + '&size=' + ${pageSize} + '\';'"
+            th:onclick="'location.href=\'?page=' + (${currentPage} - 1) + '\';'"
             th:classappend="${currentPage == 1} ? 'disabled' : ''">&lt;</button>
 
     <!-- 페이지 번호 -->
     <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
           th:classappend="${i + 1 == currentPage} ? 'active' : ''"
-          th:onclick="'location.href=\'?page=' + (${i + 1}) + '&size=' + ${pageSize} + '\';'"
+          th:onclick="'location.href=\'?page=' + (${i + 1}) + '\';'"
           th:text="${i + 1}"></span>
 
     <!-- 다음 버튼 -->
     <button th:if="${currentPage < totalPages}"
-            th:onclick="'location.href=\'?page=' + (${currentPage} + 1) + '&size=' + ${pageSize} + '\';'"
+            th:onclick="'location.href=\'?page=' + (${currentPage} + 1) + '\';'"
             th:classappend="${currentPage == totalPages} ? 'disabled' : ''">&gt;</button>
 </div>
 

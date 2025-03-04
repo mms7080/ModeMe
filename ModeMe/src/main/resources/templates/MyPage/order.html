@@ -20,14 +20,12 @@
    <main>
       <div class="OrderHeader">
          <div class="greybox">
-            <select class="orderselect">
+            <select class="orderselect" name="searchselectoption">
+            <option>전체</option>
                <option>입금전</option>
                <option>배송준비중</option>
                <option>배송중</option>
                <option>배송완료</option>
-               <option>취소</option>
-               <option>교환</option>
-               <option>반품</option>
             </select> <span class="daybuttons">
                <button class="daybutton">오늘</button>
                <button class="daybutton">1주일</button>
@@ -36,7 +34,7 @@
                <button class="daybutton">6개월</button>
             </span>
             <form class="orderheaderform">
-            	<input type="hidden" name="searchselect" value="입금전"/>
+            	<input type="hidden" name="searchselect" value="전체"/>
                <input type="date" id="startdate" name="startdate" required>
                ~ <input type="date" id="enddate" name="enddate" required>
                <button class="ordersearch">조회</button>
@@ -91,23 +89,20 @@
 <div class="pagination">
     <!-- 이전 버튼 -->
     <button th:if="${currentPage > 1}"
-            th:onclick="'location.href=\'?page=' + (${currentPage} - 1) + '&size=' + ${pageSize} + '\';'"
+            th:onclick="'location.href=\'?page=' + (${currentPage} - 1) + '\';'"
             th:classappend="${currentPage == 1} ? 'disabled' : ''">&lt;</button>
 
     <!-- 페이지 번호 -->
     <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
           th:classappend="${i + 1 == currentPage} ? 'active' : ''"
-          th:onclick="'location.href=\'?page=' + (${i + 1}) + '&size=' + ${pageSize} + '\';'"
+          th:onclick="'location.href=\'?page=' + (${i + 1}) + '\';'"
           th:text="${i + 1}"></span>
 
     <!-- 다음 버튼 -->
     <button th:if="${currentPage < totalPages}"
-            th:onclick="'location.href=\'?page=' + (${currentPage} + 1) + '&size=' + ${pageSize} + '\';'"
+            th:onclick="'location.href=\'?page=' + (${currentPage} + 1) + '\';'"
             th:classappend="${currentPage == totalPages} ? 'disabled' : ''">&gt;</button>
 </div>
-
-
-
 
    </main>
 

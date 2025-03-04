@@ -25,3 +25,7 @@ function loadPage(page) {
     currentPage = page;
     window.location.href = `/order?page=${page}`;  // 페이지 이동
 }
+
+if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_RELOAD) {
+    window.location.href = "/order";  // 새로고침 후 /order로 리디렉션
+}

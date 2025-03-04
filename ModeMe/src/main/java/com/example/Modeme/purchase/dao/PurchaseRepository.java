@@ -1,7 +1,7 @@
 package com.example.Modeme.purchase.dao;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
@@ -29,6 +29,10 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long>{
 	
 	List<Purchase> findByUsernameAndProcess(String username, String process);
 	
-	    Page<Purchase> findByUsername(String username, Pageable pageable);
+	Page<Purchase> findByUsername(String username, Pageable pageable);
+
+	Page<Purchase> findByUsernameAndProcessAndOrderDateBetween(String username, String process, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
+	
+	Page<Purchase> findByUsernameAndOrderDateBetween(String username,  LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
 
 }
