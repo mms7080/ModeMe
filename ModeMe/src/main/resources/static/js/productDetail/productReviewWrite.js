@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     return response.text();
                 })
                 .then(url => {
-                    // 예: input id "reviewFile1" -> index "1"
                     const inputId = event.target.id;
                     const index = inputId.replace('reviewFile', '');
                     

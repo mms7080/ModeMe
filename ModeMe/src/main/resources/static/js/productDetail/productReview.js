@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let totalPages = parseInt(paginationContainer.dataset.totalPages, 10) || 1;
     const productId = paginationContainer.dataset.productId;
 
-    // 좋아요 버튼 이벤트 등록
     function setupLikeButtons() {
         document.querySelectorAll(".like-button").forEach(button => {
             button.removeEventListener("click", toggleLike);
@@ -31,7 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const likeCountElem = document.getElementById(`like-count-${reviewId}`);
         const isLiked = button.classList.contains("liked");
 
-        // 임시 UI 업데이트
         if (isLiked) {
             button.classList.remove("liked");
             likeIcon.textContent = "🤍";
@@ -46,7 +44,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        // 서버 요청
         fetch(`/productDetail/review/${reviewId}/like`, {
             method: "POST",
             credentials: "include",
@@ -89,7 +86,6 @@ document.addEventListener("DOMContentLoaded", () => {
         fetchReviews(0);
     });
 
-    // 리뷰 항목 클릭 시 모달을 열기 위한 이벤트 등록
     function setupReviewItemClick() {
         document.querySelectorAll(".review-item").forEach(item => {
             item.removeEventListener("click", reviewItemClickHandler);
@@ -98,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function reviewItemClickHandler(e) {
-        // 좋아요 버튼이나 리뷰 액션 영역 클릭 시 이벤트 무시
+
         if (e.target.closest(".like-button") || e.target.closest(".review-actions")) {
             return;
         }
@@ -109,7 +105,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // 리뷰 fetch 및 리뷰 목록, 페이지네이션 업데이트
     function fetchReviews(page) {
         const sortType = document.getElementById('reviewSort').value;
         fetch(`/productDetail/${productId}/reviews?page=${page}&sortType=${sortType}`)
@@ -120,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .then(data => {
                 reviewListContainer.innerHTML = "";
                 data.reviews.forEach(review => {
-					// 리뷰 항목 생성 시
+
 					let imagesIndicatorHtml = "";
 					if (review.hasImages) {
 					    imagesIndicatorHtml = `
@@ -207,7 +202,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // 초기 리뷰 로드
     fetchReviews(currentPage);
 });
 
@@ -215,9 +209,9 @@ document.querySelectorAll(".view-images-link").forEach(link => {
     link.addEventListener("click", function(e) {
         e.preventDefault();
 		e.stopImmediatePropagation();
-        e.stopPropagation(); // 추가: 이벤트 전파 중단
+        e.stopPropagation();
         const reviewId = this.getAttribute("data-review-id");
-        // 모달 열기 로직 ...
+
         fetch(`/productDetail/reviewDetails/${reviewId}`)
             .then(response => response.json())
             .then(data => {
@@ -242,7 +236,6 @@ document.querySelectorAll(".view-images-link").forEach(link => {
     });
 });
 
-// 모달 함수: 리뷰 상세 팝업 열기/닫기
 function openReviewModal(reviewId) {
     fetch(`/productDetail/reviewDetails/${reviewId}`)
         .then(response => {

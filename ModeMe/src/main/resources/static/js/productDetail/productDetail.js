@@ -1,19 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
-	// 삭제 버튼 클릭 시 이벤트 처리
 	const deleteButtons = document.querySelectorAll('.admin-delete-button');
 
 	deleteButtons.forEach(button => {
 		button.addEventListener('click', (event) => {
-			// 삭제할 상품의 ID를 가져옵니다.
 			const productId = event.target.getAttribute('data-id');
-
-			// 사용자에게 삭제 여부 확인
 			const confirmDelete = confirm("정말로 이 상품을 삭제하시겠습니까?");
 
 			if (confirmDelete) {
-				// Ajax를 사용하여 DELETE 요청을 보냅니다.
 				fetch(`/manager/deleteProduct/${productId}`, {
-					method: 'DELETE',  // HTTP DELETE 요청
+					method: 'DELETE',
 					headers: {
 						'Content-Type': 'application/json'
 					}
@@ -21,7 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
 					.then(response => {
 						if (response.ok) {
 							alert("상품이 삭제되었습니다.");
-							// 삭제 후 관리자 상품 목록 페이지로 이동
 							window.location.href = "/";
 						} else {
 							return response.text().then(errorMessage => {
@@ -164,30 +158,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	let productPrice = parseInt(priceElement.getAttribute("data-price"), 10);
 
-	// 포맷팅된 가격으로 표시
 	const formatPrice = (price) => {
 		return price.toLocaleString('en').replace(/,/g, ',');
 	};
 
-	// 초기 가격 설정
 	priceElement.textContent = `${formatPrice(productPrice)}원`;
 
 	optionButtons.forEach(button => {
 		button.addEventListener('click', () => {
 			const group = button.parentElement;
-			const groupType = group.previousElementSibling.textContent.trim(); // COLOR or SIZE
+			const groupType = group.previousElementSibling.textContent.trim();
 
-			// If the button is already selected, unselect it and clear related selection
 			if (button.classList.contains('selected')) {
 				button.classList.remove('selected');
 				updateSummary(groupType, '');
 			} else {
-				// Deselect all buttons in the same group
 				group.querySelectorAll('.selected').forEach(selectedButton => {
 					selectedButton.classList.remove('selected');
 				});
 
-				// Select the clicked button
 				button.classList.add('selected');
 				updateSummary(groupType, button.textContent.trim());
 			}
@@ -221,20 +210,16 @@ document.addEventListener("DOMContentLoaded", () => {
 	const thumbnails = document.querySelectorAll(".thumbnail-image");
 	const mainPreview = document.getElementById("main-preview");
 
-	// 최초 메인 이미지 저장
 	const initialMainImageSrc = mainPreview.src;
-	let currentMainImageSrc = initialMainImageSrc; // 현재 메인 이미지 추적
-
+	let currentMainImageSrc = initialMainImageSrc;
 	thumbnails.forEach((thumbnail) => {
 		thumbnail.addEventListener("click", function() {
 			let clickedThumbnailSrc = this.src;
 
-			// 클릭한 썸네일이 현재 메인 이미지인 경우, 초기 이미지로 되돌림
 			if (clickedThumbnailSrc === currentMainImageSrc) {
 				mainPreview.src = initialMainImageSrc;
 				currentMainImageSrc = initialMainImageSrc;
 			} else {
-				// 메인 이미지와 썸네일 이미지를 교체
 				mainPreview.src = clickedThumbnailSrc;
 				this.src = currentMainImageSrc;
 				currentMainImageSrc = clickedThumbnailSrc;
@@ -242,18 +227,17 @@ document.addEventListener("DOMContentLoaded", () => {
 		});
 	});
 
-	// 메인 이미지 확대 기능 (돋보기 효과)
 	mainPreview.addEventListener("mousemove", function(e) {
 		const rect = mainPreview.getBoundingClientRect();
 		const x = (e.clientX - rect.left) / rect.width * 100;
 		const y = (e.clientY - rect.top) / rect.height * 100;
 
 		mainPreview.style.transformOrigin = `${x}% ${y}%`;
-		mainPreview.style.transform = "scale(2)"; // 2배 확대
+		mainPreview.style.transform = "scale(2)";
 	});
 
 	mainPreview.addEventListener("mouseleave", function() {
-		mainPreview.style.transform = "scale(1)"; // 원래 크기로 복구
+		mainPreview.style.transform = "scale(1)";
 	});
 });
 

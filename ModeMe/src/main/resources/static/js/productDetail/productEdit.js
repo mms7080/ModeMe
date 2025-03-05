@@ -1,9 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
-	// 품절 버튼과 상품 수량 입력 필드
+
 	const stockInput = document.getElementById("stock");
 	const soldOutButton = document.getElementById("sold-out-btn");
 
-	// 품절 버튼 클릭 시 수량을 0으로 설정하고 입력 필드 비활성화
 	soldOutButton.addEventListener("click", () => {
 		stockInput.value = 0;
 	});
@@ -13,28 +12,23 @@ document.addEventListener("DOMContentLoaded", () => {
 	const mainCategoryInputs = document.querySelectorAll('input[name="category"]');
 	const subcategoryContainer = document.getElementById("subcategory");
 
-	// 서브카테고리 데이터
 	const subcategories = {
 		outer: ["점퍼", "가디건", "자켓", "코트"],
 		top: ["티셔츠", "민소매", "셔츠/블라우스", "니트", "후드/맨투맨"],
 		bottom: ["데님", "팬츠", "슬랙스", "스커트", "트레이닝"]
 	};
 
-	// 저장된 서브카테고리 값 가져오기
 	const currentSubcategory = subcategoryContainer.getAttribute("data-selected-subcategory");
 
-	// 초기 서브카테고리 설정
 	const currentCategory = document.querySelector('input[name="category"]:checked')?.value;
 	updateSubcategories(currentCategory, currentSubcategory);
 
-	// 메인 카테고리 변경 시 서브카테고리 업데이트
 	mainCategoryInputs.forEach((input) => {
 		input.addEventListener("change", () => {
 			updateSubcategories(input.value);
 		});
 	});
 
-	// 서브카테고리 업데이트 함수
 	function updateSubcategories(category, selectedSubcategory = null) {
 
 		const subItems = subcategories[category] || [];
@@ -50,9 +44,8 @@ document.addEventListener("DOMContentLoaded", () => {
 			subItemInput.name = "subcategory";
 			subItemInput.value = item;
 
-			// 저장된 서브카테고리를 초기 선택
 			if (item === selectedSubcategory) {
-				subItemInput.checked = true; // 선택된 서브카테고리 체크
+				subItemInput.checked = true;
 			}
 			subItemDiv.appendChild(subItemInput);
 			subItemDiv.appendChild(subItemLabel);
@@ -61,7 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 });
 
-// 미리보기 영역에 있는 이미지들의 src를 hidden input에 업데이트하는 함수 (미리보기 컨테이너를 명확히 지정)
 function updateImageUrlsHiddenInput() {
 	const previewContainer = document.getElementById("previewImagesContainer");
 	if (!previewContainer) {
@@ -71,7 +63,7 @@ function updateImageUrlsHiddenInput() {
 	const previewImages = previewContainer.querySelectorAll("img.preview-image");
 	const imageUrls = [];
 	previewImages.forEach(img => {
-		// placeholder 이미지가 아닌 경우에만 URL 수집
+
 		if (img && img.src && !img.src.includes("placeholder.png")) {
 			imageUrls.push(img.src);
 		}
@@ -84,7 +76,6 @@ function updateImageUrlsHiddenInput() {
 	}
 }
 
-// 수정된 이미지 업로드 함수 (Promise 반환 없이 바로 실행)
 function uploadImage(imageUploadName, previewImageName) {
 	const fileInput = document.getElementById(imageUploadName);
 	if (!fileInput.files || fileInput.files.length === 0) {
@@ -94,27 +85,26 @@ function uploadImage(imageUploadName, previewImageName) {
 	const uuid = crypto.randomUUID();
 	let file = fileInput.files[0];
 	let formData = new FormData();
-	let newFileName = file.name + "_" + uuid; // 파일명 변경
+	let newFileName = file.name + "_" + uuid;
 	let renamedFile = new File([file], newFileName, { type: file.type });
 	formData.append("file", renamedFile);
 
 	fetch("/api/gcs/upload", { method: "POST", body: formData })
 		.then(response => {
-			return response.text(); // 이미지 URL 반환
+			return response.text();
 		})
 		.then(imageUrl => {
 			if (imageUrl && imageUrl.trim() !== "") {
-				// hidden input 업데이트
+
 				let imageUrlsInput = document.getElementById("imageUrls");
 				if (!imageUrlsInput) {
 					return;
 				}
-				// 기존 값 가져오기 (hidden input은 수정페이지에서 등록 페이지와 달리 초기값이 있을 수 있음)
+
 				let existingUrls = imageUrlsInput.value ? imageUrlsInput.value.split(",") : [];
 				existingUrls.push(imageUrl);
 				imageUrlsInput.value = existingUrls.join(",");
 
-				// 미리보기 이미지 업데이트
 				let previewImage = document.getElementById(previewImageName);
 				if (previewImage) {
 					previewImage.src = imageUrl;
@@ -123,7 +113,7 @@ function uploadImage(imageUploadName, previewImageName) {
 				} else {
 					console.error(`🚨 Preview image not found for id: ${previewImageName}`);
 				}
-				// 업데이트 후 hidden input 재갱신 (전체 미리보기 이미지 기준)
+
 				updateImageUrlsHiddenInput();
 			} else { }
 		}).catch(error => {
@@ -138,15 +128,13 @@ document.addEventListener("DOMContentLoaded", () => {
 		const fileInput = box.querySelector("input[type='file']");
 		const fileNameSpan = box.querySelector(".file-name");
 
-		// 박스를 클릭하면 파일 입력 필드 활성화
 		box.addEventListener("click", (e) => {
-			// 클릭 대상이 input, button, span이 아닌 경우에만 파일 입력 클릭
+
 			const tagName = e.target.tagName.toLowerCase();
 			if (tagName === "input" || tagName === "button" || tagName === "span") return;
 			fileInput.click();
 		});
 
-		// 파일 선택 후, 파일 이름 표시와 업로드 함수 호출
 		fileInput.addEventListener("change", () => {
 			if (fileInput.files.length > 0) {
 				fileNameSpan.textContent = fileInput.files[0].name;
@@ -158,11 +146,10 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-	// Hidden input 필드와 에디터 컨테이너 가져오기
+
 	const editorElement = document.getElementById("rich-text-editor");
 	const hiddenInput = document.getElementById("productDescription");
 
-	// Rich Text Editor 초기화
 	const editor = new Quill("#rich-text-editor", {
 		theme: "snow",
 		placeholder: "상품 상세 정보를 입력하세요...",
@@ -200,7 +187,6 @@ document.addEventListener("DOMContentLoaded", () => {
 								};
 								reader.readAsDataURL(file);
 
-								// 서버 업로드 (선택적으로 구현)
 								const formData = new FormData();
 								formData.append("image", file);
 
@@ -227,13 +213,11 @@ document.addEventListener("DOMContentLoaded", () => {
 		},
 	});
 
-	// 초기값 설정
-	const initialContent = hiddenInput.value; // Hidden input에 저장된 값 가져오기
+	const initialContent = hiddenInput.value;
 	if (initialContent) {
 		editor.clipboard.dangerouslyPasteHTML(initialContent);
 	}
 
-	// 에디터 내용 변경 시 hidden input 업데이트
 	editor.on("text-change", () => {
 		hiddenInput.value = editor.root.innerHTML.trim();
 	});
@@ -243,9 +227,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	const buttons = document.querySelectorAll(".buttons button");
 	buttons.forEach((button) => {
 		button.addEventListener("click", () => {
-			const url = button.getAttribute("data-url"); // 버튼의 data-url 속성 값 가져오기
+			const url = button.getAttribute("data-url");
 			if (url) {
-				window.location.href = url; // 해당 URL로 이동
+				window.location.href = url;
 			} else {
 				console.error("URL이 설정되지 않았습니다.");
 			}
@@ -260,14 +244,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	let currentImageUrls = imageUrlsInput.value ? imageUrlsInput.value.split(",") : [];
 
-	// 기존 이미지 유지 (기존 이미지 URL이 hidden input에 저장됨)
 	previewImages.forEach((previewImage, index) => {
 		if (currentImageUrls[index]) {
 			previewImage.src = currentImageUrls[index];
 		}
 	});
 
-	// 파일 입력이 변경될 때 이벤트 리스너 추가
 	fileInputs.forEach((fileInput, index) => {
 		fileInput.addEventListener("change", function(event) {
 			const file = event.target.files[0];
@@ -275,7 +257,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				const reader = new FileReader();
 				reader.onload = function(e) {
 					previewImages[index].src = e.target.result;
-					currentImageUrls[index] = e.target.result; // 새로운 이미지 URL 업데이트
+					currentImageUrls[index] = e.target.result;
 					updateHiddenInput();
 				};
 				reader.readAsDataURL(file);
@@ -283,7 +265,6 @@ document.addEventListener("DOMContentLoaded", function() {
 		});
 	});
 
-	// Hidden input 업데이트 함수
 	function updateHiddenInput() {
 		imageUrlsInput.value = currentImageUrls.join(",");
 	}
