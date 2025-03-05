@@ -26,6 +26,64 @@ function loadPage(page) {
     window.location.href = `/order?page=${page}`;  // 페이지 이동
 }
 
+function goToPage(newPage) {
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('page', newPage); // 기존 URL의 page 값만 변경
+
+    window.location.href = window.location.pathname + "?" + urlParams.toString(); // 전체 URL로 이동
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const startDateInput = document.getElementById("startdate");
+    const endDateInput = document.getElementById("enddate");
+
+    function getFormattedDate(date) { //newDate로 가져오면 UTC(협정 세계시) 기준이여서 yyyy-mm-dd 포맷 직접 생성
+        const yyyy = date.getFullYear();
+        const mm = String(date.getMonth() + 1).padStart(2, "0"); // 월(0부터 시작) + 1
+        const dd = String(date.getDate()).padStart(2, "0");
+        return `${yyyy}-${mm}-${dd}`;
+    }
+
+    function setDateRange(months) {
+        const today = new Date();
+        const startDate = new Date();
+        startDate.setMonth(startDate.getMonth() - months); // N개월 전으로 설정
+
+        startDateInput.value = getFormattedDate(startDate);
+        endDateInput.value = getFormattedDate(today);
+    }
+
+    document.querySelectorAll(".daybutton").forEach(button => {
+        button.addEventListener("click", function () {
+            const text = this.textContent.trim(); // 버튼 텍스트 읽기
+            const today = new Date();
+
+            switch (text) {
+                case "오늘":
+                    startDateInput.value = getFormattedDate(today);
+                    endDateInput.value = getFormattedDate(today);
+                    break;
+                case "1주일":
+                    const oneWeekAgo = new Date();
+                    oneWeekAgo.setDate(today.getDate() - 7);
+                    startDateInput.value = getFormattedDate(oneWeekAgo);
+                    endDateInput.value = getFormattedDate(today);
+                    break;
+                case "1개월":
+                    setDateRange(1);
+                    break;
+                case "3개월":
+                    setDateRange(3);
+                    break;
+                case "6개월":
+                    setDateRange(6);
+                    break;
+            }
+        });
+    });
+});
+
+
 if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_RELOAD) {
     window.location.href = "/order";  // 새로고침 후 /order로 리디렉션
 }

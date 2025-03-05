@@ -161,6 +161,8 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 		        LocalDateTime startDate = startdate != null ? LocalDateTime.parse(startdate + "T00:00:00") : null;
 		        LocalDateTime endDate = enddate != null ? LocalDateTime.parse(enddate + "T23:59:59") : null;
 
+		        if(page<1) {page=1;}
+		        
 		        // 페이지 크기 설정
 		        Pageable pageable = PageRequest.of(page - 1,5, Sort.by("orderDate").descending());  // size 값을 반영
 
