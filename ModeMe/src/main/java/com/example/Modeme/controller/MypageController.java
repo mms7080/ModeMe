@@ -169,6 +169,7 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 		        // 주문 내역을 페이지로 조회
 		        Page<Purchase> purchasePage = purrep.findByUsername(userid, pageable);
 
+		        // 검색기능
 		        if (searchselect == null || searchselect.isEmpty()) {
 		            searchselect = "전체"; // 기본값 설정
 		        }
@@ -229,10 +230,6 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 
 		        return "/MyPage/order";
 		    }
-
-
-
-
 			
 			// 적립금
 			@GetMapping("/mileage")
@@ -334,17 +331,16 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 				String userid = userDetails.getUsername();
 				Long user = userDetails.getUser().getId();
 				
-				if(action.equals("cart")) {
-					//쇼핑카트 저장안됨 수정해야함
-					ShoppingCart cart = new ShoppingCart(null,user,itemnumber,name,quantity);
-					cartrep.save(cart);
+				if(action.equals("cart")) { // 장바구니에 추가하는 경우
 					
-					wishser.deleteWishlist(userid, wishid);
-				
+					ShoppingCart cart = new ShoppingCart(null,user,itemnumber,name,quantity);
+					cartrep.save(cart); // 장바구니에 저장
+					
+					wishser.deleteWishlist(userid, wishid); // 관심 상품 목록에서 삭제
 				}
-				if(action.equals("delete")) {
 				
-				wishser.deleteWishlist(userid, wishid);
+				if(action.equals("delete")) { // 관심 상품 삭제하는 경우
+					wishser.deleteWishlist(userid, wishid);
 				}
 				
 				return "redirect:/wishlist";
@@ -358,12 +354,13 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 				Model model
 			) {
 				String userid = userDetails.getUsername();
-				List<Address> address_list = addressrep.findByUserid(userid);
 				
+				// 사용자 ID로 주소 목록 조회
+				List<Address> address_list = addressrep.findByUserid(userid);
 				model.addAttribute("address_list",address_list);
 				
-	List<Defaultaddress> default_list = defaultrep.findByUserid(userid);
-				
+				// 기본 배송지 목록 조회
+				List<Defaultaddress> default_list = defaultrep.findByUserid(userid);
 				model.addAttribute("default_list",default_list);
 				
 				
@@ -419,8 +416,10 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 			) {
 				String userid = userDetails.getUsername();
 				
+				// 전체 주소 조합 (우편번호 + 기본 주소 + 추가 주소 + 상세 주소)
 				String full_address = zip + " " + address + extraaddress + " " + addressdetail;
 				
+				// 새로운 주소 객체 생성 및 저장
 				Address save_address = new Address(null,userid,name,phone,full_address);
 				addressrep.save(save_address); //팝업에서 배송지목록 테이블로 저장
 				
@@ -442,7 +441,7 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 		        defaultser.deleteDefaultAddress(userid, addressId);
 		        
 		        Defaultaddress save_default = new Defaultaddress(null, userid, name, phone, address, true);
-		        defaultrep.save(save_default);
+		        defaultrep.save(save_default); //배송지 저장
 
 		        return "redirect:/address"; // 처리 후 주소 목록 페이지로 리다이렉트
 		    }
