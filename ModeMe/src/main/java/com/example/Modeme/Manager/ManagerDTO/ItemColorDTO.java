@@ -8,7 +8,7 @@ public class ItemColorDTO {
     private Long id;  // ItemColor 엔티티의 ID
     private List<ItemColor> color;  // 색상 정보
 
-    // Getter and Setter methods
+    // Getter  Setter 메소드
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

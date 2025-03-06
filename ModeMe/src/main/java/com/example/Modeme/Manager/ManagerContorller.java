@@ -77,15 +77,15 @@ public class ManagerContorller {
 
     @ModelAttribute
     public void addAttributes(Model model, Principal principal) {
-        keep.headerlogin(model, principal);
+        keep.headerlogin(model, principal); // 로그인 정보 헤더에 추가
     }
 
     // 관리자 메인
     @GetMapping("/manager/managerMain")
     public String adminDashboard(Model model, Principal principal) {
     	if(principal != null) {
-    		String username = principal.getName();
-    		model.addAttribute("username", username);
+    		String username = principal.getName(); // 로그인한 사용자명 가져오기
+    		model.addAttribute("username", username); // 모델에 사용자명 추가
     	}
         // 총 회원 수
         long totalUsers = userRepository.count();
@@ -114,9 +114,9 @@ public class ManagerContorller {
     public String addItemForm(Model model, Principal principal) {
     	if(principal != null) {
     		String username = principal.getName();
-    		model.addAttribute("username", username);
+    		model.addAttribute("username", username);	// 모델에 사용자명 추가
     	}
-        model.addAttribute("addItemDTO", new AddItemDTO());
+        model.addAttribute("addItemDTO", new AddItemDTO());	// 상품 등록 폼을 위한 DTO 추가
         return "/manager/managerInput";
     }
 
@@ -125,6 +125,7 @@ public class ManagerContorller {
     public String addItem(@ModelAttribute AddItemDTO addItemDTO, Principal principal,
     		@RequestParam(value = "imageUrls", required = false) List<String> imageUrls) {
     	
+    	// 이미지 URL이 없으면 빈 리스트로 처리
     	if(principal != null) {
     		String username = principal.getName();
     		System.out.println("상품 삭제한 사용자:" + username);
@@ -141,6 +142,7 @@ public class ManagerContorller {
         return "redirect:/productDetail/productDetail/" + savedItem.getId();
     }
 
+    // 상품 목록 페이지
     @GetMapping("/manager/managerProduct")
     public String getProductList(
         @RequestParam(defaultValue = "0") int page,
@@ -151,7 +153,7 @@ public class ManagerContorller {
     ) {
         if (principal != null) {
             String username = principal.getName();
-            model.addAttribute("username", username);
+            model.addAttribute("username", username);	// 모델에 사용자명 추가
         }
         
         // keyword가 null인 경우 빈 문자열로 설정
@@ -198,10 +200,10 @@ public class ManagerContorller {
     public String deleteProduct(@PathVariable Long id, Principal principal) {
        	if(principal != null) {
     		String username = principal.getName();
-    		System.out.println("상품 삭제한 사용자:" + username);
+    		System.out.println("상품 삭제한 사용자:" + username); // 상품 삭제한 사용자 정보 출력
     	}
         try {
-            as.deleteProduct(id);
+            as.deleteProduct(id); // 상품 삭제
             return "상품 삭제 성공";
         } catch (Exception e) {
             e.printStackTrace();
@@ -209,6 +211,7 @@ public class ManagerContorller {
         }
     }   
     
+    // 상품 리뷰 목록 페이지
     @GetMapping("/manager/managerReview")
     public String getReviews(
             @RequestParam(defaultValue = "0") int page,
@@ -262,6 +265,7 @@ public class ManagerContorller {
         }
     }
     
+    // 사용자 관리 페이지
     @GetMapping("/manager/users")
     public String getUserManagementPage(
             @RequestParam(defaultValue = "0") int page, 
@@ -305,10 +309,10 @@ public class ManagerContorller {
         model.addAttribute("option", option);
         model.addAttribute("keyword", keyword);
 
-        return "manager/managerUser";
+        return "manager/managerUser";	// 사용자 관리 페이지 반환
     }
 
-    
+    // 판매 관리 페이지
     @GetMapping("/manager/ManagerSale")
     public String getSaleData(
         @RequestParam(defaultValue = "0") int page,
@@ -346,12 +350,10 @@ public class ManagerContorller {
         model.addAttribute("searchOption", searchOption); // 검색 옵션 추가
         model.addAttribute("keyword", keyword); // 검색어 추가
 
-        return "manager/managerSale"; // 뷰 이름 반환
+        return "manager/managerSale"; // 판매 관리 페이지 반환
     }
-
-
     
-   
+    // 판매 상태 업데이트 처리
     @PutMapping("/manager/ManagerSale/{saleId}")
     @ResponseBody
     public ResponseEntity<String> updateSaleProcess(
@@ -375,6 +377,7 @@ public class ManagerContorller {
         }
     }
 
+    // 주문 삭제 처리
     @DeleteMapping("/manager/ManagerSale/{saleId}")
     public ResponseEntity<String> deleteOrder(@PathVariable Long saleId) {
         try {

@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.example.Modeme.Manager.Entity.ItemColor;
 
-// import com.example.Modeme.Manager.Entity.ProductImage;
+
 
 public class AddItemDTO {
     private Long id;
@@ -25,7 +25,7 @@ public class AddItemDTO {
 	public void setImageUrls(List<String> imageUrls) {
 		this.imageUrls = imageUrls;
 	}
-	// Getter and Setter methods
+	// Getter Setter 메소드
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -56,6 +56,4 @@ public class AddItemDTO {
     public String getProductDescription() { return productDescription; }
     public void setProductDescription(String productDescription) { this.productDescription = productDescription; }
 
-    // public List<ProductImage> getImages() { return images; }
-    // public void setImages(List<ProductImage> images) { this.images = images; }
 }

@@ -20,12 +20,14 @@ public class ManagerReviewService {
 	@Autowired
 	private ProductReviewRepository prs;
 	
+	 // 기본 리뷰 목록 조회 (내림차순 정렬)
 	public Page<ProductReview> getReviews(Pageable pageable){
         // 내림차순 정렬: id 기준으로 내림차순 정렬
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Order.desc("id")));
         return prs.findAll(pageable);
 	}
 	
+	 // 검색된 리뷰 목록 조회
 	public Page<ProductReview> searchReviews(String option, String keyword, Pageable pageable) {
 	    if ("productName".equals(option)) {
 	        return prs.findByAddItem_NameContaining(keyword, pageable);

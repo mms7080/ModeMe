@@ -49,7 +49,7 @@ public class AddItem {
 
 
 
-    // Getter and Setter methods
+    // Getter  Setter 메소드
     public Long getId() {
         return id;
     }

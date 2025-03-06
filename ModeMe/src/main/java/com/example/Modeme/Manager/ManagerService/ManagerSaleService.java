@@ -53,26 +53,34 @@ public class ManagerSaleService {
     @Autowired
     private itemSizeRepository isr;
     
-
+    // 기본 판매 목록 조회 (내림차순 정렬)
     public Page<ProductSaleDTO> getSaleData(Pageable pageable, String newProcess, String searchOption, String keyword) {
         Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Order.desc("orderDate")));
         Page<Purchase> purchases;
-
+        
+        // 검색 옵션에 따라 주문 데이터를 필터링
         if ("process".equals(searchOption) && keyword != null) {
+        	// 주문 상태로 검색
             String internalProcessStatus = mapKoreanToProcess(keyword);
             purchases = pr.findByProcess(internalProcessStatus, sortedPageable);
         } else if ("orderInfo".equals(searchOption) && keyword != null) {
+        	// 상품 이름으로 검색
             purchases = pr.findByItemnameContaining(keyword, sortedPageable);
         } else if ("orderId".equals(searchOption) && keyword != null) {
+        	// 유저 아이디로 검색
             purchases = pr.findByUsernameContaining(keyword, sortedPageable);
         } else {
+        	// 모든 주문 데이터를 가져옴
             purchases = pr.findAll(sortedPageable);
         }
-
+        
+        // 데이터 변환: DTO로 변환하여 반환
         return purchases.map(purchase -> {
+        	 // 주문 상태가 없으면 기본값으로 설정
             if (purchase.getProcess() == null || purchase.getProcess().isEmpty()) {
                 purchase.setProcess("before");
                 pr.save(purchase);
+             // 새로운 상태로 변경
             } else if (newProcess != null && !newProcess.isEmpty()) {
                 purchase.setProcess(newProcess);
                 pr.save(purchase);
@@ -101,6 +109,7 @@ public class ManagerSaleService {
             // ✅ 주문 날짜 변환
             Date formattedOrderDate = Date.valueOf(purchase.getOrderDate().toLocalDate());
 
+            // DTO 생성 후 반환
             return new ProductSaleDTO(
                 purchase.getId(),
                 formattedOrderDate,
@@ -118,6 +127,7 @@ public class ManagerSaleService {
         });
     }
     
+    // 색상 ID로 색상 이름 조회
     private String getColorNameById(String colorId) {
         if (colorId == null || colorId.isEmpty()) {
             System.out.println("ColorId가 null 또는 빈 값입니다.");
@@ -139,6 +149,7 @@ public class ManagerSaleService {
         }
     }
 
+    // 사이즈 ID로 사이즈 이름 조회
     private String getSizeNameById(String sizeId) {
         if (sizeId == null || sizeId.isEmpty()) {
             System.out.println("SizeId가 null 또는 빈 값입니다.");
@@ -181,6 +192,7 @@ public class ManagerSaleService {
         }
     }
     
+    // 주문 상태를 한국어로 매핑하는 메서드
     private String mapProcessToKorean(String process) {
         switch (process) {
             case "before":
@@ -216,19 +228,19 @@ public class ManagerSaleService {
                                           Collectors.summingInt(Purchase::getTotalPrice)));
     }
 
-    // Helper method to format date to "yyyy-MM" format
+    // 날짜를 "yyyy-MM" 형식으로 변환하는 헬퍼 메서드
     private String formatDateToMonth(LocalDateTime orderDate) {
         return orderDate.format(DateTimeFormatter.ofPattern("yyyy-MM"));
     }
 
-    // Helper method to get category from productNumber
+    // 상품 번호로 카테고리 조회
     private String getCategory(int productNumber) {
-        return ar.findById((long) productNumber) // convert int to Long
+        return ar.findById((long) productNumber) 
                  .map(item -> item.getCategory())
                  .orElse("기타");
     }
 
-    // Helper method to format the Date to yyyy-MM-dd
+    // 날짜를 "yyyy-MM-dd" 형식으로 변환하는 헬퍼 메서드
     private String formatDate(LocalDateTime orderDate) {
         if (orderDate == null) {
             return "";
@@ -248,7 +260,7 @@ public class ManagerSaleService {
             ));
     }
 
-    
+    // 주문 상태를 업데이트하는 메서드
     @Transactional
     public String updateSaleProcess(Long id, String newProcess) {
         if (newProcess == null || newProcess.isEmpty()) {

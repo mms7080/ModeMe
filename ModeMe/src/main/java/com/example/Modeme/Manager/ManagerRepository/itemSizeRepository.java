@@ -9,5 +9,5 @@ import com.example.Modeme.Manager.Entity.ItemSize;
 
 @Repository
 public interface itemSizeRepository extends JpaRepository<ItemSize, Long>{
-	 Optional<ItemSize> findById(Long id);
+	 Optional<ItemSize> findById(Long id); // 주어진 id로 ItemSize를 조회하여 반환
 }

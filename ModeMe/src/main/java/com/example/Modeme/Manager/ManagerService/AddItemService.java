@@ -51,8 +51,7 @@ public class AddItemService {
 	@Autowired
     private ProductImageRepository productImageRepository; 
 	
-//	@Autowired
-//	private ProductImageRepository pir;
+
 	@Transactional
 	public AddItem addItemWithImages(AddItemDTO addItemDTO) {
 	    // AddItem 엔티티 생성 및 기본 필드 설정

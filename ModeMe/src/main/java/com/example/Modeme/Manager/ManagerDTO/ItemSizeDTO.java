@@ -8,7 +8,7 @@ public class ItemSizeDTO {
     private Long id;  // ItemSize 엔티티의 ID
     private List<ItemSize> itemSize;  // 사이즈 정보
 
-    // Getter and Setter methods
+    // Getter  Setter 메서드
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
