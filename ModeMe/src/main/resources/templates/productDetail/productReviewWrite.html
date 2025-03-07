@@ -82,7 +82,7 @@
 				<button type="submit" class="upload-button">등록</button>
 				<!-- 취소 버튼 -->
 				<button type="button"
-					onclick="location.href='/productDetail/productDetail/{id}'">취소</button>
+					th:onclick="|location.href='/productDetail/productDetail/${product.id}'|">취소</button>
 			</div>
 		</form>
 	</div>
