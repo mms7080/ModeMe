@@ -12,7 +12,8 @@ document.addEventListener("DOMContentLoaded", function () {
             if (checkbox.checked) {
                 let productId = row.getAttribute("data-product-id");
                 let productName = row.querySelector("td:nth-child(3)").innerText;
-                let price = parseInt(row.querySelector("td:nth-child(4)").innerText.replace("KRW ", "").replace(",", ""));
+                let price2 = row.querySelector("td:nth-child(4)").innerText.replace("KRW ", "").replace(/,/g, "")
+				let price = price2.replace("원", "");
                 let quantity = parseInt(row.querySelector("td:nth-child(7) input").value);
                 let imageSrc = row.querySelector("td:nth-child(2) img").getAttribute("src"); // 이미지 경로 가져오기
 
@@ -97,7 +98,8 @@ document.addEventListener("DOMContentLoaded", function () {
         let totalAmount = 0;
         document.querySelectorAll(".product-table tbody tr").forEach(row => {
             const quantityInput = row.querySelector("input[type='number']");
-            const priceText = row.querySelector("td:nth-child(4)").innerText.replace("KRW ", "").replace(",", "");
+            // 가격에서 'KRW '를 제거하고, 쉼표도 제거해서 숫자로 변환
+            const priceText = row.querySelector("td:nth-child(4)").innerText.replace("KRW ", "").replace(/,/g, "");
             const totalCell = row.querySelector("td:nth-child(9)");
 
             const quantity = parseInt(quantityInput.value, 10);
@@ -124,6 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     updateTotal(); // 초기 실행
 });
+
 
 
 // 전체 선택, 해제
@@ -202,6 +205,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
 
 document.addEventListener("DOMContentLoaded", function () {
     $(".button-group-vertical .wishlist-btn").on("click", function () {
