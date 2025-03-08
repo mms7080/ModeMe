@@ -142,7 +142,6 @@ public class ManagerContorller {
         return "redirect:/productDetail/productDetail/" + savedItem.getId();
     }
 
-    // 상품 목록 페이지
     @GetMapping("/manager/managerProduct")
     public String getProductList(
         @RequestParam(defaultValue = "0") int page,
@@ -153,9 +152,9 @@ public class ManagerContorller {
     ) {
         if (principal != null) {
             String username = principal.getName();
-            model.addAttribute("username", username);	// 모델에 사용자명 추가
+            model.addAttribute("username", username); // 모델에 사용자명 추가
         }
-        
+
         // keyword가 null인 경우 빈 문자열로 설정
         if (keyword == null) {
             keyword = "";
@@ -174,11 +173,17 @@ public class ManagerContorller {
         List<AddItem> products = productPage.getContent();
         int totalPages = productPage.getTotalPages();
 
-        // 각 상품의 첫 번째 이미지 URL을 가져오기
+        // 최신 이미지 URL 적용
         List<String> firstImageUrls = new ArrayList<>();
         for (AddItem product : products) {
-            String firstImageUrl = as.getFirstImageUrl(product.getId());
-            firstImageUrls.add(firstImageUrl);
+            // 최신 이미지 목록 조회
+            List<String> latestImages = as.getLatestImageUrls(product.getId());
+
+            // 최신 이미지 설정
+            product.setImageUrls(latestImages);
+
+            // 첫 번째 이미지 URL 저장
+            firstImageUrls.add(latestImages.isEmpty() ? null : latestImages.get(0));
         }
 
         // 모델에 데이터를 추가

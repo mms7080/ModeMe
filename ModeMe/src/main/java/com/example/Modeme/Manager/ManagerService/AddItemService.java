@@ -3,6 +3,7 @@ package com.example.Modeme.Manager.ManagerService;
 import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -172,7 +173,17 @@ public class AddItemService {
         }
         return null;  // 이미지가 없으면 null 반환
     }
+    
+ // 최신 이미지 URL을 가져오는 메서드
+    public List<String> getLatestImageUrls(Long productId) {
+        return productImageRepository.findByAddItemId(productId)
+                                     .stream()
+                                     .map(ProductImage::getImageUrl)
+                                     .collect(Collectors.toList());
+    }
 }
+
+
 
 		
 
