@@ -81,6 +81,14 @@ h1 {
 	color: #333;
 }
 
+.product-price {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+
 .review-form {
 	margin-left: 10%;
 	margin-right: 10%;
