@@ -19,6 +19,7 @@ import com.example.Modeme.Manager.Entity.AddItem;
 import com.example.Modeme.Manager.Entity.ItemColor;
 import com.example.Modeme.Manager.Entity.ItemColorName;
 import com.example.Modeme.Manager.Entity.ItemSize;
+import com.example.Modeme.Manager.Entity.ProductImage;
 import com.example.Modeme.Manager.ManagerDTO.ProductSaleDTO;
 import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
 import com.example.Modeme.Manager.ManagerRepository.ProductImageRepository;
@@ -53,34 +54,28 @@ public class ManagerSaleService {
     @Autowired
     private itemSizeRepository isr;
     
-    // 기본 판매 목록 조회 (내림차순 정렬)
+ // 기본 판매 목록 조회 (내림차순 정렬)
     public Page<ProductSaleDTO> getSaleData(Pageable pageable, String newProcess, String searchOption, String keyword) {
         Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Order.desc("orderDate")));
         Page<Purchase> purchases;
         
         // 검색 옵션에 따라 주문 데이터를 필터링
         if ("process".equals(searchOption) && keyword != null) {
-        	// 주문 상태로 검색
             String internalProcessStatus = mapKoreanToProcess(keyword);
             purchases = pr.findByProcess(internalProcessStatus, sortedPageable);
         } else if ("orderInfo".equals(searchOption) && keyword != null) {
-        	// 상품 이름으로 검색
             purchases = pr.findByItemnameContaining(keyword, sortedPageable);
         } else if ("orderId".equals(searchOption) && keyword != null) {
-        	// 유저 아이디로 검색
             purchases = pr.findByUsernameContaining(keyword, sortedPageable);
         } else {
-        	// 모든 주문 데이터를 가져옴
             purchases = pr.findAll(sortedPageable);
         }
-        
+
         // 데이터 변환: DTO로 변환하여 반환
         return purchases.map(purchase -> {
-        	 // 주문 상태가 없으면 기본값으로 설정
             if (purchase.getProcess() == null || purchase.getProcess().isEmpty()) {
                 purchase.setProcess("before");
                 pr.save(purchase);
-             // 새로운 상태로 변경
             } else if (newProcess != null && !newProcess.isEmpty()) {
                 purchase.setProcess(newProcess);
                 pr.save(purchase);
@@ -96,9 +91,11 @@ public class ManagerSaleService {
                             .map(User::getName)
                             .orElse("Unknown User");
 
-            // ✅ 첫 번째 상품 이미지 URL 조회
-            String firstImageUrl = pir.findFirstImageByProductId((long) purchase.getProductNumber())
-                                      .stream().findFirst().orElse("defaultImageUrl");
+            // ✅ 최신 이미지 목록 조회
+            List<String> latestImages = getLatestImageUrls((long) purchase.getProductNumber());
+
+            // ✅ 첫 번째 이미지 URL 설정
+            String firstImageUrl = latestImages.isEmpty() ? "defaultImageUrl" : latestImages.get(0);
 
             // ✅ 색상명 조회
             String colorName = getColorNameById(purchase.getColorId());
@@ -120,12 +117,13 @@ public class ManagerSaleService {
                 purchase.getUsername(),
                 name,
                 purchase.getProcess(),
-                firstImageUrl,
+                firstImageUrl,  // 최신 이미지 적용
                 colorName,
                 sizeName
             );
         });
     }
+
     
     // 색상 ID로 색상 이름 조회
     private String getColorNameById(String colorId) {
@@ -283,6 +281,12 @@ public class ManagerSaleService {
             .orElseThrow(() -> new IllegalArgumentException("해당 주문을 찾을 수 없습니다."));
     }
 
-   
+    // 최신 이미지 URL을 가져오는 메서드
+    public List<String> getLatestImageUrls(Long productId) {
+        return pir.findByAddItemId(productId)
+                  .stream()
+                  .map(ProductImage::getImageUrl)
+                  .collect(Collectors.toList());
+    }
 }
 
