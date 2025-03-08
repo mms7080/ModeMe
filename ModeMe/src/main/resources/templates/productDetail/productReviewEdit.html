@@ -27,7 +27,8 @@
 			<!-- 상품 정보 -->
 			<div class="product-info">
 				<h4 th:text="${product?.name ?: '상품 이름 없음'}">상품 이름</h4>
-				<p th:text="'₩' + ${product?.price ?: 0}">상품 가격</p>
+				<p th:if="${product != null and product.price != null}" th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')} + '원'"></p>
+				<p th:if="${product == null or product.price == null}">0원</p>
 				<a th:href="@{/productDetail/productDetail/{id}(id=${product?.id})}">
 					<button type="button">상품 상세보기</button>
 				</a>
