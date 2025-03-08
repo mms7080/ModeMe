@@ -16,27 +16,28 @@
 		<h1>🛒 주문 관리</h1>
 
 		<div class="dashboardHeader">
-			<div class="infoBox">
+			<div class="infoBox status-filter" data-status="before">
 				<h3>⏰ 입금 전</h3>
 				<p
 					th:text="${#strings.isEmpty(orderCountByProcess['before']) ? 0 : orderCountByProcess['before']}+'건'">0건</p>
 			</div>
-			<div class="infoBox">
+			<div class="infoBox status-filter" data-status="ready">
 				<h3>📦 배송준비 중</h3>
 				<p
 					th:text="${#strings.isEmpty(orderCountByProcess['ready']) ? 0 : orderCountByProcess['ready']}+'건'">0건</p>
 			</div>
-			<div class="infoBox">
+			<div class="infoBox status-filter" data-status="delivery">
 				<h3>🚛 배송 중</h3>
 				<p
 					th:text="${#strings.isEmpty(orderCountByProcess['delivery']) ? 0 : orderCountByProcess['delivery']}+'건'">0건</p>
 			</div>
-			<div class="infoBox">
+			<div class="infoBox status-filter" data-status="done">
 				<h3>✅ 배송완료</h3>
 				<p
 					th:text="${#strings.isEmpty(orderCountByProcess['done']) ? 0 : orderCountByProcess['done']}+'건'">0건</p>
 			</div>
 		</div>
+
 
 		<!-- 매출 차트 (월별 및 카테고리별) -->
 		<div class="chart-section">
