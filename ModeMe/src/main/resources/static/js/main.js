@@ -120,3 +120,32 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".product-card").forEach(product => {
+        let images = [];
+        let currentIndex = 0;
+        const productImage = product.querySelector(".product-image");
+        
+        // product-card 내에 숨겨진 input을 통해 상품 ID 가져오기
+        const productId = product.querySelector("input[type='hidden']").value;
+
+        // Ajax 요청을 통해 해당 상품의 이미지 리스트 가져오기
+        $.ajax({
+            type: "GET",
+            url: `/productDetail/getImages/${productId}`,  // 서버에서 이미지 리스트 반환하는 API 필요
+            success: function (response) {
+                if (response.length > 1) {
+                    images = response; // 이미지 리스트 저장
+                    setInterval(() => {
+                        currentIndex = (currentIndex + 1) % images.length;
+                        productImage.src = images[currentIndex] + "?t=" + new Date().getTime(); // 이미지 변경
+                    }, 2000); // 2초마다 변경
+                }
+            },
+            error: function (error) {
+                console.error("이미지 변경 오류:", error);
+            }
+        });
+    });
+});
+

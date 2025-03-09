@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.Modeme.Config.CustomUserDetails;
 import com.example.Modeme.Manager.Entity.AddItem;
@@ -212,5 +214,19 @@ public class ViewController {
 	public String manageReview() {
 		return "/manager/managerReview";
 	}
+	//메인 이미지최신화
+	@GetMapping("/productDetail/getImages/{productId}")
+	@ResponseBody
+	public List<String> getProductImages(@PathVariable Long productId) {
+	    Optional<AddItem> product = air.findById(productId);
+	    if (product.isPresent()) {
+	        return productImageRepository.findByAddItemId(productId)
+	                                     .stream()
+	                                     .map(ProductImage::getImageUrl)
+	                                     .collect(Collectors.toList());
+	    }
+	    return new ArrayList<>(); // 상품이 없으면 빈 리스트 반환
+	}
+
 
 }
