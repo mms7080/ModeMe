@@ -83,5 +83,23 @@
 
 	<!-- 푸터 -->
 	<div th:replace="~{footer :: footer}"></div>
+	
+	<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const deleteButtons = document.querySelectorAll(".delete-post-button, .delete-button");
+
+    deleteButtons.forEach(button => {
+        button.addEventListener("click", function(event) {
+            event.preventDefault(); // 기본 제출 방지
+            const confirmation = confirm("정말로 삭제하시겠습니까?");
+            
+            if (confirmation) {
+                this.closest("form").submit(); // 확인 시 폼 제출
+            }
+        });
+    });
+});
+</script>
+	
 </body>
 </html>
