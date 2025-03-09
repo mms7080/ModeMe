@@ -222,8 +222,6 @@ document.querySelectorAll(".view-images-link").forEach(link => {
                     data.imageUrls.forEach(url => {
                         const img = document.createElement("img");
                         img.src = url;
-                        img.style.maxWidth = "200px";
-                        img.style.margin = "5px";
                         modalImagesContainer.appendChild(img);
                     });
                 }
@@ -260,6 +258,8 @@ function openReviewModal(reviewId) {
             }
             
             document.getElementById("reviewModal").style.display = "block";
+			
+			
         })
         .catch(error => {
             console.error("리뷰 상세 데이터 로드 중 오류:", error);
