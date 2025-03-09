@@ -51,6 +51,20 @@ h1 {
 	 box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 테이블 그림자 효과 */
 }
 
+/* ✅ 상품 개수 입력란 (수량) 텍스트를 가운데 정렬 */
+.wishlist_quantity {
+    text-align: center;  /* ✅ 텍스트 중앙 정렬 */
+    width: 50px;  /* ✅ 입력 필드 크기 조정 */
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 100px;  /* ✅ 가로 길이 늘리기 */
+}
+
+
+
+
 .wishlistcontent{
 	display: grid;
 	grid-template-columns: repeat(5,1fr);
@@ -88,15 +102,24 @@ h1 {
 	    width: 45%;
 }
 
-.wishlist_delete, .wishlist_cart {
-    background-color: transparent;
-    border: 1px solid grey;
+/*  장바구니 담기 & 삭제 버튼 디자인 통일 */
+.wishlist_cart, .wishlist_delete {
+    text-align: center;  
+    padding: 5px;
+    border: 1px solid #ccc; 
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100px;  /* ✅ 가로 길이 늘리기 */
 }
 
-.wishlist_delete:hover, .wishlist_cart:hover {
-    background-color: #f0f0f0;
+/*  버튼 hover 효과 */
+.wishlist_cart:hover, .wishlist_delete:hover {
+    background-color: #f0f0f0; 
 }
+
 
 .wishlistcontent span, .address_time span {
     text-align: center;

@@ -127,11 +127,23 @@ h1 {
 	justify-items: center;
 	align-items: center;
 	    padding: 5px;
+	    
 }
 
 .ordercontent span {
 		    color:#333;
 }
+/* 상품정보 링크 밑줄 제거 */
+.ordercontent a {
+    text-decoration: none; /* ✅ 밑줄 제거 */
+    color: inherit; /* ✅ 기존 텍스트 색상 유지 */
+}
+
+.ordercontent a:hover {
+    text-decoration: none; /* ✅ 호버 시에도 밑줄 제거 */
+    color: #0078d4; /* ✅ 마우스를 올렸을 때 색상을 살짝 강조 (선택 사항) */
+}
+
 
 .online {
 	border-top: 1px solid lightgrey;
