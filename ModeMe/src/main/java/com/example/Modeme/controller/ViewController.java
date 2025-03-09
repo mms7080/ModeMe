@@ -20,7 +20,9 @@ import com.example.Modeme.Manager.Entity.AddItem;
 import com.example.Modeme.Manager.Entity.ProductImage;
 import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
 import com.example.Modeme.Manager.ManagerRepository.ProductImageRepository;
+import com.example.Modeme.Mypage.MypageEntity.Mileage;
 import com.example.Modeme.Mypage.MypageEntity.Wishlist;
+import com.example.Modeme.Mypage.MypageRepository.MileageRepository;
 import com.example.Modeme.Mypage.MypageRepository.WishlistRepository;
 import com.example.Modeme.User.UserDTO.Headerlogin;
 import com.example.Modeme.User.UserEntity.User;
@@ -52,6 +54,9 @@ public class ViewController {
 	
 	@Autowired
 	private WishlistRepository wishr;
+	
+	@Autowired
+	private MileageRepository mr;
 	
 	 @Autowired
 	private ProductImageRepository productImageRepository;
@@ -106,6 +111,15 @@ public class ViewController {
 	            }
 	        }
 	    }
+	    
+	    for (AddItem item : itemList) {
+	        List<String> latestImages = productImageRepository.findByAddItemId(item.getId())
+	                                         .stream()
+	                                         .map(ProductImage::getImageUrl)
+	                                         .collect(Collectors.toList());
+	        item.setImageUrls(latestImages);  // 최신 이미지 적용
+	    }
+	    List<Mileage> mList = mr.findByUserid(u.getUsername());
 
 	    model.addAttribute("sList", sList);
 	    model.addAttribute("itemList", itemList);

@@ -272,7 +272,7 @@ public class PurchaseController {
 	        @RequestParam("colorIds") String colorIds,
 	        @RequestParam("sizeIds") String sizeIds,
 	        @RequestParam("imageUrls") String imageUrls,
-	        @RequestParam(value="discount", required=false, defaultValue="0") int discount,
+	        @RequestParam(name="discount", required=false, defaultValue="0") int discount,
 	        Principal prin) {
 	    
 	    // Principal 객체 확인
@@ -280,8 +280,6 @@ public class PurchaseController {
 	        return "error: 인증되지 않은 사용자";
 	    }
 
-	    System.out.println("사용자 정보: " + prin.getName());
-	    System.out.println("받은 데이터 확인: " + aIds + ", " + itemnames + ", " + quantities);
 
 	    User u = ur.findByUsername(prin.getName())
 	               .orElseThrow(() -> new RuntimeException("사용자 없음"));
@@ -320,7 +318,12 @@ public class PurchaseController {
 	            p.setAddressDetail(addrDetail);
 	            p.setItemname(itemNamesArray[i].trim());
 	            p.setUsername(userid);
-	            p.setTotalPrice(itemPrice * quantity);
+	            if(i==0) {
+	            	p.setTotalPrice(itemPrice * quantity - discount);
+	            	mileser.saveUsedMileage(u.getUsername(), discount);
+	            } else {
+	            	p.setTotalPrice(itemPrice * quantity);
+	            }
 	            p.setProcess(paymentStatus);
 	            p.setColorId(colorId);
 	            p.setSizeId(sizeId);
@@ -328,7 +331,10 @@ public class PurchaseController {
 	            p.setImageUrl(imageUrl);
 
 	            pr.save(p);
-
+	            
+	            
+	            
+	            
 	            scr.deleteByUserIdAndProductId((long) uId, (long) productId);
 	        }
 	    } catch (Exception e) {

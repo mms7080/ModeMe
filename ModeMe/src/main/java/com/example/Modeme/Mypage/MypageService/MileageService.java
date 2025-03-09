@@ -1,7 +1,7 @@
 package com.example.Modeme.Mypage.MypageService;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,5 +64,13 @@ public class MileageService {
                 .sum();
     }
 
-    
+    public Mileage saveUsedMileage(String userid, int usedMileage) {
+    	Mileage mileage = new Mileage();
+    	mileage.setUserid(userid);
+        mileage.setUsedMileage(usedMileage);
+        mileage.setMileage(0); // 마일리지 적립금은 0으로 설정
+        mileage.setCreateAt(LocalDateTime.now()); // 현재 시간 저장
+
+        return milerep.save(mileage);
+    }
 }

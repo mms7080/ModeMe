@@ -47,6 +47,31 @@ function openDaumPostcode() {
 	}).open();
 }
 
+// 배송지 버튼
+document.addEventListener("DOMContentLoaded", function () {
+    const defaultAddressRadio = document.getElementById("defaultAddress");
+    const newAddressRadio = document.getElementById("newAddress");
+    const defaultAddressFields = document.getElementById("defaultAddressFields");
+    const newAddressFields = document.getElementById("newAddressFields");
+
+    // ✅ 기본 배송지 선택 시
+    defaultAddressRadio.addEventListener("change", function () {
+        if (this.checked) {
+            defaultAddressFields.style.display = "block";
+            newAddressFields.style.display = "none";
+        }
+    });
+
+    // ✅ 다른 배송지 선택 시
+    newAddressRadio.addEventListener("change", function () {
+        if (this.checked) {
+            defaultAddressFields.style.display = "none";
+            newAddressFields.style.display = "block";
+        }
+    });
+});
+
+
 
 // 결제 금액 변경
 document.addEventListener("DOMContentLoaded", function () {
@@ -131,6 +156,7 @@ document.getElementById("payButton").addEventListener("click", function () {
     const finalPrice = parseInt(finalPriceText.replace(/₩|,/g, ""), 10);
 	const discount = document.getElementById("use-points").value;
 	
+	
     const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let merchantUid = 'TD';
     for (let i = 0; i < 8; i++) {
@@ -142,7 +168,9 @@ document.getElementById("payButton").addEventListener("click", function () {
     let itemNameList = items.map(i => i.productName.trim()).join(",");
 
     if (paymentMethod === "bank-transfer") {
-
+		
+		console.log(merchantUid)
+		
 	    let aIdList = items.map(i => i.productId).join(",");
 	    let itemNameList = items.map(i => i.productName.trim()).join(",");
 	    let colorIdList = items.map(i => i.colorId).join(",");   // ✅ 색상 ID 추가
@@ -384,31 +412,6 @@ document.getElementById("tosspay").addEventListener("click", function() {
 	    });
 	});
 
-document.getElementById("use-points").addEventListener("input", function() {
-    const usedMileage = document.getElementById("use-points").value; // 사용자가 입력한 마일리지 값
-//    console.log("사용할 마일리지: " + usedMileage); // 콘솔에서 확인
-
-		const discount = document.getElementById("discount-amount");
-		discount.innerText = "-₩" + usedMileage
-		
-    // 입력값이 비어있지 않으면 요청을 보냄
-    if (usedMileage !== "") {
-        $.ajax({
-            type: "get",  // HTTP 메서드
-            url: "/mileage",  // 요청 URL
-            data: { usedMileage: usedMileage },  // 전송할 데이터
-            success: (rsp) => {
-                if (rsp == 'success') {
-                    alert('적립 사용 됨');
-                    location.href = "/mileage";
-                }
-            },
-            error: (rsp) => {
-                console.log(rsp);
-            }
-        });
-    }
-});
 
 
 
