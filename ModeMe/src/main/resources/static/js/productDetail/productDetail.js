@@ -392,3 +392,30 @@ document.addEventListener("DOMContentLoaded", function() {
 		});
 	})
 })
+
+document.addEventListener("DOMContentLoaded", function() {
+    const quickBarLinks = document.querySelectorAll(".quickBar li a");
+    
+    function updateActiveTab() {
+        const currentHash = window.location.hash || "#prdBuy"; // 기본값은 상품구매
+        quickBarLinks.forEach(link => {
+            const parentLi = link.parentElement;
+            if (link.getAttribute("href") === currentHash) {
+                parentLi.classList.add("selected"); // 현재 페이지의 탭 강조
+            } else {
+                parentLi.classList.remove("selected");
+            }
+        });
+    }
+
+    // 페이지 로드 시 강조 적용
+    updateActiveTab();
+
+    // 사용자가 클릭 시 강조 적용
+    quickBarLinks.forEach(link => {
+        link.addEventListener("click", function() {
+            setTimeout(updateActiveTab, 10); // 짧은 딜레이 후 적용
+        });
+    });
+});
+

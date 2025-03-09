@@ -76,24 +76,64 @@ body {
 }
 
 .quickBar {
-	display: flex;
-	justify-content: center;
-	list-style: none;
-	margin: 20px 0;
-	gap: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    gap: 20px; /* 항목 간 간격 조정 */
+}
+
+.quickBar li {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.quickBar li {
+    position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .quickBar a {
-	text-decoration: none;
-	color: black;
-	font-size: 16px;
+    text-decoration: none;
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 5px 10px;
+    transition: color 0.3s ease-in-out;
 }
 
-.quickBar a:hover {
-	text-decoration: none;
-	color: #333;
-	font-size: 16px;
+/* 선택된 탭 강조 */
+.quickBar .selected a {
+    font-weight: bold;
+    color: #000;
+    border-bottom: 2px solid #000; /* 선택된 탭 밑줄 */
 }
+
+
+/* 구분선 스타일 */
+.quickBar li:not(:last-child)::after {
+    content: "|";
+    color: #bbb;
+    margin-left: 10px;
+    font-size: 14px;
+}
+
+/* 숫자 박스 스타일 */
+.quickBar .reviewcount {
+    display: inline-block;
+    background-color: #666;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 4px;
+}
+
 
 .product-section {
 	display: flex;

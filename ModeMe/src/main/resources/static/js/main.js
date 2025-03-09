@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
-
+//메인이미지 2초마다 변경
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".product-card").forEach(product => {
         let images = [];
