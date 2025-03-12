@@ -40,3 +40,15 @@ function loadPage(page) {
 if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_RELOAD) {
     window.location.href = "/wishlist";  // 새로고침 후 /order로 리디렉션
 }
+
+// 알림을 띄우는 함수
+        function showAlert(message) {
+            if (message) {
+                alert(message);  // 메시지가 존재하면 알림창 띄우기
+            }
+        }
+
+        window.onload = function() {
+            var message = /*[[${message}]]*/ '';  // Thymeleaf에서 전달된 메시지
+            showAlert(message);  // showAlert 함수 호출
+        };
