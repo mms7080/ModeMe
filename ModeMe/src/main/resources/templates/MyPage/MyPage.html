@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MyPage</title>
 <link rel="stylesheet" href="/css/MyPage/MyPage.css">
-<script defer src="/js/MyPage/mypage.js"></script>
+<!-- <script defer src="/js/MyPage/mypage.js"></script> -->
 
 </head>
 <body>
@@ -14,9 +14,9 @@
 	<div th:replace="~{header :: header}"></div>
 
 	<h1>MyPage</h1>
-	<main>
+	<main id="my-page">
 		<!-- 마이페이지 회색 박스 -->
-		<div class="MypageHeader">
+		<div class="MypageHeader" id="mileage-info">
 		<div class="firstbox" >
 				<div class="firstboxcol">
 				<span>총적립금</span> 
@@ -124,7 +124,6 @@
 				</a>
 			</div>
 		</div>
-
 	</main>
 	
 	<!-- 푸터 -->

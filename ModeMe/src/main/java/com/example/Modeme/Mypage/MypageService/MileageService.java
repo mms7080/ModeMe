@@ -2,11 +2,13 @@ package com.example.Modeme.Mypage.MypageService;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.Modeme.Mypage.MypageEntity.Mileage;
+import com.example.Modeme.Mypage.MypageEntity.Wishlist;
 import com.example.Modeme.Mypage.MypageRepository.MileageRepository;
 import com.example.Modeme.purchase.dao.PurchaseRepository;
 import com.example.Modeme.purchase.dto.Purchase;
@@ -25,16 +27,16 @@ public class MileageService {
 	
     // 결제와 동시에 마일리지 테이블에 입력
     public void saveMileage(String userid, int usedMileage) {
-    	 System.out.println("saveMileage 호출됨");  // 로그 추가
         // 사용자의 주문 목록을 가져옵니다.
         List<Purchase> purchaseList = purrep.findByUsername(userid);
+      
         
         for (Purchase pur : purchaseList) {
             // 마일리지가 이미 존재하면 생성을 건너뛰고, 없다면 새로 생성
         	List<Mileage> existingMileages = milerep.findByOrdernum(pur.getId().toString());
 
         	// 마일리지가 없는 경우에만 저장
-        	if (existingMileages.isEmpty()) {
+        	 if (existingMileages.isEmpty()) {
         	    Mileage mile = new Mileage();
         	    mile.setUserid(pur.getUsername());
         	    mile.setCreateAt(pur.getOrderDate());
@@ -43,10 +45,23 @@ public class MileageService {
         	    mile.setContent("주문 적립금");
         	    mile.setUsedMileage(usedMileage);
         	    milerep.save(mile);
-        	}
+        	} 
 
         }
     }
+    
+    public void deleteMileage(String userid, int usedMileage) {
+        // ordernum이 null인 마일리지 목록 조회
+        List<Mileage> milesWithNullOrderNum = milerep.findByOrdernumIsNull();
+        
+        if (milesWithNullOrderNum != null && !milesWithNullOrderNum.isEmpty()) {
+            for (Mileage mile : milesWithNullOrderNum) {
+                milerep.delete(mile);  // 삭제
+            }
+        }
+    }
+
+
 	
     // 총 적립금
     public int getTotalMileage(String userid) {

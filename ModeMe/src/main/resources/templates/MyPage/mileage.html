@@ -63,22 +63,29 @@
 		</div>
 		
 <div class="pagination">
-    <!-- 이전 버튼 -->
+    <!-- 이전 그룹 버튼 -->
+    <button th:if="${startPage > 1}"
+            th:onclick="'location.href=\'?page=' + (${startPage - 1}) + '\';'">&lt;&lt;</button>
+
+    <!-- 이전 페이지 버튼 -->
     <button th:if="${currentPage > 1}"
-            th:onclick="'location.href=\'?page=' + (${currentPage} - 1) + '\';'"
-            th:classappend="${currentPage == 1} ? 'disabled' : ''">&lt;</button>
+            th:onclick="'location.href=\'?page=' + (${currentPage - 1}) + '\';'">&lt;</button>
 
-    <!-- 페이지 번호 -->
-    <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-          th:classappend="${i + 1 == currentPage} ? 'active' : ''"
-          th:onclick="'location.href=\'?page=' + (${i + 1}) + '\';'"
-          th:text="${i + 1}"></span>
+    <!-- 페이지 번호 (10개씩 표시) -->
+    <span th:each="i : ${#numbers.sequence(startPage, endPage)}"
+          th:classappend="${i == currentPage} ? 'active' : ''"
+          th:onclick="'location.href=\'?page=' + (${i}) + '\';'"
+          th:text="${i}"></span>
 
-    <!-- 다음 버튼 -->
+    <!-- 다음 페이지 버튼 -->
     <button th:if="${currentPage < totalPages}"
-            th:onclick="'location.href=\'?page=' + (${currentPage} + 1) + '\';'"
-            th:classappend="${currentPage == totalPages} ? 'disabled' : ''">&gt;</button>
+            th:onclick="'location.href=\'?page=' + (${currentPage + 1}) + '\';'">&gt;</button>
+
+    <!-- 다음 그룹 버튼 -->
+    <button th:if="${endPage < totalPages}"
+            th:onclick="'location.href=\'?page=' + (${endPage + 1}) + '\';'">&gt;&gt;</button>
 </div>
+
 
 
 		<div class="mileagefooter">

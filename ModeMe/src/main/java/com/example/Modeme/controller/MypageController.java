@@ -1,9 +1,9 @@
 	package com.example.Modeme.controller;
 	
 	import java.security.Principal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -145,6 +145,8 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 		        return "/MyPage/MyPage";
 		    }
 		    
+	
+		    
 		    @GetMapping("/order")
 		    public String Order(
 		        @AuthenticationPrincipal CustomUserDetails userDetails,
@@ -240,13 +242,14 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 			        Model model
 			) {
 			    String userid = userDetails.getUsername();
-			    System.out.println(userid);
+
 			   
 			    mileser.saveMileage(userid, usedMileage);
+			    mileser.deleteMileage(userid, usedMileage);
 			   
 		        // 주문 내역을 페이지로 조회
 			   
-			    List<Mileage> mileageList = milerep.findByUserid(userid);
+			    List<Mileage> mileageList = milerep.findByUseridOrderByCreateAtDesc(userid);
 			
 			    int start = (page - 1) * 5;
 			    int end = Math.min(start + 5, mileageList.size());
@@ -282,11 +285,15 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 			    model.addAttribute("totalPages", (int) Math.ceil((double) mileageList.size() / 5)); // 전체 페이지 수 계산
 
 			    // 시작 페이지, 끝 페이지 계산
-			    int startPage = (page - 1) / 5 * 5 + 1;
-			    int endPage = Math.min(startPage + 4, (int) Math.ceil((double) mileageList.size() / 5));
 
+			    int totalPages = (int) Math.ceil((double) mileageList.size() / 5);
+			    int startPage = ((page - 1) / 10) * 10 + 1; // 현재 페이지를 기준으로 10 단위 시작
+			    int endPage = Math.min(startPage + 9, totalPages); // 최대 10개까지만 표시
+
+			    model.addAttribute("totalPages", totalPages);
 			    model.addAttribute("startPage", startPage);
 			    model.addAttribute("endPage", endPage);
+
 		        
 			    
 			    //주문내역 생성과 동시에 마일리지 적립 -> 주문내역 먼저 생성 후 마일리지 작업

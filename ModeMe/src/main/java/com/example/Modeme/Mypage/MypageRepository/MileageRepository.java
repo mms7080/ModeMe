@@ -17,9 +17,12 @@ import com.example.Modeme.purchase.dto.Purchase;
 import jakarta.transaction.Transactional;
 
 @Repository
-public interface MileageRepository extends JpaRepository<Mileage, Long>{
-	List<Mileage> findByUserid(String userid);
+public interface MileageRepository extends JpaRepository<Mileage, Long> {
+    List<Mileage> findByUserid(String userid);
 
-	List<Mileage> findByOrdernum(String string);
-	
+    List<Mileage> findByOrdernum(String ordernum);
+
+    List<Mileage> findByUseridOrderByCreateAtDesc(String userid);
+    
+    List<Mileage> findByOrdernumIsNull();
 }
