@@ -54,20 +54,23 @@
                <span>주문처리상태</span>
             </div>
 
-           <!-- 주문 내역이 있을 경우 -->
+<!-- 주문 내역이 있을 경우 -->
 <div th:if="${orders != null && !orders.isEmpty()}">
     <div class="ordercontent online" th:each="content : ${orders}">
         <div class="center">
             <span th:text="${#temporals.format(content['order'].orderDate, 'yyyy-MM-dd')}"></span></br>
             <span th:text="${content['order'].id}"></span>
         </div>
-        <img th:src="@{${content['order'].imageUrl}}" alt="상품 이미지" class="order-image" />
+        <!-- 이미지가 있을 경우에만 표시 -->
+        <img th:if="${content['imageUrls'] != null and not #lists.isEmpty(content['imageUrls'])}"
+             th:src="@{${content['imageUrls'][0]}}" alt="상품 이미지" class="order-image" />
+
         <a th:href="@{/productDetail/productDetail/{id}(id=${content['order'].productNumber})}">
-    <span th:text="${content['order'].itemname}"></span>
-        <span th:if="${content['merchantUidCount'] != null and content['merchantUidCount'] > 0}" 
-      th:text="' 외 ' + ${content['merchantUidCount']} + '개'">
-</span>
-</a>
+            <span th:text="${content['order'].itemname}"></span>
+            <span th:if="${content['merchantUidCount'] != null and content['merchantUidCount'] > 0}" 
+                  th:text="' 외 ' + ${content['merchantUidCount']} + '개'">
+            </span>
+        </a>
         <span th:text="${content['order'].productMany}"></span> 
         <span th:text="${#numbers.formatInteger(content['order'].totalPrice, 0, 'COMMA').replace(',', '.')}"></span> 
         <span th:switch="${content['order'].process}"> 
@@ -79,6 +82,7 @@
         </span>
     </div>
 </div>
+
 
 <!-- 주문 내역이 없을 경우 -->
 <div th:unless="${orders != null && !orders.isEmpty()}" class="orderlist">

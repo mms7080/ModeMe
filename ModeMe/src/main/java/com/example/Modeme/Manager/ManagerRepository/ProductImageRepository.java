@@ -25,4 +25,7 @@ public interface ProductImageRepository extends JpaRepository<ProductImage, Long
     
     // 주어진 상품 ID에 해당하는 모든 ProductImage를 조회
     List<ProductImage> findByAddItemId(Long addItemId);
+    
+    List<ProductImage> findByAddItemId(int addItemid);
+    
 }

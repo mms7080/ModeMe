@@ -178,7 +178,9 @@ public class PurchaseController {
 
 	// 무통장입금을 선택했을 경우
 	@GetMapping("/bankTransfer")
-	public String bankTransfer(@RequestParam("merchantUid") String merchantUid, Principal prin, Model model) {
+	public String bankTransfer(@RequestParam("merchantUid") String merchantUid, Principal prin, Model model,
+			@AuthenticationPrincipal CustomUserDetails userDetails,
+	        @RequestParam(name = "usedMileage", defaultValue = "0") int usedMileage) {
 	    User u = ur.findByUsername(prin.getName()).get();
 
 	    // ✅ 같은 merchantUid를 가진 모든 주문 조회
@@ -216,6 +218,12 @@ public class PurchaseController {
 	    model.addAttribute("productSizes", productSizes); // ✅ 리스트로 변경하여 추가
 	    model.addAttribute("totalAmount", totalAmount);
 	    model.addAttribute("bankAccount", "신한은행 110-445-079289 예금주 : 모드미");
+	    
+	    String userid = userDetails.getUsername();
+
+		   
+	    mileser.saveMileage(userid, usedMileage);
+	    mileser.deleteMileage(userid, usedMileage);
 
 	    return "/purchase/guideBankAccount";
 	}
@@ -273,6 +281,8 @@ public class PurchaseController {
 	        @RequestParam("sizeIds") String sizeIds,
 	        @RequestParam("imageUrls") String imageUrls,
 	        @RequestParam(name="discount", required=false, defaultValue="0") int discount,
+	        @AuthenticationPrincipal CustomUserDetails userDetails,
+	        @RequestParam(name = "usedMileage", defaultValue = "0") int usedMileage,
 	        Principal prin) {
 	    
 	    // Principal 객체 확인
@@ -341,6 +351,12 @@ public class PurchaseController {
 	        e.printStackTrace(); // 실제 오류 로그 출력
 	        return "error: 저장 실패";
 	    }
+	    
+	    String userid2 = userDetails.getUsername();
+
+		   
+	    mileser.saveMileage(userid2, usedMileage);
+	    mileser.deleteMileage(userid2, usedMileage);
 
 	    return "success";
 	}
