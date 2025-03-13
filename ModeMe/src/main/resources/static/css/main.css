@@ -75,7 +75,6 @@ section {
 .product-card img {
     width: 100%;
     height: auto;
-    border-radius: 5px;
     transition: opacity 0.3s ease;
 }
 .product-card:hover img {
@@ -170,6 +169,5 @@ section {
     width: 200px;   /* 너비 고정 */
     height: 250px;  /* 높이 고정 */
     object-fit: cover; /* 비율 유지하며 채우기 */
-    border-radius: 10px; /* 둥근 모서리 추가 */
 }
 
