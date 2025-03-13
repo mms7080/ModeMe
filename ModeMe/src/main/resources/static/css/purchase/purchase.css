@@ -184,3 +184,19 @@ button:hover {
 	gap: 20px; /* 이미지 간 간격 */
 	margin-top: 20px; /* 위 내용과 간격 */
 }
+
+/* ✅ 배송지 선택 라디오 버튼 스타일 */
+.form-row input[type="radio"] {
+    margin-right: 5px;
+    flex: 0 0 auto;
+}
+
+.radio-group {
+	display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.form-row::after {
+	content: "";
+}

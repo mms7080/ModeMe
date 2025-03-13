@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +29,10 @@ import com.example.Modeme.Manager.ManagerRepository.AddItemRepository;
 import com.example.Modeme.Manager.ManagerRepository.ProductImageRepository;
 import com.example.Modeme.Manager.ManagerRepository.itemColorNameRepository;
 import com.example.Modeme.Manager.ManagerRepository.itemSizeRepository;
+import com.example.Modeme.Mypage.MypageEntity.Address;
 import com.example.Modeme.Mypage.MypageEntity.Mileage;
 import com.example.Modeme.Mypage.MypageRepository.MileageRepository;
+import com.example.Modeme.Mypage.MypageService.AddressService;
 import com.example.Modeme.Mypage.MypageService.MileageService;
 import com.example.Modeme.User.UserDTO.Headerlogin;
 import com.example.Modeme.User.UserEntity.User;
@@ -69,6 +72,9 @@ public class PurchaseController {
 	private MileageService mileser;
 	@Autowired
 	private MileageRepository milerep;
+	
+	@Autowired
+	private AddressService addrser;
 	
 	@Autowired
 	private ProductImageRepository productImageRepository;
@@ -233,7 +239,6 @@ public class PurchaseController {
 
 	
 	// ProductController 로 옮기면 좋음
-	// ProductController 로 옮기면 좋음
 	@GetMapping("/proList")
 	public String productList(
 	        @RequestParam(defaultValue="all") String category, Model model
@@ -281,8 +286,9 @@ public class PurchaseController {
 	        @RequestParam("sizeIds") String sizeIds,
 	        @RequestParam("imageUrls") String imageUrls,
 	        @RequestParam(name="discount", required=false, defaultValue="0") int discount,
-	        @AuthenticationPrincipal CustomUserDetails userDetails,
 	        @RequestParam(name = "usedMileage", defaultValue = "0") int usedMileage,
+	        @RequestParam(name = "postcode") String postcode,
+	        @AuthenticationPrincipal CustomUserDetails userDetails,
 	        Principal prin) {
 	    
 	    // Principal 객체 확인
@@ -295,7 +301,7 @@ public class PurchaseController {
 	               .orElseThrow(() -> new RuntimeException("사용자 없음"));
 	    String userid = u.getUsername();
 
-	    String paymentStatus = (impUid == null || impUid.isEmpty()) ? "before" : "ready";
+//	    String paymentStatus = (impUid == null || impUid.isEmpty()) ? "before" : "ready";
 
 	    // 문자열을 배열로 변환
 	    String[] itemNamesArray = itemnames.split(",");
@@ -305,6 +311,22 @@ public class PurchaseController {
 	    String[] colorIdArray = colorIds.split(",");
 	    String[] sizeIdArray = sizeIds.split(",");
 	    String[] imageUrlArray = imageUrls.split(",");
+	    
+	 // ✅ impUid가 null 또는 빈 값인지 확인
+	    boolean isImpUidEmpty = (impUid == null || impUid.isEmpty());
+
+	    // ✅ priceArray의 모든 값이 0인지 확인
+	    boolean isAllPriceZero = true;
+	    for (String price1 : priceArray) {
+	        if (!price1.trim().equals("0")) { // 0이 아닌 값이 하나라도 있으면 false
+	            isAllPriceZero = false;
+	            break;
+	        }
+	    }
+
+	    // ✅ 조건에 따라 paymentStatus 설정
+	    String paymentStatus = (isImpUidEmpty && isAllPriceZero) ? "ready" : "before";
+
 
 	    // 상품 정보 검증
 	    if (aIdArray.length == 0 || itemNamesArray.length == 0 || quantityArray.length == 0) {
@@ -328,21 +350,21 @@ public class PurchaseController {
 	            p.setAddressDetail(addrDetail);
 	            p.setItemname(itemNamesArray[i].trim());
 	            p.setUsername(userid);
-	            if(i==0) {
-	            	p.setTotalPrice(itemPrice * quantity - discount);
-	            	mileser.saveUsedMileage(u.getUsername(), discount);
-	            } else {
-	            	p.setTotalPrice(itemPrice * quantity);
-	            }
 	            p.setProcess(paymentStatus);
 	            p.setColorId(colorId);
 	            p.setSizeId(sizeId);
 	            p.setMerchantUid(merchantUid);
 	            p.setImageUrl(imageUrl);
 
+	            
 	            pr.save(p);
 	            
-	            
+	            if(i==0) { // 여러개 주문의 경우 첫 아이템, 할인은 
+	            	p.setTotalPrice(itemPrice * quantity - discount);
+	            	mileser.saveUsedMileage(u.getUsername(), discount, (pr.findTopByUsernameOrderByIdDesc(u.getUsername()).getId()));
+	            } else {
+	            	p.setTotalPrice(itemPrice * quantity);
+	            }
 	            
 	            
 	            scr.deleteByUserIdAndProductId((long) uId, (long) productId);
@@ -354,6 +376,8 @@ public class PurchaseController {
 	    
 	    String userid2 = userDetails.getUsername();
 
+	    boolean isSaved = addrser.saveAddressIfNotExists(u.getUsername(), address, u.getPhone(), 
+	    											postcode, address, addrDetail);
 		   
 	    mileser.saveMileage(userid2, usedMileage);
 	    mileser.deleteMileage(userid2, usedMileage);
@@ -362,6 +386,16 @@ public class PurchaseController {
 	}
 
 
+	@GetMapping("/getAdditionalAddresses")
+	@ResponseBody
+	public List<Address> getAdditionalAddresses(@AuthenticationPrincipal UserDetails userDetails) {
+        return addrser.getUserAddresses(userDetails);
+    }
 
+	@GetMapping("/getAddressById")
+	@ResponseBody
+	public Address getAddressById(@RequestParam Long id) {
+		return addrser.getAddressById(id);
+	}
 
 }

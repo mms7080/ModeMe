@@ -19,49 +19,88 @@
 
 			<!-- 배송지 섹션 -->
 			<div class="section">
-				<div class="section-title">배송지</div>
-				<div class="form-row">
-					<label>받는사람</label>
-					<input type="text" placeholder="이름" th:value="${user.name}">
-				</div>
-				<div class="form-row">
-					<label>주소</label>
-						<input name="postcode" id="sample6_postcode" type="text" placeholder="우편번호"
-						 style="flex: 0 0 120px; margin-right: 10px;" th:value="${user.postcode}">
-					<button type="button" id="addBtn" onclick="openDaumPostcode()">주소검색</button>
-				</div>
-				<div class="form-row">
-					<label></label>
-					<input name="address" id="sample6_address" type="text" placeholder="기본주소" th:value="${user.address}">
-					<input name="extraAddress" id="extraaddress" type="text" placeholder="참고항목">
-				</div>
-				<div class="form-row">
-					<label></label>
-					<input name="detailAddress" id="sample6_detailAddress" type="text" placeholder="상세주소" th:value="${user.addressDetail}">
-				</div>
-				<div class="form-row">
-					<label>휴대전화</label>
-					<select id="firstPhone" style="flex: 0 0 80px; margin-right: 10px;">
-						<option>010</option>
-						<option>011</option>
-						<option>016</option>
-					</select>
-					<input id="phoneNum" type="text" placeholder="12345678" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
-					<input type="hidden" name="phone" id="phoneNumber">
-				</div>
-				<div class="form-row">
-					<label>이메일</label>
-					<input id="email-username" type="text" placeholder="아이디" style="flex: 1; margin-right: 5px;">
-					<span>@</span>
-					<select id="email-domain" onchange="handleDomainChange()" style="flex: 1; margin-left: 5px;">
-						<option id="gmail" value="gmail.com">gmail.com</option>
-						<option id="naver" value="naver.com">naver.com</option>
-						<option id="daum" value="daum.net">daum.net</option>
-						<option id="else" value="custom">직접 입력</option>
-					</select>
-					<input id="custom-domain" type="text" placeholder="직접 입력" style="display: none; flex: 1; margin-left: 5px;">
-				</div>
+			    <div class="section-title">배송지</div>
+			
+			    <div class="form-row">
+			        <label>받는사람</label>
+			        <input type="text" id="receiverName" placeholder="이름" th:value="${user.name}">
+			    </div>
+			
+			    <div class="form-row">
+			        <label style="flex: 0 0 116px; text-align: left">주소</label>
+			        <div class="radio-group">
+				        <input type="radio" id="defaultAddress" name="addressType" checked> 기본 배송지
+				        <input type="radio" id="newAddress" name="addressType"> 다른 배송지 입력
+				    </div>
+			    </div>
+			
+			    <!-- ✅ 기본 배송지 필드 (초기 표시됨) -->
+			    <div id="defaultAddressFields">
+			        <div class="form-row">
+			        	<label></label>
+			            <input id="original-postcode" name="postcode" type="text" placeholder="우편번호"
+			                style="flex: 0 0 120px; margin-right: 10px;" th:value="${user.postcode}">
+			        </div>
+			        <div class="form-row">
+			            <label></label>
+			            <input id="original-address" name="address" type="text" placeholder="기본주소" th:value="${user.address}">
+			            <input name="extraAddress" type="text" placeholder="참고항목">
+			        </div>
+			        <div class="form-row">
+			            <label></label>
+			            <input id="original-addressDetail" name="detailAddress" type="text" placeholder="상세주소" th:value="${user.addressDetail}">
+			        </div>
+			    </div>
+			
+			    <!-- ✅ 다른 배송지 선택 시 표시될 필드 (초기 숨김) -->
+			    <div id="newAddressFields" style="display: none;">
+			        <div class="form-row">
+			            <label>추가 배송지 선택</label>
+			            <select id="addressSelect">
+			                <option value="">배송지를 선택하세요</option>
+			            </select>
+			        </div>
+			        <div class="form-row">
+			        	<label></label>
+			            <input name="postcode" id="sample6_postcode" type="text" placeholder="우편번호" readonly style="flex: 0 0 120px; margin-right: 10px;">
+			            <button type="button" id="addBtn" onclick="openDaumPostcode()">주소검색</button>
+			        </div>
+			        <div class="form-row">
+			            <label></label>
+			            <input name="address" id="sample6_address" type="text" placeholder="기본주소" readonly>
+			            <input name="extraAddress" id="extraaddress" type="text" placeholder="참고항목" readonly>
+			        </div>
+			        <div class="form-row">
+			            <label></label>
+			            <input name="detailAddress" id="sample6_detailAddress" type="text" placeholder="상세주소">
+			        </div>
+			    </div>
+			
+			    <div class="form-row">
+			        <label>휴대전화</label>
+			        <select id="firstPhone" style="flex: 0 0 80px; margin-right: 10px;">
+			            <option>010</option>
+			            <option>011</option>
+			            <option>016</option>
+			        </select>
+			        <input id="phoneNum" type="text" placeholder="12345678" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
+			        <input type="hidden" name="phone" id="phoneNumber">
+			    </div>
+			
+			    <div class="form-row">
+			        <label>이메일</label>
+			        <input id="email-username" type="text" placeholder="아이디" style="flex: 1; margin-right: 5px;">
+			        <span>@</span>
+			        <select id="email-domain" onchange="handleDomainChange()" style="flex: 1; margin-left: 5px;">
+			            <option id="gmail" value="gmail.com">gmail.com</option>
+			            <option id="naver" value="naver.com">naver.com</option>
+			            <option id="daum" value="daum.net">daum.net</option>
+			            <option id="else" value="custom">직접 입력</option>
+			        </select>
+			        <input id="custom-domain" type="text" placeholder="직접 입력" style="display: none; flex: 1; margin-left: 5px;">
+			    </div>
 			</div>
+
 
 			<!-- 주문상품 섹션 -->
 			<div class="section">

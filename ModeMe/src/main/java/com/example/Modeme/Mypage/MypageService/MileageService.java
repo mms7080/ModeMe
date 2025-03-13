@@ -79,12 +79,13 @@ public class MileageService {
                 .sum();
     }
 
-    public Mileage saveUsedMileage(String userid, int usedMileage) {
+    public Mileage saveUsedMileage(String userid, int usedMileage, Long ordernum) {
     	Mileage mileage = new Mileage();
     	mileage.setUserid(userid);
         mileage.setUsedMileage(usedMileage);
         mileage.setMileage(0); // 마일리지 적립금은 0으로 설정
         mileage.setCreateAt(LocalDateTime.now()); // 현재 시간 저장
+        mileage.setOrdernum(""+ordernum);
 
         return milerep.save(mileage);
     }
