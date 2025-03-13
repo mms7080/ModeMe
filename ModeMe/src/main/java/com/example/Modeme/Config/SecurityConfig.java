@@ -1,5 +1,7 @@
 package com.example.Modeme.Config;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,16 +13,18 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.List;
+import com.example.Modeme.User.UserService.CustomOAuth2UserService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
+    private final CustomOAuth2UserService oAuth2UserService;
 
-    public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
+    public SecurityConfig(CustomUserDetailsService customUserDetailsService, CustomOAuth2UserService oAuth2UserService) {
         this.customUserDetailsService = customUserDetailsService;
+        this.oAuth2UserService = oAuth2UserService;
     }
 
     @Bean
@@ -120,6 +124,13 @@ public class SecurityConfig {
                 .invalidateHttpSession(true) // 세션 무효화
                 .deleteCookies("JSESSIONID") // 쿠키 삭제
             )
+            .oauth2Login(oauth2 -> oauth2
+                    .loginPage("/signin")
+                    .defaultSuccessUrl("/", true)
+                    .userInfoEndpoint(userInfo -> userInfo
+                        .userService(oAuth2UserService)
+                    )
+                )
             .rememberMe(rm -> rm
                 .key("SecureRandomKeyForEncryption") // Remember-Me 토큰 암호화 키
                 .tokenValiditySeconds(3600 * 24 * 7) // Remember-Me 토큰 유효기간 (7일)
