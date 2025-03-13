@@ -7,36 +7,44 @@
 
 * {
     font-family: 'omyu_pretty';
+    box-sizing: border-box;
 }
 
-/* 페이지 전체 높이를 설정하고, Flexbox로 설정 */
+/* ✅ 페이지 전체 페이드인 효과 */
 body {
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* 전체 화면 높이를 채우기 위한 설정 */
+    min-height: 100vh;
+    opacity: 0;
+    animation: fadeIn 0.3s ease-in forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 main {
-    flex: 1; /* 본문 영역이 남은 공간을 차지하도록 설정 */
+    flex: 1;
 }
 
-/* 푸터 스타일 */
+/* ✅ 푸터 스타일 */
 .footer {
     background-color: #f9f9f9;
-    padding: 20px 50px;
+    padding: 30px 50px;
     border-top: 1px solid #ddd;
     font-size: 14px;
     color: #333;
     text-align: left;
-    width: 100%; /* 화면 전체 너비에 맞춤 */
-    position: relative; /* 스크롤 시 따라오지 않게 설정 */
-    bottom: 0; /* 페이지 하단에 위치 */
-    margin-top: auto; /* 본문 다음에 위치 */
+    width: 100%;
+    position: relative;
+    bottom: 0;
+    margin-top: auto;
 }
 
-/* 푸터 컨테이너 */
+/* ✅ 푸터 컨테이너 */
 .footer-container {
     display: flex;
     justify-content: space-between;
@@ -45,22 +53,55 @@ main {
     flex-wrap: wrap;
 }
 
-/* 푸터 섹션 스타일 */
+/* ✅ 푸터 섹션 스타일 */
 .footer-section {
     flex: 1;
     margin: 0 10px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeSlide 0.3s ease-out 0.3s forwards;
+}
+
+/* ✅ 푸터 내부 요소 개별적으로 나타나는 애니메이션 */
+@keyframes fadeSlide {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .footer-section h5 {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: bold;
-    margin-bottom: 10px;
-    color: #333;
+    margin-bottom: 12px;
+    color: #222;
+    position: relative;
 }
 
+/* ✅ 푸터 섹션 타이틀 밑줄 애니메이션 */
+.footer-section h5::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 40px;
+    height: 2px;
+    background-color: #000;
+    transition: width 0.3s ease-in-out;
+}
+
+.footer-section:hover h5::after {
+    width: 80px;
+}
+
+/* ✅ 푸터 텍스트 */
 .footer-section p,
 .footer-section li {
-    font-size: 12px;
+    font-size: 13px;
     margin: 5px 0;
     color: #555;
 }
@@ -74,21 +115,23 @@ main {
     text-decoration: none;
     color: #555;
     font-size: 12px;
+    transition: color 0.3s ease-in-out;
 }
 
 .footer-section ul li a:hover {
     text-decoration: underline;
+    color: #222;
 }
 
-/* 전화번호 강조 */
+/* ✅ 전화번호 강조 */
 .phone-number {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
     color: #000;
     margin-bottom: 10px;
 }
 
-/* 버튼 스타일 */
+/* ✅ 버튼 스타일 */
 .buttons {
     display: flex;
     gap: 10px;
@@ -98,20 +141,23 @@ main {
     background-color: #333;
     color: #fff;
     border: none;
-    padding: 5px 10px;
+    padding: 8px 12px;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 13px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
 }
 
 .buttons button:hover {
     background-color: #555;
+    transform: scale(1.05);
 }
 
-/* 소셜 미디어 스타일 */
+/* ✅ 소셜 미디어 스타일 */
 .social-media {
     display: flex;
-    gap: 10px; /* 아이콘 간격 설정 */
-    justify-content: flex-start; /* 왼쪽 정렬 */
+    gap: 10px;
+    justify-content: flex-start;
     align-items: center;
 }
 
@@ -119,18 +165,19 @@ main {
     text-decoration: none;
 }
 
+/* ✅ 소셜 아이콘 흔들리는 애니메이션 */
 .social-icon {
-    width: 24px; /* 아이콘 너비 */
-    height: 24px; /* 아이콘 높이 */
+    width: 26px;
+    height: 26px;
     display: inline-block;
-    transition: transform 0.2s ease; /* 호버 효과 추가 */
+    transition: transform 0.3s ease-in-out;
 }
 
 .social-icon:hover {
-    transform: scale(1.1); /* 호버 시 확대 효과 */
+    transform: rotate(-10deg) scale(1.1);
 }
 
-/* 반응형 디자인 */
+/* ✅ 반응형 디자인 */
 @media (max-width: 768px) {
     .footer-container {
         flex-direction: column;

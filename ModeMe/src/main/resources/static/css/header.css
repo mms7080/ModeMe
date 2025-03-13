@@ -5,7 +5,40 @@ body {
 ::-webkit-scrollbar {
 	display:none;
 }    
-/*테스트*/
+
+
+
+/* ✅ 기본 헤더 스타일 */
+header {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background-color: white;
+    transition: all 0.3s ease-in-out;
+    z-index: 1000;
+}
+
+/* ✅ 스크롤 시 헤더 크기 축소 */
+header.scrolled {
+    padding: 5px 0;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+}
+
+/* ✅ 네비게이션 메뉴 스타일 */
+.menu {
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+}
+
+/* ✅ 네비게이션 메뉴 축소 효과 */
+header.scrolled .menu a {
+    font-size: 12px;
+    padding: 8px 16px;
+    transition: all 0.3s ease-in-out;
+}
+
 header {
     border-bottom: 1px solid #ddd;
     margin-bottom: 20px;
@@ -69,14 +102,23 @@ header {
     margin: 20px 0;
 }
 
-/* 중앙 메뉴 스타일 */
+/* ✅ 중앙 메뉴 스타일 (수정됨) */
 .menu {
     text-align: center;
     margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    position: relative;
+    padding: 10px 0;
+    
+    /* ✅ 새로고침 애니메이션 (기본적으로 투명 & 아래쪽 위치) */
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeInSlideDown 0.8s ease-out forwards;
 }
 
 .menu a {
-    margin: 0 15px;
     text-decoration: none;
     color: #333;
     font-size: 14px;
@@ -84,10 +126,42 @@ header {
     display: inline-block;
     padding: 10px 20px;
     text-transform: uppercase;
+    position: relative;
+    transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .menu a:hover {
     color: #555;
+    transform: translateY(-2px);
+}
+
+/* ✅ 중앙 메뉴 밑줄 애니메이션 효과 추가 */
+.menu a::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -5px;
+    width: 0%;
+    height: 2px;
+    background-color: black;
+    transition: width 0.3s ease, left 0.3s ease;
+}
+
+.menu a:hover::after {
+    width: 100%;
+    left: 0;
+}
+
+/* ✅ 새로고침 애니메이션 */
+@keyframes fadeInSlideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* 이미지 스타일 */

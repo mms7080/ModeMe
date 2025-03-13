@@ -13,9 +13,9 @@ img:hover{
     font-size: 24px;
 /*     font-weight: bold; */
 }
-/* Section 스타일: 가로 80%와 가운데 정렬 */
+/* Section 스타일: 가로 70%와 가운데 정렬 */
 section {
-    width: 80%;
+    width: 70%;
     margin: 0 auto; /* 가운데 정렬 */
 }
 .carousel-container {
