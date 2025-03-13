@@ -31,19 +31,35 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
-        System.out.println("🔹 [네이버 OAuth2] 전체 응답 데이터: " + attributes);
+        System.out.println("🔹 [OAuth2] 전체 응답 데이터: " + attributes);
 
+        // ✅ 어떤 OAuth2 제공자인지 구분 (naver, kakao)
         String provider = userRequest.getClientRegistration().getRegistrationId();
+        String email = null;
+        String name = null;
+
         if ("naver".equals(provider)) {
             attributes = (Map<String, Object>) attributes.get("response");
+            email = (String) attributes.get("email");
+            name = (String) attributes.get("name");
+            System.out.println("✅ [네이버 로그인] 사용자 이메일: " + email);
+            System.out.println("✅ [네이버 로그인] 사용자 이름: " + name);
+        } 
+        else if ("kakao".equals(provider)) {
+            Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
+            email = (String) kakaoAccount.get("email");
+
+            Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
+            name = (String) profile.get("nickname");
+
+            System.out.println("✅ [카카오 로그인] 사용자 이메일: " + email);
+            System.out.println("✅ [카카오 로그인] 사용자 이름: " + name);
+        } 
+        else {
+            throw new OAuth2AuthenticationException("❌ 지원되지 않는 OAuth2 제공자: " + provider);
         }
 
-        String email = (String) attributes.get("email");
-        String name = (String) attributes.get("name");
-
-        System.out.println("✅ [네이버 로그인] 사용자 이메일: " + email);
-        System.out.println("✅ [네이버 로그인] 사용자 이름: " + name);
-
+        // ✅ 기존 사용자 확인
         Optional<User> existingUser = userRepository.findByUsername(email);
 
         User user;
