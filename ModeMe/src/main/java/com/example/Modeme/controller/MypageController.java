@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.Modeme.Config.CustomUserDetails;
 import com.example.Modeme.Manager.Entity.AddItem;
@@ -353,6 +354,13 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
                      wish.setImage(null); // 이미지가 없으면 null로 설정
                  }
              }
+             
+             // 메시지가 있으면 alert로 띄우기
+             if (model.containsAttribute("message")) {
+                 String message = (String) model.getAttribute("message");
+                 // 모델에 전달된 메시지로 처리 (HTML에서 alert로 표시)
+                 model.addAttribute("message", message);
+             }
 
              // 현재 페이지와 총 페이지 수 계산
              int currentPage = wishlistPage.getNumber() + 1;
@@ -368,30 +376,41 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
          
          @PostMapping("/wishlist_delete")
          public String DeleteWish(
-               @AuthenticationPrincipal CustomUserDetails userDetails,
-               @RequestParam(value="wishid") Long wishid,
-               @RequestParam(value="name") String name,
-               @RequestParam(value="number") Long itemnumber,
-               @RequestParam(value="action") String action,
-               @RequestParam(value="quantity") int quantity
+                 @AuthenticationPrincipal CustomUserDetails userDetails,
+                 @RequestParam(value = "wishid") Long wishid,
+                 @RequestParam(value = "name") String name,
+                 @RequestParam(value = "number") Long itemnumber,
+                 @RequestParam(value = "action") String action,
+                 @RequestParam(value = "quantity") int quantity,
+                 RedirectAttributes redirectAttributes
          ) {
-            String userid = userDetails.getUsername();
-            Long user = userDetails.getUser().getId();
-            
-            if(action.equals("cart")) { // 장바구니에 추가하는 경우
-               
-               ShoppingCart cart = new ShoppingCart(null,user,itemnumber,name,quantity);
-               cartrep.save(cart); // 장바구니에 저장
-               
-               wishser.deleteWishlist(userid, wishid); // 관심 상품 목록에서 삭제
-            }
-            
-            if(action.equals("delete")) { // 관심 상품 삭제하는 경우
-               wishser.deleteWishlist(userid, wishid);
-            }
-            
-            return "redirect:/wishlist";
+             String userid = userDetails.getUsername();
+             Long user = userDetails.getUser().getId();
+
+             if ("cart".equals(action)) { // 장바구니 추가
+                 Optional<ShoppingCart> existingCartItem = cartrep.findByUserIdAndProductId(user, itemnumber);
+
+                 if (existingCartItem.isEmpty()) {
+                     ShoppingCart cart = new ShoppingCart(null, user, itemnumber, name, quantity);
+                     cartrep.save(cart); // 장바구니 저장
+
+                     wishser.deleteWishlist(userid, wishid); // 관심 상품 목록에서 삭제
+                     redirectAttributes.addFlashAttribute("message", "장바구니에 이동 완료되었습니다.");
+                 } else {
+                     redirectAttributes.addFlashAttribute("message", "이미 장바구니에 존재하는 상품입니다.");
+                 }
+             }
+
+             if (action.equals("delete")) { // 관심 상품 삭제하는 경우
+                 wishser.deleteWishlist(userid, wishid);
+                 redirectAttributes.addFlashAttribute("message", "관심 상품이 삭제 되었습니다.");
+             }
+
+             return "redirect:/wishlist"; // 리디렉션 처리
          }
+
+
+
    
          // 배송 주소록 관리
          @GetMapping("/address")

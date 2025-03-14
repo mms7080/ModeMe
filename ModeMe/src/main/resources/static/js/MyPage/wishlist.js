@@ -1,20 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
-    // 부모 요소에서 이벤트를 델리게이션 방식으로 처리
-    document.querySelector(".wishlist_form").addEventListener("click", function(event) {
-        // 클릭된 요소가 .wishlist_cart 클래스가 있는 버튼일 경우
-        if (event.target && event.target.matches(".wishlist_cart")) {
-            alert("장바구니로 이동하였습니다.");
-        }
-    });
-});
 
-function setAction(actionValue) {
-        // 'action' hidden input에 클릭된 버튼에 맞는 값 설정
-        document.getElementById("action").value = actionValue;
-        
-        // 폼을 제출
-        document.querySelector(".wishlist_form").submit();
-    }
 	
 let currentPage = 1;
 let totalPages = 1; // 서버에서 가져오는 총 페이지 수
@@ -41,14 +25,30 @@ if (window.performance && window.performance.navigation.type === window.performa
     window.location.href = "/wishlist";  // 새로고침 후 /order로 리디렉션
 }
 
-// 알림을 띄우는 함수
-        function showAlert(message) {
-            if (message) {
-                alert(message);  // 메시지가 존재하면 알림창 띄우기
-            }
-        }
+// setAction: 버튼 클릭 시 action 값을 설정하고 폼 제출
+function setAction(actionValue) {
+    var form = event.target.closest("form");  // 클릭된 버튼의 폼을 찾음
+    form.querySelector("input[name='action']").value = actionValue;  // 'action' 값을 설정
+    
+    // 폼을 제출
+    form.submit();
+}
 
-        window.onload = function() {
-            var message = /*[[${message}]]*/ '';  // Thymeleaf에서 전달된 메시지
-            showAlert(message);  // showAlert 함수 호출
-        };
+// 알림을 띄우는 함수
+function showAlert(message) {
+    if (message) {
+        alert(message);  // 메시지가 존재하면 알림창 띄우기
+    }
+}
+
+// 페이지 로드 시 메시지 표시
+window.onload = function() {
+    // 서버에서 전달된 message 값을 가져옴
+    var message = document.body.getAttribute("data-message"); 
+
+    // 메시지가 존재하면 알림창으로 표시
+    if (message && message.trim() !== '') {
+        showAlert(message); // 메시지가 존재하면 alert로 띄우기
+    }
+};
+
