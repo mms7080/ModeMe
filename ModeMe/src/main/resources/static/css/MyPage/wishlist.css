@@ -88,9 +88,8 @@ h1 {
 }
 
 .wishlist-image {
-    width: 100%;      
-    max-width: 80px;  
-    height: auto;
+    width: 100px;
+    height: 100px;
     object-fit: cover;
 
 }
@@ -174,4 +173,13 @@ h1 {
 button.disabled {
     pointer-events: none;
     opacity: 0.5;
+}
+
+@media ( max-width: 950px){
+	.wishlist-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+
+	}
 }
