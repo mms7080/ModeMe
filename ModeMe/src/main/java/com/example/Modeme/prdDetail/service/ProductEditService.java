@@ -40,68 +40,105 @@ public class ProductEditService {
 	}
 
 	// 상품 업데이트
-
 	@Transactional
 	public AddItem updateProduct(Long id, AddItemDTO updatedItem) {
-		AddItem existingItem = addItemRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다. ID: " + id));
+	    // 기존 상품 조회
+	    AddItem existingItem = addItemRepository.findById(id)
+	            .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다. ID: " + id));
 
-		// 기본 데이터 업데이트
-		existingItem.setName(updatedItem.getName());
-		existingItem.setStock(updatedItem.getStock());
-		existingItem.setPrice(updatedItem.getPrice());
-		existingItem.setCategory(updatedItem.getCategory());
-		existingItem.setSubcategory(updatedItem.getSubcategory());
-		existingItem.setProductDescription(updatedItem.getProductDescription());
+	    // --- 기본 데이터 업데이트 ---
+	    existingItem.setName(updatedItem.getName());
+	    existingItem.setStock(updatedItem.getStock());
+	    existingItem.setPrice(updatedItem.getPrice());
+	    existingItem.setCategory(updatedItem.getCategory());
+	    existingItem.setSubcategory(updatedItem.getSubcategory());
+	    existingItem.setProductDescription(updatedItem.getProductDescription());
 
-		existingItem.getColors().clear();
-		existingItem.getColorNames().clear();
+	    /*
+	     * 수정된 코드에서는:
+	     * 기존 엔티티의 리스트를 유지한 채, 값만 수정하거나 추가/삭제하여 ID 보존
+	     */
 
-		// 색상 업데이트
-		List<ItemColor> updatedColors = updatedItem.getColors().stream().map(color -> {
-			ItemColor itemColor = new ItemColor();
-			itemColor.setColor(color);
-			itemColor.setAddItem(existingItem);
-			return itemColor;
-		}).toList();
-		existingItem.getColors().addAll(updatedColors);
+	    // --- 색상 업데이트 ---
+	    List<ItemColor> existingColors = existingItem.getColors(); // 기존 색상 리스트
+	    List<String> updatedColors = updatedItem.getColors();      // 새로 전달된 색상 데이터
 
-		// 색상 이름 업데이트
-		List<ItemColorName> updatedColorNames = updatedItem.getColorNames().stream().map(colorName -> {
-			ItemColorName itemColorName = new ItemColorName();
-			itemColorName.setColorName(colorName);
-			itemColorName.setAddItem(existingItem);
-			return itemColorName;
-		}).toList();
-		existingItem.getColorNames().addAll(updatedColorNames);
+	    // 기존 색상 엔티티 수정
+	    for (int i = 0; i < updatedColors.size(); i++) {
+	        if (i < existingColors.size()) {
+	            // 기존 색상 엔티티가 있으면 값만 수정
+	            existingColors.get(i).setColor(updatedColors.get(i));
+	        } else {
+	            // 기존에 없는 색상은 새로 추가
+	            ItemColor newColor = new ItemColor();
+	            newColor.setColor(updatedColors.get(i));
+	            newColor.setAddItem(existingItem); // 연관관계 설정
+	            existingColors.add(newColor);
+	        }
+	    }
+	    // 기존 색상 개수가 더 많으면, 불필요한 엔티티 제거
+	    if (existingColors.size() > updatedColors.size()) {
+	        existingColors.subList(updatedColors.size(), existingColors.size()).clear();
+	    }
 
-		// 사이즈 업데이트 추가
-		List<ItemSize> updatedSizes = updatedItem.getProductSizes().stream().map(size -> {
-			ItemSize itemSize = new ItemSize();
-			itemSize.setItemSize(size);
-			itemSize.setAddItem(existingItem);
-			return itemSize;
-		}).toList();
-		existingItem.getProductSizes().clear();
-		existingItem.getProductSizes().addAll(updatedSizes);
+	    // --- 색상 이름 업데이트 (원리 동일) ---
+	    List<ItemColorName> existingColorNames = existingItem.getColorNames();
+	    List<String> updatedColorNames = updatedItem.getColorNames();
 
-		// 기존 이미지 URL 유지 (새로운 이미지가 없으면 기존 이미지 유지)
-		if (updatedItem.getImageUrls() != null && !updatedItem.getImageUrls().isEmpty()) {
-			productImageRepository.deleteByAddItemId(existingItem.getId());
-			productImageRepository.flush();
+	    for (int i = 0; i < updatedColorNames.size(); i++) {
+	        if (i < existingColorNames.size()) {
+	            existingColorNames.get(i).setColorName(updatedColorNames.get(i));
+	        } else {
+	            ItemColorName newColorName = new ItemColorName();
+	            newColorName.setColorName(updatedColorNames.get(i));
+	            newColorName.setAddItem(existingItem);
+	            existingColorNames.add(newColorName);
+	        }
+	    }
+	    if (existingColorNames.size() > updatedColorNames.size()) {
+	        existingColorNames.subList(updatedColorNames.size(), existingColorNames.size()).clear();
+	    }
 
-			for (String imageUrl : updatedItem.getImageUrls()) {
-				if (imageUrl != null && !imageUrl.trim().isEmpty()) {
-					ProductImage productImage = new ProductImage();
-					productImage.setImageUrl(imageUrl);
-					productImage.setAddItem(existingItem);
-					productImageRepository.save(productImage);
-				}
-			}
-		} else {
-			System.out.println("이미지 URL이 전달되지 않음: 기존 이미지 유지");
-		}
-		return existingItem;
+	    // --- 사이즈 업데이트 (원리 동일) ---
+	    List<ItemSize> existingSizes = existingItem.getProductSizes();
+	    List<String> updatedSizes = updatedItem.getProductSizes();
+
+	    for (int i = 0; i < updatedSizes.size(); i++) {
+	        if (i < existingSizes.size()) {
+	            existingSizes.get(i).setItemSize(updatedSizes.get(i));
+	        } else {
+	            ItemSize newSize = new ItemSize();
+	            newSize.setItemSize(updatedSizes.get(i));
+	            newSize.setAddItem(existingItem);
+	            existingSizes.add(newSize);
+	        }
+	    }
+	    if (existingSizes.size() > updatedSizes.size()) {
+	        existingSizes.subList(updatedSizes.size(), existingSizes.size()).clear();
+	    }
+
+	    /*
+	     * 기존 이미지 업데이트 로직은 동일 (이미지는 삭제 후 새로 추가하는 구조)
+	     * => 만약 이미지도 기존 ID 유지 원하면 비슷한 방식으로 수정 가능
+	     */
+	    if (updatedItem.getImageUrls() != null && !updatedItem.getImageUrls().isEmpty()) {
+	        productImageRepository.deleteByAddItemId(existingItem.getId()); // 기존 이미지 삭제
+	        productImageRepository.flush();
+
+	        for (String imageUrl : updatedItem.getImageUrls()) {
+	            if (imageUrl != null && !imageUrl.trim().isEmpty()) {
+	                ProductImage productImage = new ProductImage();
+	                productImage.setImageUrl(imageUrl);
+	                productImage.setAddItem(existingItem);
+	                productImageRepository.save(productImage);
+	            }
+	        }
+	    } else {
+	        System.out.println("이미지 URL이 전달되지 않음: 기존 이미지 유지");
+	    }
+
+	    return existingItem;
 	}
+
 
 }
