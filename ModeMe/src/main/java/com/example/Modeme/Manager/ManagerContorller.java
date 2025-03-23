@@ -81,7 +81,7 @@ public class ManagerContorller {
     }
 
     // 관리자 메인
-    @GetMapping("/manager/managerMain")
+    @GetMapping("manager/managerMain")
     public String adminDashboard(Model model, Principal principal) {
     	if(principal != null) {
     		String username = principal.getName(); // 로그인한 사용자명 가져오기
@@ -110,18 +110,18 @@ public class ManagerContorller {
     
 
     // 상품 등록 폼
-    @GetMapping("/manager/new")
+    @GetMapping("manager/new")
     public String addItemForm(Model model, Principal principal) {
     	if(principal != null) {
     		String username = principal.getName();
     		model.addAttribute("username", username);	// 모델에 사용자명 추가
     	}
         model.addAttribute("addItemDTO", new AddItemDTO());	// 상품 등록 폼을 위한 DTO 추가
-        return "/manager/managerInput";
+        return "manager/managerInput";
     }
 
     // 상품 등록
-    @PostMapping("/manager/new")
+    @PostMapping("manager/new")
     public String addItem(@ModelAttribute AddItemDTO addItemDTO, Principal principal,
     		@RequestParam(value = "imageUrls", required = false) List<String> imageUrls) {
     	
@@ -142,7 +142,7 @@ public class ManagerContorller {
         return "redirect:/productDetail/productDetail/" + savedItem.getId();
     }
 
-    @GetMapping("/manager/managerProduct")
+    @GetMapping("manager/managerProduct")
     public String getProductList(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "5") int size,
@@ -200,7 +200,7 @@ public class ManagerContorller {
 
     
  // 상품 삭제 처리
-    @DeleteMapping("/manager/deleteProduct/{id}")
+    @DeleteMapping("manager/deleteProduct/{id}")
     @ResponseBody
     public String deleteProduct(@PathVariable Long id, Principal principal) {
        	if(principal != null) {
@@ -217,7 +217,7 @@ public class ManagerContorller {
     }   
     
     // 상품 리뷰 목록 페이지
-    @GetMapping("/manager/managerReview")
+    @GetMapping("manager/managerReview")
     public String getReviews(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
@@ -258,7 +258,7 @@ public class ManagerContorller {
     }
 
     // 리뷰 삭제 처리
-    @DeleteMapping("/manager/deleteReview/{id}")
+    @DeleteMapping("manager/deleteReview/{id}")
     @ResponseBody
     public String deleteReview(@PathVariable Long id) {
         try {
@@ -271,7 +271,7 @@ public class ManagerContorller {
     }
     
     // 사용자 관리 페이지
-    @GetMapping("/manager/users")
+    @GetMapping("manager/users")
     public String getUserManagementPage(
             @RequestParam(defaultValue = "0") int page, 
             @RequestParam(defaultValue = "5") int size, 
@@ -318,7 +318,7 @@ public class ManagerContorller {
     }
 
     // 판매 관리 페이지
-    @GetMapping("/manager/ManagerSale")
+    @GetMapping("manager/ManagerSale")
     public String getSaleData(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "5") int size,
@@ -359,7 +359,7 @@ public class ManagerContorller {
     }
     
     // 판매 상태 업데이트 처리
-    @PutMapping("/manager/ManagerSale/{saleId}")
+    @PutMapping("manager/ManagerSale/{saleId}")
     @ResponseBody
     public ResponseEntity<String> updateSaleProcess(
         @PathVariable Long saleId,
@@ -383,7 +383,7 @@ public class ManagerContorller {
     }
 
     // 주문 삭제 처리
-    @DeleteMapping("/manager/ManagerSale/{saleId}")
+    @DeleteMapping("manager/ManagerSale/{saleId}")
     public ResponseEntity<String> deleteOrder(@PathVariable Long saleId) {
         try {
             pr.deleteById(saleId);
