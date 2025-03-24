@@ -150,7 +150,7 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
               model.addAttribute("countShipping", countShipping);
               model.addAttribute("countDelivered", countDelivered);
 
-              return "/MyPage/MyPage";
+              return "MyPage/MyPage";
           }
           
           @GetMapping("/order")
@@ -261,7 +261,7 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
               model.addAttribute("totalItems", purchasePage.getTotalElements());
               model.addAttribute("items", items); // items를 모델에 추가
 
-              return "/MyPage/order";
+              return "MyPage/order";
           }
 
          
@@ -325,7 +325,7 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
              
              //주문내역 생성과 동시에 마일리지 적립 -> 주문내역 먼저 생성 후 마일리지 작업
              
-             return "/MyPage/mileage";
+             return "MyPage/mileage";
          }
       
          // 관심 상품
@@ -371,7 +371,7 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
              model.addAttribute("currentPage", currentPage);
              model.addAttribute("totalPages", totalPages);
 
-             return "/MyPage/wishlist";
+             return "MyPage/wishlist";
          }
          
          @PostMapping("/wishlist_delete")
@@ -443,7 +443,7 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
 
              // 데이터가 없다면 기본 페이지로 이동
              if (addresses.isEmpty()) {
-                 return "/MyPage/address"; // 기본 페이지로 이동
+                 return "MyPage/address"; // 기본 페이지로 이동
              }
 
              // 전체 페이지 개수 계산
@@ -468,7 +468,7 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
              model.addAttribute("startPage", currentRangeStart); 
              model.addAttribute("endPage", currentRangeEnd);
             
-            return "/MyPage/address";
+            return "MyPage/address";
          }
          
          @PostMapping("/address")
