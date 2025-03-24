@@ -33,7 +33,7 @@ public class SignupController {
         boolean isLoggedIn = auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal());
         model.addAttribute("loggedIn", isLoggedIn); // 항상 true/false 값을 가지도록 설정
 
-        return "/Sign/signup"; // 회원가입 HTML 경로
+        return "Sign/signup"; // 회원가입 HTML 경로
     }
 
     // 아이디 중복 확인 API

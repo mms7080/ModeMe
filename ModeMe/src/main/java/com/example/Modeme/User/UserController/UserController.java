@@ -41,7 +41,7 @@ public class UserController {
     // 로그인 페이지
     @GetMapping("/signin")
     public String signin() {
-        return "/Sign/signin"; // 로그인 HTML 경로
+        return "Sign/signin"; // 로그인 HTML 경로
     }
 
     /** ======================== [ 회원정보 찾기 ] ======================== **/
@@ -49,13 +49,13 @@ public class UserController {
     // 아이디 찾기 페이지
     @GetMapping("/find_id")
     public String findId() {
-        return "/Sign/find_id"; // 아이디 찾기 HTML 경로
+        return "Sign/find_id"; // 아이디 찾기 HTML 경로
     }
 
     // 비밀번호 찾기 페이지
     @GetMapping("/find_pw")
     public String findPw() {
-        return "/Sign/find_pw"; // 비밀번호 찾기 HTML 경로
+        return "Sign/find_pw"; // 비밀번호 찾기 HTML 경로
     }
     
     /** ======================== [ 아이디 찾기 ] ======================== **/
@@ -122,7 +122,7 @@ public class UserController {
         userDTO.setAddressDetail(user.getAddressDetail());
 
         model.addAttribute("userDTO", userDTO);
-        return "/Sign/modify"; // 회원정보 수정 페이지
+        return "Sign/modify"; // 회원정보 수정 페이지
     }
 
 
@@ -131,7 +131,7 @@ public class UserController {
                                 BindingResult bindingResult, 
                                 Principal principal, Model model) {
         if (bindingResult.hasErrors()) {
-            return "/Sign/modify"; // 유효성 검사 실패 시 다시 회원정보 수정 페이지로 이동
+            return "Sign/modify"; // 유효성 검사 실패 시 다시 회원정보 수정 페이지로 이동
         }
 
         if (principal == null) {
@@ -149,7 +149,7 @@ public class UserController {
         } catch (Exception e) {
             System.out.println("❌ 회원정보 수정 중 오류 발생: " + e.getMessage());
             model.addAttribute("errorMessage", "회원정보 수정에 실패하였습니다.");
-            return "/Sign/modify";
+            return "Sign/modify";
         }
     }
 }

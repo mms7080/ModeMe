@@ -67,7 +67,7 @@ public class NoticeController {
         model.addAttribute("totalPages", noticePage.getTotalPages());
         model.addAttribute("pageSize", size);
 
-        return "/Notice/noticeHome";
+        return "Notice/noticeHome";
     }
 
 
@@ -81,7 +81,7 @@ public class NoticeController {
         noticeService.getPreviousNotice(id).ifPresent(prev -> model.addAttribute("previousNotice", prev));
         noticeService.getNextNotice(id).ifPresent(next -> model.addAttribute("nextNotice", next));
 
-        return "/Notice/NoticeView";
+        return "Notice/NoticeView";
     }
 
     // 공지 작성 화면
@@ -118,7 +118,7 @@ public class NoticeController {
         if (isAdmin(principal)) {
             NoticeDto noticeDto = noticeService.getNoticeById(id);
             model.addAttribute("notice", noticeDto);
-            return "/Notice/NoticeEdit";
+            return "Notice/NoticeEdit";
         }
         return "redirect:/notices";
     }

@@ -179,7 +179,7 @@ public class PurchaseController {
 	    model.addAttribute("availableMileage", availableMileage);
 	    
 	    
-	    return "/purchase/purchase";
+	    return "purchase/purchase";
 	}
 
 	// 무통장입금을 선택했을 경우
@@ -231,7 +231,7 @@ public class PurchaseController {
 	    mileser.saveMileage(userid, usedMileage);
 	    mileser.deleteMileage(userid, usedMileage);
 
-	    return "/purchase/guideBankAccount";
+	    return "purchase/guideBankAccount";
 	}
 
 
@@ -263,7 +263,7 @@ public class PurchaseController {
 	    model.addAttribute("aList", items);
 	    model.addAttribute("selectedCategory", category);
 	    
-	    return "/product/productList";
+	    return "product/productList";
 	}
 
 		

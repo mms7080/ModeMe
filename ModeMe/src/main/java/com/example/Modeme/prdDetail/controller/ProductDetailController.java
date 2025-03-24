@@ -111,7 +111,7 @@ public class ProductDetailController {
 				.map(ProductImage::getImageUrl).collect(Collectors.toList());
 		model.addAttribute("product", product);
 		model.addAttribute("imageUrls", imageUrls); // 최신 이미지 URL 추가
-		return "/productDetail/productEdit"; // 수정 페이지 템플릿 이름
+		return "productDetail/productEdit"; // 수정 페이지 템플릿 이름
 	}
 
 	// 수정 처리
@@ -181,7 +181,7 @@ public class ProductDetailController {
 		model.addAttribute("totalPages", reviewPage.getTotalPages());
 		model.addAttribute("productDescription", product.getProductDescription());
 
-		return "/productDetail/productDetail";
+		return "productDetail/productDetail";
 	}
 
 	// 리뷰 작성 페이지
@@ -198,7 +198,7 @@ public class ProductDetailController {
 				.map(ProductImage::getImageUrl).collect(Collectors.toList());
 		model.addAttribute("imageUrls", imageUrls); // 최신 이미지 리스트 추가
 		model.addAttribute("product", product);
-		return "/productDetail/productReviewWrite"; // 리뷰 작성 페이지
+		return "productDetail/productReviewWrite"; // 리뷰 작성 페이지
 	}
 
 	@PostMapping("/{id}/review")
@@ -306,7 +306,7 @@ public class ProductDetailController {
 		model.addAttribute("reviewImages", reviewImages);
 		model.addAttribute("product", product);
 
-		return "/productDetail/productReviewEdit"; // 리뷰 수정 페이지
+		return "productDetail/productReviewEdit"; // 리뷰 수정 페이지
 	}
 
 	// 리뷰 수정

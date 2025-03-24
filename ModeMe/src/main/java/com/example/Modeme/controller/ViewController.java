@@ -84,7 +84,7 @@ public class ViewController {
 	// 푸터 없어도되는데 나중에 쓸일있을거같아서 해둠
 	@GetMapping("/footer")
 	public String footer() {
-		return "/footer";
+		return "footer";
 	}
 	// 장바구니
 	@GetMapping("/shoppingcart")
@@ -125,32 +125,32 @@ public class ViewController {
 
 	    model.addAttribute("sList", sList);
 	    model.addAttribute("itemList", itemList);
-	    return "/purchase/shoppingCart";
+	    return "purchase/shoppingCart";
 	}
 
 
 	// 제품 상세
 	@GetMapping("/productDetail")
 	public String productDetail() {
-		return "/productDetail/productDetail";
+		return "productDetail/productDetail";
 	}
 
 	// 제품 리뷰 작성페이지
 	@GetMapping("/productReviewWrite")
 	public String productReviewWrite() {
-		return "/productDetail/productReviewWrite";
+		return "productDetail/productReviewWrite";
 	}
 
 	// 제품 문의 작성페이지
 	@GetMapping("/productQAWrite")
 	public String productQAWrite() {
-		return "/productDetail/productQAWrite";
+		return "productDetail/productQAWrite";
 	}
 	
 	// 제품 문의 작성페이지
 	@GetMapping("/productEdit")
 	public String productEdit() {
-		return "/productDetail/productEdit";
+		return "productDetail/productEdit";
 	}
 
 
@@ -178,7 +178,7 @@ public class ViewController {
 	        model.addAttribute("wList", null);
 	    }
 
-	    return "/main";  // main.html 반환
+	    return "main";  // main.html 반환
 	}
 
 
@@ -188,31 +188,31 @@ public class ViewController {
 	// OUTER 예시 링크
 	@GetMapping("/outer")
 	public String outer() {
-		return "/product/productList";
+		return "product/productList";
 	}
 	
 	// 관리자 상품 등록
 	@GetMapping("/managerInput")
 	public String inputProduct() {
-		return "/manager/managerInput";
+		return "manager/managerInput";
 	}
 
 	// 관리자 주문 관리
 	@GetMapping("/managerSale")
 	public String manageSale() {
-		return "/manager/managerSale";
+		return "manager/managerSale";
 	}
 
 	// 관리자 상품 관리
 	@GetMapping("/managerProduct")
 	public String manageProduct() {
-		return "/manager/managerProduct";
+		return "manager/managerProduct";
 	}
 
 	// 관리자 리뷰 관리
 	@GetMapping("/managerReview")
 	public String manageReview() {
-		return "/manager/managerReview";
+		return "manager/managerReview";
 	}
 	//메인 이미지최신화
 	@GetMapping("/productDetail/getImages/{productId}")

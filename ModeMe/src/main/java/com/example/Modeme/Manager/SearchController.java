@@ -49,5 +49,5 @@ public class SearchController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         boolean isLoggedIn = auth != null && auth.isAuthenticated() && !auth.getPrincipal().equals("anonymousUser");
         model.addAttribute("loggedIn", isLoggedIn);
-        return "/searchpage"; // 검색 결과를 Thymeleaf 템플릿(main.html)으로 전달
+        return "searchpage"; // 검색 결과를 Thymeleaf 템플릿(main.html)으로 전달
     }}

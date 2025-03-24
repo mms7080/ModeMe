@@ -77,7 +77,7 @@ public class QnaController {
         model.addAttribute("pageSize", size);
         model.addAttribute("totalSize", qnaPage.getTotalElements());
 
-        return "/Notice/qnaHome";
+        return "Notice/qnaHome";
     }
 
 
@@ -98,7 +98,7 @@ public class QnaController {
         commentCounts.put(id, comments.size()); // 현재 QnA의 댓글 수
         model.addAttribute("commentCounts", commentCounts);
 
-        return "/Notice/qnaView"; // qnaView.html로 이동
+        return "Notice/qnaView"; // qnaView.html로 이동
     }
 
 
@@ -127,7 +127,7 @@ public class QnaController {
     // QnA 작성 페이지
     @GetMapping("/write")
     public String getQnaWritePage() {
-        return "/Notice/qnaWrite"; // /Notice 디렉토리에 있는 qnaWrite.html 반환
+        return "Notice/qnaWrite"; // /Notice 디렉토리에 있는 qnaWrite.html 반환
     }
 
  // 비밀글 확인 페이지
@@ -170,7 +170,7 @@ public class QnaController {
         }
         model.addAttribute("error", "비밀번호가 올바르지 않습니다."); // 정확한 에러 메시지 추가
         model.addAttribute("qnaId", id);
-        return "/Notice/secretPage"; // 다시 비밀번호 입력 페이지로 이동
+        return "Notice/secretPage"; // 다시 비밀번호 입력 페이지로 이동
     }
 
   
@@ -213,7 +213,7 @@ public class QnaController {
     public String editQna(@PathVariable Long id, Model model) {
         Qna qna = qnaService.findById(id);
         model.addAttribute("qna", qna);
-        return "/Notice/qnaEdit";
+        return "Notice/qnaEdit";
     }
 
     //QnA 수정
