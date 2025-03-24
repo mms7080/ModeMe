@@ -228,8 +228,7 @@ public class PurchaseController {
 	    String userid = userDetails.getUsername();
 
 		   
-	    mileser.saveMileage(userid, usedMileage);
-	    mileser.deleteMileage(userid, usedMileage);
+	  
 
 	    return "purchase/guideBankAccount";
 	}
@@ -359,28 +358,31 @@ public class PurchaseController {
 	            
 	            pr.save(p);
 	            
+	            
 	            if(i==0) { // 여러개 주문의 경우 첫 아이템, 할인은 
 	            	p.setTotalPrice(itemPrice * quantity - discount);
-	            	mileser.saveUsedMileage(u.getUsername(), discount, (pr.findTopByUsernameOrderByIdDesc(u.getUsername()).getId()));
+	            	mileser.saveMileage(u.getUsername(), discount);
 	            } else {
 	            	p.setTotalPrice(itemPrice * quantity);
 	            }
 	            
 	            
 	            scr.deleteByUserIdAndProductId((long) uId, (long) productId);
+	            
+	    	    
+
 	        }
 	    } catch (Exception e) {
 	        e.printStackTrace(); // 실제 오류 로그 출력
 	        return "error: 저장 실패";
 	    }
 	    
-	    String userid2 = userDetails.getUsername();
+	  
 
 	    boolean isSaved = addrser.saveAddressIfNotExists(u.getUsername(), address, u.getPhone(), 
 	    											postcode, address, addrDetail);
-		   
-	    mileser.saveMileage(userid2, usedMileage);
-	    mileser.deleteMileage(userid2, usedMileage);
+		
+
 
 	    return "success";
 	}

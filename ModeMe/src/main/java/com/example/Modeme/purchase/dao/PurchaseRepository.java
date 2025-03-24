@@ -38,5 +38,6 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long>{
 	Page<Purchase> findByUsernameAndOrderDateBetween(String username,  LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
 	
 	
+	
 	Purchase findTopByUsernameOrderByIdDesc(String username);
 }

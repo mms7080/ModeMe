@@ -46,18 +46,19 @@
 			<div class="mileagecontent_title">
 				<span>주문날짜</span> <span>적립금</span> <span>주문번호</span> <span>내용</span>
 			</div>
-			<div class="mileagecontent" th:if="${currentPage == 1}">
-				<!-- MyPage/mileage.html -->
-<span th:text="${#temporals.format(mileage_list, 'yyyy-MM-dd')}"></span>
-
-
- <span>2,000원</span> <span></span> <span>신규회원 적립금</span>
-			</div>
+			
 			<div class="mileagecontent" th:each="content:${mileage_all}">
 				<span th:text="${#temporals.format(content.createAt, 'yyyy-MM-dd')}"></span>
 				<span th:text="${content.mileage} + '원'"></span>
 				<span th:text="${content.ordernum}"></span>
 				<span th:text="${content.content}"></span>
+			</div>
+			<div class="mileagecontent" th:if="${currentPage == totalPages}">
+				<!-- MyPage/mileage.html -->
+<span th:text="${#temporals.format(mileage_list, 'yyyy-MM-dd')}"></span>
+
+
+ <span>2,000원</span> <span></span> <span>신규회원 적립금</span>
 			</div>
 			</div>
 		</div>

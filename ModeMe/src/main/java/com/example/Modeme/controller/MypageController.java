@@ -3,6 +3,7 @@
    import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -276,13 +277,11 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
                  Model model
          ) {
              String userid = userDetails.getUsername();
-             System.out.println(userid);
-            
-             mileser.saveMileage(userid, usedMileage);
+
             
               // 주문 내역을 페이지로 조회
             
-             List<Mileage> mileageList = milerep.findByUserid(userid);
+             List<Mileage> mileageList = milerep.findByUseridOrderByCreateAtDescOrdernumDesc(userid);
          
              int start = (page - 1) * 5;
              int end = Math.min(start + 5, mileageList.size());

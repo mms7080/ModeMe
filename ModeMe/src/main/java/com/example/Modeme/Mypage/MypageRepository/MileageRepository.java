@@ -22,7 +22,7 @@ public interface MileageRepository extends JpaRepository<Mileage, Long> {
 
     List<Mileage> findByOrdernum(String ordernum);
 
-    List<Mileage> findByUseridOrderByCreateAtDesc(String userid);
+    List<Mileage> findByUseridOrderByCreateAtDescOrdernumDesc(String userid);
     
     List<Mileage> findByOrdernumIsNull();
 }

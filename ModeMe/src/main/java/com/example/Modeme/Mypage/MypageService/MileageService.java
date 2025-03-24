@@ -39,30 +39,19 @@ public class MileageService {
         	 if (existingMileages.isEmpty()) {
         	    Mileage mile = new Mileage();
         	    mile.setUserid(pur.getUsername());
-        	    mile.setCreateAt(pur.getOrderDate());
+        	    mile.setCreateAt(LocalDateTime.now());
         	    mile.setMileage((int) Math.ceil(pur.getTotalPrice() * 0.01));  
         	    mile.setOrdernum(pur.getId().toString());
-        	    mile.setContent("주문 적립금");
         	    mile.setUsedMileage(usedMileage);
+        	    mile.setContent("주문 적립금");
+        	  
         	    milerep.save(mile);
+        	    
         	} 
 
         }
     }
-    
-    public void deleteMileage(String userid, int usedMileage) {
-        // ordernum이 null인 마일리지 목록 조회
-        List<Mileage> milesWithNullOrderNum = milerep.findByOrdernumIsNull();
-        
-        if (milesWithNullOrderNum != null && !milesWithNullOrderNum.isEmpty()) {
-            for (Mileage mile : milesWithNullOrderNum) {
-                milerep.delete(mile);  // 삭제
-            }
-        }
-    }
 
-
-	
     // 총 적립금
     public int getTotalMileage(String userid) {
         // 사용자의 모든 마일리지 목록을 가져옵니다.
@@ -79,14 +68,5 @@ public class MileageService {
                 .sum();
     }
 
-    public Mileage saveUsedMileage(String userid, int usedMileage, Long ordernum) {
-    	Mileage mileage = new Mileage();
-    	mileage.setUserid(userid);
-        mileage.setUsedMileage(usedMileage);
-        mileage.setMileage(0); // 마일리지 적립금은 0으로 설정
-        mileage.setCreateAt(LocalDateTime.now()); // 현재 시간 저장
-        mileage.setOrdernum(""+ordernum);
-
-        return milerep.save(mileage);
-    }
+    
 }
