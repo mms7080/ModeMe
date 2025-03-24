@@ -90,25 +90,29 @@
 </div>
 
          </div>
-<!-- 🚀 totalPages가 0이면 페이지네이션을 표시하지 않음 -->
-<div class="pagination" th:if="${totalPages > 1}">
-    <!-- 이전 버튼 -->
-    <button th:if="${currentPage > 1}"
-            th:onclick="|goToPage(${currentPage - 1})|"
-            th:classappend="${currentPage == 1} ? 'disabled' : ''">&lt;</button>
+<div class="pagination">
+    <!-- 이전 그룹 버튼 -->
+    <button th:if="${startPage > 1}"
+            th:onclick="'location.href=\'?page=' + (${startPage - 1}) + '\';'">&lt;&lt;</button>
 
-    <!-- 페이지 번호 -->
-    <span th:each="i : ${#numbers.sequence(1, totalPages)}"
+    <!-- 이전 페이지 버튼 -->
+    <button th:if="${currentPage > 1}"
+            th:onclick="'location.href=\'?page=' + (${currentPage - 1}) + '\';'">&lt;</button>
+
+    <!-- 페이지 번호 (10개씩 표시) -->
+    <span th:each="i : ${#numbers.sequence(startPage, endPage)}"
           th:classappend="${i == currentPage} ? 'active' : ''"
-          th:onclick="|goToPage(${i})|"
+          th:onclick="'location.href=\'?page=' + (${i}) + '\';'"
           th:text="${i}"></span>
 
-    <!-- 다음 버튼 -->
+    <!-- 다음 페이지 버튼 -->
     <button th:if="${currentPage < totalPages}"
-            th:onclick="|goToPage(${currentPage + 1})|"
-            th:classappend="${currentPage == totalPages} ? 'disabled' : ''">&gt;</button>
-</div>
+            th:onclick="'location.href=\'?page=' + (${currentPage + 1}) + '\';'">&gt;</button>
 
+    <!-- 다음 그룹 버튼 -->
+    <button th:if="${endPage < totalPages}"
+            th:onclick="'location.href=\'?page=' + (${endPage + 1}) + '\';'">&gt;&gt;</button>
+</div>
 
    </main>
 

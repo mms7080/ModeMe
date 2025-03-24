@@ -180,7 +180,7 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
               // 주문 내역을 페이지로 조회
               Page<Purchase> purchasePage = purrep.findByUsername(userid, pageable);
 
-              // 검색기능
+              // 검색 기능 적용
               if (searchselect == null || searchselect.isEmpty()) {
                   searchselect = "전체"; // 기본값 설정
               }
@@ -200,16 +200,25 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
                       break;
                   case "전체":
                       if (startDate != null && endDate != null) {
-                          // 날짜 범위가 설정되었을 때만 날짜 조건으로 필터링
                           purchasePage = purrep.findByUsernameAndOrderDateBetween(userid, startDate, endDate, pageable);
                       } else {
-                          // 날짜 범위가 없으면 모든 데이터를 출력
                           purchasePage = purrep.findByUsername(userid, pageable);
                       }
                       break;
                   default:
                       purchasePage = purrep.findByUsername(userid, pageable);
                       break;
+              }
+
+              // 페이지네이션 그룹 계산 (5개씩)
+              int totalPages = purchasePage.getTotalPages();
+              int startPage = ((page - 1) / 5) * 5 + 1;
+              int endPage = Math.min(startPage + 4, totalPages);
+
+              // totalPages가 0일 경우 startPage, endPage 조정
+              if (totalPages == 0) {
+                  startPage = 1;
+                  endPage = 1;
               }
 
               List<Map<String, Object>> ordersWithCounts = new ArrayList<>();
@@ -224,45 +233,38 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
                   orderWithCount.put("order", order);
 
                   // merchantUidCount가 0일 경우 처리
-                  if (count == 0) {
-                      orderWithCount.put("merchantUidCount", null);  // count가 0이면 null을 넣음
-                  } else {
-                      orderWithCount.put("merchantUidCount", count);
-                  }
+                  orderWithCount.put("merchantUidCount", count == 0 ? null : count);
 
                   ordersWithCounts.add(orderWithCount);
               }
 
-              List<AddItem> items;
-
-              if ("all".equals(category)) {
-                  items = addrep.findAll();
-              } else {
-                  items = addrep.findByCategory(category);
-              }
+              List<AddItem> items = "all".equals(category) ? addrep.findAll() : addrep.findByCategory(category);
 
               // ✅ 상품 이미지 최신 데이터 반영
               for (Map<String, Object> item : ordersWithCounts) {
-                  Object itemId = item.get("order"); // 수정: item에서 "order" 키를 사용해야 합니다.
-                  if (itemId instanceof Purchase) {  // "order" 객체가 Purchase 타입일 경우 처리
+                  Object itemId = item.get("order");
+                  if (itemId instanceof Purchase) {
                       Purchase purchase = (Purchase) itemId;
-                      List<String> latestImages = productImageRepository.findByAddItemId(purchase.getProductNumber())  // 상품 번호로 이미지 찾기
+                      List<String> latestImages = productImageRepository.findByAddItemId(purchase.getProductNumber())
                               .stream()
                               .map(ProductImage::getImageUrl)
                               .collect(Collectors.toList());
-                      item.put("imageUrls", latestImages.isEmpty() ? null : latestImages);  // 이미지가 없으면 null 처리
+                      item.put("imageUrls", latestImages.isEmpty() ? null : latestImages);
                   }
               }
 
-              // 페이지네이션 관련 데이터 모델에 추가
+              // 모델에 데이터 추가
               model.addAttribute("orders", ordersWithCounts);
               model.addAttribute("currentPage", page);
-              model.addAttribute("totalPages", purchasePage.getTotalPages());
+              model.addAttribute("totalPages", totalPages);
+              model.addAttribute("startPage", startPage);
+              model.addAttribute("endPage", endPage);
               model.addAttribute("totalItems", purchasePage.getTotalElements());
-              model.addAttribute("items", items); // items를 모델에 추가
+              model.addAttribute("items", items);
 
               return "MyPage/order";
           }
+
 
          
          // 적립금
