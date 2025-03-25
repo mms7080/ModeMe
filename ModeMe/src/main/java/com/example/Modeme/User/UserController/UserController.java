@@ -41,7 +41,7 @@ public class UserController {
     /** ======================== [ 로그인 ] ======================== **/
 
     // 로그인 페이지
-    @GetMapping("signin")
+    @GetMapping("/signin")
     public String signin() {
         return "Sign/signin"; // 로그인 HTML 경로
     }
@@ -49,20 +49,20 @@ public class UserController {
     /** ======================== [ 회원정보 찾기 ] ======================== **/
 
     // 아이디 찾기 페이지
-    @GetMapping("find_id")
+    @GetMapping("/find_id")
     public String findId() {
         return "Sign/find_id"; // 아이디 찾기 HTML 경로
     }
 
     // 비밀번호 찾기 페이지
-    @GetMapping("find_pw")
+    @GetMapping("/find_pw")
     public String findPw() {
         return "Sign/find_pw"; // 비밀번호 찾기 HTML 경로
     }
     
     /** ======================== [ 아이디 찾기 ] ======================== **/
 
-    @PostMapping("find_id")
+    @PostMapping("/find_id")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> findId(@RequestParam("name") String name,
                                                       @RequestParam(value = "contact", required = false) String contact,
@@ -102,7 +102,7 @@ public class UserController {
     
     /** ======================== [ 비밀번호 변경 ] ======================== **/
     
-    @PostMapping("check_userinfo")
+    @PostMapping("/check_userinfo")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> checkUserInfo(
             @RequestParam String username,
@@ -128,7 +128,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
     
-    @PostMapping("reset_pw")
+    @PostMapping("/reset_pw")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> resetPassword(
             @RequestParam String username,
@@ -159,7 +159,7 @@ public class UserController {
     /** ======================== [ 회원정보 수정 ] ======================== **/
 
     // 회원정보 수정 페이지 (현재 로그인한 사용자 정보 불러오기)
-    @GetMapping("modify")
+    @GetMapping("/modify")
     public String modifyForm(Model model, Principal principal) {
         if (principal == null) {
             return "redirect:/signin"; // 로그인되지 않은 경우 로그인 페이지로 리디렉트
@@ -185,7 +185,7 @@ public class UserController {
     }
 
 
-    @PostMapping("modify")
+    @PostMapping("/modify")
     public String modifyProcess(@Valid @ModelAttribute("userDTO") UserDTO userDTO, 
                                 BindingResult bindingResult, 
                                 Principal principal, Model model) {
