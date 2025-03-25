@@ -148,16 +148,14 @@
 		    }
 		
 		    // 로그인 폼 제출 시 아이디 저장/삭제 처리
-		    document.querySelector(".login-form").addEventListener("submit", function () {
+			document.querySelector(".login-form").addEventListener("submit", function () {
 		        if (rememberCheckbox.checked) {
 		            localStorage.setItem("savedUsername", usernameInput.value);
 		        } else {
 		            localStorage.removeItem("savedUsername");
 		        }
 		    });
-		});
-	</script>
-	
-	    
+		}
+	</script>    
 </body>
 </html>
