@@ -142,7 +142,7 @@ h1 {
 /* 버튼 기본 스타일 (회원가입 페이지와 동일한 스타일 적용) */
 .btn-black {
     height: 44px; /* 다른 input과 동일한 높이 */
-    padding: 5px 10px; /* 내부 여백 조정 */
+    /* padding: 5px 10px; */ /* 내부 여백 조정 */
     font-size: 14px;
     background-color: #000;
     color: #fff;
@@ -162,7 +162,7 @@ h1 {
     display: flex;
     align-items: center; /* 버튼과 인풋 수직 정렬 */
     gap: 10px; /* 버튼과 우편번호 입력창 사이 여백 */
-    width: 98%;
+    width: 100%;
 }
 
 /* 우편번호 입력 필드 크기 조정 */
