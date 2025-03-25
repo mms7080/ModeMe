@@ -185,7 +185,7 @@ public class PurchaseController {
 	// 무통장입금을 선택했을 경우
 	@GetMapping("/bankTransfer")
 	public String bankTransfer(@RequestParam("merchantUid") String merchantUid, Principal prin, Model model,
-			@AuthenticationPrincipal CustomUserDetails userDetails,
+	        @AuthenticationPrincipal CustomUserDetails userDetails,
 	        @RequestParam(name = "usedMileage", defaultValue = "0") int usedMileage) {
 	    User u = ur.findByUsername(prin.getName()).get();
 
@@ -199,11 +199,23 @@ public class PurchaseController {
 
 	    int totalAmount = 0;
 	    for (Purchase p : pList) {
-	    	totalAmount += p.getTotalPrice();
-	        // ✅ 상품 이미지 (imageUrls[0])
-	        Optional<AddItem> item = air.findById((long) p.getProductNumber());
-	        if (item.isPresent() && item.get().getImageUrls() != null && !item.get().getImageUrls().isEmpty()) {
-	            productImages.add(item.get().getImageUrls().get(0)); // 첫 번째 이미지 추가
+	        totalAmount += p.getTotalPrice();
+
+	        // ✅ 최신 상품 이미지 가져오기
+	        Optional<AddItem> itemOpt = air.findById((long) p.getProductNumber());
+	        if (itemOpt.isPresent()) {
+	            AddItem item = itemOpt.get();
+	            List<String> latestImages = productImageRepository.findByAddItemId(item.getId())
+	                    .stream()
+	                    .map(ProductImage::getImageUrl)
+	                    .collect(Collectors.toList());
+	            
+	            if (!latestImages.isEmpty()) {
+	                productImages.add(latestImages.get(0)); // 첫 번째 이미지 사용
+	                item.setImageUrls(latestImages); // 최신 이미지 적용
+	            } else {
+	                productImages.add("/image/default.jpg"); // 기본 이미지 추가
+	            }
 	        } else {
 	            productImages.add("/image/default.jpg"); // 기본 이미지 추가
 	        }
@@ -219,19 +231,15 @@ public class PurchaseController {
 
 	    model.addAttribute("user", u);
 	    model.addAttribute("items", pList);
-	    model.addAttribute("productImages", productImages); // ✅ 리스트로 변경하여 추가
-	    model.addAttribute("productColors", productColors); // ✅ 리스트로 변경하여 추가
-	    model.addAttribute("productSizes", productSizes); // ✅ 리스트로 변경하여 추가
+	    model.addAttribute("productImages", productImages);
+	    model.addAttribute("productColors", productColors);
+	    model.addAttribute("productSizes", productSizes);
 	    model.addAttribute("totalAmount", totalAmount);
 	    model.addAttribute("bankAccount", "신한은행 110-445-079289 예금주 : 모드미");
 	    
-	    String userid = userDetails.getUsername();
-
-		   
-	  
-
 	    return "purchase/guideBankAccount";
 	}
+
 
 
 
