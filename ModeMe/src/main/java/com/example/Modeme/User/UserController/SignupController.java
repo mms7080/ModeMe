@@ -24,7 +24,7 @@ public class SignupController {
     /** ======================== [ 회원가입 ] ======================== **/
 
     // 회원가입 폼
-    @GetMapping("/signup")
+    @GetMapping("signup")
     public String signupForm(Model model) {
         model.addAttribute("userDTO", new UserDTO());
 
@@ -37,14 +37,14 @@ public class SignupController {
     }
 
     // 아이디 중복 확인 API
-    @GetMapping("/api/check-username")
+    @GetMapping("api/check-username")
     @ResponseBody
     public ResponseEntity<Boolean> checkUsername(@RequestParam String username) {
         return ResponseEntity.ok(userService.isUsernameTaken(username));
     }
 
     // 회원가입 처리
-    @PostMapping("/signup")
+    @PostMapping("signup")
     public ResponseEntity<?> signupProcess(@Valid @ModelAttribute("userDTO") UserDTO userDTO, 
                                           BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
