@@ -15,7 +15,7 @@
     <!-- 본문 -->
     <main class="modify-container">
         <div class="breadcrumb">
-            <a href="/mainpage">홈</a> &gt; <span>회원정보 수정</span>
+            <a href="/">홈</a> &gt; <span>회원정보 수정</span>
         </div>
         <h1>👨‍👩‍👦 회원정보 수정</h1>
         <form action="/modify" method="post" class="modify-form">
@@ -29,6 +29,13 @@
 				<div class="form-row">
 				    <label for="password">비밀번호 변경</label>
 				    <input type="password" id="password" name="password" placeholder="새 비밀번호 입력 (변경하지 않으려면 비워두세요)">
+				    <small id="password-strength-status"></small>
+				</div>
+				
+				<div class="form-row">
+				    <label for="confirm-password">비밀번호 확인</label>
+				    <input type="password" id="confirm-password" placeholder="비밀번호를 다시 입력하세요">
+				    <small id="password-match-status"></small>
 				</div>
                 <div class="form-row">
                     <label for="name">이름</label>
@@ -90,36 +97,80 @@
 
     <!-- 푸터 -->
     <div th:replace="~{footer :: footer}"></div>
-    
-    <script>
-    function findAddress() {
-        new daum.Postcode({
-            oncomplete: function(data) {
-                document.getElementById('postcode').value = data.zonecode;
-                document.getElementById('address').value = data.address;
-            }
-        }).open();
-    }
-
-    // 회원정보 수정 후 알림창 띄우고 새로고침
-	document.addEventListener("DOMContentLoaded", function () {
-	    document.querySelector(".modify-form").addEventListener("submit", function (event) {
-	        event.preventDefault();
-	        console.log("🔹 fetch 요청 시작"); // ✅ 디버깅 추가
+	    
+	<script>
+	function findAddress() {
+	    new daum.Postcode({
+	        oncomplete: function(data) {
+	            document.getElementById('postcode').value = data.zonecode;
+	            document.getElementById('address').value = data.address;
+	        }
+	    }).open();
+	}
 	
-	        // ✅ postcode 요소가 로드되었는지 확인
-	        const postcodeInput = document.getElementById("postcode");
-	        if (!postcodeInput) {
-	            console.error("❌ 오류: 'postcode' input 요소를 찾을 수 없습니다.");
-	            return;
+	// 비밀번호 실시간 체크
+	document.addEventListener("DOMContentLoaded", () => {
+	    const pw = document.getElementById("password");
+	    const confirm = document.getElementById("confirm-password");
+	    const strengthStatus = document.getElementById("password-strength-status");
+	    const matchStatus = document.getElementById("password-match-status");
+	
+	    if (pw && confirm) {
+	        pw.addEventListener("input", () => {
+	            const value = pw.value.trim();
+	            if (value.length < 5) {
+	                strengthStatus.innerText = "";
+	                strengthStatus.style.color = "";
+	            } else if (value.length < 10) {
+	                strengthStatus.innerText = "⚠️ 약한 비밀번호입니다. (최소 10자)";
+	                strengthStatus.style.color = "orange";
+	            } else {
+	                strengthStatus.innerText = "✅ 강한 비밀번호입니다!";
+	                strengthStatus.style.color = "green";
+	            }
+	        });
+	
+	        confirm.addEventListener("input", () => {
+	            if (!confirm.value) {
+	                matchStatus.innerText = "";
+	            } else if (pw.value === confirm.value) {
+	                matchStatus.innerText = "✅ 비밀번호가 일치합니다.";
+	                matchStatus.style.color = "green";
+	            } else {
+	                matchStatus.innerText = "❌ 비밀번호가 일치하지 않습니다.";
+	                matchStatus.style.color = "red";
+	            }
+	        });
+	    }
+	});
+	
+	// 회원정보 수정 제출 시 유효성 검사 포함
+	document.addEventListener("DOMContentLoaded", () => {
+	    document.querySelector(".modify-form").addEventListener("submit", function (event) {
+	        const pw = document.getElementById("password").value.trim();
+	        const confirm = document.getElementById("confirm-password")?.value?.trim();
+	
+	        // 비밀번호 입력한 경우에만 검사
+	        if (pw.length > 0) {
+	            if (pw.length < 10) {
+	                alert("비밀번호는 10자 이상이어야 합니다.");
+	                event.preventDefault();
+	                return;
+	            }
+	
+	            if (pw !== confirm) {
+	                alert("비밀번호가 일치하지 않습니다.");
+	                event.preventDefault();
+	                return;
+	            }
 	        }
 	
+	        // 통과 시 fetch 요청 진행
 	        const formData = new FormData(this);
 	        fetch("/modify", {
 	            method: "POST",
 	            body: formData
 	        }).then(response => {
-	            console.log("🔹 서버 응답 상태:", response.status); // ✅ 응답 상태 확인
 	            if (response.ok) {
 	                alert("회원정보가 수정되었습니다.");
 	                location.reload();
@@ -127,10 +178,13 @@
 	                alert("회원정보 수정에 실패했습니다.");
 	            }
 	        }).catch(error => {
-	            console.log("❌ fetch 요청 오류:", error);
+	            console.error("❌ 요청 중 오류:", error);
+	            alert("오류가 발생했습니다.");
 	        });
+	
+	        event.preventDefault(); // fetch 후에도 기본 제출 막기
 	    });
 	});
-    </script>
+	</script>
 </body>
 </html>

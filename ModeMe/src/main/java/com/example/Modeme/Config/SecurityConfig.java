@@ -63,8 +63,9 @@ public class SecurityConfig {
                     "/purchase",
                     "/cart/**",
                     "/api/drive/**",
-                    "/wishlist/**"
-
+                    "/wishlist/**",
+                    "/check_userinfo",
+                    "/reset_pw"
                 )
             )
             .authorizeHttpRequests(auth -> auth
@@ -100,7 +101,9 @@ public class SecurityConfig {
                     "check-email",
                     "/api/**",
                     "/product/**",
-                    "/proList"
+                    "/proList",
+                    "/check_userinfo",
+                    "/reset_pw"
                 ).permitAll()
 
                 // ✅ 회원정보 수정 페이지는 로그인한 사용자만 접근 가능

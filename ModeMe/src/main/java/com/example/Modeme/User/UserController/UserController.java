@@ -3,6 +3,7 @@ package com.example.Modeme.User.UserController;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.Modeme.User.UserDTO.Headerlogin;
 import com.example.Modeme.User.UserDTO.UserDTO;
 import com.example.Modeme.User.UserEntity.User;
+import com.example.Modeme.User.UserRepository.UserRepository;
 import com.example.Modeme.User.UserService.UserService;
 
 import jakarta.validation.Valid;
@@ -27,9 +29,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
     private final Headerlogin keep; // 로그인 유지 재사용 Headerlogin 클래스
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @ModelAttribute
     public void addAttributes(Model model, Principal principal) {
@@ -81,6 +83,7 @@ public class UserController {
         if ("email".equals(findMethod)) {
             maskedUsername = userService.findUsernameByNameAndEmail(name, contact);
         } else if ("phone".equals(findMethod)) {
+            contact = contact.replaceAll("[^0-9]", ""); // 💡 전화번호 숫자만 추출
             maskedUsername = userService.findUsernameByNameAndPhone(name, contact);
         }
 
@@ -96,6 +99,62 @@ public class UserController {
 
         return ResponseEntity.ok(response);
     }
+    
+    /** ======================== [ 비밀번호 변경 ] ======================== **/
+    
+    @PostMapping("/check_userinfo")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> checkUserInfo(
+            @RequestParam String username,
+            @RequestParam String name,
+            @RequestParam String contact,
+            @RequestParam String findMethod) {
+
+        Map<String, Object> response = new HashMap<>();
+
+        Optional<User> userOptional = Optional.empty();
+        if ("email".equals(findMethod)) {
+            userOptional = userRepository.findByUsernameAndNameAndEmail(username, name, contact);
+        } else if ("phone".equals(findMethod)) {
+            userOptional = userRepository.findByUsernameAndNameAndPhone(username, name, contact);
+        }
+
+        if (userOptional.isPresent()) {
+            response.put("success", true);
+        } else {
+            response.put("success", false);
+        }
+
+        return ResponseEntity.ok(response);
+    }
+    
+    @PostMapping("/reset_pw")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> resetPassword(
+            @RequestParam String username,
+            @RequestParam String newPassword) {
+
+        Map<String, Object> response = new HashMap<>();
+
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+
+        if (optionalUser.isEmpty()) {
+            response.put("success", false);
+            response.put("message", "사용자 없음");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        User user = optionalUser.get();
+        String encodedPassword = userService.encodePassword(newPassword);
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
+
+        response.put("success", true);
+        response.put("message", "변경 완료");
+        return ResponseEntity.ok(response);
+    }
+
+
 
     /** ======================== [ 회원정보 수정 ] ======================== **/
 

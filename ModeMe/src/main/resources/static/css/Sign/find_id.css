@@ -135,6 +135,10 @@ h1 {
     transition: background-color 0.3s;
 }
 
+.margin {
+	height: 20px;
+}
+
 
 .find-btn:hover {
     background-color: #444;

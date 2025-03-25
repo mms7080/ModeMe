@@ -100,6 +100,10 @@ h1 {
     text-align: center; /* 텍스트 가운데 정렬 */
 }
 
+.margin {
+	width:20px;
+}
+
 /* 버튼 */
 .find-btn {
     width: 100%;
@@ -116,4 +120,67 @@ h1 {
 
 .find-btn:hover {
     background-color: #444;
+}
+
+/* ✅ 비밀번호 재설정 영역만 적용 */
+#reset-form {
+    max-width: 400px;
+    margin: 40px auto 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    font-family: 'omyu_pretty', sans-serif;
+}
+
+#reset-form h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#reset-form .form-group {
+    margin-bottom: 18px;
+    text-align: left;
+}
+
+#reset-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+#reset-form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+#reset-form small {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #666;
+}
+
+#reset-form button {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 15px;
+    font-weight: bold;
+    background-color: #000;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#reset-form button:hover {
+    background-color: #333;
 }

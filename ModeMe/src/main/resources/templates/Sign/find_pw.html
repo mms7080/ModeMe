@@ -11,19 +11,11 @@
     <!-- 헤더 -->
     <div th:replace="~{header :: header}"></div>
 
-    <!-- 비밀번호 찾기 본문 -->
     <main class="find-container">
-        <h1>비밀번호 찾기</h1>
-        <form action="/find-id" method="post" class="find-form">
-            <!-- 회원유형 -->
-            <div class="form-row">
-                <label for="member-type">회원유형</label>
-                <select id="member-type" name="memberType" required>
-                    <option value="personal">개인회원</option>
-                    <option value="personal-business">개인 사업자회원</option>
-                </select>
-            </div>
-            <!-- 찾기 방법 -->
+        <h1>비밀번호 재설정</h1>
+
+        <!-- 사용자 정보 확인 폼 -->
+        <div class="find-form">
             <div class="form-row">
                 <label>찾기 방법</label>
                 <div class="radio-group">
@@ -33,37 +25,71 @@
                     <label for="phone">휴대폰번호</label>
                 </div>
             </div>
-            <!-- 이름 -->
+            
+            <div class="margin"></div>
+
             <div class="form-row">
                 <label for="userid">아이디</label>
                 <input type="text" id="userid" name="userid" placeholder="아이디" required>
             </div>
-            <!-- 이름 -->
+
+			<div class="margin"></div>
+			
             <div class="form-row">
                 <label for="name">이름</label>
                 <input type="text" id="name" name="name" placeholder="이름" required>
             </div>
-            <!-- 이메일로 찾기 -->
+
+			<div class="margin"></div>
+			
             <div class="form-row email-fields">
                 <label for="email-input">이메일</label>
-                <input type="email" id="email-input" name="email" placeholder="example@email.com" required>
+                <input type="email" id="email-input" name="email" placeholder="example@email.com">
             </div>
-			<!-- 휴대폰번호로 찾기 -->
-			<div class="form-row phone-fields" style="display: none;">
-			    <label for="phone-input">휴대폰 번호</label>
-			    <div class="phone-input-group">
-			        <input type="text" name="phonePart1" placeholder="010" maxlength="3" required>
-			        <input type="text" name="phonePart2" placeholder="1234" maxlength="4" required>
-			        <input type="text" name="phonePart3" placeholder="5678" maxlength="4" required>
-			    </div>
-			</div>
-            <button type="submit" class="find-btn">확인</button>
-        </form>
+
+            <div class="form-row phone-fields" style="display: none;">
+                <label for="phone-input">휴대폰 번호</label>
+                <input type="text" id="phone-input" name="phone" placeholder="01012345678" maxlength="11">
+            </div>
+
+			<div class="margin"></div>
+			<div class="margin"></div>
+			
+            <button type="button" class="find-btn" onclick="verifyUser()">확인</button>
+            <div id="error-message" style="color:red; margin-top:10px;"></div>
+        </div>
+
+        <!-- 비밀번호 재설정 폼 -->
+        <div id="reset-form" style="display: none;">
+            <input type="hidden" id="reset-username">
+				
+			<div class="margin"></div>
+			<div class="margin"></div>
+			
+            <div class="form-group">
+                <label for="new-password">새 비밀번호</label>
+                <input type="password" id="new-password" placeholder="10자 이상" required>
+                <small id="password-strength-status"></small>
+            </div>
+			
+			<div class="margin"></div>
+			
+            <div class="form-group">
+                <label for="confirm-password">비밀번호 확인</label>
+                <input type="password" id="confirm-password" required>
+                <small id="password-match-status"></small>
+            </div>
+			
+			<div class="margin"></div>
+			<div class="margin"></div>
+			
+            <button type="button" onclick="submitResetPassword()">변경하기</button>
+        </div>
     </main>
 
     <!-- 푸터 -->
     <div th:replace="~{footer :: footer}"></div>
-    
+
     <script>
         function toggleFields(method) {
             const emailFields = document.querySelector(".email-fields");
@@ -75,6 +101,122 @@
             } else {
                 emailFields.style.display = "none";
                 phoneFields.style.display = "flex";
+            }
+        }
+
+        function verifyUser() {
+            const method = document.querySelector("input[name='findMethod']:checked").value;
+            const username = document.getElementById("userid").value.trim();
+            const name = document.getElementById("name").value.trim();
+            let contact = "";
+
+            if (method === "email") {
+                contact = document.getElementById("email-input").value.trim();
+            } else {
+                contact = document.getElementById("phone-input").value.trim();
+            }
+
+            fetch("/check_userinfo", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({
+                    username: username,
+                    name: name,
+                    contact: contact,
+                    findMethod: method
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById("reset-form").style.display = "block";
+                    document.getElementById("reset-username").value = username;
+                    document.querySelector(".find-form").style.display = "none";
+                } else {
+                    document.getElementById("error-message").innerText = "❌ 일치하는 회원 정보가 없습니다.";
+                }
+            })
+            .catch(err => {
+                alert("❌ 서버 오류");
+                console.error(err);
+            });
+        }
+
+        function submitResetPassword() {
+            const username = document.getElementById("reset-username").value;
+            const pw = document.getElementById("new-password").value.trim();
+            const confirmPw = document.getElementById("confirm-password").value.trim();
+
+            if (pw.length < 10) {
+                alert("비밀번호는 10자 이상이어야 합니다.");
+                return;
+            }
+
+            if (pw !== confirmPw) {
+                alert("비밀번호가 일치하지 않습니다.");
+                return;
+            }
+
+            fetch("/reset_pw", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({ username: username, newPassword: pw })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert("✅ 비밀번호가 성공적으로 변경되었습니다!");
+                    window.location.href = "/signin";
+                } else {
+                    alert("❌ 변경 실패: " + data.message);
+                }
+            })
+            .catch(err => {
+                alert("서버 오류");
+                console.error(err);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const pw = document.getElementById("new-password");
+            const confirmPw = document.getElementById("confirm-password");
+
+            pw.addEventListener("input", checkStrength);
+            confirmPw.addEventListener("input", checkMatch);
+        });
+
+        function checkStrength() {
+            const pw = document.getElementById("new-password").value.trim();
+            const status = document.getElementById("password-strength-status");
+
+            if (pw.length < 5) {
+                status.innerText = "";
+                status.style.color = "";
+            } else if (pw.length < 10) {
+                status.innerText = "⚠️ 약한 비밀번호입니다. (최소 10자)";
+                status.style.color = "orange";
+            } else {
+                status.innerText = "✅ 강한 비밀번호입니다!";
+                status.style.color = "green";
+            }
+        }
+
+        function checkMatch() {
+            const pw = document.getElementById("new-password").value.trim();
+            const confirm = document.getElementById("confirm-password").value.trim();
+            const status = document.getElementById("password-match-status");
+
+            if (!confirm) {
+                status.innerText = "";
+                return;
+            }
+
+            if (pw === confirm) {
+                status.innerText = "✅ 일치합니다.";
+                status.style.color = "green";
+            } else {
+                status.innerText = "❌ 비밀번호가 다릅니다.";
+                status.style.color = "red";
             }
         }
     </script>

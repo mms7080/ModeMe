@@ -1,5 +1,6 @@
 package com.example.Modeme.User.UserService;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -147,13 +148,26 @@ public class UserService {
     }
 
     public String findUsernameByNameAndEmail(String name, String email) {
-        Optional<User> userOptional = userRepository.findByNameAndEmail(name, email);
-        return userOptional.map(user -> maskUsername(user.getUsername())).orElse(null);
+        List<User> users = userRepository.findAllByNameAndEmail(name, email);
+        if (!users.isEmpty()) {
+            return maskUsername(users.get(0).getUsername()); // 첫 번째 사용자만 사용
+        } else {
+            return null;
+        }
     }
 
     public String findUsernameByNameAndPhone(String name, String phone) {
-        Optional<User> userOptional = userRepository.findByNameAndPhone(name, phone);
-        return userOptional.map(user -> maskUsername(user.getUsername())).orElse(null);
+        List<User> users = userRepository.findAllByNameAndPhone(name, phone);
+        if (!users.isEmpty()) {
+            return maskUsername(users.get(0).getUsername()); // 첫 번째 사용자만 사용
+        } else {
+            return null;
+        }
+    }
+    
+    // 암호화 메서드
+    public String encodePassword(String rawPassword) {
+        return passwordEncoder.encode(rawPassword);
     }
 
 }
