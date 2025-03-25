@@ -60,102 +60,99 @@
     <!-- 푸터 -->
     <div th:replace="~{footer :: footer}"></div>
 
-	<script>
-	document.addEventListener("DOMContentLoaded", function () {
-	    /** ================= ✅ 카카오 로그인 ================= **/
-	    Kakao.init('337dc51e65db835d92140237621c8f56'); // 📌 본인의 JavaScript 키 입력
-	    console.log(Kakao.isInitialized());
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    /** ✅ 카카오 로그인 **/
+    if (window.Kakao) {
+        Kakao.init('337dc51e65db835d92140237621c8f56');
+        console.log(Kakao.isInitialized());
 
-	    function loginWithKakao() {
-	        Kakao.Auth.login({
-	            success: function(authObj) {
-	                alert('카카오 로그인 성공!');
-	                console.log(authObj);
-	            },
-	            fail: function(err) {
-	                alert('카카오 로그인 실패!');
-	                console.log(err);
-	            }
-	        });
-	    }
+        function loginWithKakao() {
+            Kakao.Auth.login({
+                success: function(authObj) {
+                    alert('카카오 로그인 성공!');
+                    console.log(authObj);
+                },
+                fail: function(err) {
+                    alert('카카오 로그인 실패!');
+                    console.log(err);
+                }
+            });
+        }
+    }
 
-	    /** ================= ✅ 네이버 로그인 ================= **/
-	    const naverLogin = new naver.LoginWithNaverId({
-	        clientId: "L2yk1g6sJC3EhfnnBVtN",
-	        callbackUrl: "http://localhost:9999/api/auth/naver/callback",
-	        loginButton: { color: "green", type: 2, height: 50 },
-	        isPopup: true
-	    });
+    /** ✅ 네이버 로그인 **/
+    const naverLogin = new naver.LoginWithNaverId({
+        clientId: "L2yk1g6sJC3EhfnnBVtN",
+        callbackUrl: "http://localhost:9999/api/auth/naver/callback",
+        loginButton: { color: "green", type: 2, height: 50 },
+        isPopup: true
+    });
 
-	    naverLogin.init();
+    naverLogin.init();
 
-	    const clientId = "L2yk1g6sJC3EhfnnBVtN";
-	    const redirectUri = "http://localhost:9999/api/auth/naver/callback";
-	    const state = "randomState";
+    const clientId = "L2yk1g6sJC3EhfnnBVtN";
+    const redirectUri = "http://localhost:9999/api/auth/naver/callback";
+    const state = "randomState";
 
-	    document.getElementById("custom-naver-login-button").addEventListener("click", function (event) {
-	        event.preventDefault(); // 기본 동작 방지
+    document.getElementById("custom-naver-login-button").addEventListener("click", function (event) {
+        event.preventDefault();
 
-	        const popupWidth = 500;
-	        const popupHeight = 600;
-	        const left = (window.screen.width - popupWidth) / 2;
-	        const top = (window.screen.height - popupHeight) / 2;
+        const popupWidth = 500;
+        const popupHeight = 600;
+        const left = (window.screen.width - popupWidth) / 2;
+        const top = (window.screen.height - popupHeight) / 2;
 
-	        const loginPopup = window.open(
-	            `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&state=${state}`,
-	            "naverLoginPopup",
-	            `width=${popupWidth},height=${popupHeight},left=${left},top=${top},scrollbars=yes`
-	        );
+        const loginPopup = window.open(
+            `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&state=${state}`,
+            "naverLoginPopup",
+            `width=${popupWidth},height=${popupHeight},left=${left},top=${top},scrollbars=yes`
+        );
 
-	        if (!loginPopup || loginPopup.closed || typeof loginPopup.closed === "undefined") {
-	            alert("팝업이 차단되었습니다. 팝업 차단을 해제해주세요.");
-	        }
-	    });
+        if (!loginPopup || loginPopup.closed || typeof loginPopup.closed === "undefined") {
+            alert("팝업이 차단되었습니다. 팝업 차단을 해제해주세요.");
+        }
+    });
 
-	    naverLogin.getLoginStatus(function (status) {
-	        if (status) {
-	            const email = naverLogin.user.getEmail();
-	            const nickname = naverLogin.user.getNickName();
-	            if (!email) {
-	                alert("이메일 정보 제공을 동의해주세요.");
-	                naverLogin.reprompt();
-	                return;
-	            }
-	            alert(`네이버 로그인 성공! 환영합니다, ${nickname}님!`);
-	            console.log(`Email: ${email}, Nickname: ${nickname}`);
-	        }
-	    });
-	</script>
-	
-	<script>
-		document.addEventListener("DOMContentLoaded", function () {
-		    // URL에서 로그인 실패 파라미터 확인 및 팝업 띄우기
-		    const urlParams = new URLSearchParams(window.location.search);
-		    if (urlParams.get('error') === 'true') {
-		        alert("아이디 또는 비밀번호가 일치하지 않습니다.");
-		        // URL에서 파라미터를 제거
-		        window.history.replaceState({}, document.title, window.location.pathname);
-		    }
-		
-		    /** ✅ 아이디 저장 기능 **/
-		    const usernameInput = document.getElementById("username");
-		    const rememberCheckbox = document.getElementById("remember");
-		    
-		    // 페이지 로딩 시 저장된 아이디 불러오기
-		    if (localStorage.getItem("savedUsername")) {
-		        usernameInput.value = localStorage.getItem("savedUsername");
-		        rememberCheckbox.checked = true;
-		    }
-		
-		    // 로그인 폼 제출 시 아이디 저장/삭제 처리
-			document.querySelector(".login-form").addEventListener("submit", function () {
-		        if (rememberCheckbox.checked) {
-		            localStorage.setItem("savedUsername", usernameInput.value);
-		        } else {
-		            localStorage.removeItem("savedUsername");
-		        }
-		    });
-		}
-	</script>    
+    naverLogin.getLoginStatus(function (status) {
+        if (status) {
+            const email = naverLogin.user.getEmail();
+            const nickname = naverLogin.user.getNickName();
+            if (!email) {
+                alert("이메일 정보 제공을 동의해주세요.");
+                naverLogin.reprompt();
+                return;
+            }
+            alert(`네이버 로그인 성공! 환영합니다, ${nickname}님!`);
+            console.log(`Email: ${email}, Nickname: ${nickname}`);
+        }
+    });
+
+    /** ✅ 로그인 실패 알림 **/
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('error') === 'true') {
+        alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
+    /** ✅ 아이디 저장 기능 **/
+    const usernameInput = document.getElementById("username");
+    const rememberCheckbox = document.getElementById("remember");
+
+    if (localStorage.getItem("savedUsername")) {
+        usernameInput.value = localStorage.getItem("savedUsername");
+        rememberCheckbox.checked = true;
+    }
+
+    document.querySelector(".login-form").addEventListener("submit", function () {
+        if (rememberCheckbox.checked) {
+            localStorage.setItem("savedUsername", usernameInput.value);
+        } else {
+            localStorage.removeItem("savedUsername");
+        }
+    });
+}); // 여기다
+</script>
+ 
 </body>
 </html>
