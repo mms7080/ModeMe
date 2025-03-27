@@ -40,4 +40,6 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long>{
 	
 	
 	Purchase findTopByUsernameOrderByIdDesc(String username);
+
+	List<Purchase> findByUsernameOrderByOrderDateDesc(String userid);
 }

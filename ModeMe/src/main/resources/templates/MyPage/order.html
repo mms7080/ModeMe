@@ -72,7 +72,8 @@
             </span>
         </a>
         <span th:text="${content['order'].productMany}"></span> 
-        <span th:text="${#numbers.formatInteger(content['order'].totalPrice, 0, 'COMMA').replace(',', '.')}"></span> 
+        <span th:text="${#numbers.formatInteger(content['totalPriceSum'], 0, 'COMMA').replace(',', '.')}"></span> 
+
         <span th:switch="${content['order'].process}"> 
             <span th:case="'before'">⏰ 입금 전</span> 
             <span th:case="'ready'">📦 배송준비 중</span>

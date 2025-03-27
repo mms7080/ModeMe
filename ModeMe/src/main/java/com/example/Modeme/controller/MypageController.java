@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -167,7 +166,7 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
           ) {
               String userid = userDetails.getUsername();
 
-              // 날짜 파라미터 처리
+              // 날짜 처리
               LocalDateTime startDate = startdate != null ? LocalDateTime.parse(startdate + "T00:00:00") : null;
               LocalDateTime endDate = enddate != null ? LocalDateTime.parse(enddate + "T23:59:59") : null;
 
@@ -175,73 +174,51 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
                   page = 1;
               }
 
-              // 페이지 크기 설정
-              Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("orderDate").descending());  // size 값을 반영
+              // ✅ 최신순(내림차순)으로 모든 주문 가져오기
+              List<Purchase> allOrders = purrep.findByUsernameOrderByOrderDateDesc(userid);
 
-              // 주문 내역을 페이지로 조회
-              Page<Purchase> purchasePage = purrep.findByUsername(userid, pageable);
-
-              // 검색 기능 적용
-              if (searchselect == null || searchselect.isEmpty()) {
-                  searchselect = "전체"; // 기본값 설정
+              // ✅ merchantUid 기준으로 주문번호가 가장 작은 주문만 저장
+              Map<String, Purchase> uniqueOrders = new HashMap<>();
+              for (Purchase order : allOrders) {
+                  uniqueOrders.merge(order.getMerchantUid(), order, (existing, newOrder) ->
+                          existing.getId() < newOrder.getId() ? existing : newOrder
+                  );
               }
 
-              switch (searchselect) {
-                  case "입금전":
-                      purchasePage = purrep.findByUsernameAndProcessAndOrderDateBetween(userid, "before", startDate, endDate, pageable);
-                      break;
-                  case "배송준비중":
-                      purchasePage = purrep.findByUsernameAndProcessAndOrderDateBetween(userid, "ready", startDate, endDate, pageable);
-                      break;
-                  case "배송중":
-                      purchasePage = purrep.findByUsernameAndProcessAndOrderDateBetween(userid, "delivery", startDate, endDate, pageable);
-                      break;
-                  case "배송완료":
-                      purchasePage = purrep.findByUsernameAndProcessAndOrderDateBetween(userid, "done", startDate, endDate, pageable);
-                      break;
-                  case "전체":
-                      if (startDate != null && endDate != null) {
-                          purchasePage = purrep.findByUsernameAndOrderDateBetween(userid, startDate, endDate, pageable);
-                      } else {
-                          purchasePage = purrep.findByUsername(userid, pageable);
-                      }
-                      break;
-                  default:
-                      purchasePage = purrep.findByUsername(userid, pageable);
-                      break;
-              }
+              // ✅ 최신순 정렬 유지 (orderDate DESC)
+              List<Purchase> filteredOrders = new ArrayList<>(uniqueOrders.values());
+              filteredOrders.sort(Comparator.comparing(Purchase::getOrderDate).reversed());
 
-              // 페이지네이션 그룹 계산 (5개씩)
-              int totalPages = purchasePage.getTotalPages();
-              int startPage = ((page - 1) / 5) * 5 + 1;
-              int endPage = Math.min(startPage + 4, totalPages);
+              // ✅ 페이징 적용
+              int pageSize = 5;
+              int fromIndex = (page - 1) * pageSize;
+              int toIndex = Math.min(fromIndex + pageSize, filteredOrders.size());
+              List<Purchase> paginatedOrders = filteredOrders.subList(fromIndex, toIndex);
 
-              // totalPages가 0일 경우 startPage, endPage 조정
-              if (totalPages == 0) {
-                  startPage = 1;
-                  endPage = 1;
-              }
-
+              // ✅ merchantUidCount 계산 + 금액 합산
               List<Map<String, Object>> ordersWithCounts = new ArrayList<>();
+              for (Purchase order : paginatedOrders) {
+                  // 같은 merchantUid의 모든 주문 찾기
+                  List<Purchase> sameMerchantOrders = allOrders.stream()
+                          .filter(o -> o.getMerchantUid() != null && o.getMerchantUid().equals(order.getMerchantUid()))
+                          .collect(Collectors.toList());
 
-              // 주문 내역에 대한 merchantUidCount 계산
-              for (Purchase order : purchasePage.getContent()) {
-                  long count = purchasePage.getContent().stream()
-                          .filter(o -> o.getMerchantUid() != null && o.getMerchantUid().equals(order.getMerchantUid()))  // null 체크 추가
-                          .count() - 1;  // 자기 자신 제외
+                  // 주문 개수 (자기 자신 제외)
+                  long count = sameMerchantOrders.size() - 1;
+
+                  // ✅ 같은 merchantUid의 주문 금액 합산
+                  int totalPriceSum = sameMerchantOrders.stream()
+                          .mapToInt(Purchase::getTotalPrice)
+                          .sum();
 
                   Map<String, Object> orderWithCount = new HashMap<>();
                   orderWithCount.put("order", order);
-
-                  // merchantUidCount가 0일 경우 처리
                   orderWithCount.put("merchantUidCount", count == 0 ? null : count);
-
+                  orderWithCount.put("totalPriceSum", totalPriceSum); // ✅ 합산된 금액 저장
                   ordersWithCounts.add(orderWithCount);
               }
 
-              List<AddItem> items = "all".equals(category) ? addrep.findAll() : addrep.findByCategory(category);
-
-              // ✅ 상품 이미지 최신 데이터 반영
+              // ✅ 최신 상품 이미지 반영
               for (Map<String, Object> item : ordersWithCounts) {
                   Object itemId = item.get("order");
                   if (itemId instanceof Purchase) {
@@ -254,19 +231,28 @@ import com.example.Modeme.purchase.dto.ShoppingCart;
                   }
               }
 
+              List<AddItem> items = "all".equals(category) ? addrep.findAll() : addrep.findByCategory(category);
+
+              // ✅ 페이지네이션 계산
+              int totalPages = (int) Math.ceil((double) filteredOrders.size() / pageSize);
+              int startPage = ((page - 1) / 5) * 5 + 1;
+              int endPage = Math.min(startPage + 4, totalPages);
+              if (totalPages == 0) {
+                  startPage = 1;
+                  endPage = 1;
+              }
+
               // 모델에 데이터 추가
               model.addAttribute("orders", ordersWithCounts);
               model.addAttribute("currentPage", page);
               model.addAttribute("totalPages", totalPages);
               model.addAttribute("startPage", startPage);
               model.addAttribute("endPage", endPage);
-              model.addAttribute("totalItems", purchasePage.getTotalElements());
+              model.addAttribute("totalItems", filteredOrders.size());
               model.addAttribute("items", items);
 
               return "MyPage/order";
           }
-
-
          
          // 적립금
          @GetMapping("/mileage")

@@ -372,6 +372,7 @@ public class PurchaseController {
 	            	mileser.saveMileage(u.getUsername(), discount);
 	            } else {
 	            	p.setTotalPrice(itemPrice * quantity);
+	            	mileser.saveMileage(u.getUsername(), 0);
 	            }
 	            
 	            
